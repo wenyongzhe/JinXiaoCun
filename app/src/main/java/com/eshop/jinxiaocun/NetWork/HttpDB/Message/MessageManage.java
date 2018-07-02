@@ -1,9 +1,10 @@
-package com.eshop.jinxiaocun.NetWork.Message;
+package com.eshop.jinxiaocun.NetWork.HttpDB.Message;
 
 import android.content.Context;
 
-import com.eshop.jinxiaocun.NetWork.IResponseListener;
-import com.eshop.jinxiaocun.NetWork.OKHttpRequest;
+
+import com.eshop.jinxiaocun.NetWork.HttpDB.IResponseListener;
+import com.eshop.jinxiaocun.NetWork.HttpDB.OKHttpRequest;
 
 import java.io.IOException;
 

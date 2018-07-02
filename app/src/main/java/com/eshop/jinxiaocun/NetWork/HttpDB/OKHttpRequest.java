@@ -1,10 +1,10 @@
-package com.eshop.jinxiaocun.NetWork;
+package com.eshop.jinxiaocun.NetWork.HttpDB;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.eshop.jinxiaocun.NetWork.Message.MessageManage;
+import com.eshop.jinxiaocun.NetWork.HttpDB.Message.MessageManage;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.NetWorkUtil;
 

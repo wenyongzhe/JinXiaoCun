@@ -1,6 +1,7 @@
-package com.eshop.jinxiaocun.NetWork.Message;
+package com.eshop.jinxiaocun.NetWork.HttpDB.Message;
 
-import com.eshop.jinxiaocun.NetWork.IResponseListener;
+
+import com.eshop.jinxiaocun.NetWork.HttpDB.IResponseListener;
 
 import java.io.IOException;
 

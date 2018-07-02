@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import com.eshop.jinxiaocun.utils.*;
 
-public class JdbcControl {
+public class JtdsImpl implements JdbcInterface{
 
     String driverName = "net.sourceforge.jtds.jdbc.Driver";
     String dbURL ="jdbc:jtds:sqlserver://" + Config.IP + Config.IP_POIN + Config.DB_NAME + ";charset=UTF-8;";
@@ -17,8 +17,8 @@ public class JdbcControl {
     ResultSet rs = null;
     Statement statement;
 
-
-    private void connectDb(){
+    @Override
+    public void connectDb(){
         try {
             Class.forName(driverName);
             dbConn = DriverManager.getConnection(dbURL,Config.USER_NAME, Config.PASSWORD);
@@ -30,7 +30,8 @@ public class JdbcControl {
         }
     }
 
-    private void closeDb(){
+    @Override
+    public void closeDb(){
         if(rs!=null){
             try {
                 rs.close();
@@ -64,6 +65,12 @@ public class JdbcControl {
             e.printStackTrace();
         }*/
     }
+
+    @Override
+    public void query() {
+
+    }
+
 
     private ResultSet executeQuery(String sql){
         connectDb();

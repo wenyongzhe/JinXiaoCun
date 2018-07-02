@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.NetWork;
+package com.eshop.jinxiaocun.NetWork.HttpDB;
 
 /**
  * Created by Administrator on 2018/3/27.

@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.NetWork.Json;
+package com.eshop.jinxiaocun.NetWork.HttpDB.Json;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 import java.util.Map;
 
-import static com.eshop.jinxiaocun.Application.mContext;
+import static com.eshop.jinxiaocun.Base.Application.mContext;
 
 /**
  * Created by Administrator on 2018/3/26.

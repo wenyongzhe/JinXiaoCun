@@ -1,4 +1,4 @@
 package com.eshop.jinxiaocun.Base;
 
-public class BaseBean {
+public class BaseBean extends Object{
 }

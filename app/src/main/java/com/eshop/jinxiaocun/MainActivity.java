@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.eshop.jinxiaocun.NetWork.Jdbc.OrmLiteManager;
 import com.eshop.jinxiaocun.utils.Config;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
@@ -21,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(){
             @Override
             public void run() {
-                String dbURL ="jdbc:jtds:sqlserver://" + Config.IP + Config.IP_POIN + Config.DB_NAME + ";charset=UTF-8;";
-                testSqlServer2008(dbURL);
+                testSqlServer2008(Config.DB_URL);
             }
         }.start();
 
@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
             ((JdbcConnectionSource) connectionSource).setPassword("123456");
             CellPhoneDao cd = new CellPhoneDao();
             cd.performDBOperations(connectionSource);
+
+
+            OrmLiteManager ff = new OrmLiteManager();
+
 
         } catch (SQLException e) {
             e.printStackTrace();

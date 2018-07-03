@@ -12,6 +12,7 @@ public class Config {
     public final static String PASSWORD="123456";
     //下载文件路径
     public static final String download_dir = "eshop";
+    public static String DB_URL ="jdbc:jtds:sqlserver://" + Config.IP + Config.IP_POIN + Config.DB_NAME + ";charset=UTF-8;";
 
     public final static String updateFile = Config.getSdCardPath() + "/"+download_dir+"/Update/";
     public final static String databasePath = Config.getSdCardPath() + "/"+download_dir+"/Database/";

@@ -1,10 +1,8 @@
-package com.eshop.jinxiaocun.NetWork.Jdbc;
+package com.eshop.jinxiaocun.netWork.jdbc;
 
-import android.util.Log;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.eshop.jinxiaocun.utils.*;

@@ -1,22 +1,25 @@
-package com.eshop.jinxiaocun.Base;
+package com.eshop.jinxiaocun.base;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
-import supoin.jinxiaocun.R;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class BaseActivity extends AppCompatActivity {
+
+    private Unbinder unbinder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        unbinder = ButterKnife.bind(this);
         Application.getInstance().addActivity(this);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -35,6 +38,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        unbinder.unbind();
         Application.getInstance().finishActivity(this);
         super.onDestroy();
     }

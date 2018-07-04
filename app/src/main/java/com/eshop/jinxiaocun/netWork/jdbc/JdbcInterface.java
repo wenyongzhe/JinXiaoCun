@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.NetWork.Jdbc;
+package com.eshop.jinxiaocun.netWork.jdbc;
 
 public interface JdbcInterface {
     public void connectDb();

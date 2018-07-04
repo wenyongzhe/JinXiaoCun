@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun;
+package com.eshop.jinxiaocun.xiaoshou.bean;
 
 
 import com.j256.ormlite.field.DatabaseField;

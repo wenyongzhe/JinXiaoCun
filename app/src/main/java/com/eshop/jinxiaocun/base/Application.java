@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.Base;
+package com.eshop.jinxiaocun.base;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -8,7 +8,7 @@ import android.telephony.TelephonyManager;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
-import com.eshop.jinxiaocun.NetWork.HttpDB.NetManager;
+import com.eshop.jinxiaocun.netWork.httpDB.NetManager;
 import com.eshop.jinxiaocun.utils.Config;
 
 import java.util.Stack;

@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.NetWork.HttpDB.Json;
+package com.eshop.jinxiaocun.netWork.httpDB.json;
 
 
 import com.google.gson.Gson;

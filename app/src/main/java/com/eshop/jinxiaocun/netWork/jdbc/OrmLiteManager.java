@@ -1,40 +1,13 @@
-package com.eshop.jinxiaocun.NetWork.Jdbc;
+package com.eshop.jinxiaocun.netWork.jdbc;
 
-import com.eshop.jinxiaocun.Base.BaseBean;
-import com.eshop.jinxiaocun.CellPhoneDao;
 import com.eshop.jinxiaocun.utils.Config;
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.CloseableWrappedIterable;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.dao.DatabaseResultsMapper;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.dao.GenericRawResults;
-import com.j256.ormlite.dao.ObjectCache;
-import com.j256.ormlite.dao.RawRowMapper;
-import com.j256.ormlite.dao.RawRowObjectMapper;
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.DeleteBuilder;
-import com.j256.ormlite.stmt.GenericRowMapper;
-import com.j256.ormlite.stmt.PreparedDelete;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.PreparedUpdate;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.support.DatabaseConnection;
-import com.j256.ormlite.support.DatabaseResults;
-import com.j256.ormlite.table.ObjectFactory;
-import com.j256.ormlite.table.TableUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 public class OrmLiteManager implements JdbcInterface {
 
@@ -42,6 +15,14 @@ public class OrmLiteManager implements JdbcInterface {
     private volatile static OrmLiteManager ormLiteManager;
 
     public OrmLiteManager() {
+        try {
+            connectionSource = new JdbcConnectionSource(Config.DB_URL);
+            ((JdbcConnectionSource) connectionSource).setUsername(Config.USER_NAME);
+            ((JdbcConnectionSource) connectionSource).setPassword(Config.PASSWORD);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static OrmLiteManager getOrmLiteManager(){
@@ -57,22 +38,36 @@ public class OrmLiteManager implements JdbcInterface {
 
     @Override
     public void connectDb() {
-        try {
+       /* try {
             connectionSource = new JdbcConnectionSource(Config.DB_URL);
             ((JdbcConnectionSource) connectionSource).setUsername(Config.USER_NAME);
             ((JdbcConnectionSource) connectionSource).setPassword(Config.PASSWORD);
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public ConnectionSource getConnectionSource() {
         return connectionSource;
     }
 
+    public Dao creatDao(ConnectionSource connectionSource, Class classStr){
+        try {
+            return DaoManager.createDao(connectionSource, classStr);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public void closeDb() {
+        try {
+            connectionSource.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

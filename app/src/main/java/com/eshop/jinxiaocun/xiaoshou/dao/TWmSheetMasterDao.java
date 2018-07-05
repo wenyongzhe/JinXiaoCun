@@ -4,7 +4,6 @@ import com.eshop.jinxiaocun.base.BaseBean;
 import com.eshop.jinxiaocun.netWork.jdbc.OrmLiteManager;
 import com.eshop.jinxiaocun.xiaoshou.bean.TWmSheetMasterBean;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,6 +32,10 @@ public class TWmSheetMasterDao extends BaseBean {
         return -1;
     }
 
+    @Override
+    public int create(Object data) throws SQLException {
+        return dao.create((TWmSheetMasterBean) data);
+    }
 
     @Override
     public Object queryForId(Object o) throws SQLException {

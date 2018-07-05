@@ -45,8 +45,9 @@ public class TWmSheetMasterBean{
     @DatabaseField(columnName = "oper_id")
     private String oper_id;
 
-    @DatabaseField(columnName = "time_stamp")
-    private String time_stamp;
+
+
+
 
     public String getOper_id() {
         return oper_id;
@@ -56,13 +57,6 @@ public class TWmSheetMasterBean{
         this.oper_id = oper_id;
     }
 
-    public String getTime_stamp() {
-        return time_stamp;
-    }
-
-    public void setTime_stamp(String time_stamp) {
-        this.time_stamp = time_stamp;
-    }
 
     public String getBranch_no() {
         return branch_no;

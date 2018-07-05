@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Author 卢安
@@ -61,6 +62,17 @@ public class MyUtils {
         } catch (JsonParseException e) {
             return false;
         }
+    }
+
+    /**
+     * 产生0～max的随机整数 包括0 不包括max
+     *
+     * @param max
+     * 随机数的上限
+     * @return
+     */
+    public static int getRandom(int max) {
+        return new Random().nextInt(max);
     }
 
     /**

@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.eshop.jinxiaocun.thread.TaskInterface;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements TaskInterface {
 
     private Unbinder unbinder;
 
@@ -82,6 +84,16 @@ public class BaseActivity extends AppCompatActivity {
     public void showSoftKeyboard(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    public Object doInBackground(Object[] objects) {
+        return null;
+    }
+
+    @Override
+    public void onPostExecute(Object o) {
+
     }
 
     /*protected void setKeyboard(boolean flag) {

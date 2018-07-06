@@ -3,7 +3,7 @@ package com.eshop.jinxiaocun.main;
 import android.os.Bundle;
 
 import com.eshop.jinxiaocun.base.BaseActivity;
-import com.eshop.jinxiaocun.thread.BlankjThreadImp;
+import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
 import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
 
-        ThreadManagerInterface mThreadManagerInterface = new BlankjThreadImp();
+        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
         mThreadManagerInterface.executeRunnable(this);
 
 
@@ -63,8 +63,10 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
         System.out.println("*******List of objects saved in DB*******");
-        for (TWmSheetMasterBean cellPhone : list) {
-            System.out.println(cellPhone);
+        if(list!=null){
+            for (TWmSheetMasterBean cellPhone : list) {
+                System.out.println(cellPhone);
+            }
         }
 
     }

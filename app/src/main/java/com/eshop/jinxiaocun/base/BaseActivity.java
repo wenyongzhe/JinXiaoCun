@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class BaseActivity extends AppCompatActivity implements TaskInterface {
+public class BaseActivity extends AppCompatActivity implements TaskInterface{
 
     private Unbinder unbinder;
 
@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity implements TaskInterface {
     }
 
     @Override
-    public Object doInBackground(Object[] objects) {
+    public Object doInBackground(Object[] objects){
         return null;
     }
 

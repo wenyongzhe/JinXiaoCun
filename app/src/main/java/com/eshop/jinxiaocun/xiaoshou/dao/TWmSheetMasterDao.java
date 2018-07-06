@@ -16,40 +16,10 @@ public class TWmSheetMasterDao extends BaseBean {
         return dao;
     }
 
-
     public TWmSheetMasterDao() {
         OrmLiteManager mOrmLiteManager = OrmLiteManager.getOrmLiteManager();
         dao = mOrmLiteManager.creatDao(mOrmLiteManager.getConnectionSource(), TWmSheetMasterBean.class);
 
-    }
-
-    public int add(Object mObject){
-        try {
-            return dao.create((TWmSheetMasterBean) mObject);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    @Override
-    public int create(Object data) throws SQLException {
-        return dao.create((TWmSheetMasterBean) data);
-    }
-
-    @Override
-    public Object queryForId(Object o) throws SQLException {
-        try {
-            return dao.queryForId((Integer) o);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List queryForAll() throws SQLException {
-        return null;
     }
 
 }

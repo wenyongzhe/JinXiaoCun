@@ -1,29 +1,29 @@
 package com.eshop.jinxiaocun.thread;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
-public class BlankjThreadImp implements ThreadManagerInterface {
+public class AsyncTaskThreadImp implements ThreadManagerInterface {
 
     private static TaskInterface taskInterface;
 
     @Override
     public void executeRunnable(TaskInterface taskInterface) {
-
-        BlankjThreadImp.taskInterface = taskInterface;
-        asyncTask.execute();
-
+            AsyncTaskThreadImp.taskInterface = taskInterface;
+            asyncTask.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     AsyncTask asyncTask =  new AsyncTask() {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            return BlankjThreadImp.taskInterface.doInBackground(objects);
+            return AsyncTaskThreadImp.taskInterface.doInBackground(objects);
         }
 
         @Override
         protected void onPostExecute(Object o) {
-            BlankjThreadImp.taskInterface.onPostExecute(o);
+            AsyncTaskThreadImp.taskInterface.onPostExecute(o);
         }
     };
 

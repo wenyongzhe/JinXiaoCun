@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.main;
+package com.eshop.jinxiaocun.main.view;
 
 import android.os.Bundle;
 

@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:name="com.eshop.jinxiaocun.base.Application"
         android:theme="@style/AppTheme">
-        <activity android:name="com.eshop.jinxiaocun.main.MainActivity">
+        <activity android:name="com.eshop.jinxiaocun.main.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

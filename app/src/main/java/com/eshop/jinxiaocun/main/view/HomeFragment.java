@@ -18,7 +18,6 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.gridview)
     GridView gridview;
 
-    private HomeListAdapter mReportListAdapter;
     private Unbinder unbinder;
 
     public static Fragment newInstance() {

@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
-import supoin.jinxiaocun.R;
+
+import com.eshop.jinxiaocun.R;
 
 public class XiaoShouFragment extends Fragment {
 

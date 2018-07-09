@@ -3,4 +3,40 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- 紫色 -->
+    <color name="purple">#9f2264</color>
+    <color name="bg_item">#33f0f0f0</color>
+    <color name="grey_bg_list1">#f0f0f0</color>
+    <color name="grey_bg_list2">#e1e1e1</color>
+    <color name="white">#ffffff</color>
+    <color name="blue_login">#009c9c</color>
+    <color name="text_grey1">#505050</color>
+    <color name="text_blue1">#4e99cc</color>
+    <color name="botton_bg">#ebebeb</color>
+    <color name="red_theme">#c5251c</color>
+    <color name="blue_list">#5e8ba1</color>
+    <color name="divider">#b4b4b4</color>
+    <color name="black_theme">#333333</color>
+    <color name="transparent1">#00000000</color>
+
+    <!-- comm -->
+    <color name="activity_background">#ffffff</color>
+    <color name="fragment_background">#ffffff</color>
+    <color name="background">#FFFFFF</color>
+    <color name="blue_theme">#009f98</color>
+    <color name="bg_login_logon">#D5D3D4</color>
+    <color name="line">#B4B4B4</color>
+    <color name="line_blue">#3A74D9</color>
+    <color name="bg_grey1">#C3C3C3</color>
+    <color name="bg_grey2">#EBEBEB</color>
+    <color name="bg_yellow">#FFFF33</color>
+    <color name="bg_grid_nor">#FFFFFF</color>
+    <color name="bg_grid_press">#E1E1E1</color>
+    <color name="text_grey2">#969696</color>
+    <color name="text_blue">#3A74D9</color>
+    <color name="text_red">#872C2C</color>
+    <color name="primary_color">#2b4361</color>
+    <color name="grey_pressed">#5c5c5c</color>
+    <color name="bg_spinner1">#ccb6bec9</color>
 </resources>

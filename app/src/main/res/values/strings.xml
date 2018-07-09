@@ -21,4 +21,18 @@
     <string name="input_server_address">请输入服务器地址</string>
     <string name="confirm">确定</string>
     <string name="hint_no_network">没有网络，请检查网络！</string>
+
+    <!-- 菜单 -->
+    <string name="system_menu">系统主菜单</string>
+    <string name="menu_goods_query">商品查询</string>
+    <string name="menu_jiaqian_print">价签打印</string>
+    <string name="menu_mendian_qinghuo">门店请货</string>
+    <string name="menu_zhigong_manage">直供管理</string>
+    <string name="menu_deliver_manage">配送管理</string>
+    <string name="menu_huojia_dingwei">货架定位</string>
+    <string name="menu_diaobo_manage">调拨管理</string>
+    <string name="menu_pandian_manage">盘点管理</string>
+    <string name="menu_offline_manage">离线管理</string>
+    <string name="menu_zhigong_shouhuo">直供收货</string>
+    <string name="menu_gongyingsang_tuihuo">供应商退货</string>
 </resources>

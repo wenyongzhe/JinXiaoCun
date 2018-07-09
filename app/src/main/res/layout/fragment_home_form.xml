@@ -18,11 +18,15 @@
 
     <GridView
         android:id="@+id/gridview"
+        android:paddingTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnWidth="120dp"
-        android:stretchMode="spacingWidthUniform"
-        android:numColumns="2"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@color/transparent1"
+        android:gravity="center"
+        android:listSelector="@null"
+        android:numColumns="3"
+        android:verticalSpacing="20dp" >
+    </GridView>
 
 </LinearLayout>

@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextView_Grey"  >
+        <item name="android:textColor">@color/text_grey1</item>
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

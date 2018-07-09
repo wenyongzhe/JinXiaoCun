@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import supoin.jinxiaocun.R;
+import com.eshop.jinxiaocun.R;
+
 
 public class jichuFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.base;
+package com.eshop.jinxiaocun.base.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

@@ -1,18 +1,19 @@
 package com.eshop.jinxiaocun.main.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import supoin.jinxiaocun.R;
 
-public class TongJiFragment extends Fragment {
+public class jichuFragment extends Fragment {
 
-    public static android.support.v4.app.Fragment newInstance() {
-        return new TongJiFragment();
+
+    public static Fragment newInstance() {
+        return new jichuFragment();
     }
 
     @Nullable

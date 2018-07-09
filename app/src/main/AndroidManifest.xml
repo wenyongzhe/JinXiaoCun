@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name="com.eshop.jinxiaocun.base.Application"
+        android:name="com.eshop.jinxiaocun.base.view.Application"
         android:theme="@style/AppTheme">
         <activity android:name="com.eshop.jinxiaocun.main.view.MainActivity">
             <intent-filter>

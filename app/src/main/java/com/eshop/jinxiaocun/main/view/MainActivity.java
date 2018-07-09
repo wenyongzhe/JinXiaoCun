@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.eshop.jinxiaocun.base.Application;
-import com.eshop.jinxiaocun.base.BaseActivity;
-import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
-import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
+import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.xiaoshou.bean.TWmSheetMasterBean;
@@ -21,6 +19,7 @@ import java.util.List;
 
 import supoin.jinxiaocun.R;
 
+
 public class MainActivity extends BaseActivity {
 
     private TabView tabView;
@@ -31,14 +30,16 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main_menu);
         tabView= (TabView) findViewById(R.id.tabView);
         List<TabViewChild> tabViewChildList=new ArrayList<>();
-        TabViewChild tabViewChild01=new TabViewChild(R.drawable.tab01_sel,R.drawable.tab01_unsel, Application.getInstance().getString(R.string.item_home),  FirstFragment.newInstance());
-        TabViewChild tabViewChild02=new TabViewChild(R.drawable.tab02_sel,R.drawable.tab02_unsel, Application.getInstance().getString(R.string.item_single_order),  SingleOrderFrgment.newInstance());
-        TabViewChild tabViewChild03=new TabViewChild(R.drawable.tab04_sel,R.drawable.tab04_unsel, Application.getInstance().getString(R.string.item_collocation_order),  CollocationOrderFrgment.newInstance());
-        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tab03_sel,R.drawable.tab03_unsel, Application.getInstance().getString(R.string.item_report_form), ReportFormFrgment.newInstance());
+        TabViewChild tabViewChild01=new TabViewChild(R.drawable.tab01_sel,R.drawable.tab01_unsel, Application.getInstance().getString(R.string.item_home),  HomeFragment.newInstance());
+        TabViewChild tabViewChild02=new TabViewChild(R.drawable.tab02_sel,R.drawable.tab02_unsel, Application.getInstance().getString(R.string.item_kucun),  KuChunFragment.newInstance());
+        TabViewChild tabViewChild03=new TabViewChild(R.drawable.tab04_sel,R.drawable.tab04_unsel, Application.getInstance().getString(R.string.item_xiaoshou), XiaoShouFragment.newInstance());
+        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tab03_sel,R.drawable.tab03_unsel, Application.getInstance().getString(R.string.item_tongji),  TongJiFragment.newInstance());
+        TabViewChild tabViewChild05=new TabViewChild(R.drawable.tab05_sel,R.drawable.tab05_unsel, Application.getInstance().getString(R.string.item_jichu), jichuFragment.newInstance());
         tabViewChildList.add(tabViewChild01);
         tabViewChildList.add(tabViewChild02);
         tabViewChildList.add(tabViewChild03);
         tabViewChildList.add(tabViewChild04);
+        tabViewChildList.add(tabViewChild05);
         //end add data
         tabView.setTabViewDefaultPosition(0);
         tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());

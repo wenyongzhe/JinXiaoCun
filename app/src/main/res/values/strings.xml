@@ -7,9 +7,10 @@
     <string name="menu_switch_store">主题/门店切换</string>
     <string name="menu_signout">退出</string>
     <string name="item_home">首页</string>
-    <string name="item_single_order">单品订货</string>
-    <string name="item_collocation_order">搭配订货</string>
-    <string name="item_report_form">报表</string>
+    <string name="item_kucun">库存</string>
+    <string name="item_tongji">统计</string>
+    <string name="item_xiaoshou">销售</string>
+    <string name="item_jichu">基础</string>
     <string name="item_enter">录入</string>
     <string name="item_evaluate">评价</string>
     <string name="item_relevance">关联款</string>

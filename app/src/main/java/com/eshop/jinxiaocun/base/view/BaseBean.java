@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.base;
+package com.eshop.jinxiaocun.base.view;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.CloseableWrappedIterable;

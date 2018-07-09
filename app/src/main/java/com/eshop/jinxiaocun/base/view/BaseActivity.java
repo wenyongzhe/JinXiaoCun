@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.base;
+package com.eshop.jinxiaocun.base.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 
 import butterknife.ButterKnife;

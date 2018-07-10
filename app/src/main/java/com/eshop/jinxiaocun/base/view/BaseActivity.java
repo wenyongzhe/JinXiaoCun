@@ -24,7 +24,7 @@ public class BaseActivity extends AppCompatActivity implements TaskInterface{
         super.onCreate(savedInstanceState);
         unbinder = ButterKnife.bind(this);
         Application.getInstance().addActivity(this);
-
+        getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 

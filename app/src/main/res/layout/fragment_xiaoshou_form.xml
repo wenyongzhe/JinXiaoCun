@@ -4,27 +4,55 @@
               android:layout_height="fill_parent"
               xmlns:imageText="http://schemas.android.com/apk/res-auto"
               android:gravity="center|top"
-              android:background="@color/grey_bg_list2"
-              android:paddingTop="20dp"
+              android:background="@color/bg_item"
+              android:paddingTop="10dp"
               android:orientation="vertical">
 
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
         <com.eshop.jinxiaocun.widget.ImageTextView
-            android:id="@+id/imagetext1"
-            imageText:leftImage="@drawable/bg_grid_menu_nor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_weight="1"
+            android:id="@+id/myView_xiaoshou"
+            imageText:leftImage="@drawable/tab05_unsel"
+            imageText:subTitle="@string/item_title_xiaoshoudan"
+            imageText:subMessage="@string/item_message_maihuo"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"/>
+
+        <include layout="@layout/widget_line"/>
 
         <com.eshop.jinxiaocun.widget.ImageTextView
-            imageText:leftImage="@drawable/bg_grid_menu_nor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-
+            android:id="@+id/myView_xiaoshoutui"
+            android:layout_weight="1"
+            imageText:leftImage="@drawable/tab05_unsel"
+            android:layout_width="0dp"
+            imageText:subTitle="@string/item_title_xiaoshoutuihuodan"
+            imageText:subMessage="@string/item_message_tuihuo"
+            android:layout_height="fill_parent"/>
     </LinearLayout>
+
+   <!-- <LinearLayout
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <com.eshop.jinxiaocun.widget.ImageTextView
+            android:layout_weight="1"
+            android:id="@+id/imagetext2"
+            imageText:leftImage="@drawable/tab05_unsel"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"/>
+
+        <include layout="@layout/widget_line"/>
+
+        <com.eshop.jinxiaocun.widget.ImageTextView
+            android:layout_weight="1"
+            imageText:leftImage="@drawable/tab05_unsel"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"/>
+    </LinearLayout>-->
 
 </LinearLayout>

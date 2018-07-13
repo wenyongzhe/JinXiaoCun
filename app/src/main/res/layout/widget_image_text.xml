@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/lay_transroot"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/primary"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/white"
+              android:layout_gravity="center"
+              android:layout_centerVertical="true"
               android:orientation="vertical">
 
         <LinearLayout
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:gravity="center_vertical"
+            android:layout_height="0dp">
                 <ImageView
                     android:id="@+id/iv_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/tab01_sel"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"/>
                 <TextView
+                    android:layout_weight="1"
+                    android:textSize="18sp"
                     android:id="@+id/tv_subject_heading"
-                    style="@style/text_white"
                     android:layout_height="match_parent"
+                    android:layout_width="0dp"
                     android:gravity="center_vertical"
                     android:singleLine="true"
+                    android:textColor="@color/black_theme"
                     android:text="@string/cancel" />
         </LinearLayout>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_theme"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
             android:id="@+id/tv_message"
-            style="@style/text_white"
-            android:layout_centerInParent="true"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
             android:text="@string/app_name"
             android:textSize="16sp" />
 

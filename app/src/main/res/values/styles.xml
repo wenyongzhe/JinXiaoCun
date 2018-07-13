@@ -37,4 +37,11 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!-- 加载滚动条样式 -->
+    <style name="Spinner">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDuration">2000</item>
+        <item name="android:indeterminateOnly">true</item>
+    </style>
+
 </resources>

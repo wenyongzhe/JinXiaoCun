@@ -38,4 +38,9 @@
     <string name="menu_offline_manage">离线管理</string>
     <string name="menu_zhigong_shouhuo">直供收货</string>
     <string name="menu_gongyingsang_tuihuo">供应商退货</string>
+    <!--销售-->
+    <string name="item_title_xiaoshoudan">销售单</string>
+    <string name="item_title_xiaoshoutuihuodan">销售退货单</string>
+    <string name="item_message_maihuo">卖货、出库</string>
+    <string name="item_message_tuihuo">退货、换货</string>
 </resources>

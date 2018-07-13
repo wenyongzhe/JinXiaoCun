@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
+import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.thread.TaskInterface;
+
+import java.util.zip.Inflater;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -18,14 +23,22 @@ import butterknife.Unbinder;
 public class BaseActivity extends AppCompatActivity implements TaskInterface{
 
     private Unbinder unbinder;
+    protected   LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base);
+        mLinearLayout = findViewById(R.id.content);
         unbinder = ButterKnife.bind(this);
         Application.getInstance().addActivity(this);
         getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    public View getView(int layout){
+        View returnView = this.getLayoutInflater().inflate(layout, null);
+        return returnView;
     }
 
     @Override

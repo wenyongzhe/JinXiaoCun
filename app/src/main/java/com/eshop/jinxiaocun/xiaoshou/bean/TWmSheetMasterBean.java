@@ -274,7 +274,7 @@ public class TWmSheetMasterBean{
         this.trans_flag = trans_flag;
     }
 
-    public String getAcct_flag() {
+    public String getAcct_flag(String s) {
         return acct_flag;
     }
 

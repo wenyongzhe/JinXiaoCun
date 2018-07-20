@@ -7,6 +7,8 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
+import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.xiaoshou.bean.TWmSheetMasterBean;
@@ -52,7 +54,7 @@ public class MainActivity extends BaseActivity {
 
 
 
-        /*ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
+      /*  ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
         mThreadManagerInterface.executeRunnable(this);*/
     }
 

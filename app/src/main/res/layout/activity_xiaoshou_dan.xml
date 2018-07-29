@@ -7,6 +7,19 @@
     <ListView
         android:id="@+id/lv_xiaoshoudan"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="90dp"/>
+
+    <com.qmuiteam.qmui.widget.QMUIVerticalTextView
+        android:id="@+id/verticalTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:background="#666666"
+        android:lineSpacingExtra="6dp"
+        android:padding="6dp"
+        android:text="ffdfdfd"
+        android:textColor="#555555"
+        android:textSize="14sp"/>
 
 </LinearLayout>

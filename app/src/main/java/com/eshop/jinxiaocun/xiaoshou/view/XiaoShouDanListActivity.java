@@ -34,7 +34,6 @@ public class XiaoShouDanListActivity extends BaseListActivity {
         ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
         mThreadManagerInterface.executeRunnable(this);
 
-        loadData();
     }
 
     private void loadData(){

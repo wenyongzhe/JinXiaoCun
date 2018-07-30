@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.AdapterView;
 
 
 import com.eshop.jinxiaocun.R;
@@ -15,7 +16,7 @@ import com.eshop.jinxiaocun.widget.LightProgressDialog;
  * Created by wenyongzhe on 2018/3/23.
  */
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener{
+public abstract class BaseFragment extends Fragment implements View.OnClickListener,AdapterView.OnItemClickListener{
 
     public ProgressDialog loadingDialog;
 
@@ -96,6 +97,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
 }

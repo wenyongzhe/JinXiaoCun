@@ -58,6 +58,11 @@ public class MainActivity extends BaseActivity {
         mThreadManagerInterface.executeRunnable(this);*/
     }
 
+    @Override
+    protected void loadData() {
+
+    }
+
 
     @Override
     public Object doInBackground(Object[] objects) {

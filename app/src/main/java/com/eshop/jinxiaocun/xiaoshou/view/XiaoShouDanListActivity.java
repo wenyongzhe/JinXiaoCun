@@ -31,8 +31,8 @@ public class XiaoShouDanListActivity extends BaseListActivity {
         mLinearLayout.addView(getView(R.layout.activity_xiaoshou_dan),-1,params);
         lvXiaoshoudan = findViewById(R.id.lv_xiaoshoudan);
 
-        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        mThreadManagerInterface.executeRunnable(this);
+        //ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
+        //mThreadManagerInterface.executeRunnable(this);
 
     }
 
@@ -44,6 +44,7 @@ public class XiaoShouDanListActivity extends BaseListActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

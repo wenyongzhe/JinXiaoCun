@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class BaseActivity extends AppCompatActivity implements TaskInterface{
+public abstract class BaseActivity extends AppCompatActivity implements TaskInterface{
 
     private Unbinder unbinder;
     protected   LinearLayout mLinearLayout;
@@ -35,6 +35,8 @@ public class BaseActivity extends AppCompatActivity implements TaskInterface{
         getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
+
+    protected abstract void loadData();
 
     public View getView(int layout){
         View returnView = this.getLayoutInflater().inflate(layout, null);

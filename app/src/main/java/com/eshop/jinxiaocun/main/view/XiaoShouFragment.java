@@ -39,6 +39,11 @@ public class XiaoShouFragment extends BaseFragment {
     }
 
     @Override
+    protected void loadData() {
+
+    }
+
+    @Override
     public void onClick(View view) {
         Intent mIntent;
         switch (view.getId()){

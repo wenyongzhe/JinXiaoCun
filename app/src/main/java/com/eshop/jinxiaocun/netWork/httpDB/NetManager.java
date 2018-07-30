@@ -14,6 +14,9 @@ public class NetManager {
     private static NetRequest instance;
     private static Context mContext;
 
+    /*使用方法
+     NetManager.getRequest().doPost(RequestConst.GetReport, param, this);
+     */
     public static NetRequest getRequest(){
         return instance;
     }
@@ -29,7 +32,7 @@ public class NetManager {
 
     // 采用反射的形式实现，这样有一个好处是，以后增加新的实现类的话，我们只需要传递相应 的 Class，
 //而不需要更改 NetManger 的代码
-    public static <T extends NetRequest> NetRequest getRequest(Class<T> clz){
+    /*public static <T extends NetRequest> NetRequest getRequest(Class<T> clz){
         String simpleName = clz.getSimpleName();
         NetRequest request = mMap.get(simpleName);
         if(request ==null){
@@ -51,6 +54,5 @@ public class NetManager {
         }
         instance=request;
         return request;
-
-    }
+    }*/
 }

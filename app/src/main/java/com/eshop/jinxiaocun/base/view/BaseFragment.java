@@ -12,12 +12,14 @@ import com.eshop.jinxiaocun.widget.LightProgressDialog;
 
 
 /**
- * Created by gaoqiujie on 2018/3/23.
+ * Created by wenyongzhe on 2018/3/23.
  */
 
-public class BaseFragment extends Fragment implements View.OnClickListener{
+public abstract class BaseFragment extends Fragment implements View.OnClickListener{
 
     public ProgressDialog loadingDialog;
+
+    protected abstract void loadData();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

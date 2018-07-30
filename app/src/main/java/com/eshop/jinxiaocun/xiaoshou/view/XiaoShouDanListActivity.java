@@ -36,7 +36,8 @@ public class XiaoShouDanListActivity extends BaseListActivity {
 
     }
 
-    private void loadData(){
+    @Override
+    protected void loadData() {
         TWmSheetMasterDao mTWmSheetMasterDao = new TWmSheetMasterDao();
         try {
             listInfo = mTWmSheetMasterDao.getDao().queryForAll();

@@ -17,6 +17,11 @@ public class BaseListActivity extends BaseActivity implements AdapterView.OnItem
     }
 
     @Override
+    protected void loadData() {
+
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }

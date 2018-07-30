@@ -15,13 +15,6 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-}
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
@@ -35,8 +28,8 @@ allprojects {
     ext {
         buildToolsVersion = "28.0.0"
         minSdkVersion = 14
-        targetSdkVersion = 28
-        compileSdkVersion = 28
+        targetSdkVersion = 27
+        compileSdkVersion = 27
         supportVersion = "27.1.1"
     }
 }

@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.util.Log;
 import android.view.Display;
-import android.view.DisplayCutout;
+//import android.view.DisplayCutout;
 import android.view.Surface;
 import android.view.View;
 import android.view.Window;
@@ -89,42 +89,44 @@ public class QMUINotchHelper {
     }
 
     public static boolean hasNotch(View view){
-        if (sHasNotch == null) {
-            if(isNotchOfficialSupport()){
-                WindowInsets windowInsets = view.getRootWindowInsets();
-                if(windowInsets != null){
-                    DisplayCutout displayCutout = windowInsets.getDisplayCutout();
-                    sHasNotch = displayCutout != null;
-                }else{
-                    // view not attached
-                    return false;
-                }
-
-            }else {
-                sHasNotch = has3rdNotch(view.getContext());
-            }
-        }
-        return sHasNotch;
+//        if (sHasNotch == null) {
+//            if(isNotchOfficialSupport()){
+//                WindowInsets windowInsets = view.getRootWindowInsets();
+//                if(windowInsets != null){
+//                    DisplayCutout displayCutout = windowInsets.getDisplayCutout();
+//                    sHasNotch = displayCutout != null;
+//                }else{
+//                    // view not attached
+//                    return false;
+//                }
+//
+//            }else {
+//                sHasNotch = has3rdNotch(view.getContext());
+//            }
+//        }
+//        return sHasNotch;
+        return false;
     }
 
     public static boolean hasNotch(Activity activity) {
-        if (sHasNotch == null) {
-            if(isNotchOfficialSupport()){
-                Window window = activity.getWindow();
-                if(window == null){
-                    return false;
-                }
-                View decorView = window.getDecorView();
-                if(decorView == null){
-                    return false;
-                }
-                DisplayCutout displayCutout = decorView.getRootWindowInsets().getDisplayCutout();
-                sHasNotch = displayCutout != null;
-            }else {
-                sHasNotch = has3rdNotch(activity);
-            }
-        }
-        return sHasNotch;
+//        if (sHasNotch == null) {
+//            if(isNotchOfficialSupport()){
+//                Window window = activity.getWindow();
+//                if(window == null){
+//                    return false;
+//                }
+//                View decorView = window.getDecorView();
+//                if(decorView == null){
+//                    return false;
+//                }
+//                DisplayCutout displayCutout = decorView.getRootWindowInsets().getDisplayCutout();
+//                sHasNotch = displayCutout != null;
+//            }else {
+//                sHasNotch = has3rdNotch(activity);
+//            }
+//        }
+//        return sHasNotch;
+        return false;
     }
 
     private static boolean has3rdNotch(Context context){
@@ -218,12 +220,12 @@ public class QMUINotchHelper {
     private static Rect getSafeInsetRect(Activity activity) {
         if(isNotchOfficialSupport()){
             Rect rect = new Rect();
-            DisplayCutout displayCutout = activity.getWindow().getDecorView()
-                    .getRootWindowInsets().getDisplayCutout();
-            if(displayCutout != null){
-                rect.set(displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
-                        displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
-            }
+//            DisplayCutout displayCutout = activity.getWindow().getDecorView()
+//                    .getRootWindowInsets().getDisplayCutout();
+//            if(displayCutout != null){
+//                rect.set(displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
+//                        displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
+//            }
             return rect;
         }
         return get3rdSafeInsetRect(activity);
@@ -232,11 +234,11 @@ public class QMUINotchHelper {
     private static Rect getSafeInsetRect(View view) {
         if(isNotchOfficialSupport()){
             Rect rect = new Rect();
-            DisplayCutout displayCutout = view.getRootWindowInsets().getDisplayCutout();
-            if(displayCutout != null){
-                rect.set(displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
-                        displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
-            }
+//            DisplayCutout displayCutout = view.getRootWindowInsets().getDisplayCutout();
+//            if(displayCutout != null){
+//                rect.set(displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
+//                        displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
+//            }
             return rect;
         }
         return get3rdSafeInsetRect(view.getContext());
@@ -438,7 +440,8 @@ public class QMUINotchHelper {
     }
 
     public static boolean isNotchOfficialSupport(){
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+        return false;
     }
 
 }

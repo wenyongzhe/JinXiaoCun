@@ -7,7 +7,7 @@ import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.WindowInsetsCompat;
-import android.view.DisplayCutout;
+//import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,20 +33,20 @@ public class QMUIWindowInsetHelper {
         mWindowInsetLayoutWR = new WeakReference<>(windowInsetLayout);
         KEYBOARD_HEIGHT_BOUNDARY = QMUIDisplayHelper.dp2px(viewGroup.getContext(), 100);
 
-        if (QMUINotchHelper.isNotchOfficialSupport()) {
-            // WindowInsetsCompat does not exist DisplayCutout stuff...
-            viewGroup.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                @Override
-                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                    if (mWindowInsetLayoutWR.get() != null &&
-                            mWindowInsetLayoutWR.get().applySystemWindowInsets(windowInsets)) {
-                        windowInsets = windowInsets.consumeDisplayCutout();
-                        return windowInsets.consumeSystemWindowInsets();
-                    }
-                    return windowInsets;
-                }
-            });
-        } else {
+//        if (QMUINotchHelper.isNotchOfficialSupport()) {
+//            // WindowInsetsCompat does not exist DisplayCutout stuff...
+//            viewGroup.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+//                @Override
+//                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+//                    if (mWindowInsetLayoutWR.get() != null &&
+//                            mWindowInsetLayoutWR.get().applySystemWindowInsets(windowInsets)) {
+//                        windowInsets = windowInsets.consumeDisplayCutout();
+//                        return windowInsets.consumeSystemWindowInsets();
+//                    }
+//                    return windowInsets;
+//                }
+//            });
+//        } else {
             // some rom crash with WindowInsets...
             ViewCompat.setOnApplyWindowInsetsListener(viewGroup,
                     new android.support.v4.view.OnApplyWindowInsetsListener() {
@@ -61,7 +61,7 @@ public class QMUIWindowInsetHelper {
                             return insets;
                         }
                     });
-        }
+//        }
     }
 
     @SuppressWarnings("deprecation")
@@ -143,10 +143,10 @@ public class QMUIWindowInsetHelper {
                 // avoid dispatching multiple times
                 dispatchNotchInsetChange(viewGroup);
             }
-            DisplayCutout displayCutout = insets.getDisplayCutout();
-            if (displayCutout != null) {
-                insets = insets.consumeDisplayCutout();
-            }
+//            DisplayCutout displayCutout = insets.getDisplayCutout();
+//            if (displayCutout != null) {
+//                insets = insets.consumeDisplayCutout();
+//            }
         }
 
         boolean consumed = false;

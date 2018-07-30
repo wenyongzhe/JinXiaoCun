@@ -66,8 +66,8 @@ public class QMUIStatusBarHelper {
 
         if(QMUINotchHelper.isNotchOfficialSupport()){
             WindowManager.LayoutParams params = window.getAttributes();
-            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams
-                    .LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+//            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams
+//                    .LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             window.setAttributes(params);
         }
 

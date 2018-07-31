@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.main.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
+import com.eshop.jinxiaocun.xiaoshou.view.XiaoshouDanScanActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,15 +70,19 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        switch (view.getId()){
-            case R.string.menu_goods_manager:
+        Intent intent = new Intent();
+
+        switch (i){
+            case 0:
                 break;
 
-            case R.string.menu_caigoudan:
+            case 1:
                 break;
-            case R.string.menu_xiaoshoudan:
+            case 2:
+                intent.setClass(Application.mContext, XiaoshouDanScanActivity.class);
+                startActivity(intent);
                 break;
-            case R.string.menu_kucunchaxun:
+            case 3:
                 break;
 
         }

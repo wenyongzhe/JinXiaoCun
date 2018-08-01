@@ -6,4 +6,8 @@
 
     <include layout="@layout/widget_text_spinner"/>
 
+    <include layout="@layout/widget_text_text"/>
+
+    <include layout="@layout/widget_text_text"/>
+
 </LinearLayout>

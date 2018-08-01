@@ -4,31 +4,64 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+
 public class XiaoshouDanScanActivity extends BaseScanActivity {
+
+    @BindView(R.id.ly1_sp)
+    private Spinner mSpinner1;
+    @BindView(R.id.ly2_sp)
+    private Spinner mSpinner2;
+    @BindView(R.id.ly3_sp)
+    private Spinner mSpinner3;
 
     private LinearLayout ly_kaidan;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, ActionBar.LayoutParams.FILL_PARENT);
-        mLinearLayout.addView(getView(R.layout.activity_add_xiaoshou_dan),-1,params);
-        ly_kaidan = findViewById(R.id.lv_xiaoshoudan);
-
+        ButterKnife.bind(this);
+        loadData();
+        initView();
     }
 
     @Override
     protected void loadData() {
         super.loadData();
+    }
+
+    @SuppressLint("WrongViewCast")
+    @Override
+    protected void initView() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, ActionBar.LayoutParams.FILL_PARENT);
+        mLinearLayout.addView(getView(R.layout.activity_add_xiaoshou_dan),-1,params);
+        ly_kaidan = findViewById(R.id.lv_xiaoshoudan);
+        mSpinner1 = findViewById(R.id.ly1_sp);
+        mSpinner2 = findViewById(R.id.ly2_sp);
+        mSpinner3 = findViewById(R.id.ly3_sp);
+
+        List<String> list = new ArrayList<>();
+        list.add("正品");
+        list.add("赠品");
+        list.add("促销品");
+        list.add("不良品");
+        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(XiaoshouDanScanActivity.this, R.layout.my_simple_spinner_item, list);
+        mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
+        mSpinner1.setAdapter(mTuiHupoAdapter);
+        mSpinner2.setAdapter(mTuiHupoAdapter);
+        mSpinner3.setAdapter(mTuiHupoAdapter);
     }
 
 }

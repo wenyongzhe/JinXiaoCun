@@ -13,6 +13,8 @@ import com.eshop.jinxiaocun.utils.Config;
 
 import java.util.Stack;
 
+import butterknife.ButterKnife;
+
 public class Application extends android.app.Application {
 
     private static Stack<Activity> activityStack;

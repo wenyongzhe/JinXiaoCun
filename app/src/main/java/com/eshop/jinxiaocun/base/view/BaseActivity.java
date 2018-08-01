@@ -38,6 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
 
     protected abstract void loadData();
 
+    protected abstract void initView();
+
     public View getView(int layout){
         View returnView = this.getLayoutInflater().inflate(layout, null);
         return returnView;

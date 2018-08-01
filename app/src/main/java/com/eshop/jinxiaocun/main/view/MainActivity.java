@@ -63,6 +63,11 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void initView() {
+
+    }
+
 
     @Override
     public Object doInBackground(Object[] objects) {

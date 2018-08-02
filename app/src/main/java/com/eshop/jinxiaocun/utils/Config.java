@@ -4,12 +4,20 @@ import android.os.Environment;
 
 public class Config {
 
+    public static String UserCode = "";
+    public static String UserName = "";
+
     public static String DeviceID = "";
-    public final static String IP="192.168.10.67";
-    public final static String IP_POIN=":1433/";
-    public final static String DB_NAME="EWESHOP";
-    public final static String USER_NAME="sa";
-    public final static String PASSWORD="123456";
+    public static String IP="192.168.10.67";
+    public static String IP_POIN=":1433/";
+    public static String DB_NAME="EWESHOP";
+    public static String USER_NAME="sa";
+    public static String PASSWORD="123456";
+    public static String httpURL = "";
+
+    //门店组
+    public static String ShopGroup = "";
+
     //下载文件路径
     public static final String download_dir = "eshop";
     public static String DB_URL ="jdbc:jtds:sqlserver://" + Config.IP + Config.IP_POIN + Config.DB_NAME + ";charset=UTF-8;";

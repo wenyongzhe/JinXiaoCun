@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.main.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.login.LoginActivity;
 import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
 import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
 import com.eshop.jinxiaocun.utils.Config;
@@ -52,10 +54,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
+//        startLogin();
 
       /*  ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
         mThreadManagerInterface.executeRunnable(this);*/
+    }
+
+    private void startLogin(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

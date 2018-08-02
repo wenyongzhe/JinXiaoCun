@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_system_setting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+   <!-- <include
+        layout="@layout/custom_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="top" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:text="门店组：" />
+
+        <EditText
+            android:id="@+id/et_shop_group"
+            style="@style/EditText_Grey_Border"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="false"
+            android:gravity="top"
+            android:singleLine="false"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:text="服务器：" />
+
+        <EditText
+            android:id="@+id/et_service_url"
+            style="@style/EditText_Grey_Border"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="false"
+            android:gravity="top"
+            android:singleLine="false"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:text="端口号：" />
+
+        <EditText
+            android:id="@+id/et_service_port"
+            style="@style/EditText_Grey_Border"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="false"
+            android:gravity="top"
+            android:singleLine="false"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_test"
+            style="@style/Button_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/btnSave" />
+
+    </LinearLayout>
+
+</LinearLayout>

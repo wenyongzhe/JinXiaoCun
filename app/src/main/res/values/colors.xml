@@ -19,6 +19,7 @@
     <color name="divider">#b4b4b4</color>
     <color name="black_theme">#333333</color>
     <color name="transparent1">#00000000</color>
+    <color name="whitegray">#aededf</color>
 
     <!-- comm -->
     <color name="activity_background">#ffffff</color>
@@ -44,4 +45,8 @@
     <color name="primary_dark">#303F9F</color>
     <color name="accent">#FF4081</color>
     <color name="black_dft">#3c3c3c</color>
+    <color name="button_background">#0c4050</color>
+    <color name="button_dark">#2864A9</color>
+    <color name="button_red">#ff4400</color>
+    <color name="gray">#ff606060</color>
 </resources>

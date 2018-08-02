@@ -1,11 +1,15 @@
 package com.eshop.jinxiaocun.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.eshop.jinxiaocun.base.view.Application;
 import com.google.gson.JsonParseException;
@@ -16,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Random;
@@ -196,6 +201,41 @@ public class MyUtils {
         return Float.parseFloat( new DecimalFormat("##0.00").format(values));
     }
 
+    public static String getString(int resId) {
+        return Application.mContext.getString(resId);
+    }
 
+    /**
+     * 在子线程也可以调用
+     */
+    public static void showToast(int message, Context paramContext) {
+        Toast.makeText(paramContext, getString(message), Toast.LENGTH_LONG).show();
+    }
+    /**
+     * 在子线程也可以调用
+     */
+    public static void showToast(String message, Context paramContext) {
+        Toast.makeText(paramContext, message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 在子线程也可以调用
+     */
+    public static void showToastShort(String message, Context paramContext) {
+        Toast.makeText(paramContext, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void closeKeyboard(Activity context, EditText editText){
+        context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        try {
+            Class<EditText> cls = EditText.class;
+            Method setSoftInputShownOnFocus;
+            setSoftInputShownOnFocus = cls.getMethod("setShowSoftInputOnFocus", boolean.class);
+            setSoftInputShownOnFocus.setAccessible(true);
+            setSoftInputShownOnFocus.invoke(editText, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

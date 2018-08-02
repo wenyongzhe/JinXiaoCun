@@ -43,4 +43,16 @@
     <string name="item_title_xiaoshoutuihuodan">销售退货单</string>
     <string name="item_message_maihuo">卖货、出库</string>
     <string name="item_message_tuihuo">退货、换货</string>
+
+    <!-- 登录 -->
+    <string name="login">登录</string>
+    <string name="setting">设置</string>
+    <string name="params_hint_password">请输入密码</string>
+    <string name="params_hint_user">请输入用户名</string>
+    <string name="params_current_version">当前版本:</string>
+
+    <!-- 系统管理 -->
+    <string name="params_setting">系统设置</string>
+    <string name="btnSave">保存</string>
+    <string name="btnTest">测试</string>
 </resources>

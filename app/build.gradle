@@ -12,6 +12,7 @@ android {
     }
     buildTypes {
         release {
+            //混淆编译
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -21,6 +22,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     buildToolsVersion '28.0.0'
+
+
 }
 
 dependencies {

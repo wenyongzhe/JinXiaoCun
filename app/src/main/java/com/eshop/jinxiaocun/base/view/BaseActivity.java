@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.thread.TaskInterface;
+import com.eshop.jinxiaocun.widget.MyActionBar;
 
 import java.util.zip.Inflater;
 
@@ -24,11 +25,13 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
 
     private Unbinder unbinder;
     protected   LinearLayout mLinearLayout;
+    public MyActionBar mMyActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        mMyActionBar = findViewById(R.id.actionbar);
         mLinearLayout = findViewById(R.id.content);
         unbinder = ButterKnife.bind(this);
         Application.getInstance().addActivity(this);

@@ -55,4 +55,15 @@
     <string name="params_setting">系统设置</string>
     <string name="btnSave">保存</string>
     <string name="btnTest">测试</string>
+
+    <!-- 控制底部的按钮 -->
+    <string name="help">帮助</string>
+    <string name="add">添加</string>
+    <string name="delete">删除</string>
+    <string name="close">关闭</string>
+    <string name="upload">上传</string>
+    <string name="download">下载</string>
+    <string name="billing">开单</string>
+    <string name="modify">修改</string>
+    <string name="modifycount">改数</string>
 </resources>

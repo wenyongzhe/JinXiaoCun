@@ -1,9 +1,11 @@
 package com.eshop.jinxiaocun.login;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 
 import com.eshop.jinxiaocun.R;
@@ -11,6 +13,7 @@ import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +34,21 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_system_setting);
-//        setTileText("系统设置");
-        ButterKnife.bind(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, ActionBar.LayoutParams.FILL_PARENT);
+        mLinearLayout.addView(getView(R.layout.activity_system_setting),-1,params);
+
+        mMyActionBar.setData("系统设置", R.mipmap.icon_back, "", 0, "", new ActionBarClickListener() {
+            @Override
+            public void onLeftClick() {
+                finish();
+            }
+
+            @Override
+            public void onRightClick() {
+
+            }
+        });
+//        ButterKnife.bind(this);
 
         txtSeverUrl = findViewById(R.id.et_service_url);
         txtSeverPort = findViewById(R.id.et_service_port);

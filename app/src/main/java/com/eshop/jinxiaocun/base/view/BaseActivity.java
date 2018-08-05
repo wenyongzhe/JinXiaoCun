@@ -24,7 +24,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity implements TaskInterface{
 
     private Unbinder unbinder;
-    protected   LinearLayout mLinearLayout;
+    protected LinearLayout mLinearLayout;
     public MyActionBar mMyActionBar;
 
     @Override

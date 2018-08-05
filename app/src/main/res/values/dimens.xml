@@ -13,6 +13,7 @@
     <dimen name="layout_margin10">10dp</dimen>
     <dimen name="layout_margin5">5dp</dimen>
     <dimen name="layout_margin3">3dp</dimen>
+    <dimen name="layout_margin0">0dp</dimen>
     <dimen name="layout_item_heigth">50dp</dimen>
     <dimen name="layout_heigth55">55dp</dimen>
     <dimen name="layout_heigth50">50dp</dimen>

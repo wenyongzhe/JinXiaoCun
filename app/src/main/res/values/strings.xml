@@ -103,4 +103,41 @@
     <string name="list_item_HTCode">合同编码</string>
     <string name="list_item_PSHTCode">配送合同</string>
     <string name="list_item_SupCode">供应商编码</string>
+
+
+    <string name="list_item_FormIndex">单据号</string>
+    <string name="list_item_PDNO">盘点任务号</string>
+    <string name="list_item_Status">单据状态</string>
+    <string name="list_item_BillType">单据类型</string>
+    <string name="list_item_OrderDate">单据日期</string>
+    <string name="list_item_PDTypeName">盘点类型</string>
+    <string name="list_item_SupName">供应商名称</string>
+    <string name="list_item_StoreName">仓库名称</string>
+    <string name="list_item_StoreCode">仓库编码</string>
+    <string name="list_item_AllAmount">总金额</string>
+    <string name="list_item_AllCount">总数量</string>
+    <string name="list_item_CustName">客户名称</string>
+    <string name="list_item_OutOrg">调出组织</string>
+    <string name="list_item_OutWareHouse">调出仓库</string>
+    <string name="list_item_InWareHouse">调入仓库</string>
+    <string name="list_item_InOrg">调入组织</string>
+    <string name="list_item_OrgCode">组织编号</string>
+    <string name="list_item_OrgName">组织名称</string>
+    <string name="list_item_PSOrgCode">配送组织</string>
+    <string name="list_item_InOrgCode">接收组织</string>
+    <string name="list_item_HTCOde">合同编码</string>
+    <string name="list_item_PFCustName">批发客户</string>
+    <string name="list_item_ISKFP">是否开发票</string>
+    <string name="list_item_JSType">结算方式</string>
+
+    <string name="list_item_CGRWCode">采购任务号</string>
+    <string name="list_item_YSZhuZhi">验收组织</string>
+    <string name="list_item_DHRiQi">到货日期</string>
+    <string name="list_item_HTNAME">合同名称</string>
+    <string name="list_item_CGYCode">采购员编号</string>
+    <string name="list_item_PeiSongDanHao">配送单号</string>
+    <string name="list_item_XuHao">序号</string>
+    <string name="list_item_SupplierCode">供应商编码</string>
+    <string name="list_item_ProductDate">生产日期</string>
+    <string name="list_item_ProdType">商品类型</string>
 </resources>

@@ -27,9 +27,9 @@ public class XiaoShouDanListActivity extends BaseListActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, ActionBar.LayoutParams.FILL_PARENT);
-        mLinearLayout.addView(getView(R.layout.activity_xiaoshou_dan),-1,params);
-        lvXiaoshoudan = findViewById(R.id.lv_xiaoshoudan);
+        loadData();
+        initView();
+
 
         //ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
         //mThreadManagerInterface.executeRunnable(this);
@@ -37,13 +37,32 @@ public class XiaoShouDanListActivity extends BaseListActivity {
     }
 
     @Override
+    protected void initView() {
+        super.initView();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLinearLayout.addView(getView(R.layout.activity_xiaoshou_dan),0,params);
+
+        setHeaderTitle(R.id.tv_0, R.string.list_item_Status, 100);
+        setHeaderTitle(R.id.tv_1, R.string.list_item_FormIndex, 200);
+        setHeaderTitle(R.id.tv_2, R.string.list_item_AllCount, 100);
+        setHeaderTitle(R.id.tv_3, R.string.list_item_AllAmount, 100);
+        setHeaderTitle(R.id.tv_4, R.string.list_item_SupName, 150);
+        setHeaderTitle(R.id.tv_5, R.string.list_item_DHRiQi, 150);
+        setHeaderTitle(R.id.tv_6, R.string.list_item_OrderDate, 150);
+        setHeaderTitle(R.id.tv_7, R.string.list_item_HTNAME, 150);
+    }
+
+    @Override
     protected void loadData() {
-        TWmSheetMasterDao mTWmSheetMasterDao = new TWmSheetMasterDao();
-        try {
-            listInfo = mTWmSheetMasterDao.getDao().queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+
+
+//        TWmSheetMasterDao mTWmSheetMasterDao = new TWmSheetMasterDao();
+//        try {
+//            listInfo = mTWmSheetMasterDao.getDao().queryForAll();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

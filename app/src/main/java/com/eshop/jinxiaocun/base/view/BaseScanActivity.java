@@ -14,10 +14,8 @@ public abstract class BaseScanActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,2);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
-
         mLinearLayout.addView(bottomView,-1,params);
     }
 

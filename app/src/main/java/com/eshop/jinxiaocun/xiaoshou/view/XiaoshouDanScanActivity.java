@@ -47,10 +47,9 @@ public class XiaoshouDanScanActivity extends BaseScanActivity {
     @SuppressLint("WrongViewCast")
     @Override
     protected void initView() {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_add_xiaoshou_dan, null);
         mLinearLayout.addView(mView,0,params);
-        ly_kaidan = findViewById(R.id.lv_xiaoshoudan);
         mSpinner1 = findViewById(R.id.ly1_sp);
         mSpinner2 = findViewById(R.id.ly2_sp);
         mSpinner3 = findViewById(R.id.ly3_sp);

@@ -3,6 +3,9 @@ package com.eshop.jinxiaocun.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,7 @@ import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.main.view.MainActivity;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 
 
 import butterknife.BindView;
@@ -40,6 +44,7 @@ public class LoginActivity extends BaseActivity {
     Button btn_systemset;
 
     ProgressDialog progressDialog;
+    ILogin loginAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +80,22 @@ public class LoginActivity extends BaseActivity {
             editPassword.requestFocus();
 
         //测试时设置默认密码
-        editUser.setText("9999");
-        editPassword.setText("111111");
+        editUser.setText("100");
+        editPassword.setText("123456");
         editPassword.setSelection(editPassword.length());
 
+        loginAction = new LoginImp(mHandler);
 
         closeEditTextKeyboard();
         HomeProhibit();
     }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void loadData() {
@@ -103,61 +116,29 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     public void OnLogin() {
-//        try {
-//            if (!Build.MANUFACTURER.equals("SUPOIN")){
-//
-//                MyUtils.showToast("机器不合法，请使用销邦设备！", this);
-//                return;
-//            }
-//
-//            if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this))
-//            {
-//                MyUtils.showToast("您的网络有问题，请检查网络连接！",LoginActivity.this);
-//                return;
-//            }
-//
-//            if (editUser.getText().toString().trim().length() == 0) {
-//                MyUtils.showToast("用户名不能为空", this);
-//                return;
-//            }
-//            if (TextUtils.isEmpty(ConfigureParam.ShopGroup)) {
-//                MyUtils.showToast("请先输入门店组", this);
-//                Intent intent = new Intent();
-//                intent.setClass(LoginActivity.this, SystemSettingActivity.class);
-//                startActivity(intent);
-//                return;
-//            }
-//            progressDialog = MyUtils.showNoButtonProgressDialog(LoginActivity.this, "正在登录...");
-//            OkHttpUtils.login(editUser.getText().toString().trim(),editPassword.getText().toString().trim(),new GsonObjectCallback<LoginResponseEntity>() {
-//                @Override
-//                public void onUi(LoginResponseEntity responseEntity) throws Exception {
-//                    if(responseEntity.getRetCode().equals("0000")){
-//                        if(responseEntity.getData()!=null){
-//                            MyUtils.showToast("登录成功！", LoginActivity.this);
-//
-                            Intent intent = new Intent();
-//                            Config.UserCode = editUser.getText().toString().trim();
-//                            Config.listStore = responseEntity.getData().getUsr().getDataRange();
-                            intent.setClass(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-//                        }
-//                    }else{
-//                        MyUtils.showToast("登录失败！原因："+responseEntity.getRetMsg(), LoginActivity.this);
-//                    }
-//                    progressDialog.dismiss();
-//                }
-//                @Override
-//                public void onFailed(Call call, IOException e) {
-//                    MyUtils.showToast("登录失败！原因："+e.getMessage(), LoginActivity.this);
-//                    progressDialog.dismiss();
-//                }
-//            });
-//
-//
-//        }
-//        catch (Exception ex){
-//            MyUtils.showToast("登录失败！原因：" + ex.getMessage(), this);
-//        }
+        try {
+            if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this)) {
+                MyUtils.showToast("您的网络有问题，请检查网络连接！", LoginActivity.this);
+                return;
+            }
+
+            if (editUser.getText().toString().trim().length() == 0) {
+                MyUtils.showToast("用户名不能为空", this);
+                return;
+            }
+            if (TextUtils.isEmpty(Config.ShopGroup)) {
+                MyUtils.showToast("请先输入门店组", this);
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, SystemSettingActivity.class);
+                startActivity(intent);
+                return;
+            }
+
+            loginAction.loginAction(editUser.getText().toString().trim(),editPassword.getText().toString().trim());
+        }
+        catch (Exception ex){
+            MyUtils.showToast("登录失败！原因：" + ex.getMessage(), this);
+        }
     }
 
     @OnClick(R.id.btn_systemset)

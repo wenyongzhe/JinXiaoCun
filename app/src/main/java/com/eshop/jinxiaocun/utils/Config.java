@@ -15,6 +15,9 @@ public class Config {
     public static String PASSWORD="123456";
     public static String httpURL = "";
 
+    private static String WebUrl = "";
+    private static String NameSpace = "";
+
     //门店组
     public static String ShopGroup = "";
 
@@ -30,6 +33,14 @@ public class Config {
 
     public static String getSdCardPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+    public static String getWebUrl() {
+        return WebUrl;
+    }
+
+    public static String getNameSpace() {
+        return NameSpace;
     }
 
 }

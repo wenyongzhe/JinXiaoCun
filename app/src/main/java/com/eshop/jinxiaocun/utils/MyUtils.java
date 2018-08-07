@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Author 卢安
- * 创建时间  2018/3/26 0026
  * 描述  工具类
  */
 

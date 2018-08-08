@@ -94,6 +94,9 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
         }
     };
 

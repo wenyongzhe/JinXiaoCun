@@ -1,62 +1,64 @@
 package com.eshop.jinxiaocun.login;
 
-import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 
-import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
+import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
+import com.eshop.jinxiaocun.thread.TaskInterface;
+import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
 
-import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
 
-public class LoginImp extends AsyncTask implements ILogin {
+public class LoginImp implements ILogin {
 
-    private int timeOut = 5 * 1000 * 60;
     private Handler mHandler;
+    private WebServiceManager webServiceManager;
+
 
     public LoginImp(Handler mHandler) {
         this.mHandler = mHandler;
+        webServiceManager = new WebServiceManager();
     }
 
     @Override
     public void loginAction(String userName, String passWord) {
-
+        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
+        mThreadManagerInterface.executeRunnable(new LoginTaskInterface(userName, passWord));
     }
 
-    @Override
-    protected Object doInBackground(Object[] objects) {
-        return null;
+    class  LoginTaskInterface implements TaskInterface{
+        private String userName;
+        private String passWord;
+
+        public LoginTaskInterface(String userName, String passWord) {
+            this.userName = userName;
+            this.passWord = passWord;
+        }
+
+        @Override
+        public Object doInBackground(Object[] objects) {
+            try {
+                SoapObject mSoapObject = webServiceManager.login(userName,passWord);
+                String msg = mSoapObject.getProperty(0).toString();
+                Log.e("","---------------"+msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Object o) {
+            mHandler.sendEmptyMessage(1);
+        }
     }
 
-    @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
-    }
 
-    public SoapObject login(String orgCode, long position, int bufferlen) throws IOException, XmlPullParserException {
-        // TODO Auto-generated method stub
-        String methodName = "POS-LOGIN";
-        SoapObject soapObject=new SoapObject(Config.getNameSpace(), methodName);
-        soapObject.addProperty("pdaNo", orgCode);
-        soapObject.addProperty("position", position);
-        soapObject.addProperty("bufferlen", bufferlen);
-        return accessWcf(soapObject, methodName, timeOut);
-    }
-
-    private SoapObject accessWcf(SoapObject soapObject, String methodName, int timeout) throws IOException , XmlPullParserException {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        //envelope.addMapping(ChangeStaffEntity.NAMESPACE, "ChangeStaffEntity", ChangeStaffEntity.class);
-        envelope.setOutputSoapObject(soapObject);
-        envelope.bodyOut = soapObject;
-        envelope.dotNet = true;
-        HttpTransportSE transportSE = new HttpTransportSE(Config.getWebUrl(), timeout);
-        transportSE.debug = true;//使用调式功能
-        transportSE.call(Config.getWebUrl() + methodName, envelope);
-        return (SoapObject) envelope.bodyIn;
-    }
 }

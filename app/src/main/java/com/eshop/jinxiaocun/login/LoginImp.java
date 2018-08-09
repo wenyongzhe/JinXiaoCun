@@ -3,10 +3,16 @@ package com.eshop.jinxiaocun.login;
 import android.os.Handler;
 import android.util.Log;
 
+import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.login.Bean.LoginBean;
+import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
+import com.eshop.jinxiaocun.netWork.WebService.WebConfig;
 import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
 import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
+import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.GsonUtil;
 
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -43,8 +49,17 @@ public class LoginImp implements ILogin {
         @Override
         public Object doInBackground(Object[] objects) {
             try {
-                SoapObject mSoapObject = webServiceManager.login(userName,passWord);
+                LoginBean mLoginBean = new LoginBean();
+                mLoginBean.setAs_branch_no(Config.ShopGroup);
+                mLoginBean.setAs_operid(userName);
+                mLoginBean.setAs_operpsw(passWord);
+                String jsonData = GsonUtil.GsonString(mLoginBean);
+
+                SoapObject mSoapObject = webServiceManager.action(WebConfig.getLoginMeth(),jsonData);
                 String msg = mSoapObject.getProperty(0).toString();
+                JsonFormatImp mJsonFormatImp = new JsonFormatImp();
+                mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), LoginBeanResult.class);
+
                 Log.e("","---------------"+msg);
             } catch (IOException e) {
                 e.printStackTrace();

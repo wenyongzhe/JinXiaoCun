@@ -14,14 +14,7 @@ import java.io.IOException;
 
 public class WebServiceManager {
 
-    public SoapObject login(String userName, String passWord) throws IOException, XmlPullParserException {
-        LoginBean mLoginBean = new LoginBean();
-        mLoginBean.setAs_branch_no(Config.ShopGroup);
-        mLoginBean.setAs_operid(userName);
-        mLoginBean.setAs_operpsw(passWord);
-        String jsonData = GsonUtil.GsonString(mLoginBean);
-
-        String methodName = "POS-LOGIN";
+    public SoapObject action(String methodName, String jsonData) throws IOException, XmlPullParserException {
         SoapObject soapObject=new SoapObject(WebConfig.getNameSpace(), methodName);
         soapObject.addProperty("DevID", Config.DeviceID);
         soapObject.addProperty("SoftVer", Config.VersionCode);

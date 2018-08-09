@@ -41,6 +41,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_login)
     Button btn_login;
 
+    @BindView(R.id.btn_regit)
+    Button btn_regit;
+
     Button btn_systemset;
 
     ProgressDialog progressDialog;
@@ -72,6 +75,13 @@ public class LoginActivity extends BaseActivity {
                 OnSysemSet();
             }
         });
+        /*btn_regit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnRegist();
+            }
+        });*/
+
         tv_version.setText(CommonUtility.getInstance().GetAppVersion(this));
         tv_deviceid.setText(Config.DeviceID);
 
@@ -149,6 +159,9 @@ public class LoginActivity extends BaseActivity {
         Intent intent = new Intent();
         intent.setClass(LoginActivity.this, SystemSettingActivity.class);
         startActivity(intent);
+    }
+
+    public void OnRegist(){
     }
 
     @OnClick(R.id.tv_softkey)

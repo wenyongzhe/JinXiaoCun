@@ -55,7 +55,7 @@ public class LoginImp implements ILogin {
                 mLoginBean.setAs_operpsw(passWord);
                 String jsonData = GsonUtil.GsonString(mLoginBean);
 
-                SoapObject mSoapObject = webServiceManager.action(WebConfig.getLoginMeth(),jsonData);
+                SoapObject mSoapObject = webServiceManager.action(WebConfig.getLoginCmd(),jsonData);
                 String msg = mSoapObject.getProperty(0).toString();
                 JsonFormatImp mJsonFormatImp = new JsonFormatImp();
                 mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), LoginBeanResult.class);

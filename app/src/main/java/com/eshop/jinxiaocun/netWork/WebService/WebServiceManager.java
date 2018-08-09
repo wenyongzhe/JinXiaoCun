@@ -18,6 +18,7 @@ public class WebServiceManager {
         SoapObject soapObject=new SoapObject(WebConfig.getNameSpace(), methodName);
         soapObject.addProperty("DevID", Config.DeviceID);
         soapObject.addProperty("SoftVer", Config.VersionCode);
+        soapObject.addProperty("strCmd", methodName);
         soapObject.addProperty("JsonData", jsonData);
         return accessWcf(soapObject, methodName, WebConfig.getTimeOut());
     }
@@ -30,7 +31,8 @@ public class WebServiceManager {
         envelope.dotNet = true;
         HttpTransportSE transportSE = new HttpTransportSE(WebConfig.getWsdlUri(), timeout);
         transportSE.debug = true;//使用调式功能
-        transportSE.call(WebConfig.getNameSpace() + methodName, envelope);
+//        transportSE.call(WebConfig.getNameSpace() + methodName, envelope);
+        transportSE.call(null, envelope);
         return (SoapObject) envelope.bodyIn;
     }
 

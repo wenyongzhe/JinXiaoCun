@@ -4,11 +4,15 @@ public class WebConfig {
     private static final int TIME_OUT = 5 * 1000 * 60;
     private static String WSDL_URI = "";
     private static String NameSpace = "";
-    private static final String LOGIN_CMD = "POS-LOGIN";
+    private static final String POS_LOGIN = "POS-LOGIN";
+    private static final String POS_REG = "POS-REG";
 
+    public static String getPosLogin() {
+        return POS_LOGIN;
+    }
 
-    public static String getLoginCmd() {
-        return LOGIN_CMD;
+    public static String getPosReg() {
+        return POS_REG;
     }
 
     public static int getTimeOut() {

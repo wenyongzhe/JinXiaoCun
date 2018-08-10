@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.main.view.MainActivity;
@@ -75,12 +77,12 @@ public class LoginActivity extends BaseActivity {
                 OnSysemSet();
             }
         });
-        /*btn_regit.setOnClickListener(new View.OnClickListener() {
+        btn_regit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 OnRegist();
             }
-        });*/
+        });
 
         tv_version.setText(CommonUtility.getInstance().GetAppVersion(this));
         tv_deviceid.setText(Config.DeviceID);
@@ -104,9 +106,19 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+            switch (msg.what){
+                case Config.MESSAGE_OK:
+                    ToastUtils.showLong("注册成功！");
+                    break;
+                case Config.MESSAGE_ERROR:
+                    ToastUtils.showLong("注册失败！");
+                    break;
+                case Config.MESSAGE_INTENT:
+                    Intent intent = new Intent();
+                    intent.setClass(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    break;
+            }
         }
     };
 
@@ -162,6 +174,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void OnRegist(){
+        loginAction.registDevice();
     }
 
     @OnClick(R.id.tv_softkey)

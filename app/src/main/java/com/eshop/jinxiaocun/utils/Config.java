@@ -17,6 +17,13 @@ public class Config {
     public static String VersionName = "";
     public static int VersionCode = 1;
 
+    public static String branch_no = "-1";//门店号
+    public static String posid = "-1";
+    public static String soft_name = "-1";//软件名称
+
+    public final static int MESSAGE_OK = 1;
+    public final static int MESSAGE_ERROR = -1;
+    public final static int MESSAGE_INTENT = 2;
 
     //门店组
     public static String ShopGroup = "";

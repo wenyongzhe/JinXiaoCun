@@ -6,6 +6,7 @@ import android.util.Log;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.login.Bean.LoginBean;
 import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
+import com.eshop.jinxiaocun.login.Bean.RegistBeanResult;
 import com.eshop.jinxiaocun.netWork.WebService.WebConfig;
 import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
 import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
@@ -37,6 +38,48 @@ public class LoginImp implements ILogin {
         mThreadManagerInterface.executeRunnable(new LoginTaskInterface(userName, passWord));
     }
 
+    @Override
+    public void registDevice() {
+        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
+        mThreadManagerInterface.executeRunnable(new RegistInterface());
+    }
+
+    class  RegistInterface implements TaskInterface{
+
+        @Override
+        public Object doInBackground(Object[] objects) {
+            try {
+                String jsonData ="｛\"iDevID\":" + Config.DeviceID + "}";
+
+                SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosReg(),jsonData);
+                String status = mSoapObject.getProperty(0).toString();
+                if(status.equals(Config.MESSAGE_ERROR+"")){
+                    return Config.MESSAGE_ERROR;
+                }
+                JsonFormatImp mJsonFormatImp = new JsonFormatImp();
+                RegistBeanResult mRegistBeanResult = mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), RegistBeanResult.class);
+                Config.posid = mRegistBeanResult.getPosid();
+                Config.branch_no = mRegistBeanResult.getBranch_no();
+                Config.soft_name = mRegistBeanResult.getSoft_name();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            return Config.MESSAGE_OK;
+        }
+
+        @Override
+        public void onPostExecute(Object result) {
+            if((int)result==Config.MESSAGE_OK){
+                mHandler.sendEmptyMessage(Config.MESSAGE_OK);
+            }else{
+                mHandler.sendEmptyMessage(Config.MESSAGE_ERROR);
+            }
+        }
+    }
+
     class  LoginTaskInterface implements TaskInterface{
         private String userName;
         private String passWord;
@@ -55,23 +98,22 @@ public class LoginImp implements ILogin {
                 mLoginBean.setAs_operpsw(passWord);
                 String jsonData = GsonUtil.GsonString(mLoginBean);
 
-                SoapObject mSoapObject = webServiceManager.action(WebConfig.getLoginCmd(),jsonData);
-                String msg = mSoapObject.getProperty(0).toString();
+                SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosLogin(),jsonData);
+                String status = mSoapObject.getProperty(0).toString();
                 JsonFormatImp mJsonFormatImp = new JsonFormatImp();
                 mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), LoginBeanResult.class);
 
-                Log.e("","---------------"+msg);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             }
-            return null;
+            return Config.MESSAGE_INTENT;
         }
 
         @Override
         public void onPostExecute(Object o) {
-            mHandler.sendEmptyMessage(1);
+            mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
         }
     }
 

@@ -2,6 +2,8 @@ package com.eshop.jinxiaocun.xiaoshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -72,7 +74,12 @@ public class XiaoshouDanScanActivity extends BaseScanActivity {
         mSpinner3.setAdapter(mTuiHupoAdapter);
     }
 
-
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
 
 

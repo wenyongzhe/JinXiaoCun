@@ -62,6 +62,7 @@ public class LoginActivity extends BaseActivity {
         tv_deviceid = findViewById(R.id.tv_deviceid);
         editUser = (EditText) findViewById(R.id.et_user_code);
         editPassword = (EditText) findViewById(R.id.et_pwd);
+        btn_regit = findViewById(R.id.btn_regit);
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_systemset = (Button) findViewById(R.id.btn_systemset);
@@ -152,11 +153,11 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
             if (TextUtils.isEmpty(Config.ShopGroup)) {
-                MyUtils.showToast("请先输入门店组", this);
-                Intent intent = new Intent();
+                MyUtils.showToast("请先绑定设备", this);
+               /* Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, SystemSettingActivity.class);
-                startActivity(intent);
-                return;
+                startActivity(intent);*/
+//                return;
             }
 
             loginAction.loginAction(editUser.getText().toString().trim(),editPassword.getText().toString().trim());

@@ -6,9 +6,14 @@ public class WebConfig {
     private static String NameSpace = "";
     private static final String POS_LOGIN = "POS-LOGIN";
     private static final String POS_REG = "POS-REG";
+    private static final String GetPLUInfo = "GetPLUInfo";
 
     public static String getPosLogin() {
         return POS_LOGIN;
+    }
+
+    public static String getGetPLUInfo() {
+        return GetPLUInfo;
     }
 
     public static String getPosReg() {

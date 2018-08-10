@@ -24,8 +24,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.et_service_url)
     EditText txtSeverUrl;
 
-    @BindView(R.id.et_shop_group)
-    EditText txtShopGroup;
+//    @BindView(R.id.et_shop_group)
+//    EditText txtShopGroup;
 
     @BindView(R.id.et_service_port)
     EditText txtSeverPort;
@@ -52,11 +52,11 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
         txtSeverUrl = findViewById(R.id.et_service_url);
         txtSeverPort = findViewById(R.id.et_service_port);
-        txtShopGroup = findViewById(R.id.et_shop_group);
+//        txtShopGroup = findViewById(R.id.et_shop_group);
 
         txtSeverUrl.setText(Config.IP);
         txtSeverPort.setText(Config.IP_POIN);
-        txtShopGroup.setText(Config.ShopGroup);
+//        txtShopGroup.setText(Config.ShopGroup);
 
         Button btnTest = (Button)findViewById(R.id.btn_test);
         btnTest.setOnClickListener(this);
@@ -87,9 +87,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
                 ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_SERVERURL, txtSeverUrl.getText().toString());
                 ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_SERVERPORT, txtSeverPort.getText().toString());
-                ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_SHOPGROUP, txtShopGroup.getText().toString());
+//                ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_SHOPGROUP, txtShopGroup.getText().toString());
 
-                Config.ShopGroup = txtShopGroup.getText().toString();
+//                Config.ShopGroup = txtShopGroup.getText().toString();
                 Config.IP = txtSeverUrl.getText().toString();
                 Config.IP_POIN = txtSeverPort.getText().toString();
 

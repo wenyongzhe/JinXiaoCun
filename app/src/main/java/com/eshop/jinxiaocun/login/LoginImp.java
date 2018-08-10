@@ -3,6 +3,8 @@ package com.eshop.jinxiaocun.login;
 import android.os.Handler;
 import android.util.Log;
 
+import com.blankj.utilcode.util.DeviceUtils;
+import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.login.Bean.LoginBean;
 import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
@@ -44,12 +46,13 @@ public class LoginImp implements ILogin {
         mThreadManagerInterface.executeRunnable(new RegistInterface());
     }
 
+    //注册
     class  RegistInterface implements TaskInterface{
 
         @Override
         public Object doInBackground(Object[] objects) {
             try {
-                String jsonData ="｛\"iDevID\":" + Config.DeviceID + "}";
+                String jsonData ="｛\"iDevID\":" + Config.DeviceID + DeviceUtils.getMacAddress() + "}";
 
                 SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosReg(),jsonData);
                 String status = mSoapObject.getProperty(0).toString();
@@ -80,6 +83,7 @@ public class LoginImp implements ILogin {
         }
     }
 
+    //登录
     class  LoginTaskInterface implements TaskInterface{
         private String userName;
         private String passWord;
@@ -100,7 +104,7 @@ public class LoginImp implements ILogin {
 
                 SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosLogin(),jsonData);
                 String status = mSoapObject.getProperty(0).toString();
-                JsonFormatImp mJsonFormatImp = new JsonFormatImp();
+                IJsonFormat mJsonFormatImp = new JsonFormatImp();
                 mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), LoginBeanResult.class);
 
             } catch (IOException e) {

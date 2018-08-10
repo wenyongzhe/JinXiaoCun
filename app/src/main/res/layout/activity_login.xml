@@ -163,7 +163,7 @@
                     <TextView
                         android:id="@+id/tv_deviceid"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="1.3"
                         style="@style/TextView_Grey"
                         android:layout_height="wrap_content" />
 
@@ -176,7 +176,7 @@
                     <TextView
                         android:id="@+id/tv_vision"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="0.7"
                         android:layout_height="wrap_content"
                         style="@style/TextView_Grey" />
 

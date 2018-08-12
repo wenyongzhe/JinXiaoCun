@@ -31,25 +31,27 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by Administrator on 2018/3/27.
  */
 
-public class OKHttpRequest implements NetRequest{
+public class NetWorkImp implements INetWork {
 
     private static OkHttpClient myOkHttpClient = null;
 
-    private volatile static OKHttpRequest mOKHttpRequest;
+//    private volatile static NetWorkImp mOKHttpRequest;
     private MessageManage messageManage;
 
-    private OKHttpRequest(){}
-
-    public static OKHttpRequest getInstance(){
-        if (mOKHttpRequest == null) {
-            synchronized (OKHttpRequest.class) {
-                if (mOKHttpRequest == null) {
-                    mOKHttpRequest = new OKHttpRequest();
-                }
-            }
-        }
-        return mOKHttpRequest;
+    public NetWorkImp(Context context){
+        init(context);
     }
+
+//    public static NetWorkImp getInstance(){
+//        if (mOKHttpRequest == null) {
+//            synchronized (NetWorkImp.class) {
+//                if (mOKHttpRequest == null) {
+//                    mOKHttpRequest = new NetWorkImp();
+//                }
+//            }
+//        }
+//        return mOKHttpRequest;
+//    }
 
     @Override
     public void init(Context context) {

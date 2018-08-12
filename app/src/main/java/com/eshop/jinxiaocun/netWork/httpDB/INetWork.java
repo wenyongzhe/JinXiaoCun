@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by Administrator on 2018/3/27.
  */
 
-public interface NetRequest {
+public interface INetWork {
     void init(Context context);
 
     void doGet(String url, final Map<String, String> paramsMap, final IResponseListener iResponseListener);

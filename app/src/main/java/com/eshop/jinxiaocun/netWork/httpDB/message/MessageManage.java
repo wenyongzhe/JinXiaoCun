@@ -4,9 +4,11 @@ import android.content.Context;
 
 
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
-import com.eshop.jinxiaocun.netWork.httpDB.OKHttpRequest;
+import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 
 import java.io.IOException;
+
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2018/3/28.
@@ -26,7 +28,7 @@ public class MessageManage {
 
     public static MessageManage getInstance(){
         if (myMessageManage == null) {
-            synchronized (OKHttpRequest.class) {
+            synchronized (NetWorkImp.class) {
                 if (myMessageManage == null) {
                     myMessageManage = new MessageManage();
                 }
@@ -43,7 +45,7 @@ public class MessageManage {
         messagePost.postError(e,obj);
     }
 
-    public void postResult(Object response ,IResponseListener obj){
+    public void postResult(Response response , IResponseListener obj){
         messagePost.postResult(response,obj);
     }
 }

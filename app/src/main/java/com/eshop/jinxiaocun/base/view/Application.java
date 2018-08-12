@@ -9,7 +9,6 @@ import android.telephony.TelephonyManager;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
-import com.eshop.jinxiaocun.netWork.httpDB.NetManager;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
@@ -30,7 +29,7 @@ public class Application extends android.app.Application {
         super.onCreate();
         mContext = getApplicationContext();
 
-        NetManager.init(this);
+//        NetManager.init(this);
         Utils.init(this);
 
         singleton = this;

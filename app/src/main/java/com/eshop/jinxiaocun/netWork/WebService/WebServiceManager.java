@@ -1,8 +1,7 @@
 package com.eshop.jinxiaocun.netWork.WebService;
 
-import com.eshop.jinxiaocun.login.Bean.LoginBean;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.utils.GsonUtil;
+import com.eshop.jinxiaocun.utils.WebConfig;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -14,17 +13,17 @@ import java.io.IOException;
 
 public class WebServiceManager {
 
-    public SoapObject action(String methodName, String jsonData) throws IOException, XmlPullParserException {
-        SoapObject soapObject=new SoapObject(WebConfig.getNameSpace(), methodName);
+    public SoapObject action(String strCmd, String jsonData) throws IOException, XmlPullParserException {
+        SoapObject soapObject=new SoapObject(WebConfig.getNameSpace(), "PostData");
         soapObject.addProperty("DevID", Config.DeviceID);
         soapObject.addProperty("SoftVer", Config.VersionCode);
-        soapObject.addProperty("strCmd", methodName);
+        soapObject.addProperty("strCmd", strCmd);
         soapObject.addProperty("JsonData", jsonData);
-        return accessWcf(soapObject, methodName, WebConfig.getTimeOut());
+        return accessWcf(soapObject, "PostData", WebConfig.getTimeOut());
     }
 
     private SoapObject accessWcf(SoapObject soapObject, String methodName, int timeout) throws IOException , XmlPullParserException {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
         //envelope.addMapping(ChangeStaffEntity.NAMESPACE, "ChangeStaffEntity", ChangeStaffEntity.class);
         envelope.setOutputSoapObject(soapObject);
         envelope.bodyOut = soapObject;

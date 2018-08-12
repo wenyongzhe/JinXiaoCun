@@ -4,7 +4,7 @@ import android.os.Handler;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
-import com.eshop.jinxiaocun.netWork.WebService.WebConfig;
+import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
 import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
 import com.eshop.jinxiaocun.thread.TaskInterface;

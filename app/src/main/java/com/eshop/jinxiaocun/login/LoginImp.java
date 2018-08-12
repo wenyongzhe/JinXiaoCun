@@ -4,122 +4,109 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
-import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.login.Bean.LoginBean;
-import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
+import com.eshop.jinxiaocun.login.Bean.RegistBean;
 import com.eshop.jinxiaocun.login.Bean.RegistBeanResult;
-import com.eshop.jinxiaocun.netWork.WebService.WebConfig;
-import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
-import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
-import com.eshop.jinxiaocun.thread.TaskInterface;
-import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
+import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
+import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
+import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.utils.GsonUtil;
-
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Response;
 
 
 public class LoginImp implements ILogin {
 
     private Handler mHandler;
-    private WebServiceManager webServiceManager;
+    private INetWork mINetWork;
 
 
     public LoginImp(Handler mHandler) {
         this.mHandler = mHandler;
-        webServiceManager = new WebServiceManager();
+        mINetWork = new NetWorkImp(Application.mContext);
     }
 
     @Override
     public void loginAction(String userName, String passWord) {
-        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        mThreadManagerInterface.executeRunnable(new LoginTaskInterface(userName, passWord));
+        LoginBean mLoginBean = new LoginBean();
+        mLoginBean.getJsonData().setAs_branch_no(Config.ShopGroup);
+        mLoginBean.getJsonData().setAs_operid(userName);
+        mLoginBean.getJsonData().setAs_operpsw(passWord);
+        mLoginBean.setStrCmd(WebConfig.getPosLogin());
+
+        JsonFormatImp mJsonFormatImp = new JsonFormatImp();
+        String jsonData = mJsonFormatImp.ObjetToString(mLoginBean.getJsonData());
+
+
+        Map<String,String> map = new HashMap();
+        map.put("DevID",Config.DeviceID);
+        map.put("SoftVer",Config.VersionCode+"");
+        map.put("strCmd",WebConfig.getPosLogin());
+        map.put("JsonData",jsonData);
+
+        mINetWork.doGet(WebConfig.getWsdlUri(),map,new LoginInterface());
+
     }
 
     @Override
     public void registDevice() {
-        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        mThreadManagerInterface.executeRunnable(new RegistInterface());
+        RegistBean mRegistBean = new RegistBean();
+        String jsonData ="｛\"iDevID\":" + Config.DeviceID + DeviceUtils.getMacAddress() + "}";
+        mRegistBean.setStrCmd(WebConfig.getPosReg());
+        mRegistBean.setJsonData(jsonData);
+        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new RegistInterface());
+    }
+
+    //登陆
+    class LoginInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event) {
+            String dd = null;
+            try {
+                dd = event.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.e("-----",dd);
+        }
     }
 
     //注册
-    class  RegistInterface implements TaskInterface{
+    class RegistInterface implements IResponseListener{
 
         @Override
-        public Object doInBackground(Object[] objects) {
-            try {
-                String jsonData ="｛\"iDevID\":" + Config.DeviceID + DeviceUtils.getMacAddress() + "}";
+        public void handleError(Object event) {
 
-                SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosReg(),jsonData);
-                String status = mSoapObject.getProperty(0).toString();
-                if(status.equals(Config.MESSAGE_ERROR+"")){
-                    return Config.MESSAGE_ERROR;
-                }
-                JsonFormatImp mJsonFormatImp = new JsonFormatImp();
-                RegistBeanResult mRegistBeanResult = mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), RegistBeanResult.class);
-                Config.posid = mRegistBeanResult.getPosid();
-                Config.branch_no = mRegistBeanResult.getBranch_no();
-                Config.soft_name = mRegistBeanResult.getSoft_name();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }
-            return Config.MESSAGE_OK;
         }
 
         @Override
-        public void onPostExecute(Object result) {
-            if((int)result==Config.MESSAGE_OK){
-                mHandler.sendEmptyMessage(Config.MESSAGE_OK);
-            }else{
-                mHandler.sendEmptyMessage(Config.MESSAGE_ERROR);
+        public void handleResult(Response event) {
+            JsonFormatImp mJsonFormatImp = new JsonFormatImp();
+            RegistBeanResult mRegistBeanResult = null;
+            try {
+                mRegistBeanResult = mJsonFormatImp.JsonToBean(event.body().string(), RegistBeanResult.class);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            Config.posid = mRegistBeanResult.getPosid();
+            Config.branch_no = mRegistBeanResult.getBranch_no();
+            Config.soft_name = mRegistBeanResult.getSoft_name();
         }
     }
 
-    //登录
-    class  LoginTaskInterface implements TaskInterface{
-        private String userName;
-        private String passWord;
-
-        public LoginTaskInterface(String userName, String passWord) {
-            this.userName = userName;
-            this.passWord = passWord;
-        }
-
-        @Override
-        public Object doInBackground(Object[] objects) {
-            try {
-                LoginBean mLoginBean = new LoginBean();
-                mLoginBean.setAs_branch_no(Config.ShopGroup);
-                mLoginBean.setAs_operid(userName);
-                mLoginBean.setAs_operpsw(passWord);
-                String jsonData = GsonUtil.GsonString(mLoginBean);
-
-                SoapObject mSoapObject = webServiceManager.action(WebConfig.getPosLogin(),jsonData);
-                String status = mSoapObject.getProperty(0).toString();
-                IJsonFormat mJsonFormatImp = new JsonFormatImp();
-                mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), LoginBeanResult.class);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }
-            return Config.MESSAGE_INTENT;
-        }
-
-        @Override
-        public void onPostExecute(Object o) {
-            mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
-        }
-    }
 
 
 }

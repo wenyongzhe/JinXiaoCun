@@ -7,33 +7,28 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseListActivity;
-import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
-import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
-import com.eshop.jinxiaocun.xiaoshou.bean.TWmSheetMasterBean;
-import com.eshop.jinxiaocun.xiaoshou.dao.TWmSheetMasterDao;
-import com.j256.ormlite.dao.Dao;
+import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBean;
+import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.xiaoshou.presenter.DanJuListImp;
+import com.eshop.jinxiaocun.xiaoshou.presenter.IDanJuList;
 
-import java.sql.SQLException;
 import java.util.List;
 
-public class XiaoShouDanListActivity extends BaseListActivity {
+public class XiaoShouDanListActivity extends BaseListActivity implements INetWorResult{
 
     private ListView lvXiaoshoudan;
-    private XiaoshouDanAdapter mXiaoshouDanAdapter;
-    private List<TWmSheetMasterBean> listInfo;
+    private XiaoshouDanListAdapter mXiaoshouDanAdapter;
+    private List<DanJuMainBeanResult> listInfo;
+    private IDanJuList mDanJuList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mDanJuList = new DanJuListImp(this);
         loadData();
         initView();
-
-
-        //ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        //mThreadManagerInterface.executeRunnable(this);
-
     }
 
     @Override
@@ -54,27 +49,19 @@ public class XiaoShouDanListActivity extends BaseListActivity {
 
     @Override
     protected void loadData() {
-
-
-
-//        TWmSheetMasterDao mTWmSheetMasterDao = new TWmSheetMasterDao();
-//        try {
-//            listInfo = mTWmSheetMasterDao.getDao().queryForAll();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
+        DanJuMainBean mDanJuMainBean = new DanJuMainBean();
+        mDanJuMainBean.JsonData.BeginTime = "";
+        mDanJuMainBean.JsonData.EndTime = "";
+        mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
+        mDanJuMainBean.JsonData.PageNum = "100";
+        mDanJuMainBean.JsonData.Page = "1";
+        mDanJuList.getDanJuList(mDanJuMainBean);
     }
 
     @Override
-    public Object doInBackground(Object[] objects) {
-        loadData();
-        return null;
-    }
-
-    @Override
-    public void onPostExecute(Object o) {
-        mXiaoshouDanAdapter = new XiaoshouDanAdapter(listInfo);
+    public void handleResule(int flag, Object o) {
+        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
+        mXiaoshouDanAdapter = new XiaoshouDanListAdapter(mDanJuMainBeanResult.JsonData);
         lvXiaoshoudan.setAdapter(mXiaoshouDanAdapter);
         mXiaoshouDanAdapter.notifyDataSetChanged();
     }

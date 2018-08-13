@@ -1,74 +1,60 @@
 package com.eshop.jinxiaocun.xiaoshou.presenter;
 
 import android.os.Handler;
-
 import com.eshop.jinxiaocun.base.IJsonFormat;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
+import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.utils.WebConfig;
-import com.eshop.jinxiaocun.netWork.WebService.WebServiceManager;
-import com.eshop.jinxiaocun.thread.AsyncTaskThreadImp;
-import com.eshop.jinxiaocun.thread.TaskInterface;
-import com.eshop.jinxiaocun.thread.ThreadManagerInterface;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBean;
 import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBeanResult;
-
-import org.ksoap2.serialization.SoapObject;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
+import okhttp3.Response;
 
 public class XiaoShouScanImp implements IXiaoShouScan {
-    private Handler mHandler;
+    private INetWorResult mHandler;
+    private INetWork mINetWork;
+    IJsonFormat mJsonFormatImp = new JsonFormatImp();
+
+    public XiaoShouScanImp(INetWorResult mHandler) {
+        this.mHandler = mHandler;
+    }
 
     @Override
     public void getPLUInfo(String barCode) {
-        ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        mThreadManagerInterface.executeRunnable(new GetGoodInforInterface(barCode));
+        GoodGetBean mGoodGetBean = new GoodGetBean();
+        mGoodGetBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mGoodGetBean.getJsonData().setAs_item_no(barCode);
+        IJsonFormat mJsonFormatImp = new JsonFormatImp();
+        String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
+
+        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodInforInterface());
     }
 
-    class  GetGoodInforInterface implements TaskInterface {
+    //查询商品信息
+    class GetGoodInforInterface implements IResponseListener {
 
-        private String barCode;
-        private WebServiceManager webServiceManager;
-
-        public GetGoodInforInterface(String barCode) {
-            this.barCode = barCode;
-            webServiceManager = new WebServiceManager();
+        @Override
+        public void handleError(Object event) {
         }
 
         @Override
-        public Object doInBackground(Object[] objects) {
+        public void handleResult(Response event) {
+            String result = "";
             try {
-
-                GoodGetBean mGoodGetBean = new GoodGetBean();
-                mGoodGetBean.setAs_branchNo(Config.branch_no);
-                mGoodGetBean.setAs_item_no(barCode);
-                IJsonFormat mJsonFormatImp = new JsonFormatImp();
-                String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
-
-                SoapObject mSoapObject = webServiceManager.action(WebConfig.getGetPLUInfo(),jsonData);
-                String status = mSoapObject.getProperty(0).toString();
-                if(status.equals(Config.MESSAGE_ERROR+"")){
-                    return Config.MESSAGE_ERROR;
+                result = event.body().string();
+                GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
+                if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_OK,mGoodGetBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
                 }
-                GoodGetBeanResult mGoodGetBeanResult = mJsonFormatImp.JsonToBean( mSoapObject.getProperty(2).toString(), GoodGetBeanResult.class);
-
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }
-            return Config.MESSAGE_OK;
-        }
-
-        @Override
-        public void onPostExecute(Object result) {
-            if((int)result==Config.MESSAGE_OK){
-                mHandler.sendEmptyMessage(Config.MESSAGE_OK);
-            }else{
-                mHandler.sendEmptyMessage(Config.MESSAGE_ERROR);
             }
         }
     }
+
 }

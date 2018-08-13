@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.utils.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class XiaoshouDanScanActivity extends BaseScanActivity {
+public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWorResult {
 
     @BindView(R.id.ly1_sp)
     private Spinner mSpinner1;
@@ -74,13 +76,13 @@ public class XiaoshouDanScanActivity extends BaseScanActivity {
         mSpinner3.setAdapter(mTuiHupoAdapter);
     }
 
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+    @Override
+    public void handleResule(int flag,Object o) {
+        switch (flag){
+            case Config.MESSAGE_OK:
+                break;
+            case Config.MESSAGE_ERROR:
+                break;
         }
-    };
-
-
-
+    }
 }

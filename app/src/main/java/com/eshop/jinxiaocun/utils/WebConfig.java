@@ -4,9 +4,10 @@ public class WebConfig {
     private static final int TIME_OUT = 5 * 1000 * 60;
     private static String WSDL_URI = "http://120.79.209.140:8080/MobilePos/API.asmx/PostData";
     private static String NameSpace = "http://120.79.209.140:8080";
-    private static final String POS_LOGIN = "RT-LOGIN";
-    private static final String POS_REG = "POS-REG";
-    private static final String GetPLUInfo = "GetPLUInfo";
+    public static final String POS_LOGIN = "RT-LOGIN";
+    public static final String POS_REG = "POS-REG";
+    public static final String GetPLUInfo = "GetPLUInfo";
+    public static final String QrySheetHead = "QrySheetHead";
 
     public static String getPosLogin() {
         return POS_LOGIN;

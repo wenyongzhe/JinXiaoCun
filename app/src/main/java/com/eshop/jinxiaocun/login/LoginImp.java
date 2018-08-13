@@ -39,7 +39,6 @@ public class LoginImp implements ILogin {
         mLoginBean.getJsonData().setAs_branch_no(Config.ShopGroup);
         mLoginBean.getJsonData().setAs_operid(userName);
         mLoginBean.getJsonData().setAs_operpsw(passWord);
-        mLoginBean.setStrCmd(WebConfig.getPosLogin());
 
         JsonFormatImp mJsonFormatImp = new JsonFormatImp();
         String jsonData = mJsonFormatImp.ObjetToString(mLoginBean.getJsonData());
@@ -81,6 +80,7 @@ public class LoginImp implements ILogin {
                 e.printStackTrace();
             }
             Log.e("-----",dd);
+            mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
         }
     }
 

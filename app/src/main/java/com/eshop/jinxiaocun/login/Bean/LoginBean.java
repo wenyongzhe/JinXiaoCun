@@ -1,12 +1,14 @@
 package com.eshop.jinxiaocun.login.Bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseBean;
+import com.eshop.jinxiaocun.utils.WebConfig;
 
 public class LoginBean extends BaseBean{
 
     private LoginJsonData JsonData;
 
     public LoginBean() {
+        setStrCmd(WebConfig.getPosLogin());
         JsonData = new LoginJsonData();
     }
 

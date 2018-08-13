@@ -1,23 +1,44 @@
 package com.eshop.jinxiaocun.xiaoshou.bean;
 
-public class GoodGetBean {
+import com.eshop.jinxiaocun.base.bean.BaseBean;
+import com.eshop.jinxiaocun.login.Bean.LoginBean;
 
-    private String as_branchNo;// 门店机构
-    private String as_item_no;// 商品编码
+public class GoodGetBean extends BaseBean{
 
-    public String getAs_branchNo() {
-        return as_branchNo;
+    private GoodGetJsonData JsonData;
+
+
+    public GoodGetBean() {
+        JsonData = new GoodGetJsonData();
     }
 
-    public void setAs_branchNo(String as_branchNo) {
-        this.as_branchNo = as_branchNo;
+    public GoodGetJsonData getJsonData() {
+        return JsonData;
     }
 
-    public String getAs_item_no() {
-        return as_item_no;
+    public void setJsonData(GoodGetJsonData jsonData) {
+        JsonData = jsonData;
     }
 
-    public void setAs_item_no(String as_item_no) {
-        this.as_item_no = as_item_no;
+    public class GoodGetJsonData {
+        private String as_branchNo;// 门店机构
+        private String as_item_no;// 商品编码
+
+        public String getAs_branchNo() {
+            return as_branchNo;
+        }
+
+        public void setAs_branchNo(String as_branchNo) {
+            this.as_branchNo = as_branchNo;
+        }
+
+        public String getAs_item_no() {
+            return as_item_no;
+        }
+
+        public void setAs_item_no(String as_item_no) {
+            this.as_item_no = as_item_no;
+        }
     }
+
 }

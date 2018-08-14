@@ -12,6 +12,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.widget.ImageTextView;
 import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouDanListActivity;
+import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouDanTabListActivity;
 import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouTuiHuoListActivity;
 
 public class XiaoShouFragment extends BaseFragment {
@@ -48,7 +49,7 @@ public class XiaoShouFragment extends BaseFragment {
         Intent mIntent;
         switch (view.getId()){
             case R.id.myView_xiaoshou:
-                mIntent = new Intent(getActivity(), XiaoShouDanListActivity.class);
+                mIntent = new Intent(getActivity(), XiaoShouDanTabListActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.myView_xiaoshoutui:

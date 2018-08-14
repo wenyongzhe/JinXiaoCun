@@ -12,11 +12,6 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBean;
-import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBeanResult;
-
-import java.io.IOException;
-
 import okhttp3.Response;
 
 public class DanJuListImp implements IDanJuList {

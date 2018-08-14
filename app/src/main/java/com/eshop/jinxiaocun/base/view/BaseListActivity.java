@@ -12,10 +12,15 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.widget.RefreshListView;
 
 public class BaseListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
-    protected ListView mListView;
+    protected RefreshListView mListView;
+    /** 页数 */
+    protected int page = 1;
+    /** 每次请求的条数 */
+    protected int limit = 10;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

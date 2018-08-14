@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.ViewFindUtils;
@@ -17,13 +19,15 @@ import java.util.ArrayList;
 public class BaseTabListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"首页", "消息", "联系人"};
+    private String[] mTitles = {"已提交", "草稿"};
     private View mDecorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_tab_list);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLinearLayout.addView(getView(R.layout.activity_base_tab_list),0,params);
 
         mDecorView = getWindow().getDecorView();
         SegmentTabLayout tabLayout_4 = ViewFindUtils.find(mDecorView, R.id.tl_1);

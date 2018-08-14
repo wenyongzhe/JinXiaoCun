@@ -50,4 +50,8 @@
     <color name="button_red">#ff4400</color>
     <color name="gray">#ff606060</color>
     <color name="alpha_blue">#b6bec9</color>
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+    <!-- 浅灰 -->
+    <color name="light_gray">#b2b2b2</color>
 </resources>

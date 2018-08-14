@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.ViewFindUtils;
+import com.eshop.jinxiaocun.xiaoshou.view.CaoGaoDanJuFragment;
+import com.eshop.jinxiaocun.xiaoshou.view.FinishDanJuFragment;
 import com.flyco.tablayout.SegmentTabLayout;
 
 import java.util.ArrayList;
@@ -32,9 +34,8 @@ public class BaseTabListActivity extends BaseActivity implements AdapterView.OnI
         mDecorView = getWindow().getDecorView();
         SegmentTabLayout tabLayout_4 = ViewFindUtils.find(mDecorView, R.id.tl_1);
 
-        for (String title : mTitles) {
-            mFragments.add(DemoTestFragment.getInstance("Switch Fragment " + title));
-        }
+        mFragments.add(FinishDanJuFragment.getInstance());
+        mFragments.add(CaoGaoDanJuFragment.getInstance());
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
     }
 

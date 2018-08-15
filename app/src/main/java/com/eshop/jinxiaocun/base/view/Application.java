@@ -3,18 +3,16 @@ package com.eshop.jinxiaocun.base.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
+import com.eshop.jinxiaocun.db.DBHelper;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.Stack;
-
-import butterknife.ButterKnife;
 
 public class Application extends android.app.Application {
 
@@ -43,6 +41,7 @@ public class Application extends android.app.Application {
         Config.DeviceID = TelephonyMgr.getDeviceId();
         Config.VersionName = MyUtils.getVerName(this);
         Config.VersionCode = MyUtils.getVersionCode(this);
+        Config.DBHelper = new DBHelper(this);
 
         FileUtils.createOrExistsDir(Config.updateFile);
         FileUtils.createOrExistsDir(Config.databasePath);

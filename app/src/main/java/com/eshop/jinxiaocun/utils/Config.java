@@ -2,6 +2,8 @@ package com.eshop.jinxiaocun.utils;
 
 import android.os.Environment;
 
+import com.eshop.jinxiaocun.db.DBHelper;
+
 public class Config {
 
     public static String UserCode = "";
@@ -25,6 +27,8 @@ public class Config {
     public final static int MESSAGE_ERROR = -1;
     public final static int MESSAGE_INTENT = 2;
     public final static int MESSAGE_REFLASH = 3;
+
+    public static DBHelper DBHelper;
 
     //门店组
     public static String ShopGroup = "";

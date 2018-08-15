@@ -27,7 +27,6 @@ public class BaseTabListActivity extends BaseActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_base_tab_list),0,params);
 
@@ -37,28 +36,6 @@ public class BaseTabListActivity extends BaseActivity implements AdapterView.OnI
         mFragments.add(FinishDanJuFragment.getInstance());
         mFragments.add(CaoGaoDanJuFragment.getInstance());
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
-    }
-
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitles[position];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
     }
 
     @Override

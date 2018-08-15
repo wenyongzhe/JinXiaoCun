@@ -45,15 +45,17 @@ public class DanJuListImp implements IDanJuList {
         @Override
         public void handleResult(Response event) {
             String result = "";
+            DanJuMainBeanResult mDanJuMainBeanResult = null;
             try {
                 result = event.body().string();
-                DanJuMainBeanResult mDanJuMainBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuMainBeanResult.class);
+                mDanJuMainBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuMainBeanResult.class);
                 if(mDanJuMainBeanResult.status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_OK,mDanJuMainBeanResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuMainBeanResult);
                 }
             } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuMainBeanResult);
                 e.printStackTrace();
             }
         }

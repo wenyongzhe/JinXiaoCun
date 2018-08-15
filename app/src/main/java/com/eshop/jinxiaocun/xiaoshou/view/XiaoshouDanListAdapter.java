@@ -11,16 +11,17 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResultJson;
 import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBeanResult;
 
 import java.util.List;
 
 public class XiaoshouDanListAdapter extends BaseAdapter {
 
-    private List<DanJuMainBeanResult.DanJuMainBeanJson> listInfo;
+    private List<DanJuMainBeanResultJson> listInfo;
 
 
-    public XiaoshouDanListAdapter(List<DanJuMainBeanResult.DanJuMainBeanJson> listInfo) {
+    public XiaoshouDanListAdapter(List<DanJuMainBeanResultJson> listInfo) {
         this.listInfo = listInfo;
     }
 

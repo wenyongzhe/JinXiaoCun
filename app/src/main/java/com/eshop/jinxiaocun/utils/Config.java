@@ -24,6 +24,7 @@ public class Config {
     public final static int MESSAGE_OK = 1;
     public final static int MESSAGE_ERROR = -1;
     public final static int MESSAGE_INTENT = 2;
+    public final static int MESSAGE_REFLASH = 3;
 
     //门店组
     public static String ShopGroup = "";

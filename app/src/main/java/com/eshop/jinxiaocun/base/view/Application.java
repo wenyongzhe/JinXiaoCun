@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
 import com.eshop.jinxiaocun.db.DBHelper;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.CrashHandler;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.Stack;
@@ -34,15 +35,15 @@ public class Application extends android.app.Application {
         IMEI = PhoneUtils.getIMEI();
         getMachineIMEI();
         //收集错误信息并保存在本地
-    /*    CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());*/
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
 
         TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         Config.DeviceID = TelephonyMgr.getDeviceId();
         Config.VersionName = MyUtils.getVerName(this);
         Config.VersionCode = MyUtils.getVersionCode(this);
-        Config.DBHelper = new DBHelper(this);
-
+        Config.DBHelper = DBHelper.getInstance(this);
+      
         FileUtils.createOrExistsDir(Config.updateFile);
         FileUtils.createOrExistsDir(Config.databasePath);
         FileUtils.createOrExistsDir(Config.crashPath);

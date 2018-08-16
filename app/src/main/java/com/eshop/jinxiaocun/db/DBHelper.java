@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.eshop.jinxiaocun.utils.Config;
+
 /**
  * SQLITE数据库操作
  */
@@ -15,14 +17,30 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static int VERSION = 1;
     private final static String DATABASE_NAME = "Business.db";
     private SQLiteDatabase db;
+    protected static DBHelper mInstance = null;
 
     public DBHelper(Context context) {
         super(new DatabaseContext(context), DATABASE_NAME, null, VERSION);
     }
 
+    public synchronized static DBHelper getInstance(
+            Context context) {
+        if (mInstance == null) {
+            mInstance = new DBHelper(context);
+
+        }
+        return mInstance;
+    };
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.println("upgrade a database1");
+        //创建表结构
+        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+
+                "id"+" integer primary key autoincrement,"+
+                "ss"+" varchar(20)," +
+                "ddff"+" integer)";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
     }
 
     @Override

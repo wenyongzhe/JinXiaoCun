@@ -8,7 +8,9 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.db.DBHelper;
 import com.eshop.jinxiaocun.login.LoginActivity;
+import com.eshop.jinxiaocun.utils.Config;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 

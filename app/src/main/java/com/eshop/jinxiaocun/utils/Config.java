@@ -30,6 +30,8 @@ public class Config {
 
     public static DBHelper DBHelper;
 
+    //sql
+    public static String UP_MAIN_DANJU = "upMainDanJu";
     //门店组
     public static String ShopGroup = "";
 

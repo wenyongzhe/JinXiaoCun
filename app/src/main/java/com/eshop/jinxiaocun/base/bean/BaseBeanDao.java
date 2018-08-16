@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.base.view;
+package com.eshop.jinxiaocun.base.bean;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.CloseableWrappedIterable;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class BaseBean implements Dao {
+public class BaseBeanDao implements Dao {
     @Override
     public Object queryForId(Object o) throws SQLException {
         return null;

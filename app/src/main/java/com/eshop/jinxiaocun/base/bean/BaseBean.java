@@ -32,5 +32,5 @@ public class BaseBean {
         this.strCmd = strCmd;
     }
 
-
+    public  String getTableName(){return "";};
 }

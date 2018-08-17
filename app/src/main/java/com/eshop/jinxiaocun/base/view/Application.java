@@ -50,7 +50,6 @@ public class Application extends android.app.Application {
         FileUtils.createOrExistsDir(Config.logPath);
         FileUtils.createOrExistsFile(Config.logFilePath);
 
-        Config.DBHelper.execSQL("");
     }
 
     public static String getIMEI() {

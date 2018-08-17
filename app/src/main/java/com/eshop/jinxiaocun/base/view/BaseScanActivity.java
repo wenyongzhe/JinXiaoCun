@@ -8,8 +8,9 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 
-public abstract class BaseScanActivity extends BaseActivity  {
+public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,7 @@ public abstract class BaseScanActivity extends BaseActivity  {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
+        mMyActionBar.setData("新增单据",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.ViewFindUtils;
+import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.xiaoshou.view.CaoGaoDanJuFragment;
 import com.eshop.jinxiaocun.xiaoshou.view.FinishDanJuFragment;
 import com.flyco.tablayout.SegmentTabLayout;
@@ -18,7 +19,7 @@ import com.flyco.tablayout.SegmentTabLayout;
 import java.util.ArrayList;
 
 
-public class BaseTabListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public abstract class BaseTabListActivity extends BaseActivity implements AdapterView.OnItemClickListener,ActionBarClickListener {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private String[] mTitles = {"已提交", "草稿"};
@@ -36,6 +37,8 @@ public class BaseTabListActivity extends BaseActivity implements AdapterView.OnI
         mFragments.add(FinishDanJuFragment.getInstance());
         mFragments.add(CaoGaoDanJuFragment.getInstance());
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
+
+        mMyActionBar.setData("单据列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
     }
 
     @Override

@@ -85,4 +85,14 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
                 break;
         }
     }
+
+    @Override
+    public void onLeftClick() {
+        finish();
+    }
+
+    @Override
+    public void onRightClick() {
+
+    }
 }

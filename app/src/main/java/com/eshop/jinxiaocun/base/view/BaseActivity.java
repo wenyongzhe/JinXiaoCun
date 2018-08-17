@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.thread.TaskInterface;
+import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.MyActionBar;
 
 import java.util.zip.Inflater;

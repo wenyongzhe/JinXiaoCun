@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.utils.Config;
 
@@ -45,6 +46,9 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
     @Override
     protected void loadData() {
         super.loadData();
+        mUpMainBean.setSheetType(BillType.SO+"");//单据类型-批发销售
+        mUpMainBean.setSheet_No("");//单号
+        mUpMainBean.setBranch_No(Config.branch_no);//当前仓库
 
     }
 

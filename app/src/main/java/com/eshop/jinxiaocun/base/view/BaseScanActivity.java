@@ -7,10 +7,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.UpDetailBean;
+import com.eshop.jinxiaocun.base.bean.UpMainBean;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 
 public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener {
+
+    protected UpMainBean mUpMainBean;
+    protected UpDetailBean mUpDetailBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,9 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
         mMyActionBar.setData("新增单据",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
+
+        mUpMainBean = new UpMainBean();
+        mUpDetailBean = new UpDetailBean();
     }
 
     @Override

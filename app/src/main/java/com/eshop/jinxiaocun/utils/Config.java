@@ -32,6 +32,7 @@ public class Config {
 
     //sql
     public static String UP_MAIN_DANJU = "upMainDanJu";
+    public static String UP_DETAIL_DANJU = "upDetailDanJu";
     //门店组
     public static String ShopGroup = "";
 

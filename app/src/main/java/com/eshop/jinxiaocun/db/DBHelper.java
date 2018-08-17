@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.eshop.jinxiaocun.base.bean.UpDetailBean;
+import com.eshop.jinxiaocun.base.bean.UpMainBean;
 import com.eshop.jinxiaocun.utils.Config;
+
+import java.lang.reflect.Field;
 
 /**
  * SQLITE数据库操作
@@ -36,11 +40,27 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.println("upgrade a database1");
         //创建表结构
-        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+
-                "id"+" integer primary key autoincrement,"+
-                "ss"+" varchar(20)," +
-                "ddff"+" integer)";
+        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id"+" integer primary key autoincrement," + cloumFile(UpMainBean.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构
+        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id"+" integer primary key autoincrement," + cloumFile(UpDetailBean.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+    }
+
+    private String cloumFile(Class bean){
+        Field[] arrField = bean.getDeclaredFields();
+        String arrayTable = "";
+        for (int i=0; i<arrField.length; i++) {
+            Field field = arrField[i];
+            if(i != (arrField.length-1)){
+                arrayTable += field.getName()+" varchar(20),";
+            }else {
+                arrayTable += field.getName()+" varchar(20)";
+            }
+        }
+        return arrayTable;
     }
 
     @Override

@@ -43,12 +43,14 @@ public class Application extends android.app.Application {
         Config.VersionName = MyUtils.getVerName(this);
         Config.VersionCode = MyUtils.getVersionCode(this);
         Config.DBHelper = DBHelper.getInstance(this);
-      
+
         FileUtils.createOrExistsDir(Config.updateFile);
         FileUtils.createOrExistsDir(Config.databasePath);
         FileUtils.createOrExistsDir(Config.crashPath);
         FileUtils.createOrExistsDir(Config.logPath);
         FileUtils.createOrExistsFile(Config.logFilePath);
+
+        Config.DBHelper.execSQL("");
     }
 
     public static String getIMEI() {

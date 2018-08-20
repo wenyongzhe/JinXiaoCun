@@ -46,7 +46,7 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
                 result = event.body().string();
                 GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
                 if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,mGoodGetBeanResult);
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
                 }

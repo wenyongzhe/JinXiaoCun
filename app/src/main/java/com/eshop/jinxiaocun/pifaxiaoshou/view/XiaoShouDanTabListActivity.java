@@ -18,7 +18,7 @@ public class XiaoShouDanTabListActivity extends BaseTabListActivity {
 
     @Override
     public void onRightClick() {
-        Intent mIntent = new Intent(this,XiaoshouDanScanActivity.class);
+        Intent mIntent = new Intent(this,PiFaXiaoshouDanScanActivity.class);
         startActivity(mIntent);
     }
 }

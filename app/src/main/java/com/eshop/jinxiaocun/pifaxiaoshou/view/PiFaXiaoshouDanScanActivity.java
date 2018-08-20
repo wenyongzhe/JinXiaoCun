@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.PiFaXiaoShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
@@ -25,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWorResult {
+public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INetWorResult {
 
     @BindView(R.id.ly1_sp)
     private Spinner mSpinner1;
@@ -103,7 +104,7 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
         list.add("赠品");
         list.add("促销品");
         list.add("不良品");
-        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(XiaoshouDanScanActivity.this, R.layout.my_simple_spinner_item, list);
+        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(PiFaXiaoshouDanScanActivity.this, R.layout.my_simple_spinner_item, list);
         mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
         mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);
@@ -118,8 +119,23 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
             case Config.MESSAGE_ERROR:
                 break;
             case Config.MESSAGE_GOODS_INFOR:
+                GoodGetBeanResult mGoodGetBeanResult = (GoodGetBeanResult)o;
+                UpDetailBean mUpDetailBean = new UpDetailBean();
+                mUpDetailBean.setBarCode(mGoodGetBeanResult.JsonData.get(0).item_no);//条码
+                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).Price);//进价
+                mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
+                setDetailBean(mUpDetailBean);
+
+                setViewData(mGoodGetBeanResult);
                 break;
         }
+    }
+
+    /*
+    更新界面数据
+     */
+    private void setViewData(GoodGetBeanResult mGoodGetBeanResult) {
+
     }
 
     @Override

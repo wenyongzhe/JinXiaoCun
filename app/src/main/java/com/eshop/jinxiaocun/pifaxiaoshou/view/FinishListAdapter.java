@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 
 import android.view.LayoutInflater;
@@ -10,8 +10,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResultJson;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultJson;
 
 import java.util.HashMap;
 import java.util.List;

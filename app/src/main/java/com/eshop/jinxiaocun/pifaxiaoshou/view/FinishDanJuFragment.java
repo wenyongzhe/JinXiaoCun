@@ -1,34 +1,31 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseListFragment;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.RefreshListView;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBean;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResultJson;
-import com.eshop.jinxiaocun.xiaoshou.presenter.DanJuListImp;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultJson;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResult {
+public class FinishDanJuFragment extends BaseListFragment implements INetWorResult {
     private List<DanJuMainBeanResult> mListData;
-    private CaoGaoListAdapter mXiaoshouDanAdapter;
 
-    public static CaoGaoDanJuFragment getInstance() {
-        CaoGaoDanJuFragment sf = new CaoGaoDanJuFragment();
+    public static FinishDanJuFragment getInstance() {
+        FinishDanJuFragment sf = new FinishDanJuFragment();
         return sf;
     }
 
@@ -51,7 +48,7 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDanJuList = new DanJuListImp(this);
-        View v = inflater.inflate(R.layout.caogao_fragment, null);
+        View v = inflater.inflate(R.layout.finish_fragment, null);
         mListView = (RefreshListView) v.findViewById(R.id.list_view);
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
@@ -80,18 +77,19 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
             DanJuMainBeanResultJson test = new DanJuMainBeanResultJson();
             test.Sheet_No = "PI1234567";
             test.Oper_Date = "2017-3-4";
-            test.Ord_Amt = "$23400";
+            test.Ord_Amt = "$200";
             test.Oper_Name = "张三";
             test.Branch_No = "三楼仓库";
             list.add(test);
-            mDanJuAdapter = new CaoGaoListAdapter(list);
+            mDanJuAdapter = new FinishListAdapter(list);
             mHandle.sendEmptyMessage(Config.MESSAGE_REFLASH);
         }catch (Exception e){
             Log.e("Exception",e.getMessage());
         }
 
+
 //        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
-//        mXiaoshouDanAdapter = new CaoGaoListAdapter(mDanJuMainBeanResult.JsonData);
+//        mXiaoshouDanAdapter = new FinishListAdapter(mDanJuMainBeanResult.JsonData);
 //        mListView.setAdapter(mXiaoshouDanAdapter);
 //        mXiaoshouDanAdapter.notifyDataSetChanged();
     }
@@ -99,5 +97,6 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
     @Override
     protected void reflashList() {
         mListView.onRefreshComplete();
+
     }
 }

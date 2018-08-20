@@ -2,8 +2,6 @@ package com.eshop.jinxiaocun.base.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,8 +10,8 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.ViewFindUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
-import com.eshop.jinxiaocun.xiaoshou.view.CaoGaoDanJuFragment;
-import com.eshop.jinxiaocun.xiaoshou.view.FinishDanJuFragment;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.CaoGaoDanJuFragment;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.FinishDanJuFragment;
 import com.flyco.tablayout.SegmentTabLayout;
 
 import java.util.ArrayList;

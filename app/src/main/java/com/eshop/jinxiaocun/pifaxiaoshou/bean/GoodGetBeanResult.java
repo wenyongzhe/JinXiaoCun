@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.bean;
+package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseResult;
 

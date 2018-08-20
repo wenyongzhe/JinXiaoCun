@@ -27,6 +27,7 @@ public class Config {
     public final static int MESSAGE_ERROR = -1;
     public final static int MESSAGE_INTENT = 2;
     public final static int MESSAGE_REFLASH = 3;
+    public final static int MESSAGE_GOODS_INFOR = 4;
 
     public static DBHelper DBHelper;
 

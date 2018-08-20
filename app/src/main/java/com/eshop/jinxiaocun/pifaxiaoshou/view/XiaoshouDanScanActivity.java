@@ -1,11 +1,8 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -14,8 +11,12 @@ import android.widget.Spinner;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
+import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.PiFaXiaoShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
     private Spinner mSpinner3;
 
     private LinearLayout ly_kaidan;
+    private IXiaoShouScan mPiFaXiaoShouScanImp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,13 +45,41 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
         initView();
     }
 
+    //接收条码
+    @Override
+    protected void scanData(String barcode) {
+        mPiFaXiaoShouScanImp.getPLUInfo(barcode);
+    }
+
     @Override
     protected void loadData() {
         super.loadData();
+        mPiFaXiaoShouScanImp = new PiFaXiaoShouScanImp(this);
+        initMainBean();
+
+    }
+
+    private void initMainBean(){
+        mUpMainBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
         mUpMainBean.setSheetType(BillType.SO+"");//单据类型-批发销售
         mUpMainBean.setSheet_No("");//单号
         mUpMainBean.setBranch_No(Config.branch_no);//当前仓库
+        mUpMainBean.setOrd_Man_No(Config.UserName);//业务员
+        mUpMainBean.setPDA_No(Config.DeviceID);//PDA_No”:””	//PDA机号
+        mUpMainBean.setUSER_ID(Config.DeviceID);//USER_ID”:””       	//用户ID
+        mUpMainBean.setOper_Date(MyUtils.getCurrentTime());///Oper_Date”:”” 	//操作日期
 
+        mUpMainBean.setPayment("");//Payment”:”” //付款方式
+        mUpMainBean.setOrd_Amt("");//Ord_Amt”:””             //定金
+    }
+
+    private void setDetailBean(UpDetailBean mUpDetailBean){
+        mUpDetailBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
+        mUpDetailBean.setPOSID(Config.DeviceID);
+        mUpDetailBean.setBillNo("");//BillNo”:”” //单据号
+        mUpDetailBean.setSupplyCode("");//SupplyCode
+
+        mUpDetailBeanList.add(mUpDetailBean);
     }
 
     @SuppressLint("WrongViewCast")
@@ -86,6 +116,8 @@ public class XiaoshouDanScanActivity extends BaseScanActivity implements INetWor
             case Config.MESSAGE_OK:
                 break;
             case Config.MESSAGE_ERROR:
+                break;
+            case Config.MESSAGE_GOODS_INFOR:
                 break;
         }
     }

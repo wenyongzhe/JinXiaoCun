@@ -11,9 +11,8 @@ import android.support.v4.app.Fragment;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.widget.ImageTextView;
-import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouDanListActivity;
-import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouDanTabListActivity;
-import com.eshop.jinxiaocun.xiaoshou.view.XiaoShouTuiHuoListActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouDanTabListActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouTuiHuoListActivity;
 
 public class XiaoShouFragment extends BaseFragment {
 

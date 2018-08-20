@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.presenter;
+package com.eshop.jinxiaocun.pifaxiaoshou.presenter;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -10,8 +10,8 @@ import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.WebConfig;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBean;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import okhttp3.Response;
 
 public class DanJuListImp implements IDanJuList {

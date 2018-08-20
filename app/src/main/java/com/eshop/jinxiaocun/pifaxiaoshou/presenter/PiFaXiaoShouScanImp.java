@@ -1,6 +1,5 @@
-package com.eshop.jinxiaocun.xiaoshou.presenter;
+package com.eshop.jinxiaocun.pifaxiaoshou.presenter;
 
-import android.os.Handler;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
@@ -8,17 +7,17 @@ import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBean;
-import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import java.io.IOException;
 import okhttp3.Response;
 
-public class XiaoShouScanImp implements IXiaoShouScan {
+public class PiFaXiaoShouScanImp implements IXiaoShouScan {
     private INetWorResult mHandler;
     private INetWork mINetWork;
     IJsonFormat mJsonFormatImp = new JsonFormatImp();
 
-    public XiaoShouScanImp(INetWorResult mHandler) {
+    public PiFaXiaoShouScanImp(INetWorResult mHandler) {
         this.mHandler = mHandler;
     }
 

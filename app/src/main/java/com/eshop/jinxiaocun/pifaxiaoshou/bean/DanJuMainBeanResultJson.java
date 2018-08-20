@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.bean;
+package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
 public class DanJuMainBeanResultJson {
 

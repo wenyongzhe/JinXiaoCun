@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 
 import android.view.LayoutInflater;
@@ -10,18 +10,16 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResultJson;
-import com.eshop.jinxiaocun.xiaoshou.bean.GoodGetBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 
 import java.util.List;
 
-public class XiaoshouDanListAdapter extends BaseAdapter {
+public class XiaoshouDanAdapter extends BaseAdapter {
 
-    private List<DanJuMainBeanResultJson> listInfo;
+    private List<GoodGetBeanResult> listInfo;
 
 
-    public XiaoshouDanListAdapter(List<DanJuMainBeanResultJson> listInfo) {
+    public XiaoshouDanAdapter(List<GoodGetBeanResult> listInfo) {
         this.listInfo = listInfo;
     }
 
@@ -46,7 +44,7 @@ public class XiaoshouDanListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_xiaoshoudan,parent,false);
         }
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        tvTitle.setText(listInfo.get(position).Branch_No);
+        tvTitle.setText(listInfo.get(position).JsonData.get(0).item_no);
         return convertView;
     }
 }

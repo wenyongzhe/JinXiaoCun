@@ -1,7 +1,6 @@
-package com.eshop.jinxiaocun.xiaoshou.bean;
+package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseBean;
-import com.eshop.jinxiaocun.login.Bean.LoginBean;
 
 public class GoodGetBean extends BaseBean{
 

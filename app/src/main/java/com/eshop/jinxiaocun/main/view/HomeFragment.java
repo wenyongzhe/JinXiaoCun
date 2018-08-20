@@ -14,7 +14,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
-import com.eshop.jinxiaocun.xiaoshou.view.XiaoshouDanScanActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoshouDanScanActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,6 +1,10 @@
 package com.eshop.jinxiaocun.base.view;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,23 +15,55 @@ import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
+import android.hardware.BarcodeScan;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener {
 
     protected UpMainBean mUpMainBean;
-    protected UpDetailBean mUpDetailBean;
+    protected List<UpDetailBean> mUpDetailBeanList;
+    protected BarcodeScan mBarcodeScan;//扫描控制
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /////////////////
+        mBarcodeScan = new BarcodeScan(this);
+        IntentFilter scanDataIntentFilter = new IntentFilter();
+        scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
+        registerReceiver(mScanDataReceiver, scanDataIntentFilter);
+        mBarcodeScan.open();
+        mBarcodeScan.scanning();
+        /////////////////
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
         mMyActionBar.setData("新增单据",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
 
         mUpMainBean = new UpMainBean();
-        mUpDetailBean = new UpDetailBean();
+        mUpDetailBeanList = new ArrayList<>();
     }
+
+    /*
+    扫描返回数据
+     */
+    private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            if (action.equals("ACTION_BAR_SCAN")) {
+                String str = intent.getStringExtra("EXTRA_SCAN_DATA");
+                scanData(str);
+            }
+        }
+    };
+
+    protected abstract void scanData(String barcode);
 
     @Override
     protected void loadData() {
@@ -96,4 +132,11 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBarcodeScan.stop();
+        mBarcodeScan.close();
+        unregisterReceiver(mScanDataReceiver);
+    }
 }

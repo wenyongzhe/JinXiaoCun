@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.content.Intent;
 import android.os.Bundle;

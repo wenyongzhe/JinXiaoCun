@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.presenter;
+package com.eshop.jinxiaocun.pifaxiaoshou.presenter;
 
 public interface IXiaoShouScan {
 

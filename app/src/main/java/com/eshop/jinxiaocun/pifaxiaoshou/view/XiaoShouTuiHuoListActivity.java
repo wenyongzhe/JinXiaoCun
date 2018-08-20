@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

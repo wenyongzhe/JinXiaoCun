@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.xiaoshou.view;
+package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +9,10 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseListActivity;
 import com.eshop.jinxiaocun.widget.RefreshListView;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBean;
-import com.eshop.jinxiaocun.xiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.xiaoshou.presenter.DanJuListImp;
-import com.eshop.jinxiaocun.xiaoshou.presenter.IDanJuList;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
 
 import java.util.List;
 

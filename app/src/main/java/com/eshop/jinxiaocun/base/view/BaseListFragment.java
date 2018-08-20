@@ -6,8 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.RefreshListView;
-import com.eshop.jinxiaocun.xiaoshou.presenter.DanJuListImp;
-import com.eshop.jinxiaocun.xiaoshou.presenter.IDanJuList;
+import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
 
 public abstract class BaseListFragment extends BaseFragment{
 

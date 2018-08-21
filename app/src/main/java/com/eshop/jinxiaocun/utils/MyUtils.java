@@ -278,4 +278,9 @@ public class MyUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(new Date());
     }
+
+    public static String getTimeYYMMDD() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yymmdd");
+        return sdf.format(new Date());
+    }
 }

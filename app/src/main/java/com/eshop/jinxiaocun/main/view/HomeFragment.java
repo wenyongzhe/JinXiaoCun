@@ -15,6 +15,7 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
+import com.eshop.jinxiaocun.utils.Config;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +81,7 @@ public class HomeFragment extends BaseFragment {
                 break;
             case 2:
                 intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);
+                intent.putExtra(Config.SHEET_NO,"");
                 startActivity(intent);
                 break;
             case 3:

@@ -28,8 +28,11 @@ public class Config {
     public final static int MESSAGE_INTENT = 2;
     public final static int MESSAGE_REFLASH = 3;
     public final static int MESSAGE_GOODS_INFOR = 4;
+    public final static int MESSAGE_SHEET_DETAIL = 5;
 
     public static DBHelper DBHelper;
+
+    public static String SHEET_NO="SheetNo";
 
     //sql
     public static String UP_MAIN_DANJU = "upMainDanJu";

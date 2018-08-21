@@ -10,16 +10,16 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultJson;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 
 import java.util.List;
 
 public class XiaoshouDanListAdapter extends BaseAdapter {
 
-    private List<DanJuMainBeanResultJson> listInfo;
+    private List<DanJuMainBeanResultItem> listInfo;
 
 
-    public XiaoshouDanListAdapter(List<DanJuMainBeanResultJson> listInfo) {
+    public XiaoshouDanListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
     }
 

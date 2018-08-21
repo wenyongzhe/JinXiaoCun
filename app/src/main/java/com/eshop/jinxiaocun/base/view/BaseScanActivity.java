@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import android.hardware.BarcodeScan;
 
@@ -25,10 +27,18 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected UpMainBean mUpMainBean;
     protected List<UpDetailBean> mUpDetailBeanList;
     protected BarcodeScan mBarcodeScan;//扫描控制
+    protected boolean newSheet = false;
+    protected String sheet_no = "";
+    protected DanJuMainBeanResultItem mDanJuMainBeanResultItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        newSheet = getIntent().getStringExtra(Config.SHEET_NO).equals("")?false:true;
+        if(newSheet){
+            sheet_no = getIntent().getStringExtra(Config.SHEET_NO);
+            mDanJuMainBeanResultItem = (DanJuMainBeanResultItem) getIntent().getExtras().get("DanJuMain");
+        }
         /////////////////
         mBarcodeScan = new BarcodeScan(this);
         IntentFilter scanDataIntentFilter = new IntentFilter();

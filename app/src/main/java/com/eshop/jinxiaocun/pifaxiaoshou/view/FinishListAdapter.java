@@ -10,17 +10,17 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultJson;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class FinishListAdapter extends BaseAdapter {
 
-    private List<DanJuMainBeanResultJson> listInfo;
+    private List<DanJuMainBeanResultItem> listInfo;
 
 
-    public FinishListAdapter(List<DanJuMainBeanResultJson> listInfo) {
+    public FinishListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
     }
 
@@ -42,7 +42,7 @@ public class FinishListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(listInfo==null){
-            listInfo = (List<DanJuMainBeanResultJson>) new HashMap<>();
+            listInfo = (List<DanJuMainBeanResultItem>) new HashMap<>();
         }
         if (convertView == null) {
             convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_xiaoshoudan_finish,parent,false);

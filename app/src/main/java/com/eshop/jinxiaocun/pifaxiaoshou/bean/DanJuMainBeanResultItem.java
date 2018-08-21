@@ -1,6 +1,6 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
-public class DanJuMainBeanResultJson {
+public class DanJuMainBeanResultItem {
 
     public String Flow_ID;    //时间流水ID
     public String SheetType;       //单据类型

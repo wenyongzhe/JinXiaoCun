@@ -3,8 +3,11 @@ package com.eshop.jinxiaocun.pifaxiaoshou.presenter;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBean;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
@@ -30,6 +33,46 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
 
         mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodInforInterface());
+    }
+
+    @Override
+    public void getSheetDetail(String sheetNo) {
+        DanJuDetailBean mDanJuDetailBean = new DanJuDetailBean();
+        DanJuDetailBean.DanJuJsonData mDanJuJsonData = mDanJuDetailBean.getJsonData();
+        mDanJuJsonData.setUserId(Config.DeviceID);
+        mDanJuJsonData.setSheetType(BillType.SO+"");
+        mDanJuJsonData.setSheetNo(sheetNo);
+        mDanJuJsonData.setBranchNo("");//源仓库机构
+        mDanJuJsonData.setTBranchNo("");//目标仓库机构
+
+        IJsonFormat mJsonFormatImp = new JsonFormatImp();
+        String jsonData = mJsonFormatImp.ObjetToString(mDanJuDetailBean);
+
+        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodDetailInterface());
+    }
+
+    //获取订单明细
+    class GetGoodDetailInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event) {
+            String result = "";
+            try {
+                result = event.body().string();
+                DanJuDetailBeanResult mDanJuDetailBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuDetailBeanResult.class);
+                if(mDanJuDetailBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mDanJuDetailBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //查询商品信息

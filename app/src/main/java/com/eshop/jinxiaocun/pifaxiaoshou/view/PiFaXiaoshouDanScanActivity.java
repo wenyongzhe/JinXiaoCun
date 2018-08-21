@@ -13,6 +13,8 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.PiFaXiaoShouScanImp;
@@ -56,7 +58,10 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
     protected void loadData() {
         super.loadData();
         mPiFaXiaoShouScanImp = new PiFaXiaoShouScanImp(this);
-        initMainBean();
+        if(newSheet){
+            mPiFaXiaoShouScanImp.getSheetDetail(sheet_no);
+        }else
+            initMainBean();
 
     }
 
@@ -125,8 +130,16 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
                 mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).Price);//进价
                 mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
                 setDetailBean(mUpDetailBean);
-
                 setViewData(mGoodGetBeanResult);
+                break;
+            case Config.MESSAGE_SHEET_DETAIL:
+                DanJuDetailBeanResult mDanJuDetailBeanResult = (DanJuDetailBeanResult)o;
+                if(mDanJuDetailBeanResult.JsonData != null && mDanJuDetailBeanResult.JsonData.size()>0){
+                    DanJuMainBeanResultItem mDanJuMainBeanResultItem = mDanJuDetailBeanResult.JsonData.get(0);
+                    mUpMainBean.setPayment(mDanJuMainBeanResultItem.Payment);//付款方式
+                    mUpMainBean.setOrd_Amt(mDanJuMainBeanResultItem.Ord_Amt);//定金
+                }
+
                 break;
         }
     }

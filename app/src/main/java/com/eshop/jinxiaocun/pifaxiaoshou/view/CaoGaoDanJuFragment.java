@@ -14,7 +14,7 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultJson;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 
 import java.util.ArrayList;
@@ -74,8 +74,8 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
     @Override
     public void handleResule(int flag, Object o) {
         try{
-            List<DanJuMainBeanResultJson> list = new ArrayList();
-            DanJuMainBeanResultJson test = new DanJuMainBeanResultJson();
+            List<DanJuMainBeanResultItem> list = new ArrayList();
+            DanJuMainBeanResultItem test = new DanJuMainBeanResultItem();
             test.Sheet_No = "PI1234567";
             test.Oper_Date = "2017-3-4";
             test.Ord_Amt = "$23400";

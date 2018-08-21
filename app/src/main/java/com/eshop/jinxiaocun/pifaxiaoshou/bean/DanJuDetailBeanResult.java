@@ -4,7 +4,7 @@ import com.eshop.jinxiaocun.base.bean.BaseResult;
 
 import java.util.List;
 
-public class DanJuMainBeanResult extends BaseResult{
+public class DanJuDetailBeanResult extends BaseResult{
 
     public List<DanJuMainBeanResultItem> JsonData;
     

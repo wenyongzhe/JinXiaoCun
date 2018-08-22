@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.pifaxiaoshou.view;
+package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
@@ -28,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INetWorResult {
+public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
 
     @BindView(R.id.ly1_sp)
     private Spinner mSpinner1;
@@ -38,7 +40,7 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
     private Spinner mSpinner3;
 
     private LinearLayout ly_kaidan;
-    private IXiaoShouScan mPiFaXiaoShouScanImp;
+    private ILingshouScan mLingShouScanImp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,17 +53,18 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
     //接收条码
     @Override
     protected void scanData(String barcode) {
-        mPiFaXiaoShouScanImp.getPLUInfo(barcode);
+        mLingShouScanImp.getPLUInfo(barcode);
     }
 
     @Override
     protected void loadData() {
         super.loadData();
-        mPiFaXiaoShouScanImp = new PiFaXiaoShouScanImp(this);
-        if( !newSheet){
-            mPiFaXiaoShouScanImp.getSheetDetail(sheet_no);
+        mLingShouScanImp = new LingShouScanImp(this);
+        if(!newSheet){
+            mLingShouScanImp.getSheetDetail(sheet_no);
         }else
             initMainBean();
+        mLingShouScanImp.getFlowNo();
 
     }
 
@@ -109,7 +112,7 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
         list.add("赠品");
         list.add("促销品");
         list.add("不良品");
-        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(PiFaXiaoshouDanScanActivity.this, R.layout.my_simple_spinner_item, list);
+        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(LingShouScanActivity.this, R.layout.my_simple_spinner_item, list);
         mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
         mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);

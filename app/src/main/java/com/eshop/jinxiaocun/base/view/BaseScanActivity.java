@@ -27,25 +27,25 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected UpMainBean mUpMainBean;
     protected List<UpDetailBean> mUpDetailBeanList;
     protected BarcodeScan mBarcodeScan;//扫描控制
-    protected boolean newSheet = false;
+    protected boolean newSheet = true;
     protected String sheet_no = "";
     protected DanJuMainBeanResultItem mDanJuMainBeanResultItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newSheet = getIntent().getStringExtra(Config.SHEET_NO).equals("")?false:true;
-        if(newSheet){
+        newSheet = getIntent().getStringExtra(Config.SHEET_NO).equals("")?true:false;
+        if( !newSheet ){
             sheet_no = getIntent().getStringExtra(Config.SHEET_NO);
             mDanJuMainBeanResultItem = (DanJuMainBeanResultItem) getIntent().getExtras().get("DanJuMain");
         }
-        /////////////////
-        mBarcodeScan = new BarcodeScan(this);
+        /////////////////条码
+        /*mBarcodeScan = new BarcodeScan(this);
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         mBarcodeScan.open();
-        mBarcodeScan.scanning();
+        mBarcodeScan.scanning();*/
         /////////////////
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -145,8 +145,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBarcodeScan.stop();
+        /*mBarcodeScan.stop();
         mBarcodeScan.close();
-        unregisterReceiver(mScanDataReceiver);
+        unregisterReceiver(mScanDataReceiver);*/
     }
 }

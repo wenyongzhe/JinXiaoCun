@@ -6,5 +6,5 @@ public class BaseResult {
 
     public String status;
     public String Msg;
-
+    public String Sign;
 }

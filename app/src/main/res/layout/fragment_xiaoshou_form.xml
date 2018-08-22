@@ -34,16 +34,18 @@
             android:layout_height="fill_parent"/>
     </LinearLayout>
 
-   <!-- <LinearLayout
+    <LinearLayout
         android:layout_marginTop="2dp"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <com.eshop.jinxiaocun.widget.ImageTextView
+            android:id="@+id/myView_lingshou"
             android:layout_weight="1"
-            android:id="@+id/imagetext2"
             imageText:leftImage="@drawable/tab05_unsel"
             android:layout_width="0dp"
+            imageText:subTitle="@string/item_title_lingshou"
+            imageText:subMessage="@string/item_message_lingshou"
             android:layout_height="fill_parent"/>
 
         <include layout="@layout/widget_line"/>
@@ -52,7 +54,9 @@
             android:layout_weight="1"
             imageText:leftImage="@drawable/tab05_unsel"
             android:layout_width="0dp"
+            imageText:subTitle="@string/item_title_lingshou"
+            imageText:subMessage="@string/item_message_lingshou"
             android:layout_height="fill_parent"/>
-    </LinearLayout>-->
+    </LinearLayout>
 
 </LinearLayout>

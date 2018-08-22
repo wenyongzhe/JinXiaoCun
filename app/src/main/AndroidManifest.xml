@@ -57,6 +57,10 @@
             android:name="com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouDanTabListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
     </application>
 
 </manifest>

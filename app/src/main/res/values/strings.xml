@@ -43,6 +43,8 @@
     <string name="item_title_xiaoshoutuihuodan">销售退货单</string>
     <string name="item_message_maihuo">卖货、出库</string>
     <string name="item_message_tuihuo">退货、换货</string>
+    <string name="item_title_lingshou">门店收款</string>
+    <string name="item_message_lingshou">零售</string>
 
     <!-- 登录 -->
     <string name="login">登录</string>

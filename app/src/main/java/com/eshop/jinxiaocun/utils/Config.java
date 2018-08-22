@@ -30,6 +30,9 @@ public class Config {
     public final static int MESSAGE_GOODS_INFOR = 4;
     public final static int MESSAGE_SHEET_DETAIL = 5;
 
+    //流水号
+    public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();
+
     public static DBHelper DBHelper;
 
     public static String SHEET_NO="SheetNo";

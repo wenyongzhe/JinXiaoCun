@@ -8,6 +8,8 @@ public class WebConfig {
     public static final String POS_REG = "POS-REG";
     public static final String GetPLUInfo = "GetPLUInfo";
     public static final String QrySheetHead = "QrySheetHead";
+    public static final String GetFlowNo = "GetFlowNo";
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

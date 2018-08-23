@@ -1,10 +1,12 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
@@ -18,9 +20,14 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.Response;
 
@@ -39,9 +46,10 @@ public class LingShouScanImp implements ILingshouScan {
         GetFlowNoBean mGetFlowNoBean = new GetFlowNoBean();
         mGetFlowNoBean.getJsonData().setBranchNo(Config.branch_no);
         mGetFlowNoBean.getJsonData().setPosId(Config.posid);
-        String jsonData = mJsonFormatImp.ObjetToString(mGetFlowNoBean);
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetFlowNoInterface());
+        Map map = ReflectionUtils.obj2Map(mGetFlowNoBean);
+        mINetWork.doPost(WebConfig.getWsdlUri(),map,new GetFlowNoInterface());
     }
+
 
     @Override
     public void getPLUInfo(String barCode) {

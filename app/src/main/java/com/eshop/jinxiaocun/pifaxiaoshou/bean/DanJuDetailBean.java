@@ -9,7 +9,7 @@ public class DanJuDetailBean extends BaseBean{
 
 
     public DanJuDetailBean() {
-        setStrCmd(WebConfig.QrySheetHead);
+        setStrCmd(WebConfig.QrySheetDetail);
         JsonData = new DanJuJsonData();
     }
 

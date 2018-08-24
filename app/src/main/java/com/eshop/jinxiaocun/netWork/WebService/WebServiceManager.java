@@ -28,7 +28,7 @@ public class WebServiceManager {
         envelope.setOutputSoapObject(soapObject);
         envelope.bodyOut = soapObject;
         envelope.dotNet = true;
-        HttpTransportSE transportSE = new HttpTransportSE(WebConfig.getWsdlUri(), timeout);
+        HttpTransportSE transportSE = new HttpTransportSE(WebConfig.getPostWsdlUri(), timeout);
         transportSE.debug = true;//使用调式功能
 //        transportSE.call(WebConfig.getNameSpace() + methodName, envelope);
         transportSE.call(null, envelope);

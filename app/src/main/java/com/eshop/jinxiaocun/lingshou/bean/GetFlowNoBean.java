@@ -8,9 +8,8 @@ public class GetFlowNoBean extends BaseBean{
     private GetFlowNoJsonData JsonData;
 
     public GetFlowNoBean() {
-        setStrCmd(WebConfig.getPosLogin());
+        setStrCmd(WebConfig.GetFlowNo);
         JsonData = new GetFlowNoJsonData();
-        setStrCmd("GetFlowNo");
     }
 
     public GetFlowNoJsonData getJsonData() {

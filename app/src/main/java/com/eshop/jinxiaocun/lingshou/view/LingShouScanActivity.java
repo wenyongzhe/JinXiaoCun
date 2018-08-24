@@ -65,7 +65,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }else
             initMainBean();
         mLingShouScanImp.getFlowNo();
-
     }
 
     private void initMainBean(){

@@ -32,7 +32,7 @@ public class DanJuListImp implements IDanJuList {
         IJsonFormat mJsonFormatImp = new JsonFormatImp();
         String jsonData = mJsonFormatImp.ObjetToString(mDanJuMainBean);
 
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new DanJuListInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new DanJuListInterface());
     }
 
     //查询商品列表
@@ -43,11 +43,9 @@ public class DanJuListImp implements IDanJuList {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
+        public void handleResult(Response event, String result) {
             DanJuMainBeanResult mDanJuMainBeanResult = null;
             try {
-                result = event.body().string();
                 mDanJuMainBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuMainBeanResult.class);
                 if(mDanJuMainBeanResult.status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_OK,mDanJuMainBeanResult);

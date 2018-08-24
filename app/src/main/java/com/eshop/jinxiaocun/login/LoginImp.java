@@ -51,7 +51,7 @@ public class LoginImp implements ILogin {
         map.put("Sign","");
         map.put("JsonData",jsonData);
 
-        mINetWork.doGet(WebConfig.getWsdlUri(),map,new LoginInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new LoginInterface());
 
     }
 
@@ -61,7 +61,7 @@ public class LoginImp implements ILogin {
         String jsonData ="｛\"iDevID\":" + Config.DeviceID + DeviceUtils.getMacAddress() + "}";
         mRegistBean.setStrCmd(WebConfig.getPosReg());
         mRegistBean.setJsonData(jsonData);
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new RegistInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new RegistInterface());
     }
 
     //登陆
@@ -73,14 +73,8 @@ public class LoginImp implements ILogin {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String dd = null;
-            try {
-                dd = event.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.e("-----",dd);
+        public void handleResult(Response event,String result) {
+            Log.e("-----",result);
             mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
         }
     }
@@ -94,14 +88,10 @@ public class LoginImp implements ILogin {
         }
 
         @Override
-        public void handleResult(Response event) {
+        public void handleResult(Response event,String result) {
             JsonFormatImp mJsonFormatImp = new JsonFormatImp();
             RegistBeanResult mRegistBeanResult = null;
-            try {
-                mRegistBeanResult = mJsonFormatImp.JsonToBean(event.body().string(), RegistBeanResult.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mRegistBeanResult = mJsonFormatImp.JsonToBean(result, RegistBeanResult.class);
             Config.posid = mRegistBeanResult.getPosid();
             Config.branch_no = mRegistBeanResult.getBranch_no();
             Config.soft_name = mRegistBeanResult.getSoft_name();

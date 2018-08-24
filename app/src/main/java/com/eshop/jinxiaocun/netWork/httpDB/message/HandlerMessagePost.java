@@ -19,7 +19,14 @@ public class HandlerMessagePost implements IMessagePost {
 
     @Override
     public void postResult(Response response, IResponseListener o) {
-        o.handleResult(response);
+        byte[] b = new byte[0]; //获取数据的bytes
+        try {
+            b = response.body().bytes();
+            String info = new String(b, "GB2312"); //然后将其转为gb2312
+            o.handleResult(response,info );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

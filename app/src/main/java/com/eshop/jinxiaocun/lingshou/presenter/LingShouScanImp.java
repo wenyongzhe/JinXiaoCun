@@ -47,7 +47,7 @@ public class LingShouScanImp implements ILingshouScan {
         mGetFlowNoBean.getJsonData().setBranchNo(Config.branch_no);
         mGetFlowNoBean.getJsonData().setPosId(Config.posid);
         Map map = ReflectionUtils.obj2Map(mGetFlowNoBean);
-        mINetWork.doPost(WebConfig.getWsdlUri(),map,new GetFlowNoInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetFlowNoInterface());
     }
 
 
@@ -56,9 +56,8 @@ public class LingShouScanImp implements ILingshouScan {
         GoodGetBean mGoodGetBean = new GoodGetBean();
         mGoodGetBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGoodGetBean.getJsonData().setAs_item_no(barCode);
-        String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
-
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodInforInterface());
+        Map map = ReflectionUtils.obj2Map(mGoodGetBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodInforInterface());
     }
 
     @Override
@@ -70,11 +69,8 @@ public class LingShouScanImp implements ILingshouScan {
         mDanJuJsonData.setSheetNo(sheetNo);
         mDanJuJsonData.setBranchNo("");//源仓库机构
         mDanJuJsonData.setTBranchNo("");//目标仓库机构
-
-        IJsonFormat mJsonFormatImp = new JsonFormatImp();
-        String jsonData = mJsonFormatImp.ObjetToString(mDanJuDetailBean);
-
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodDetailInterface());
+        Map map = ReflectionUtils.obj2Map(mDanJuDetailBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new GetGoodDetailInterface());
     }
 
     //获取流水
@@ -86,18 +82,13 @@ public class LingShouScanImp implements ILingshouScan {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
-            try {
-                result = event.body().string();
-                GetFlowNoBeanResult mGetFlowNoBeanResult =  mJsonFormatImp.JsonToBean(result,GetFlowNoBeanResult.class);
-                if(mGetFlowNoBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mGetFlowNoBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleResult(Response event, String result) {
+            //{"status":"0","msg":"","jsonData":"{\"FlowNo\":\"0\"}","sign":""}
+            GetFlowNoBeanResult mGetFlowNoBeanResult =  mJsonFormatImp.JsonToBean(result,GetFlowNoBeanResult.class);
+            if(mGetFlowNoBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mGetFlowNoBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
             }
         }
     }
@@ -110,18 +101,12 @@ public class LingShouScanImp implements ILingshouScan {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
-            try {
-                result = event.body().string();
-                DanJuDetailBeanResult mDanJuDetailBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuDetailBeanResult.class);
-                if(mDanJuDetailBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mDanJuDetailBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleResult(Response event,String result) {
+            DanJuDetailBeanResult mDanJuDetailBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuDetailBeanResult.class);
+            if(mDanJuDetailBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mDanJuDetailBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
             }
         }
     }
@@ -134,18 +119,12 @@ public class LingShouScanImp implements ILingshouScan {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
-            try {
-                result = event.body().string();
-                GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
-                if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleResult(Response event,String result) {
+            GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
+            if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
             }
         }
     }

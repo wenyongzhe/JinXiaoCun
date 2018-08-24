@@ -32,7 +32,7 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         IJsonFormat mJsonFormatImp = new JsonFormatImp();
         String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
 
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodInforInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new GetGoodInforInterface());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         IJsonFormat mJsonFormatImp = new JsonFormatImp();
         String jsonData = mJsonFormatImp.ObjetToString(mDanJuDetailBean);
 
-        mINetWork.doPost(WebConfig.getWsdlUri(),jsonData,new GetGoodDetailInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new GetGoodDetailInterface());
     }
 
     //获取订单明细
@@ -59,18 +59,12 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
-            try {
-                result = event.body().string();
-                DanJuDetailBeanResult mDanJuDetailBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuDetailBeanResult.class);
-                if(mDanJuDetailBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mDanJuDetailBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleResult(Response event, String result) {
+            DanJuDetailBeanResult mDanJuDetailBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuDetailBeanResult.class);
+            if(mDanJuDetailBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mDanJuDetailBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
             }
         }
     }
@@ -83,18 +77,12 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         }
 
         @Override
-        public void handleResult(Response event) {
-            String result = "";
-            try {
-                result = event.body().string();
-                GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
-                if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleResult(Response event, String result) {
+            GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
+            if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
             }
         }
     }

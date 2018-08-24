@@ -5,6 +5,9 @@ package com.eshop.jinxiaocun.utils;
  * @Description: 反射获取对象属性信息</br>
  */
 
+import com.eshop.jinxiaocun.base.IJsonFormat;
+import com.eshop.jinxiaocun.base.JsonFormatImp;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +16,7 @@ public class ReflectionUtils {
 
     public static Map<String, String> obj2Map(Object obj) {
 
+        IJsonFormat mJsonFormatImp = new JsonFormatImp();
         Map<String, String> map = new HashMap<String, String>();
         // System.out.println(obj.getClass());
         // 获取f对象对应类中的所有属性域
@@ -20,7 +24,7 @@ public class ReflectionUtils {
         Field[] supperFields = obj.getClass().getSuperclass().getDeclaredFields();
         for (int i = 0, len = fields.length; i < len; i++) {
             String varName = fields[i].getName();
-            varName = varName.toLowerCase();//将key置为小写，默认为对象的属性
+//            varName = varName.toLowerCase();//将key置为小写，默认为对象的属性
             try {
                 // 获取原来的访问控制权限
                 boolean accessFlag = fields[i].isAccessible();
@@ -29,7 +33,10 @@ public class ReflectionUtils {
                 // 获取在对象f中属性fields[i]对应的对象中的变量
                 Object o = fields[i].get(obj);
                 if (o != null)
-                    map.put(varName, o.toString());
+                    if(varName.equals("JsonData")){
+                        map.put(varName, mJsonFormatImp.ObjetToString(o));
+                    }else
+                        map.put(varName, o.toString());
                 // System.out.println("传入的对象中包含一个如下的变量：" + varName + " = " + o);
                 // 恢复访问控制权限
                 fields[i].setAccessible(accessFlag);

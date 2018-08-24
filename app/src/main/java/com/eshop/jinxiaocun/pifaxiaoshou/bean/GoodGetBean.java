@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseBean;
+import com.eshop.jinxiaocun.utils.WebConfig;
 
 public class GoodGetBean extends BaseBean{
 
@@ -8,6 +9,7 @@ public class GoodGetBean extends BaseBean{
 
 
     public GoodGetBean() {
+        setStrCmd(WebConfig.GetPLUInfo);
         JsonData = new GoodGetJsonData();
     }
 

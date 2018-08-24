@@ -9,5 +9,5 @@ import okhttp3.Response;
 public interface IResponseListener {
 //    void handleMessage(Object event);
     void handleError(Object event);
-    void handleResult(Response event);
+    void handleResult(Response event, String result);
 }

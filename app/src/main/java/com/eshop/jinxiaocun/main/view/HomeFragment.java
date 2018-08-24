@@ -14,6 +14,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
+import com.eshop.jinxiaocun.piandian.view.PandianListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.utils.Config;
 
@@ -85,6 +86,14 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                intent.setClass(Application.mContext, PandianListActivity.class);
+                startActivity(intent);
                 break;
 
         }

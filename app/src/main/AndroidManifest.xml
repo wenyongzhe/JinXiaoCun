@@ -1,66 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.eshop.jinxiaocun">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.eshop.jinxiaocun">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!--扫描-->
-    <uses-permission android:name="android.permission.SERIAL_PORT"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 扫描 -->
+    <uses-permission android:name="android.permission.SERIAL_PORT" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".base.view.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name="com.eshop.jinxiaocun.base.view.Application"
         android:theme="@style/AppTheme">
-        <activity android:name="com.eshop.jinxiaocun.main.view.MainActivity">
-        </activity>
-
+        <activity android:name=".main.view.MainActivity"></activity>
         <activity
-            android:name="com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouDanListActivity"
+            android:name=".pifaxiaoshou.view.XiaoShouDanListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouTuiHuoListActivity"
+            android:name=".pifaxiaoshou.view.XiaoShouTuiHuoListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity"
+            android:name=".pifaxiaoshou.view.PiFaXiaoshouDanScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eshop.jinxiaocun.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" >
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.eshop.jinxiaocun.login.SystemSettingActivity"
+            android:name=".login.SystemSettingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoShouDanTabListActivity"
+            android:name=".pifaxiaoshou.view.XiaoShouDanTabListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity"
+            android:name=".lingshou.view.LingShouScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".piandian.view.PandianListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
     </application>
 
 </manifest>

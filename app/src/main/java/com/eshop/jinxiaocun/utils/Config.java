@@ -23,12 +23,13 @@ public class Config {
     public static String posid = "-1";
     public static String soft_name = "-1";//软件名称
 
-    public final static int MESSAGE_OK = 1;
+    public final static int MESSAGE_OK = 0;
     public final static int MESSAGE_ERROR = -1;
     public final static int MESSAGE_INTENT = 2;
     public final static int MESSAGE_REFLASH = 3;
     public final static int MESSAGE_GOODS_INFOR = 4;
     public final static int MESSAGE_SHEET_DETAIL = 5;
+    public final static int MESSAGE_FLOW_NO = 6;
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

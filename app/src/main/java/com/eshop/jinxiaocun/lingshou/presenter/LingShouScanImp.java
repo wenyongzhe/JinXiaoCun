@@ -86,7 +86,7 @@ public class LingShouScanImp implements ILingshouScan {
             //{"status":"0","msg":"","jsonData":"{\"FlowNo\":\"0\"}","sign":""}
             GetFlowNoBeanResult mGetFlowNoBeanResult =  mJsonFormatImp.JsonToBean(result,GetFlowNoBeanResult.class);
             if(mGetFlowNoBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_SHEET_DETAIL,mGetFlowNoBeanResult);
+                mHandler.handleResule(Config.MESSAGE_FLOW_NO,mGetFlowNoBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
             }

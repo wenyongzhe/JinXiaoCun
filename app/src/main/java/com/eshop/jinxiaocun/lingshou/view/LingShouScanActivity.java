@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
@@ -134,12 +135,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 setDetailBean(mUpDetailBean);
                 setViewData(mGoodGetBeanResult);
                 break;
-            case Config.MESSAGE_SHEET_DETAIL:
-                DanJuDetailBeanResult mDanJuDetailBeanResult = (DanJuDetailBeanResult)o;
-                if(mDanJuDetailBeanResult.JsonData != null && mDanJuDetailBeanResult.JsonData.size()>0){
-                    DanJuMainBeanResultItem mDanJuMainBeanResultItem = mDanJuDetailBeanResult.JsonData.get(0);
-                    mUpMainBean.setPayment(mDanJuMainBeanResultItem.Payment);//付款方式
-                    mUpMainBean.setOrd_Amt(mDanJuMainBeanResultItem.Ord_Amt);//定金
+            case Config.MESSAGE_FLOW_NO:
+                GetFlowNoBeanResult mGetFlowNoBeanResult = (GetFlowNoBeanResult)o;
+                if(mGetFlowNoBeanResult.getJsonData() != null && mGetFlowNoBeanResult.getJsonData().size()>0){
+                    GetFlowNoBeanResult.FlowNoJson json = mGetFlowNoBeanResult.getJsonData().get(0);
                 }
 
                 break;

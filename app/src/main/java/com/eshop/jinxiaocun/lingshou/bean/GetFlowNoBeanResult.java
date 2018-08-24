@@ -2,15 +2,29 @@ package com.eshop.jinxiaocun.lingshou.bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseResult;
 
+import java.util.List;
+
 public class GetFlowNoBeanResult extends BaseResult{
 
-    private String FlowNo;
+    private List<FlowNoJson> JsonData;
 
-    public String getFlowNo() {
-        return FlowNo;
+    public List<FlowNoJson> getJsonData() {
+        return JsonData;
     }
 
-    public void setFlowNo(String flowNo) {
-        FlowNo = flowNo;
+    public void setJsonData(List<FlowNoJson> jsonData) {
+        JsonData = jsonData;
+    }
+
+    public class FlowNoJson{
+        private String FlowNo;
+
+        public String getFlowNo() {
+            return FlowNo;
+        }
+
+        public void setFlowNo(String flowNo) {
+            FlowNo = flowNo;
+        }
     }
 }

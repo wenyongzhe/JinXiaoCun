@@ -1,0 +1,18 @@
+package com.eshop.jinxiaocun.piandian.presenter;
+
+import com.eshop.jinxiaocun.base.bean.BaseBean;
+
+/**
+ * @Author Lu An
+ * 创建时间  2018/8/27 0027
+ * 描述
+ */
+
+public interface IPandianCreat {
+
+    //取盘点范围数据
+    void getPandianFanweiData(BaseBean bean);
+
+
+
+}

@@ -44,7 +44,5 @@ public class WebConfig {
         return NameSpace;
     }
 
-    public static String getR_PD_RANGE() {
-        return WSDL_URI+R_PD_RANGE;
-    }
+
 }

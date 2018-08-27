@@ -39,7 +39,7 @@ public class PandianCreatImp implements IPandianCreat{
     @Override
     public void getPandianFanweiData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doPost(WebConfig.getR_PD_RANGE(),map,new PandianCreatImp.PandianFanweiInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianFanweiInterface());
     }
 
     //查询商品列表

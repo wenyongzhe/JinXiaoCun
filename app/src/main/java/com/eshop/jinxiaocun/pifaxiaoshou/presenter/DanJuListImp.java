@@ -9,9 +9,13 @@ import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
+
+import java.util.Map;
+
 import okhttp3.Response;
 
 public class DanJuListImp implements IDanJuList {
@@ -30,9 +34,9 @@ public class DanJuListImp implements IDanJuList {
     public void getDanJuList(BaseBean bean) {
         DanJuMainBean mDanJuMainBean = (DanJuMainBean) bean;
         IJsonFormat mJsonFormatImp = new JsonFormatImp();
-        String jsonData = mJsonFormatImp.ObjetToString(mDanJuMainBean);
-
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new DanJuListInterface());
+        //String jsonData = mJsonFormatImp.ObjetToString(mDanJuMainBean);
+        Map map = ReflectionUtils.obj2Map(mDanJuMainBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new DanJuListInterface());
     }
 
     //查询商品列表

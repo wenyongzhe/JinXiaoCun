@@ -30,6 +30,8 @@ public class Config {
     public final static int MESSAGE_GOODS_INFOR = 4;
     public final static int MESSAGE_SHEET_DETAIL = 5;
     public final static int MESSAGE_FLOW_NO = 6;
+    public final static int MESSAGE_PandianLeibie_OK = 7;
+    public final static int MESSAGE_PandianLeibie_ERROR = 8;
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

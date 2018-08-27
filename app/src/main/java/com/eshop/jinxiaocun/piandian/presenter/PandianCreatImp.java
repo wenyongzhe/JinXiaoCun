@@ -9,10 +9,12 @@ import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -42,7 +44,13 @@ public class PandianCreatImp implements IPandianCreat{
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianFanweiInterface());
     }
 
-    //查询商品列表
+    @Override
+    public void getPandianTypeData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianLeibieInterface());
+    }
+
+    //取盘点范围
     class PandianFanweiInterface implements IResponseListener {
 
         @Override
@@ -66,5 +74,27 @@ public class PandianCreatImp implements IPandianCreat{
         }
     }
 
+    //取盘点类别
+    class PandianLeibieInterface implements IResponseListener {
 
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+            PandianLeibieBeanResult mBeanResult = null;
+            try {
+                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianLeibieBeanResult.class);
+                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PandianLeibie_OK,mBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PandianLeibie_ERROR,mBeanResult);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PandianLeibie_ERROR,mBeanResult);
+                e.printStackTrace();
+            }
+        }
+    }
 }

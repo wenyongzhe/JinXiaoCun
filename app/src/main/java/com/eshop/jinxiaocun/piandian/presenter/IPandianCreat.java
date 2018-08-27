@@ -12,7 +12,8 @@ public interface IPandianCreat {
 
     //取盘点范围数据
     void getPandianFanweiData(BaseBean bean);
-
+    //取盘点类别数据
+    void getPandianTypeData(BaseBean bean);
 
 
 }

@@ -15,6 +15,7 @@ public class WebConfig {
     public static final String GetFlowNo = "GetFlowNo";
     public static final String GetPluPrice = "GetPluPrice";//销售商品取价
     public static final String R_PD_RANGE = "R-PD-RANGE";//取盘点范围
+    public static final String R_PD_CLS = "R-PD-CLS";//取盘点范围
 
     public static String getPosLogin() {
         return POS_LOGIN;

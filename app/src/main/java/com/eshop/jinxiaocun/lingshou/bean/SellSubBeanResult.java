@@ -1,23 +1,21 @@
 package com.eshop.jinxiaocun.lingshou.bean;
 
-import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BaseResult;
-import com.eshop.jinxiaocun.utils.WebConfig;
 
-public class GetPluPriceBeanResult extends BaseResult {
+public class SellSubBeanResult extends BaseResult {
 
-    private GetPluPriceJsonData jsonData;
+    private SellSubJsonData jsonData;
 
 
-    public GetPluPriceJsonData getJsonData() {
+    public SellSubJsonData getJsonData() {
         return jsonData;
     }
 
-    public void setJsonData(GetPluPriceJsonData jsonData) {
+    public void setJsonData(SellSubJsonData jsonData) {
         jsonData = jsonData;
     }
 
-    public class GetPluPriceJsonData {
+    public class SellSubJsonData {
 
         private String as_branchNo;//" :”0001” // 门店机构
         private String as_flowno;// " : “1001”,  //POSID号

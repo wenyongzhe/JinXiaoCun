@@ -14,6 +14,7 @@ import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
+import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
@@ -89,11 +90,10 @@ public class LingShouScanImp implements ILingshouScan {
     @Override
     public void sellSub() {
         SellSubBean mSellSubBean = new SellSubBean();
-//        mSellSubBean.getJsonData().setAs_branchNo(Config.branch_no);
-//        mSellSubBean.getJsonData().setAs_flowno(Config.posid);
-//        mSellSubBean.getJsonData().setAs_cardno("");
-//        Map map = ReflectionUtils.obj2Map(mSellSubBean);
-//        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface());
+        mSellSubBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mSellSubBean.getJsonData().setAs_flowno(Config.posid);//结账流水
+        Map map = ReflectionUtils.obj2Map(mSellSubBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SellSubInterface());
     }
 
     @Override
@@ -179,6 +179,24 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGetPluPriceBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
+            }
+        }
+    }
+
+    //结算
+    class SellSubInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+            SellSubBeanResult mSellSubBeanResult =  mJsonFormatImp.JsonToBean(result,SellSubBeanResult.class);
+            if(mSellSubBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mSellSubBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mSellSubBeanResult);
             }
         }
     }

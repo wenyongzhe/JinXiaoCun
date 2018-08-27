@@ -33,7 +33,6 @@ public class DanJuListImp implements IDanJuList {
     @Override
     public void getDanJuList(BaseBean bean) {
         DanJuMainBean mDanJuMainBean = (DanJuMainBean) bean;
-        IJsonFormat mJsonFormatImp = new JsonFormatImp();
         Map map = ReflectionUtils.obj2Map(mDanJuMainBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new DanJuListInterface());
     }

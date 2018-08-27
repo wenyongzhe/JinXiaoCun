@@ -9,9 +9,11 @@ public class WebConfig {
     public static final String POS_LOGIN = "RT-LOGIN";
     public static final String POS_REG = "POS-REG";
     public static final String GetPLUInfo = "GetPLUInfo";//精确查询商品信息
+    public static final String GetPLULikeInfo = "GetPLULikeInfo";//模糊查询商品信息
     public static final String QrySheetHead = "QrySheetHead";//单据主表查询
     public static final String QrySheetDetail= "QrySheetHead";//单据明细查询;
     public static final String GetFlowNo = "GetFlowNo";
+    public static final String GetPluPrice = "GetPluPrice";//销售商品取价
 
 
     public static String getPosLogin() {

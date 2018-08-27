@@ -34,9 +34,8 @@ public class DanJuListImp implements IDanJuList {
     public void getDanJuList(BaseBean bean) {
         DanJuMainBean mDanJuMainBean = (DanJuMainBean) bean;
         IJsonFormat mJsonFormatImp = new JsonFormatImp();
-        //String jsonData = mJsonFormatImp.ObjetToString(mDanJuMainBean);
         Map map = ReflectionUtils.obj2Map(mDanJuMainBean);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new DanJuListInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new DanJuListInterface());
     }
 
     //查询商品列表

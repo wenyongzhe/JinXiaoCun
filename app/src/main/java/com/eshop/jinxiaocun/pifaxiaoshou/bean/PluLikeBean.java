@@ -3,13 +3,13 @@ package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
-public class GoodGetBean extends BaseBean{
+public class PluLikeBean extends BaseBean{
 
     private GoodGetJsonData JsonData;
 
 
-    public GoodGetBean() {
-        setStrCmd(WebConfig.GetPLUInfo);
+    public PluLikeBean() {
+        setStrCmd(WebConfig.GetPLULikeInfo);
         JsonData = new GoodGetJsonData();
     }
 
@@ -23,7 +23,6 @@ public class GoodGetBean extends BaseBean{
 
     public class GoodGetJsonData {
         private String as_branchNo;// 门店机构
-        private String as_item_no;// 商品编码
         private String as_searchstr;//查询关键词、编码、助词码、附加码等模糊查询
 
         public String getAs_searchstr() {
@@ -40,14 +39,6 @@ public class GoodGetBean extends BaseBean{
 
         public void setAs_branchNo(String as_branchNo) {
             this.as_branchNo = as_branchNo;
-        }
-
-        public String getAs_item_no() {
-            return as_item_no;
-        }
-
-        public void setAs_item_no(String as_item_no) {
-            this.as_item_no = as_item_no;
         }
     }
 

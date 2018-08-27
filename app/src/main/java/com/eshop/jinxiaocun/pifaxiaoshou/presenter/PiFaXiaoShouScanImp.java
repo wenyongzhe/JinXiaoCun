@@ -8,11 +8,14 @@ import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
+import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import java.io.IOException;
+import java.util.Map;
+
 import okhttp3.Response;
 
 public class PiFaXiaoShouScanImp implements IXiaoShouScan {
@@ -29,10 +32,8 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         GoodGetBean mGoodGetBean = new GoodGetBean();
         mGoodGetBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGoodGetBean.getJsonData().setAs_item_no(barCode);
-        IJsonFormat mJsonFormatImp = new JsonFormatImp();
-        String jsonData = mJsonFormatImp.ObjetToString(mGoodGetBean);
-
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new GetGoodInforInterface());
+        Map map = ReflectionUtils.obj2Map(mGoodGetBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new GetGoodInforInterface());
     }
 
     @Override
@@ -45,10 +46,8 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
         mDanJuJsonData.setBranchNo("");//源仓库机构
         mDanJuJsonData.setTBranchNo("");//目标仓库机构
 
-        IJsonFormat mJsonFormatImp = new JsonFormatImp();
-        String jsonData = mJsonFormatImp.ObjetToString(mDanJuDetailBean);
-
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new GetGoodDetailInterface());
+        Map map = ReflectionUtils.obj2Map(mDanJuDetailBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new GetGoodDetailInterface());
     }
 
     //获取订单明细

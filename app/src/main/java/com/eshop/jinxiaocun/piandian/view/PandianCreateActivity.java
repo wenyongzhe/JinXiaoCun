@@ -9,6 +9,8 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBean;
+import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBean;
+import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
 import com.eshop.jinxiaocun.piandian.presenter.IPandianCreat;
 import com.eshop.jinxiaocun.piandian.presenter.PandianCreatImp;
 import com.eshop.jinxiaocun.utils.Config;
@@ -30,15 +32,51 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
     @Override
     protected void loadData() {
         mServerApi = new PandianCreatImp(this);
-//        mServerApi.getPandianFanweiData(new PandianFanweiBean());
-
-        PandianLeibieBean pandianLeibieBean = new PandianLeibieBean();
-        pandianLeibieBean.JsonData.as_branchNo="";//门店号
-        pandianLeibieBean.JsonData.as_posId="";//pos id
-        pandianLeibieBean.JsonData.as_type="1";//'1'类别 '0' 品牌
-        pandianLeibieBean.JsonData.as_clsorbrno="";//指定的类型或者品牌
-        mServerApi.getPandianTypeData(pandianLeibieBean);
+//        getPandianFanweiData();
+//        getPandianLeibieData();
+//        getPandianStoreJigouData();
+        getPandianPihaoCreateData();
     }
+
+    //取盘点范围数据
+    private void getPandianFanweiData(){
+        mServerApi.getPandianFanweiData(new PandianFanweiBean());
+    }
+
+    //取盘点类别数据
+    private void getPandianLeibieData(){
+        PandianLeibieBean bean = new PandianLeibieBean();
+        bean.JsonData.as_branchNo="";//门店号
+        bean.JsonData.as_posId="";//pos id
+        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
+        bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
+        mServerApi.getPandianTypeData(bean);
+    }
+
+    //取盘点门店机构
+    private void getPandianStoreJigouData(){
+        PandianStoreJigouBean bean = new PandianStoreJigouBean();
+        bean.JsonData.as_branchNo ="";//门店号
+        bean.JsonData.as_posId =""; //Pos ID
+        bean.JsonData.trans_no ="PI";//PI 单据类型
+        bean.JsonData.branch_type ="Y";
+        mServerApi.getPandianStoreJigouData(bean);
+    }
+
+    //盘点批号生成
+    private void getPandianPihaoCreateData(){
+        PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
+        bean.JsonData.as_sheetno ="PD20180001";//盘点批次号
+        bean.JsonData.as_branch_no ="0001";//门店号
+        bean.JsonData.as_oper_range ="0"; //盘点范围
+        bean.JsonData.as_check_cls =""; //盘点类别
+        bean.JsonData.as_oper_id ="1001"; //操作员ID
+        bean.JsonData.as_oper_date =""; //操作日期
+        bean.JsonData.as_memo =""; //备注
+        mServerApi.getPandianPihaoCreateData(bean);
+    }
+
+
 
     @Override
     protected void initView() {
@@ -63,9 +101,14 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
             case Config.MESSAGE_ERROR:
                 break;
             //取盘点类别
-            case Config.MESSAGE_PandianLeibie_OK:
+            case Config.MESSAGE_PANDIANLEIBIE_OK:
                 break;
-            case Config.MESSAGE_PandianLeibie_ERROR:
+            case Config.MESSAGE_PANDIANLEIBIE_ERROR:
+                break;
+            //取盘点门店机构
+            case Config.MESSAGE_PANDIANSTOREJIGOU_OK:
+                break;
+            case Config.MESSAGE_PANDIANSTOREJIGOU_ERROR:
                 break;
         }
     }

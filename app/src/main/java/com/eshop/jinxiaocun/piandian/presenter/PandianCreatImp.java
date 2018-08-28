@@ -10,6 +10,8 @@ import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -50,6 +52,18 @@ public class PandianCreatImp implements IPandianCreat{
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianLeibieInterface());
     }
 
+    @Override
+    public void getPandianStoreJigouData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianStoreJigouInterface());
+    }
+
+    @Override
+    public void getPandianPihaoCreateData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianPihaoCreateInterface());
+    }
+
     //取盘点范围
     class PandianFanweiInterface implements IResponseListener {
 
@@ -87,12 +101,60 @@ public class PandianCreatImp implements IPandianCreat{
             try {
                 mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianLeibieBeanResult.class);
                 if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_PandianLeibie_OK,mBeanResult);
+                    mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_OK,mBeanResult);
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_PandianLeibie_ERROR,mBeanResult);
+                    mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,mBeanResult);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_PandianLeibie_ERROR,mBeanResult);
+                mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,mBeanResult);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //取盘点门店机构
+    class PandianStoreJigouInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+            PandianStoreJigouBeanResult mBeanResult = null;
+            try {
+                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianStoreJigouBeanResult.class);
+                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_OK,mBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,mBeanResult);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,mBeanResult);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //盘点批号生成
+    class PandianPihaoCreateInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+            PandianPihaoCreateBeanResult mBeanResult = null;
+            try {
+                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianPihaoCreateBeanResult.class);
+                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_OK,mBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,mBeanResult);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,mBeanResult);
                 e.printStackTrace();
             }
         }

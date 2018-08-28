@@ -14,6 +14,9 @@ public interface IPandianCreat {
     void getPandianFanweiData(BaseBean bean);
     //取盘点类别数据
     void getPandianTypeData(BaseBean bean);
-
+    //取盘点门店机构数据
+    void getPandianStoreJigouData(BaseBean bean);
+    //盘点批号生成
+    void getPandianPihaoCreateData(BaseBean bean);
 
 }

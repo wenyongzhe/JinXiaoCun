@@ -16,6 +16,8 @@ public class WebConfig {
     public static final String GetPluPrice = "GetPluPrice";//销售商品取价
     public static final String R_PD_RANGE = "R-PD-RANGE";//取盘点范围
     public static final String R_PD_CLS = "R-PD-CLS";//取盘点范围
+    public static final String R_PD_BRANCH = "R-PD-BRANCH";//取盘点门店机构
+    public static final String RT_ASK_BATCH= "RT-ASK-BATCH";//盘点批号生成
 
     public static String getPosLogin() {
         return POS_LOGIN;

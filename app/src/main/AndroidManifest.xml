@@ -61,10 +61,17 @@
             android:name=".lingshou.view.LingShouScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity android:name=".piandian.view.PandianListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             />
+
+        <activity android:name=".piandian.view.PandianCreateActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
+
     </application>
 
 </manifest>

@@ -104,8 +104,8 @@ public class PandianListActivity extends BaseListActivity implements INetWorResu
         DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
         mListInfo = mDanJuMainBeanResult.JsonData;
         if(mListInfo == null)return;
-        mAdapter = new PandianListAdapter(mListInfo);
-        mListView.setAdapter(mAdapter);
+//        mAdapter = new PandianListAdapter(mListInfo);
+//        mListView.setAdapter(mAdapter);
     }
 
     @Override

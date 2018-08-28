@@ -12,6 +12,7 @@ import com.eshop.jinxiaocun.login.Bean.RegistBeanResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
 
@@ -58,10 +59,9 @@ public class LoginImp implements ILogin {
     @Override
     public void registDevice() {
         RegistBean mRegistBean = new RegistBean();
-        String jsonData ="｛\"iDevID\":" + Config.DeviceID + DeviceUtils.getMacAddress() + "}";
-        mRegistBean.setStrCmd(WebConfig.getPosReg());
-        mRegistBean.setJsonData(jsonData);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),jsonData,new RegistInterface());
+        mRegistBean.getJsonData().setiDevID(Config.DeviceID + DeviceUtils.getMacAddress());
+        Map map = ReflectionUtils.obj2Map(mRegistBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new RegistInterface());
     }
 
     //登陆
@@ -92,9 +92,9 @@ public class LoginImp implements ILogin {
             JsonFormatImp mJsonFormatImp = new JsonFormatImp();
             RegistBeanResult mRegistBeanResult = null;
             mRegistBeanResult = mJsonFormatImp.JsonToBean(result, RegistBeanResult.class);
-            Config.posid = mRegistBeanResult.getPosid();
-            Config.branch_no = mRegistBeanResult.getBranch_no();
-            Config.soft_name = mRegistBeanResult.getSoft_name();
+            Config.posid = mRegistBeanResult.getJsonData().getPosid();
+            Config.branch_no = mRegistBeanResult.getJsonData().getBranch_no();
+            Config.soft_name = mRegistBeanResult.getJsonData().getSoft_name();
         }
     }
 

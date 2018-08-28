@@ -1,6 +1,9 @@
 package com.eshop.jinxiaocun.netWork.httpDB.message;
 
 
+import com.eshop.jinxiaocun.base.IJsonFormat;
+import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.base.bean.Result;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 
 import java.io.IOException;
@@ -12,6 +15,8 @@ import okhttp3.Response;
  */
 
 public class HandlerMessagePost implements IMessagePost {
+    IJsonFormat mJsonFormatImp = new JsonFormatImp();
+
     @Override
     public void postError(IOException e, IResponseListener o) {
         o.handleError(e);

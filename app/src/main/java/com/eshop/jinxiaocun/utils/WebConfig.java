@@ -1,12 +1,13 @@
 package com.eshop.jinxiaocun.utils;
 
 public class WebConfig {
+    public static final String DEFAULT_STRING = "123";
     private static final int TIME_OUT = 5 * 1000 * 60;
     private static String WSDL_URI = "http://120.79.209.140:8080/MobilePos/API.asmx/";
     private static String NameSpace = "http://120.79.209.140:8080";
     private static String PostData = "PostData";
     private static String GetData = "GetData";
-    public static final String POS_LOGIN = "RT-LOGIN";
+    public static final String POS_LOGIN = "POS-LOGIN";
     public static final String POS_REG = "POS-REG";
     public static final String GetPLUInfo = "GetPLUInfo";//精确查询商品信息
     public static final String GetPLULikeInfo = "GetPLULikeInfo";//模糊查询商品信息

@@ -8,7 +8,7 @@ import com.eshop.jinxiaocun.base.bean.BaseBean;
  * 描述
  */
 
-public interface IPandianCreat {
+public interface IPandian {
 
     //取盘点范围数据
     void getPandianFanweiData(BaseBean bean);
@@ -18,5 +18,9 @@ public interface IPandianCreat {
     void getPandianStoreJigouData(BaseBean bean);
     //盘点批号生成
     void getPandianPihaoCreateData(BaseBean bean);
+    //盘点批号获取
+    void getPandianPihaoHuoqu(BaseBean bean);
+    //获取盘点明细
+    void getPandianDetailData(BaseBean bean);
 
 }

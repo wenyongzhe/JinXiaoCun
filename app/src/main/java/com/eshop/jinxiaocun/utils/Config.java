@@ -36,6 +36,8 @@ public class Config {
     public final static int MESSAGE_PANDIANSTOREJIGOU_ERROR = 10;
     public final static int MESSAGE_PANDIANPIHAOCREATE_OK = 11;
     public final static int MESSAGE_PANDIANPIHAOCREATE_ERROR = 12;
+    public final static int MESSAGE_PANDIANPIHAOHUOQU_OK = 13;
+    public final static int MESSAGE_PANDIANPIHAOHUOQU_ERROR = 14;
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

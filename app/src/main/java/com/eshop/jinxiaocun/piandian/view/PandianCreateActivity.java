@@ -7,12 +7,14 @@ import android.view.View;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBean;
+import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
-import com.eshop.jinxiaocun.piandian.presenter.IPandianCreat;
-import com.eshop.jinxiaocun.piandian.presenter.PandianCreatImp;
+import com.eshop.jinxiaocun.piandian.presenter.IPandian;
+import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
@@ -20,7 +22,7 @@ import com.eshop.jinxiaocun.widget.DrawableTextView;
 public class PandianCreateActivity extends BaseActivity implements INetWorResult,ActionBarClickListener {
 
 
-    private IPandianCreat mServerApi;
+    private IPandian mServerApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,13 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
 
     @Override
     protected void loadData() {
-        mServerApi = new PandianCreatImp(this);
+        mServerApi = new PandianImp(this);
 //        getPandianFanweiData();
 //        getPandianLeibieData();
 //        getPandianStoreJigouData();
-        getPandianPihaoCreateData();
+//        getPandianPihaoCreateData();
+//        getPandianPihaoHuoqu();
+        getPandianDetailData();
     }
 
     //取盘点范围数据
@@ -76,6 +80,26 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
         mServerApi.getPandianPihaoCreateData(bean);
     }
 
+    //盘点批号获取
+    private void getPandianPihaoHuoqu(){
+        PandianPihaoHuoquBean bean = new PandianPihaoHuoquBean();
+        bean.JsonData.sheet_no="PD20180001";//获取所有可填%
+        bean.JsonData.trans_no="PD";//单据标识
+        bean.JsonData.PerNum=10;//每页显示数量
+        bean.JsonData.PageNum=1;//页码
+        bean.JsonData.approveflag="1"; //审核标识
+        bean.JsonData.branch_no=""; //机构号(保留)
+        mServerApi.getPandianPihaoHuoqu(bean);
+
+    }
+
+    //获取盘点明细
+    private void getPandianDetailData(){
+        PandianDetailBean bean = new PandianDetailBean();
+        bean.JsonData.sheet_no="201807055551";//盘点批号
+        mServerApi.getPandianDetailData(bean);
+    }
+
     @Override
     protected void initView() {
         mLinearLayout.addView(getView(R.layout.activity_pandian_create));
@@ -107,6 +131,16 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
             case Config.MESSAGE_PANDIANSTOREJIGOU_OK:
                 break;
             case Config.MESSAGE_PANDIANSTOREJIGOU_ERROR:
+                break;
+            //盘点批号生成
+            case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
+                break;
+            case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
+                break;
+            //盘点批号获取
+            case Config.MESSAGE_PANDIANPIHAOHUOQU_OK:
+                break;
+            case Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR:
                 break;
         }
     }

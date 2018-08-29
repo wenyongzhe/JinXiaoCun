@@ -8,11 +8,11 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
-import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBeanResult;
-import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
@@ -29,14 +29,14 @@ import okhttp3.Response;
  * 描述
  */
 
-public class PandianCreatImp implements IPandianCreat{
+public class PandianImp implements IPandian {
 
 
     private INetWorResult mHandler;
     private INetWork mINetWork;
     private IJsonFormat mJsonFormatImp = new JsonFormatImp();
 
-    public PandianCreatImp(INetWorResult handler) {
+    public PandianImp(INetWorResult handler) {
         this.mHandler = handler;
         mINetWork = new NetWorkImp(Application.mContext);
     }
@@ -45,25 +45,37 @@ public class PandianCreatImp implements IPandianCreat{
     @Override
     public void getPandianFanweiData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianFanweiInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianFanweiInterface());
     }
 
     @Override
     public void getPandianTypeData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianLeibieInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianLeibieInterface());
     }
 
     @Override
     public void getPandianStoreJigouData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianStoreJigouInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianStoreJigouInterface());
     }
 
     @Override
     public void getPandianPihaoCreateData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianCreatImp.PandianPihaoCreateInterface());
+        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianImp.PandianPihaoCreateInterface());
+    }
+
+    @Override
+    public void getPandianPihaoHuoqu(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianPihaoHuoquInterface());
+    }
+
+    @Override
+    public void getPandianDetailData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianDetailInterface());
     }
 
     //取盘点范围
@@ -174,5 +186,59 @@ public class PandianCreatImp implements IPandianCreat{
         }
     }
 
+    //盘点批号获取
+    class PandianPihaoHuoquInterface implements IResponseListener {
 
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                List<PandianPihaoHuoquBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianPihaoHuoquBeanResult.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOHUOQU_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //获取盘点明细
+    class PandianDetailInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                List<PandianDetailBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianDetailBeanResult.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 }

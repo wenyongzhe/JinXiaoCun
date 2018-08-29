@@ -19,6 +19,8 @@ public class WebConfig {
     public static final String R_PD_CLS = "R-PD-CLS";//取盘点范围
     public static final String R_PD_BRANCH = "R-PD-BRANCH";//取盘点门店机构
     public static final String RT_ASK_BATCH= "RT-ASK-BATCH";//盘点批号生成
+    public static final String GetBatchNo= "GetBatchNo";//盘点批号获取
+    public static final String R_PD_DETAIL= "R-PD-DETAIL";//盘点明细
 
     public static String getPosLogin() {
         return POS_LOGIN;

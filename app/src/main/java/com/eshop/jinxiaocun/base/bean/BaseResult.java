@@ -5,6 +5,6 @@ import com.eshop.jinxiaocun.utils.Config;
 public class BaseResult {
 
     public String status;
-    public String Msg;
-    public String Sign;
+    public String msg;
+    public String sign;
 }

@@ -27,7 +27,7 @@ public class LoginImp implements ILogin {
 
     private Handler mHandler;
     private INetWork mINetWork;
-
+    JsonFormatImp mJsonFormatImp = new JsonFormatImp();
 
     public LoginImp(Handler mHandler) {
         this.mHandler = mHandler;
@@ -77,6 +77,11 @@ public class LoginImp implements ILogin {
             Log.e("-----",result);
             mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //注册
@@ -84,17 +89,25 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleError(Object event) {
-
         }
 
         @Override
         public void handleResult(Response event,String result) {
-            JsonFormatImp mJsonFormatImp = new JsonFormatImp();
-            RegistBeanResult mRegistBeanResult = null;
-            mRegistBeanResult = mJsonFormatImp.JsonToBean(result, RegistBeanResult.class);
-            Config.posid = mRegistBeanResult.getJsonData().getPosid();
-            Config.branch_no = mRegistBeanResult.getJsonData().getBranch_no();
-            Config.soft_name = mRegistBeanResult.getJsonData().getSoft_name();
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
+            if(jsonBean==null){
+                Config.posid = "123";
+                Config.branch_no = "123";
+                Config.soft_name = "123";
+            }else{
+                Config.posid = jsonBean.getPosid();
+                Config.branch_no = jsonBean.getBranch_no();
+                Config.soft_name = jsonBean.getSoft_name();
+            }
+            mHandler.sendEmptyMessage(Config.MESSAGE_OK);
         }
     }
 

@@ -59,6 +59,11 @@ public class DanJuListImp implements IDanJuList {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
 }

@@ -152,7 +152,7 @@ public class LoginActivity extends BaseActivity {
                 MyUtils.showToast("用户名不能为空", this);
                 return;
             }
-            if (TextUtils.isEmpty(Config.ShopGroup)) {
+            if (TextUtils.isEmpty(Config.branch_no)) {
                 MyUtils.showToast("请先绑定设备", this);
                /* Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, SystemSettingActivity.class);

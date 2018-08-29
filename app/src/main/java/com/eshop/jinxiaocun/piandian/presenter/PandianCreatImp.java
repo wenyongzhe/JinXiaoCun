@@ -86,6 +86,11 @@ public class PandianCreatImp implements IPandianCreat{
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //取盘点类别
@@ -109,6 +114,11 @@ public class PandianCreatImp implements IPandianCreat{
                 mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,mBeanResult);
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
         }
     }
 
@@ -134,6 +144,11 @@ public class PandianCreatImp implements IPandianCreat{
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //盘点批号生成
@@ -157,6 +172,11 @@ public class PandianCreatImp implements IPandianCreat{
                 mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,mBeanResult);
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
         }
     }
 }

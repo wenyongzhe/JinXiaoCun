@@ -123,6 +123,11 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //获取订单明细
@@ -140,6 +145,11 @@ public class LingShouScanImp implements ILingshouScan {
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
             }
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
         }
     }
 
@@ -159,6 +169,11 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //获取商品价格
@@ -177,6 +192,11 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //结算
@@ -194,6 +214,11 @@ public class LingShouScanImp implements ILingshouScan {
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mSellSubBeanResult);
             }
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
         }
     }
 }

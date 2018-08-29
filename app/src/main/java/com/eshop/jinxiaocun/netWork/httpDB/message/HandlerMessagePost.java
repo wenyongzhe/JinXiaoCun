@@ -28,8 +28,10 @@ public class HandlerMessagePost implements IMessagePost {
         try {
             b = response.body().bytes();
             String info = new String(b, "GB2312"); //然后将其转为gb2312
+            Result mResult = mJsonFormatImp.JsonToBean(info, Result.class);
             o.handleResult(response,info );
-        } catch (IOException e) {
+            o.handleResultJson(mResult.status,mResult.msg,mResult.jsonData);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

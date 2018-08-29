@@ -66,6 +66,11 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
                 mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuDetailBeanResult);
             }
         }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
+        }
     }
 
     //查询商品信息
@@ -83,6 +88,11 @@ public class PiFaXiaoShouScanImp implements IXiaoShouScan {
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
             }
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+
         }
     }
 

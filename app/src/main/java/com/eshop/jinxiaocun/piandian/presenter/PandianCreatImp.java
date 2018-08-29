@@ -10,8 +10,10 @@ import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -61,7 +63,7 @@ public class PandianCreatImp implements IPandianCreat{
     @Override
     public void getPandianPihaoCreateData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianCreatImp.PandianPihaoCreateInterface());
+        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianCreatImp.PandianPihaoCreateInterface());
     }
 
     //取盘点范围
@@ -73,23 +75,23 @@ public class PandianCreatImp implements IPandianCreat{
 
         @Override
         public void handleResult(Response event, String result) {
-            PandianFanweiBeanResult mBeanResult = null;
-            try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianFanweiBeanResult.class);
-                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,mBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mBeanResult);
-                }
-            } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_ERROR,mBeanResult);
-                e.printStackTrace();
-            }
+
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            PandianFanweiBeanResult mBeanResult = null;
+            try {
+                mBeanResult =  mJsonFormatImp.JsonToBean(jsonData,PandianFanweiBeanResult.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_OK,mBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -102,23 +104,16 @@ public class PandianCreatImp implements IPandianCreat{
 
         @Override
         public void handleResult(Response event, String result) {
-            PandianLeibieBeanResult mBeanResult = null;
-            try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianLeibieBeanResult.class);
-                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_OK,mBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,mBeanResult);
-                }
-            } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,mBeanResult);
-                e.printStackTrace();
-            }
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            if(status.equals(Config.MESSAGE_OK+"")){
+                List<PandianLeibieBeanResultItem> resultItemList = mJsonFormatImp.JsonToList(jsonData,PandianLeibieBeanResultItem.class);
+                mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_OK,resultItemList);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_PANDIANLEIBIE_ERROR,Msg);
+            }
         }
     }
 
@@ -131,23 +126,22 @@ public class PandianCreatImp implements IPandianCreat{
 
         @Override
         public void handleResult(Response event, String result) {
-            PandianStoreJigouBeanResult mBeanResult = null;
-            try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianStoreJigouBeanResult.class);
-                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_OK,mBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,mBeanResult);
-                }
-            } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,mBeanResult);
-                e.printStackTrace();
-            }
+
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            try {
+                List<PandianStoreJigouBeanResultItem> resultItemList =  mJsonFormatImp.JsonToList(jsonData,PandianStoreJigouBeanResultItem.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_OK,resultItemList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -160,23 +154,25 @@ public class PandianCreatImp implements IPandianCreat{
 
         @Override
         public void handleResult(Response event, String result) {
-            PandianPihaoCreateBeanResult mBeanResult = null;
-            try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(result,PandianPihaoCreateBeanResult.class);
-                if(mBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_OK,mBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,mBeanResult);
-                }
-            } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,mBeanResult);
-                e.printStackTrace();
-            }
+
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            PandianPihaoCreateBeanResult mBeanResult = null;
+            try {
+                mBeanResult =  mJsonFormatImp.JsonToBean(jsonData,PandianPihaoCreateBeanResult.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_OK,mBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
+
+
 }

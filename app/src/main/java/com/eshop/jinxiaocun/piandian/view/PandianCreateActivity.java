@@ -76,8 +76,6 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
         mServerApi.getPandianPihaoCreateData(bean);
     }
 
-
-
     @Override
     protected void initView() {
         mLinearLayout.addView(getView(R.layout.activity_pandian_create));

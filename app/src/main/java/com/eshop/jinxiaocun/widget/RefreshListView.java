@@ -26,8 +26,6 @@ import java.util.Date;
 /**
  * 上下拉刷新listview
  *
- * @author qiaocbao
- * @time 2014-10-11 上午10:32:17
  */
 public class RefreshListView extends ListView implements OnScrollListener {
     private final static int RELEASE_To_REFRESH = 0;

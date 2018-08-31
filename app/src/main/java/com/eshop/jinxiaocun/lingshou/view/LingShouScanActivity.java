@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -65,8 +67,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mLingShouScanImp.getSheetDetail(sheet_no);
         }else
             initMainBean();
-        mLingShouScanImp.getFlowNo();
-        mLingShouScanImp.sellSub();
+//        mLingShouScanImp.getFlowNo();
+//        mLingShouScanImp.sellSub();
     }
 
     private void initMainBean(){
@@ -160,6 +162,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     @Override
     public void onRightClick() {
-
+        Intent mIntent = new Intent(this, QreShanpingActivity.class);
+        startActivity(mIntent);
     }
 }

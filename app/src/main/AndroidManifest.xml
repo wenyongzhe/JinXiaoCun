@@ -71,7 +71,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             />
-
+        <activity android:name="com.eshop.jinxiaocun.base.view.QreShanpingActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden|adjustPan"
+            />
     </application>
 
 </manifest>

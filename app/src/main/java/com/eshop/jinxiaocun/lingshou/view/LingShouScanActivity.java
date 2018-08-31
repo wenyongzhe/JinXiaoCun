@@ -66,6 +66,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }else
             initMainBean();
         mLingShouScanImp.getFlowNo();
+        mLingShouScanImp.sellSub();
     }
 
     private void initMainBean(){
@@ -95,7 +96,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     protected void initView() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        View mView = this.getLayoutInflater().inflate(R.layout.activity_add_xiaoshou_dan, null);
+        View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView,0,params);
         mSpinner1 = findViewById(R.id.ly1_sp);
         mSpinner2 = findViewById(R.id.ly2_sp);

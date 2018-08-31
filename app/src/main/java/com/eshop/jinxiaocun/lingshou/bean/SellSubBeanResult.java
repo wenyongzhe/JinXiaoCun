@@ -19,7 +19,6 @@ public class SellSubBeanResult extends BaseResult {
 
         private String as_branchNo;//" :”0001” // 门店机构
         private String as_flowno;// " : “1001”,  //POSID号
-        private String as_cardno;//会员卡号
 
         public String getAs_branchNo() {
             return as_branchNo;
@@ -37,13 +36,6 @@ public class SellSubBeanResult extends BaseResult {
             this.as_flowno = as_flowno;
         }
 
-        public String getAs_cardno() {
-            return as_cardno;
-        }
-
-        public void setAs_cardno(String as_cardno) {
-            this.as_cardno = as_cardno;
-        }
     }
 
 }

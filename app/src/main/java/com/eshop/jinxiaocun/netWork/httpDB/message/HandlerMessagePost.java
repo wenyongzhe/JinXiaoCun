@@ -1,9 +1,13 @@
 package com.eshop.jinxiaocun.netWork.httpDB.message;
 
 
+import android.widget.Toast;
+
+import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.Result;
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 
 import java.io.IOException;
@@ -20,6 +24,7 @@ public class HandlerMessagePost implements IMessagePost {
     @Override
     public void postError(IOException e, IResponseListener o) {
         o.handleError(e);
+        Toast.makeText(Application.mContext, R.string.message_error,Toast.LENGTH_SHORT).show();
     }
 
     @Override

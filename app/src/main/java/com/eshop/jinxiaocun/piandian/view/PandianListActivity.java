@@ -93,7 +93,7 @@ public class PandianListActivity extends BaseListActivity implements INetWorResu
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PandianListActivity.this,PandianCreateActivity.class));
+                startActivity(new Intent(PandianListActivity.this,PandianPihaoListActivity.class));
             }
         });
 

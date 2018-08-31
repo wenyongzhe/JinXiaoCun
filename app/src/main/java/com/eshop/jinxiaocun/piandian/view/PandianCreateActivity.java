@@ -80,18 +80,18 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
         mServerApi.getPandianPihaoCreateData(bean);
     }
 
-    //盘点批号获取
-    private void getPandianPihaoHuoqu(){
-        PandianPihaoHuoquBean bean = new PandianPihaoHuoquBean();
-        bean.JsonData.sheet_no="PD20180001";//获取所有可填%
-        bean.JsonData.trans_no="PD";//单据标识
-        bean.JsonData.PerNum=10;//每页显示数量
-        bean.JsonData.PageNum=1;//页码
-        bean.JsonData.approveflag="1"; //审核标识
-        bean.JsonData.branch_no=""; //机构号(保留)
-        mServerApi.getPandianPihaoHuoqu(bean);
-
-    }
+//    //盘点批号获取
+//    private void getPandianPihaoHuoqu(){
+//        PandianPihaoHuoquBean bean = new PandianPihaoHuoquBean();
+//        bean.JsonData.sheet_no="PD20180001";//获取所有可填%
+//        bean.JsonData.trans_no="PD";//单据标识
+//        bean.JsonData.PerNum=10;//每页显示数量
+//        bean.JsonData.PageNum=1;//页码
+//        bean.JsonData.approveflag="1"; //审核标识
+//        bean.JsonData.branch_no=""; //机构号(保留)
+//        mServerApi.getPandianPihaoHuoqu(bean);
+//
+//    }
 
     //获取盘点明细
     private void getPandianDetailData(){
@@ -136,11 +136,6 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
             case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
                 break;
             case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
-                break;
-            //盘点批号获取
-            case Config.MESSAGE_PANDIANPIHAOHUOQU_OK:
-                break;
-            case Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR:
                 break;
         }
     }

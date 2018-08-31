@@ -54,4 +54,8 @@
     <color name="transparent">#00000000</color>
     <!-- 浅灰 -->
     <color name="light_gray">#b2b2b2</color>
+    <color name="list_background">#ededed</color>
+    <color name="bg_grey3">#C4C4C4</color>
+    <color name="bg_grey4">#9ea7b3</color>
+    <color name="bg_grey5">#acacac</color>
 </resources>

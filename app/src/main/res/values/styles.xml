@@ -127,4 +127,34 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="AutoScrollTextView">
+        <item name="android:textColor">@color/bg_grey4</item>
+        <item name="android:textSize">@dimen/txt_size16</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="AnimBottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
+    </style>
+
+    <style name="MyDialogStyleBottom" parent="android:Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+        <item name="android:windowFrame">@null</item>
+        <!--  边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!--  是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--  半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--  无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--  背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>

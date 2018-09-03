@@ -19,6 +19,11 @@ public class JsonFormatImp implements IJsonFormat {
 
     @Override
     public <T> List<T> JsonToList(String gsonString, Class<T> cls) {
+        return GsonUtil.jsonToList(gsonString,cls);
+    }
+
+    @Override
+    public <T> List<T> GsonToList(String gsonString, Class<T> cls) {
         return GsonUtil.GsonToList(gsonString,cls);
     }
 }

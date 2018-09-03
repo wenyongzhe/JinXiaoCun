@@ -16,11 +16,13 @@ import com.eshop.jinxiaocun.widget.RefreshListView;
 
 public class BaseListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
+    protected LinearLayout mLayoutBottom;
     protected RefreshListView mListView;
     /** 页数 */
     protected int page = 1;
     /** 每次请求的条数 */
     protected int limit = 10;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class BaseListActivity extends BaseActivity implements AdapterView.OnItem
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_list_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
+        mLayoutBottom = mLinearLayout.findViewById(R.id.ll_bottom);
     }
 
     @Override

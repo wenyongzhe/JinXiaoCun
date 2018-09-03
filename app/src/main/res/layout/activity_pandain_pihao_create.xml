@@ -23,12 +23,11 @@
             android:textSize="16sp"
             android:text="盘点批号" />
 
-        <com.eshop.jinxiaocun.widget.DrawableTextView
-            android:id="@+id/dtPandianpihao"
+        <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Select" />
+            style="@style/TextView_Grey" />
 
     </LinearLayout>
 
@@ -75,11 +74,12 @@
             android:textSize="16sp"
             android:text="盘点范围" />
 
-        <TextView
+        <com.eshop.jinxiaocun.widget.DrawableTextView
+            android:id="@+id/tvPandianFanwei"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Grey" />
+            style="@style/TextView_Select" />
 
     </LinearLayout>
 
@@ -100,11 +100,12 @@
             android:textSize="16sp"
             android:text="盘点类别" />
 
-        <TextView
+        <com.eshop.jinxiaocun.widget.DrawableTextView
+            android:id="@+id/tvPandianType"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Grey" />
+            style="@style/TextView_Select" />
 
     </LinearLayout>
 

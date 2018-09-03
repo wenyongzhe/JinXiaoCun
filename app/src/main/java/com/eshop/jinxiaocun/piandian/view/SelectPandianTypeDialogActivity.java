@@ -94,15 +94,7 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
         switch (flag){
             //取盘点类别
             case Config.MESSAGE_PANDIANLEIBIE_OK:
-//                listData = (List<PandianLeibieBeanResultItem>) o;
-
-                for (int i = 0; i < 25; i++) {
-                    PandianLeibieBeanResultItem obj = new PandianLeibieBeanResultItem();
-                    obj.setType_no("no_"+i);
-                    obj.setType_name("Name_"+i);
-                    listData.add(obj);
-                }
-
+                listData = (List<PandianLeibieBeanResultItem>) o;
                 mAdapter = new SelectPandianTypeAdapter(this, listData);
                 mListView.setAdapter(mAdapter);
                 break;

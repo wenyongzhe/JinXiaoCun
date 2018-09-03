@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.piandian.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,10 +9,6 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
@@ -39,23 +36,23 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
 //        getPandianStoreJigouData();
 //        getPandianPihaoCreateData();
 //        getPandianPihaoHuoqu();
-        getPandianDetailData();
+//        getPandianDetailData();
     }
 
-    //取盘点范围数据
-    private void getPandianFanweiData(){
-        mServerApi.getPandianFanweiData(new PandianFanweiBean());
-    }
+////    取盘点范围数据
+//    private void getPandianFanweiData(){
+//        mServerApi.getPandianFanweiData(new PandianFanweiBean());
+//    }
 
-    //取盘点类别数据
-    private void getPandianLeibieData(){
-        PandianLeibieBean bean = new PandianLeibieBean();
-        bean.JsonData.as_branchNo="";//门店号
-        bean.JsonData.as_posId="";//pos id
-        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
-        bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
-        mServerApi.getPandianTypeData(bean);
-    }
+//    //取盘点类别数据
+//    private void getPandianLeibieData(){
+//        PandianLeibieBean bean = new PandianLeibieBean();
+//        bean.JsonData.as_branchNo="";//门店号
+//        bean.JsonData.as_posId="";//pos id
+//        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
+//        bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
+//        mServerApi.getPandianTypeData(bean);
+//    }
 
     //取盘点门店机构
     private void getPandianStoreJigouData(){
@@ -67,18 +64,18 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
         mServerApi.getPandianStoreJigouData(bean);
     }
 
-    //盘点批号生成
-    private void getPandianPihaoCreateData(){
-        PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
-        bean.JsonData.as_sheetno ="PD20180001";//盘点批次号
-        bean.JsonData.as_branch_no ="0001";//门店号
-        bean.JsonData.as_oper_range ="0"; //盘点范围
-        bean.JsonData.as_check_cls =""; //盘点类别
-        bean.JsonData.as_oper_id ="1001"; //操作员ID
-        bean.JsonData.as_oper_date =""; //操作日期
-        bean.JsonData.as_memo =""; //备注
-        mServerApi.getPandianPihaoCreateData(bean);
-    }
+//    //盘点批号生成
+//    private void getPandianPihaoCreateData(){
+//        PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
+//        bean.JsonData.as_sheetno ="PD20180001";//盘点批次号
+//        bean.JsonData.as_branch_no ="0001";//门店号
+//        bean.JsonData.as_oper_range ="0"; //盘点范围
+//        bean.JsonData.as_check_cls =""; //盘点类别
+//        bean.JsonData.as_oper_id ="1001"; //操作员ID
+//        bean.JsonData.as_oper_date =""; //操作日期
+//        bean.JsonData.as_memo =""; //备注
+//        mServerApi.getPandianPihaoCreateData(bean);
+//    }
 
 //    //盘点批号获取
 //    private void getPandianPihaoHuoqu(){
@@ -103,12 +100,13 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
     @Override
     protected void initView() {
         mLinearLayout.addView(getView(R.layout.activity_pandian_create));
-        mMyActionBar.setData("盘点生成单",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
-        DrawableTextView mTvPandianfanwei =mLinearLayout.findViewById(R.id.dtPandianfanwei);
+        mMyActionBar.setData("盘点生成单",R.mipmap.ic_left_light,"",0,"",this);
+        DrawableTextView mTvPandianfanwei =mLinearLayout.findViewById(R.id.dtPandianpihao);
         mTvPandianfanwei.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-
+                Intent intent = new Intent(PandianCreateActivity.this,PandianPihaoListActivity.class);
+                startActivityForResult(intent,1);
             }
         });
     }
@@ -117,26 +115,13 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
-            //取盘点范围
-            case Config.MESSAGE_OK:
-                break;
-            case Config.MESSAGE_ERROR:
-                break;
-            //取盘点类别
-            case Config.MESSAGE_PANDIANLEIBIE_OK:
-                break;
-            case Config.MESSAGE_PANDIANLEIBIE_ERROR:
-                break;
+
             //取盘点门店机构
             case Config.MESSAGE_PANDIANSTOREJIGOU_OK:
                 break;
             case Config.MESSAGE_PANDIANSTOREJIGOU_ERROR:
                 break;
-            //盘点批号生成
-            case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
-                break;
-            case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
-                break;
+
         }
     }
 

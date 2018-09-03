@@ -41,10 +41,11 @@ public class PandianPihaoListActivity extends BaseListActivity implements INetWo
 
 
     protected void initView() {
+        mLayoutBottom.setVisibility(View.GONE);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_pandian_pihao_list),0,params);
         mListView = mLinearLayout.findViewById(R.id.listview_pandianpihao);
-        mMyActionBar.setData("盘点号列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
+        mMyActionBar.setData("盘点批号列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -73,13 +74,7 @@ public class PandianPihaoListActivity extends BaseListActivity implements INetWo
         mAdapter = new PandianPihaoListAdapter(this,mListDatas);
         mListView.setAdapter(mAdapter);
 
-        Button btnCreate = mLinearLayout.findViewById(R.id.bottom_btn_create);
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PandianPihaoListActivity.this,SelectPandianFanweiDialogActivity.class));
-            }
-        });
+
     }
 
     protected void loadData() {
@@ -104,15 +99,16 @@ public class PandianPihaoListActivity extends BaseListActivity implements INetWo
         switch (flag){
             //盘点批号获取
             case Config.MESSAGE_PANDIANPIHAOHUOQU_OK:
-                Toast.makeText(PandianPihaoListActivity.this,"获取盘点批号数据出错:"+o.toString(),Toast.LENGTH_SHORT).show();
-                break;
-            case Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR:
                 if(page==0){
                     mListDatas = (List<PandianPihaoHuoquBeanResult>) o;
+                }else{
+                    mListDatas.addAll((List<PandianPihaoHuoquBeanResult>) o);
                 }
-                mListDatas.addAll((Collection<? extends PandianPihaoHuoquBeanResult>) o);
                 mAdapter.setListInfo(mListDatas);
                 mAdapter.notifyDataSetChanged();
+                break;
+            case Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR:
+                Toast.makeText(PandianPihaoListActivity.this,"获取盘点批号数据出错:"+o.toString(),Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -124,6 +120,6 @@ public class PandianPihaoListActivity extends BaseListActivity implements INetWo
 
     @Override
     public void onRightClick() {
-
+            startActivity(new Intent(PandianPihaoListActivity.this,PandianPihaoCreateActivity.class));
     }
 }

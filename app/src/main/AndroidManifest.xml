@@ -65,33 +65,32 @@
             android:name=".piandian.view.PandianListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".piandian.view.PandianCreateActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".piandian.view.PandianPihaoListActivity"
+        <activity
+            android:name=".piandian.view.PandianPihaoListActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            />
-        <activity android:name="com.eshop.jinxiaocun.base.view.QreShanpingActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden|adjustPan"
-            />
-
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".base.view.QreShanpingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".piandian.view.SelectPandianTypeDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".piandian.view.SelectPandianFanweiDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
+        <activity android:name=".piandian.view.PandianPihaoCreateActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
     </application>
 
 </manifest>

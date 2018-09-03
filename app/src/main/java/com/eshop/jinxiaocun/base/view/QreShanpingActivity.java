@@ -18,7 +18,7 @@ import com.flyco.tablayout.SegmentTabLayout;
 
 import java.util.ArrayList;
 
-public class QreShanpingActivity extends BaseActivity  implements AdapterView.OnItemClickListener,ActionBarClickListener {
+public class QreShanpingActivity extends BaseTabListActivity  implements AdapterView.OnItemClickListener,ActionBarClickListener {
 
     ArrayList<Fragment> mFragments = new ArrayList<>();
     private String[] mTitles = {"选择商品", "搜索商品"};
@@ -27,6 +27,15 @@ public class QreShanpingActivity extends BaseActivity  implements AdapterView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void loadData() {
+
+    }
+
+    @Override
+    protected void initView() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_chaxun_shanping),0,params);
 
@@ -38,16 +47,6 @@ public class QreShanpingActivity extends BaseActivity  implements AdapterView.On
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
 
         mMyActionBar.setData("单据列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
-    }
-
-    @Override
-    protected void loadData() {
-
-    }
-
-    @Override
-    protected void initView() {
-
     }
 
     @Override

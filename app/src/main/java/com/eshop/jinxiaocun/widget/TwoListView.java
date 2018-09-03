@@ -28,8 +28,10 @@ public class TwoListView extends LinearLayout {
     protected List<GetClassPluResult> detailListBean;
     int page = 1;
 
-    public TwoListView(Context context) {
+    public TwoListView(Context context, List<QryClassResult> mainListBean, List<GetClassPluResult> detailListBean) {
         super(context);
+        mainListBean = mainListBean;
+        detailListBean = detailListBean;
     }
 
     public TwoListView(Context context, @Nullable AttributeSet attrs) {
@@ -88,13 +90,9 @@ public class TwoListView extends LinearLayout {
             }
         });
 
-        mTwoListMainAdapter = new TwoListMainAdapter(mainListBean);
-        mListViewMain.setAdapter(mTwoListMainAdapter);
-        mTwoListMainAdapter.notifyDataSetChanged();
 
-        mTwoListDetailAdapter = new TwoListDetailAdapter(detailListBean);
-        mListViewDetail.setAdapter(mTwoListDetailAdapter);
-        mTwoListDetailAdapter.notifyDataSetChanged();
+
+
     }
 
     private void loadData() {
@@ -102,9 +100,15 @@ public class TwoListView extends LinearLayout {
 
     public void setDetailListBean(List<GetClassPluResult> detailListBean) {
         this.detailListBean = detailListBean;
+        mTwoListDetailAdapter = new TwoListDetailAdapter(detailListBean);
+        mListViewDetail.setAdapter(mTwoListDetailAdapter);
+        mTwoListDetailAdapter.notifyDataSetChanged();
     }
 
     public void setMainListBean(List<QryClassResult> mainListBean) {
         this.mainListBean = mainListBean;
+        mTwoListMainAdapter = new TwoListMainAdapter(mainListBean);
+        mListViewMain.setAdapter(mTwoListMainAdapter);
+        mTwoListMainAdapter.notifyDataSetChanged();
     }
 }

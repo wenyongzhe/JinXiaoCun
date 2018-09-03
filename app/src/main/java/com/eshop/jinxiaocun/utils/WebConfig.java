@@ -21,6 +21,9 @@ public class WebConfig {
     public static final String RT_ASK_BATCH= "RT-ASK-BATCH";//盘点批号生成
     public static final String GetBatchNo= "GetBatchNo";//盘点批号获取
     public static final String R_PD_DETAIL= "R-PD-DETAIL";//盘点明细
+    public static final String QryClassInfo= "QryClassInfo";//查询商品分类
+    public static final String GetClassPluInfo= "GetClassPluInfo";//查询分类商品
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

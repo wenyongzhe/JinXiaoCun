@@ -3,19 +3,29 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tl="http://schemas.android.com/tools"
               android:orientation="vertical">
 
-    <com.eshop.jinxiaocun.widget.MyActionBar
+   <!-- <com.eshop.jinxiaocun.widget.MyActionBar
         android:id="@+id/actionbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    </com.eshop.jinxiaocun.widget.MyActionBar>
+    </com.eshop.jinxiaocun.widget.MyActionBar>-->
 
-    <LinearLayout
-        android:id="@+id/content"
-        android:orientation="vertical"
+    <com.flyco.tablayout.SegmentTabLayout
+        android:id="@+id/tl_1"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        tl:tl_bar_color="#ffffff"
+        tl:tl_indicator_color="#2C97DE"
+        tl:tl_indicator_corner_radius="8dp"
+        tl:tl_tab_padding="20dp"/>
+
+    <FrameLayout
+        android:id="@+id/fl_change"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-    </LinearLayout>
+        android:layout_height="fill_parent"/>
 
 </LinearLayout>

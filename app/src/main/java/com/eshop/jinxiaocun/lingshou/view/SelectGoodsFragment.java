@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,11 @@ import android.view.ViewGroup;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
+import com.eshop.jinxiaocun.base.bean.QryClassResult;
 import com.eshop.jinxiaocun.base.view.BaseListFragment;
+import com.eshop.jinxiaocun.lingshou.presenter.ISelectGoods;
+import com.eshop.jinxiaocun.lingshou.presenter.SelectGoodsImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
@@ -17,14 +22,21 @@ import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.FinishListAdapter;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.RefreshListView;
+import com.eshop.jinxiaocun.widget.TwoListView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 @SuppressLint("ValidFragment")
 public class SelectGoodsFragment extends BaseListFragment implements INetWorResult {
     private List<DanJuMainBeanResult> mListData;
-
+    private List<QryClassResult> mQryClassResult;
+    private List<GetClassPluResult> mGetClassPluResult;
+    private TwoListView mTwoListView;
+    ISelectGoods mISelectGoods;
     public static SelectGoodsFragment getInstance() {
         SelectGoodsFragment sf = new SelectGoodsFragment();
         return sf;
@@ -32,13 +44,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
 
     @Override
     protected void loadData() {
-        DanJuMainBean mDanJuMainBean = new DanJuMainBean();
-        mDanJuMainBean.JsonData.BeginTime = "";
-        mDanJuMainBean.JsonData.EndTime = "";
-        mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
-        mDanJuMainBean.JsonData.PageNum = limit+"";
-        mDanJuMainBean.JsonData.Page = page+"";
-//        mDanJuList.getDanJuList(mDanJuMainBean);
+        mISelectGoods.qryClassInfo();
     }
 
     @Override
@@ -48,25 +54,14 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mDanJuList = new DanJuListImp(this);
-        View v = inflater.inflate(R.layout.finish_fragment, null);
-        mListView = (RefreshListView) v.findViewById(R.id.list_view);
+        mQryClassResult = new ArrayList<QryClassResult>();
+        mGetClassPluResult = new ArrayList<GetClassPluResult>();
+        mISelectGoods = new SelectGoodsImp(this);
+        View v = inflater.inflate(R.layout.selectgoods_fragment, null);
+        mTwoListView = v.findViewById(R.id.twlist);
+        mTwoListView.setMainListBean(mQryClassResult);
+        mTwoListView.setDetailListBean(mGetClassPluResult);
 
-        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                loadData();
-            }
-        });
-
-        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page ++;
-                loadData();
-            }
-        });
         loadData();
         return v;
     }

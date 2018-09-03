@@ -26,6 +26,16 @@ public abstract class BaseTabListActivity extends BaseActivity implements Adapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initView();
+    }
+
+    @Override
+    protected void loadData() {
+
+    }
+
+    @Override
+    protected void initView() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_base_tab_list),0,params);
 
@@ -37,16 +47,6 @@ public abstract class BaseTabListActivity extends BaseActivity implements Adapte
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
 
         mMyActionBar.setData("单据列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
-    }
-
-    @Override
-    protected void loadData() {
-
-    }
-
-    @Override
-    protected void initView() {
-
     }
 
     @Override

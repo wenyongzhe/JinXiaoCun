@@ -77,7 +77,7 @@ public class PandianPihaoListActivity extends BaseListActivity implements INetWo
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PandianPihaoListActivity.this,SelectPandianTypeDialog.class));
+                startActivity(new Intent(PandianPihaoListActivity.this,SelectPandianFanweiDialogActivity.class));
             }
         });
     }

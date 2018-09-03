@@ -2,9 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -14,30 +12,29 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.piandian.adapter.SelectPandianTypeAdapter;
-import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
+import com.eshop.jinxiaocun.piandian.adapter.SelectPandianFanweiAdapter;
+import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBean;
+import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
-import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SelectPandianTypeDialog extends Activity implements INetWorResult {
+public class SelectPandianFanweiDialogActivity extends Activity implements INetWorResult {
 
-    TextView tv_0;
-    TextView tv_1;
+    private TextView title;
+    private TextView tv_0;
+    private TextView tv_1;
 
-    SelectPandianTypeAdapter adapterData;
+    private SelectPandianFanweiAdapter mAdapter;
     private IPandian mServerApi;
 
-    ListView mListView;
-    List<PandianLeibieBeanResultItem> listData = new ArrayList<>();
+    private ListView mListView;
+    private List<PandianFanweiBeanResult> listData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +43,12 @@ public class SelectPandianTypeDialog extends Activity implements INetWorResult {
 
         ButterKnife.bind(this);
 
+        title=findViewById(R.id.title);
         tv_0=findViewById(R.id.tv_0);
         tv_1=findViewById(R.id.tv_1);
         mListView=findViewById(R.id.listview_data);
-        tv_0.setWidth(CommonUtility.dip2px(this,80));
-        tv_1.setWidth(CommonUtility.dip2px(this,140));
-        tv_0.setText("编码");
+        title.setText("请选择盘点范围");
+        tv_0.setText("编号");
         tv_1.setText("名称");
 
 
@@ -59,9 +56,9 @@ public class SelectPandianTypeDialog extends Activity implements INetWorResult {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListView lv = (ListView) parent;
-                PandianLeibieBeanResultItem obj = (PandianLeibieBeanResultItem) lv.getItemAtPosition(position);
-                adapterData.setIsSelected(position);
-                adapterData.notifyDataSetInvalidated();
+                PandianFanweiBeanResult obj = (PandianFanweiBeanResult) lv.getItemAtPosition(position);
+                mAdapter.setIsSelected(position);
+                mAdapter.notifyDataSetInvalidated();
             }
         });
 
@@ -78,32 +75,28 @@ public class SelectPandianTypeDialog extends Activity implements INetWorResult {
         getWindow().setAttributes(localLayoutParams);
 
         mServerApi = new PandianImp(this);
-        getPandianLeibieData();
+        mServerApi.getPandianFanweiData(new PandianFanweiBean());
     }
-
-    //取盘点类别数据
-    private void getPandianLeibieData(){
-        PandianLeibieBean bean = new PandianLeibieBean();
-        bean.JsonData.as_branchNo="";//门店号
-        bean.JsonData.as_posId="";//pos id
-        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
-        bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
-        mServerApi.getPandianTypeData(bean);
-    }
-
-
 
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
             //取盘点类别
-            case Config.MESSAGE_PANDIANLEIBIE_OK:
+            case Config.MESSAGE_OK:
+//                listData = (List<PandianLeibieBeanResultItem>) o;
 
+                for (int i = 0; i < 25; i++) {
+                    PandianFanweiBeanResult obj = new PandianFanweiBeanResult();
+                    obj.setType_id("id_"+i);
+                    obj.setType_name("Name_"+i);
+                    listData.add(obj);
+                }
+
+                mAdapter = new SelectPandianFanweiAdapter(this, listData);
+                mListView.setAdapter(mAdapter);
                 break;
-            case Config.MESSAGE_PANDIANLEIBIE_ERROR:
-                listData = (List<PandianLeibieBeanResultItem>) o;
-                adapterData = new SelectPandianTypeAdapter(this, listData);
-                mListView.setAdapter(adapterData);
+            case Config.MESSAGE_ERROR:
+
                 break;
         }
     }

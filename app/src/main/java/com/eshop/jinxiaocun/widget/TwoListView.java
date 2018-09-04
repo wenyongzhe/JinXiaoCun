@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,12 +28,6 @@ public class TwoListView extends LinearLayout {
     protected List<QryClassResult> mainListBean;
     protected List<GetClassPluResult> detailListBean;
     int page = 1;
-
-    public TwoListView(Context context, List<QryClassResult> mainListBean, List<GetClassPluResult> detailListBean) {
-        super(context);
-        mainListBean = mainListBean;
-        detailListBean = detailListBean;
-    }
 
     public TwoListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -105,10 +100,15 @@ public class TwoListView extends LinearLayout {
         mTwoListDetailAdapter.notifyDataSetChanged();
     }
 
-    public void setMainListBean(List<QryClassResult> mainListBean) {
+    public void setMainListBean(List<QryClassResult> mainListBean, AdapterView.OnItemClickListener listener) {
         this.mainListBean = mainListBean;
         mTwoListMainAdapter = new TwoListMainAdapter(mainListBean);
         mListViewMain.setAdapter(mTwoListMainAdapter);
+        mListViewMain.setOnItemClickListener(listener);
         mTwoListMainAdapter.notifyDataSetChanged();
+    }
+
+    public void onRefreshComplete(){
+        mListViewDetail.onRefreshComplete();
     }
 }

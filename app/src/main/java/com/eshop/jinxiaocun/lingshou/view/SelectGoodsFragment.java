@@ -2,11 +2,15 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -59,8 +63,6 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         mISelectGoods = new SelectGoodsImp(this);
         View v = inflater.inflate(R.layout.selectgoods_fragment, null);
         mTwoListView = v.findViewById(R.id.twlist);
-        mTwoListView.setMainListBean(mQryClassResult);
-        mTwoListView.setDetailListBean(mGetClassPluResult);
 
         loadData();
         return v;
@@ -68,31 +70,38 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
 
     @Override
     public void handleResule(int flag, Object o) {
-        try{
-            List<DanJuMainBeanResultItem> list = new ArrayList();
-            DanJuMainBeanResultItem test = new DanJuMainBeanResultItem();
-            test.Sheet_No = "PI1234567";
-            test.Oper_Date = "2017-3-4";
-            test.Ord_Amt = "$200";
-            test.Oper_Name = "张三";
-            test.Branch_No = "三楼仓库";
-            list.add(test);
-            mDanJuAdapter = new FinishListAdapter(list);
-            mHandle.sendEmptyMessage(Config.MESSAGE_REFLASH);
-        }catch (Exception e){
-            Log.e("Exception",e.getMessage());
+        switch (flag){
+            case Config.MESSAGE_QRYCLASSINFO:
+                mQryClassResult = (List<QryClassResult>) o;
+                mTwoListView.setMainListBean(mQryClassResult,new DetailListener());
+                break;
+            case Config.MESSAGE_GETCLASSPLUINFO:
+                Message ms = new Message();
+                ms.obj = o;
+                mHandler.sendMessage(ms);
+                break;
         }
 
+    }
 
-//        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
-//        mXiaoshouDanAdapter = new FinishListAdapter(mDanJuMainBeanResult.JsonData);
-//        mListView.setAdapter(mXiaoshouDanAdapter);
-//        mXiaoshouDanAdapter.notifyDataSetChanged();
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            mGetClassPluResult = (List<GetClassPluResult>) msg.obj;
+            mTwoListView.setDetailListBean(mGetClassPluResult);
+        }
+    };
+
+    public class DetailListener  implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            mISelectGoods.getClassPluInfo(mQryClassResult.get(i).getType_no(),1);
+        }
     }
 
     @Override
     protected void reflashList() {
-        mListView.onRefreshComplete();
+        mTwoListView.onRefreshComplete();
 
     }
 }

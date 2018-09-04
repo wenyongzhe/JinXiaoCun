@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
+import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
@@ -45,6 +46,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
+    protected List<SaleFlowBean> mSaleFlowBeanList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -28,6 +28,11 @@ public class SelectPandianTypeAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
+    public void setData(List<PandianLeibieBeanResultItem> listInfo){
+        this.listInfo = listInfo;
+        notifyDataSetChanged();
+    }
+
     public void setIsSelected(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }

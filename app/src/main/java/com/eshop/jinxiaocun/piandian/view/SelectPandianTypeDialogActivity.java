@@ -50,7 +50,8 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
         tv_0.setText("编码");
         tv_1.setText("名称");
 
-
+        mAdapter = new SelectPandianTypeAdapter(this, listData);
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,8 +96,7 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
             //取盘点类别
             case Config.MESSAGE_PANDIANLEIBIE_OK:
                 listData = (List<PandianLeibieBeanResultItem>) o;
-                mAdapter = new SelectPandianTypeAdapter(this, listData);
-                mListView.setAdapter(mAdapter);
+                mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_PANDIANLEIBIE_ERROR:
 

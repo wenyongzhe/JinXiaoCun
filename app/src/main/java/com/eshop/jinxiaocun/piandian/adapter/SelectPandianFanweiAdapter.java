@@ -26,6 +26,11 @@ public class SelectPandianFanweiAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
+    public void setData(List<PandianFanweiBeanResult> listInfo){
+        this.listInfo = listInfo;
+        notifyDataSetChanged();
+    }
+
     public void setIsSelected(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }

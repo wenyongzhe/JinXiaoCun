@@ -92,11 +92,10 @@ public class PandianImp implements IPandian {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            PandianFanweiBeanResult mBeanResult = null;
             try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(jsonData,PandianFanweiBeanResult.class);
+                List<PandianFanweiBeanResult> mBeanResultList  =  mJsonFormatImp.JsonToList(jsonData,PandianFanweiBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,mBeanResult);
+                    mHandler.handleResule(Config.MESSAGE_OK,mBeanResultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
                 }

@@ -51,7 +51,8 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
         tv_0.setText("编号");
         tv_1.setText("名称");
 
-
+        mAdapter = new SelectPandianFanweiAdapter(this, listData);
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -83,17 +84,8 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
         switch (flag){
             //取盘点类别
             case Config.MESSAGE_OK:
-//                listData = (List<PandianLeibieBeanResultItem>) o;
-
-                for (int i = 0; i < 25; i++) {
-                    PandianFanweiBeanResult obj = new PandianFanweiBeanResult();
-                    obj.setType_id("id_"+i);
-                    obj.setType_name("Name_"+i);
-                    listData.add(obj);
-                }
-
-                mAdapter = new SelectPandianFanweiAdapter(this, listData);
-                mListView.setAdapter(mAdapter);
+                listData = (List<PandianFanweiBeanResult>) o;
+                mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_ERROR:
 

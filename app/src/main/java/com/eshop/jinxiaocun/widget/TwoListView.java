@@ -93,10 +93,11 @@ public class TwoListView extends LinearLayout {
     private void loadData() {
     }
 
-    public void setDetailListBean(List<GetClassPluResult> detailListBean) {
+    public void setDetailListBean(List<GetClassPluResult> detailListBean, AdapterView.OnItemClickListener listener) {
         this.detailListBean = detailListBean;
         mTwoListDetailAdapter = new TwoListDetailAdapter(detailListBean);
         mListViewDetail.setAdapter(mTwoListDetailAdapter);
+        mListViewDetail.setOnItemClickListener(listener);
         mTwoListDetailAdapter.notifyDataSetChanged();
     }
 

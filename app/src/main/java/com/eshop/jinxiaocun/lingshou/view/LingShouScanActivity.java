@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
@@ -163,6 +164,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     public void onRightClick() {
         Intent mIntent = new Intent(this, QreShanpingActivity.class);
-        startActivity(mIntent);
+        startActivityForResult(mIntent,100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        List<GetClassPluResult> selectList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+
     }
 }

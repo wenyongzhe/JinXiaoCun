@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.base.bean;
 
-public class GetClassPluResult extends ListBean{
+import java.io.Serializable;
+
+public class GetClassPluResult extends ListBean implements Serializable{
 
     private String item_no;//" :”1000”   //商品编码
     private String item_name;// ”名称”  //商品名称

@@ -43,7 +43,7 @@ public class TwoListMainAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_xiaoshoudan,parent,false);
+            convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_twolist_main,parent,false);
         }
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
         tvTitle.setText(listInfo.get(position).getType_name());

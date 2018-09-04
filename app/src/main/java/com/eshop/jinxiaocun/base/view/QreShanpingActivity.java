@@ -8,13 +8,16 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.TabEntity;
 import com.eshop.jinxiaocun.lingshou.view.QueryFragment;
 import com.eshop.jinxiaocun.lingshou.view.SelectGoodsFragment;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.CaoGaoDanJuFragment;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.FinishDanJuFragment;
 import com.eshop.jinxiaocun.utils.ViewFindUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
+import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.SegmentTabLayout;
+import com.flyco.tablayout.listener.CustomTabEntity;
 
 import java.util.ArrayList;
 
@@ -22,6 +25,9 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 
     ArrayList<Fragment> mFragments = new ArrayList<>();
     private String[] mTitles = {"选择商品", "搜索商品"};
+//    private int[] mIconUnselectIds = { R.mipmap.img_diaobo_geli, R.mipmap.img_diaobo_geli};
+//    private int[] mIconSelectIds = { R.mipmap.img_diaobo_geli, R.mipmap.img_diaobo_geli};
+    private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private View mDecorView;
 
     @Override
@@ -41,6 +47,10 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 
         mDecorView = getWindow().getDecorView();
         SegmentTabLayout tabLayout_4 = ViewFindUtils.find(mDecorView, R.id.tl_1);
+
+//        for (int i = 0; i < mTitles.length; i++) {
+//            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+//        }
 
         mFragments.add(SelectGoodsFragment.getInstance());
         mFragments.add(QueryFragment.getInstance());

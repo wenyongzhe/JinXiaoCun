@@ -28,6 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:gravity="center_vertical"
             style="@style/TextView_Grey" />
 
     </LinearLayout>
@@ -54,6 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:gravity="center_vertical"
             style="@style/TextView_Grey" />
 
     </LinearLayout>
@@ -100,7 +102,7 @@
             android:layout_weight="3"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:text="盘点类别" />
+            android:text="类别品牌" />
 
         <com.eshop.jinxiaocun.widget.DrawableTextView
             android:id="@+id/tvPandianType"
@@ -133,6 +135,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:gravity="center_vertical"
             style="@style/TextView_Grey" />
 
     </LinearLayout>
@@ -160,6 +163,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:gravity="center_vertical"
             style="@style/TextView_Grey" />
 
     </LinearLayout>
@@ -187,9 +191,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:gravity="center_vertical"
             style="@style/EditText_Grey_Border" />
 
     </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/list_item_apply"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/txt_size16"
+        android:textColor="@color/black"
+        />
 
 
 

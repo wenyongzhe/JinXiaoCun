@@ -23,6 +23,7 @@ public class WebConfig {
     public static final String R_PD_DETAIL= "R-PD-DETAIL";//盘点明细
     public static final String QryClassInfo= "QryClassInfo";//查询商品分类
     public static final String GetClassPluInfo= "GetClassPluInfo";//查询分类商品 getclassplunfo
+    public static final String GetSheetNo= "GetSheetNo";//获取业务单据号
 
     public static String getPosLogin() {
         return POS_LOGIN;

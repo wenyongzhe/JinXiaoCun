@@ -34,6 +34,7 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
     MyActionBar mMyActionBar;
 
     protected FrameLayout mView;
+    protected LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
         mView = new FrameLayout(this);
         View rootView = View.inflate(this, R.layout.activity_base, null);
-        LinearLayout mLinearLayout = rootView.findViewById(R.id.content);
+        mLinearLayout = rootView.findViewById(R.id.content);
         View contentView = LayoutInflater.from(this).inflate(getLayoutId(),null);
         mLinearLayout.addView(contentView);
         setContentView(rootView);

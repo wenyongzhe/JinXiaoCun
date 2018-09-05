@@ -4,17 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <com.eshop.jinxiaocun.widget.RefreshListView
-        android:id="@+id/listview_pandianpihao"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="-1px"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@drawable/bg_gray_horizonter_divider_line"
-        android:dividerHeight="1px"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        android:listSelector="@color/transparent">
-    </com.eshop.jinxiaocun.widget.RefreshListView>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:textSize="@dimen/txt_size16"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:text="关键词" />
+
+        <EditText
+            android:id="@+id/et_barcode"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:imeOptions="actionSend"
+            style="@style/EditText_Grey_Border"
+            android:gravity="left|center_vertical"
+            android:hint="请扫描或输入"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -22,7 +22,7 @@ public class WebConfig {
     public static final String GetBatchNo= "GetBatchNo";//盘点批号获取
     public static final String R_PD_DETAIL= "R-PD-DETAIL";//盘点明细
     public static final String QryClassInfo= "QryClassInfo";//查询商品分类
-    public static final String GetClassPluInfo= "GetClassPlunfo";//查询分类商品 getclassplunfo
+    public static final String GetClassPluInfo= "GetClassPluInfo";//查询分类商品 getclassplunfo
 
 
     public static String getPosLogin() {

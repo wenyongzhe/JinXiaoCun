@@ -53,7 +53,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         loadData();
         initView();
     }
@@ -106,6 +105,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView,0,params);
+        ButterKnife.bind(this);
         mSpinner1 = findViewById(R.id.ly1_sp);
         mSpinner2 = findViewById(R.id.ly2_sp);
         mSpinner3 = findViewById(R.id.ly3_sp);

@@ -179,8 +179,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-        selectList.addAll(mGetClassPluResult);
-        mLingShouScanAdapter.notifyDataSetChanged();
+        switch (resultCode){
+            case Config.RESULT_SELECT_GOODS:
+                List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+                selectList.addAll(mGetClassPluResult);
+                mLingShouScanAdapter.notifyDataSetChanged();
+                break;
+        }
+
     }
 }

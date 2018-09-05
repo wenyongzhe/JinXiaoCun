@@ -38,7 +38,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
         mDanJuMainBean.JsonData.PageNum = limit+"";
         mDanJuMainBean.JsonData.Page = page+"";
-//        mDanJuList.getDanJuList(mDanJuMainBean);
+        mDanJuList.getDanJuList(mDanJuMainBean);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDanJuList = new DanJuListImp(this);
-        View v = inflater.inflate(R.layout.finish_fragment, null);
+        View v = inflater.inflate(R.layout.query_fragment, null);
         mListView = (RefreshListView) v.findViewById(R.id.list_view);
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {

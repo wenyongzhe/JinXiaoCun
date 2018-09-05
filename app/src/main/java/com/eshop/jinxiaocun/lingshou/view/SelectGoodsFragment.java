@@ -101,7 +101,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
                 selectList.add(mGetClassPluResult.get(i-1));
                 Intent mIntent = new Intent();
                 mIntent.putExtra("SelectList", (Serializable) selectList);
-                getActivity().setResult(200,mIntent);
+                getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
                 getActivity().finish();
             }catch (Exception e){
                 Log.e("--",""+e.getMessage());

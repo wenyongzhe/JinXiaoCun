@@ -24,7 +24,6 @@ public class WebConfig {
     public static final String QryClassInfo= "QryClassInfo";//查询商品分类
     public static final String GetClassPluInfo= "GetClassPluInfo";//查询分类商品 getclassplunfo
 
-
     public static String getPosLogin() {
         return POS_LOGIN;
     }

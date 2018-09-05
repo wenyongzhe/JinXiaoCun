@@ -56,7 +56,7 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
         mFragments.add(QueryFragment.getInstance());
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
 
-        mMyActionBar.setData("单据列表",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
+        mMyActionBar.setData("单据列表",R.mipmap.ic_left_light,"",0,"",this);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 
     @Override
     public void onLeftClick() {
-
+        finish();
     }
 
     @Override

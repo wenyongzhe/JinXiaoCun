@@ -22,7 +22,6 @@
         android:layout_height="160dp"/>
     <GridView
         android:id="@+id/gridview"
-        android:paddingTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -30,7 +29,7 @@
         android:gravity="center"
         android:listSelector="@null"
         android:numColumns="3"
-        android:verticalSpacing="20dp" >
+        android:verticalSpacing="0dp" >
     </GridView>
 
 </LinearLayout>

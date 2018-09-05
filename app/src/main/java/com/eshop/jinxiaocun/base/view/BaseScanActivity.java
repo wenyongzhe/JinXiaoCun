@@ -42,12 +42,17 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
             mDanJuMainBeanResultItem = (DanJuMainBeanResultItem) getIntent().getExtras().get("DanJuMain");
         }
         /////////////////条码
-        /*mBarcodeScan = new BarcodeScan(this);
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
-        mBarcodeScan.open();
-        mBarcodeScan.scanning();*/
+        try {
+            mBarcodeScan = new BarcodeScan(this);
+            mBarcodeScan.open();
+        }catch (Exception e){
+
+        }
+
+        //mBarcodeScan.scanning();
         /////////////////
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -148,8 +153,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*mBarcodeScan.stop();
+        //mBarcodeScan.stop();
         mBarcodeScan.close();
-        unregisterReceiver(mScanDataReceiver);*/
+        unregisterReceiver(mScanDataReceiver);
     }
 }

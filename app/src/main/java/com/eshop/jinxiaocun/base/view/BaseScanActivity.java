@@ -4,10 +4,10 @@ package com.eshop.jinxiaocun.base.view;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -30,6 +30,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected boolean newSheet = true;
     protected String sheet_no = "";
     protected DanJuMainBeanResultItem mDanJuMainBeanResultItem;
+    protected ListView mListview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
+        mListview = bottomView.findViewById(R.id.listview_data);
         mMyActionBar.setData("新增单据",R.mipmap.ic_left_light,"",R.mipmap.add,"",this);
 
         mUpMainBean = new UpMainBean();

@@ -93,8 +93,8 @@ public class LoginActivity extends BaseActivity {
             editPassword.requestFocus();
 
         //测试时设置默认密码
-        editUser.setText("100");
-        editPassword.setText("123456");
+        editUser.setText("1001");
+        editPassword.setText("1001");
         editPassword.setSelection(editPassword.length());
 
         loginAction = new LoginImp(mHandler);

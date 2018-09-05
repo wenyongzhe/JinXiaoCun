@@ -47,6 +47,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     protected List<SaleFlowBean> mSaleFlowBeanList;
+    private LingShouScanAdapter mLingShouScanAdapter;
+    List<GetClassPluResult> selectList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,9 +111,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mSpinner3 = findViewById(R.id.ly3_sp);
 
 
-        setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 150);
-        setHeaderTitle(R.id.tv_1, R.string.list_item_CountN5, 100);
-        setHeaderTitle(R.id.tv_2, R.string.list_item_BarCode, 180);
+        setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
+        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+        setHeaderTitle(R.id.tv_2, R.string.list_item_Price, 100);
 
 
         List<String> list = new ArrayList<>();
@@ -124,6 +126,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);
         mSpinner3.setAdapter(mTuiHupoAdapter);
+
+        mLingShouScanAdapter = new LingShouScanAdapter(selectList);
+        mListview.setAdapter(mLingShouScanAdapter);
+        mLingShouScanAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -173,7 +179,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        List<GetClassPluResult> selectList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-
+        List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+        selectList.addAll(mGetClassPluResult);
+        mLingShouScanAdapter.notifyDataSetChanged();
     }
 }

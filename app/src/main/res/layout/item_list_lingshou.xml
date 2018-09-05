@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_height="@dimen/layout_item_heigth"
+              android:layout_width="match_parent">
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        style="@style/TextView_Grey"
+        android:gravity="center"
+        android:maxLines="1"/>
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+    <TextView
+        android:id="@+id/item_no"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        style="@style/TextView_Grey"
+        android:maxLines="1"/>
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+
+    <!--售价-->
+    <TextView
+        android:id="@+id/sale_price"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        style="@style/TextView_Grey"
+        android:maxLines="1"/>
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+
+</LinearLayout>

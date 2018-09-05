@@ -1,30 +1,35 @@
 package com.eshop.jinxiaocun.piandian.view;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBean;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
-public class PandianPihaoCreateActivity extends BaseActivity implements INetWorResult,ActionBarClickListener {
+import butterknife.BindView;
 
+public class PandianPihaoCreateActivity extends CommonBaseActivity implements INetWorResult {
 
+    @BindView(R.id.tvPandianFanwei)
+    DrawableTextView mTvPandianfanwei;
+    @BindView(R.id.tvPandianType)
+    DrawableTextView mTvPandianType;
     private IPandian mServerApi;
+    private PandianFanweiBeanResult mSelectPandianFanweiBeanEntity = null;
+    private PandianLeibieBeanResultItem mSelectPandianLeibieBeanEntity = null;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initView();
-        loadData();
+    protected int getLayoutId() {
+        return R.layout.activity_pandain_pihao_create;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class PandianPihaoCreateActivity extends BaseActivity implements INetWorR
     //盘点批号生成
     private void getPandianPihaoCreateData(){
         PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
-        bean.JsonData.as_sheetno ="PD20180001";//盘点批次号
+        bean.JsonData.as_sheetno ="";//盘点批次号PD20180001
         bean.JsonData.as_branch_no ="0001";//门店号
         bean.JsonData.as_oper_range ="0"; //盘点范围
         bean.JsonData.as_check_cls =""; //盘点类别
@@ -46,32 +51,58 @@ public class PandianPihaoCreateActivity extends BaseActivity implements INetWorR
         mServerApi.getPandianPihaoCreateData(bean);
     }
 
-
-
-
     @Override
     protected void initView() {
-        mLinearLayout.addView(getView(R.layout.activity_pandain_pihao_create));
-        mMyActionBar.setData("盘点批申请",R.mipmap.ic_left_light,"",0,"",this);
-
-        DrawableTextView mTvPandianfanwei =mLinearLayout.findViewById(R.id.tvPandianFanwei);
+        setTopToolBar("盘点批申请",R.mipmap.ic_left_light,"",0,"");
         mTvPandianfanwei.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
                 Intent intent = new Intent(PandianPihaoCreateActivity.this,SelectPandianFanweiDialogActivity.class);
+                intent.putExtra("PandianFanwei",mSelectPandianFanweiBeanEntity);
                 startActivityForResult(intent,1);
             }
         });
-        DrawableTextView mTvPandianType =mLinearLayout.findViewById(R.id.tvPandianType);
         mTvPandianType.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(PandianPihaoCreateActivity.this,SelectPandianTypeDialogActivity.class);
-                startActivityForResult(intent,2);
+                if(mSelectPandianFanweiBeanEntity !=null ){
+                    if(mSelectPandianFanweiBeanEntity.getType_name().contains("类别")||mSelectPandianFanweiBeanEntity.getType_name().contains("品牌")){
+                        Intent intent = new Intent(PandianPihaoCreateActivity.this,SelectPandianTypeDialogActivity.class);
+                        //'1'类别 '0' 品牌
+                        intent.putExtra("as_type",mSelectPandianFanweiBeanEntity.getType_name().contains("类别")?"1":"0");
+                        intent.putExtra("PandianLeibie",mSelectPandianLeibieBeanEntity);
+                        startActivityForResult(intent,2);
+                    }
+                }
+
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1 && resultCode == 11){
+            mSelectPandianFanweiBeanEntity = (PandianFanweiBeanResult) data.getSerializableExtra("PandianFanwei");
+            if(mSelectPandianFanweiBeanEntity !=null){
+                mTvPandianfanwei.setText(mSelectPandianFanweiBeanEntity.getType_name());
+                if(!mSelectPandianFanweiBeanEntity.getType_name().contains("类别")||!mSelectPandianFanweiBeanEntity.getType_name().contains("品牌")){
+                    mTvPandianType.setText("");
+                }
+            }
+
+
+        }
+
+        if(requestCode == 2 && resultCode == 22){
+            mSelectPandianLeibieBeanEntity = (PandianLeibieBeanResultItem) data.getSerializableExtra("PandianLeibie");
+            if(mSelectPandianLeibieBeanEntity !=null){
+                mTvPandianType.setText(mSelectPandianLeibieBeanEntity.getType_name());
+            }
+        }
+
+
+    }
 
     @Override
     public void handleResule(int flag, Object o) {
@@ -86,13 +117,4 @@ public class PandianPihaoCreateActivity extends BaseActivity implements INetWorR
         }
     }
 
-    @Override
-    public void onLeftClick() {
-        finish();
-    }
-
-    @Override
-    public void onRightClick() {
-
-    }
 }

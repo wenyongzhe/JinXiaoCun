@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -34,6 +36,8 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
 
     ListView mListView;
     List<PandianLeibieBeanResultItem> listData = new ArrayList<>();
+    private PandianLeibieBeanResultItem mSelectEntity = null;
+    private String mAsType = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
         tv_0.setText("编码");
         tv_1.setText("名称");
 
+        mAsType = getIntent().getStringExtra("as_type");
+        mSelectEntity = (PandianLeibieBeanResultItem) getIntent().getSerializableExtra("PandianLeibie");
+
         mAdapter = new SelectPandianTypeAdapter(this, listData);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,6 +66,10 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
                 PandianLeibieBeanResultItem obj = (PandianLeibieBeanResultItem) lv.getItemAtPosition(position);
                 mAdapter.setIsSelected(position);
                 mAdapter.notifyDataSetInvalidated();
+                Intent intent = new Intent();
+                intent.putExtra("PandianLeibie",obj);
+                setResult(22,intent);
+                finish();
             }
         });
 
@@ -83,7 +94,7 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
         PandianLeibieBean bean = new PandianLeibieBean();
         bean.JsonData.as_branchNo="";//门店号
         bean.JsonData.as_posId="";//pos id
-        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
+        bean.JsonData.as_type = mAsType;//'1'类别 '0' 品牌
         bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
         mServerApi.getPandianTypeData(bean);
     }
@@ -96,10 +107,18 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
             //取盘点类别
             case Config.MESSAGE_PANDIANLEIBIE_OK:
                 listData = (List<PandianLeibieBeanResultItem>) o;
+                if(mSelectEntity !=null){
+                    for (int i = 0; i < listData.size(); i++) {
+                        if(mSelectEntity.getType_name().equals(listData.get(i).getType_name())){
+                            mAdapter.setIsSelected(i);
+                            break;
+                        }
+                    }
+                }
                 mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_PANDIANLEIBIE_ERROR:
-
+                Toast.makeText(SelectPandianTypeDialogActivity.this,"获取盘点类别错误: "+o.toString(),Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -2,13 +2,15 @@ package com.eshop.jinxiaocun.piandian.bean;
 
 import com.eshop.jinxiaocun.base.bean.BaseResult;
 
+import java.io.Serializable;
+
 /**
  * @Author Lu An
  * 创建时间  2018/8/27 0027
  * 描述
  */
 
-public class PandianFanweiBeanResult extends BaseResult {
+public class PandianFanweiBeanResult extends BaseResult implements Serializable {
 
     /** type_id
      * 0	全场盘点

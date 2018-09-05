@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -35,6 +37,7 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
 
     private ListView mListView;
     private List<PandianFanweiBeanResult> listData = new ArrayList<>();
+    private PandianFanweiBeanResult mSelectEntity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
         tv_0.setText("编号");
         tv_1.setText("名称");
 
+        mSelectEntity = (PandianFanweiBeanResult) getIntent().getSerializableExtra("PandianFanwei");
+
         mAdapter = new SelectPandianFanweiAdapter(this, listData);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,6 +65,10 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
                 PandianFanweiBeanResult obj = (PandianFanweiBeanResult) lv.getItemAtPosition(position);
                 mAdapter.setIsSelected(position);
                 mAdapter.notifyDataSetInvalidated();
+                Intent intent = new Intent();
+                intent.putExtra("PandianFanwei",obj);
+                setResult(11,intent);
+                finish();
             }
         });
 
@@ -85,10 +94,18 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
             //取盘点类别
             case Config.MESSAGE_OK:
                 listData = (List<PandianFanweiBeanResult>) o;
+                if(mSelectEntity !=null){
+                    for (int i = 0; i < listData.size(); i++) {
+                        if(mSelectEntity.getType_name().equals(listData.get(i).getType_name())){
+                            mAdapter.setIsSelected(i);
+                            break;
+                        }
+                    }
+                }
                 mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_ERROR:
-
+                Toast.makeText(SelectPandianFanweiDialogActivity.this,"获取盘点范围错误: "+o.toString(),Toast.LENGTH_SHORT).show();
                 break;
         }
     }

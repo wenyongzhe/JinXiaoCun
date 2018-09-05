@@ -1,12 +1,14 @@
 package com.eshop.jinxiaocun.piandian.bean;
 
+import java.io.Serializable;
+
 /**
  * @Author Lu An
  * 创建时间  2018/8/27 0027
  * 描述
  */
 
-public class PandianLeibieBeanResultItem {
+public class PandianLeibieBeanResultItem implements Serializable {
 
 
     private String type_no; // 编码

@@ -83,11 +83,11 @@ public class NetWorkImp implements INetWork {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
-            myOkHttpClient = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS)
+            myOkHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.MINUTES)
                     //添加OkHttp3的拦截器
                     .addInterceptor(httpLoggingInterceptor)
                     .addNetworkInterceptor(new CacheInterceptor())
-                    .writeTimeout(20, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(2, TimeUnit.MINUTES).readTimeout(2, TimeUnit.MINUTES)
                     .cache(new Cache(sdcache.getAbsoluteFile(), cacheSize))
                     .build();
         }

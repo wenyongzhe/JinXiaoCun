@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnLogin();
+                OnRegist();
             }
         });
         btn_systemset.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +110,11 @@ public class LoginActivity extends BaseActivity {
             switch (msg.what){
                 case Config.MESSAGE_OK:
                     ToastUtils.showLong("注册成功！");
+                    OnLogin();
                     break;
                 case Config.MESSAGE_ERROR:
                     ToastUtils.showLong("注册失败！");
+                    OnLogin();
                     break;
                 case Config.MESSAGE_INTENT:
                     Intent intent = new Intent();

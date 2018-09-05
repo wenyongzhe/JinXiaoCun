@@ -65,6 +65,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @Override
     protected void loadData() {
         super.loadData();
+        mSaleFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
         if(!newSheet){
             mLingShouScanImp.getSheetDetail(sheet_no);

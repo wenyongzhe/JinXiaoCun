@@ -37,7 +37,7 @@ public class LoginImp implements ILogin {
     @Override
     public void loginAction(String userName, String passWord) {
         LoginBean mLoginBean = new LoginBean();
-        mLoginBean.getJsonData().setAs_branch_no(Config.ShopGroup);
+        mLoginBean.getJsonData().setAs_branch_no(Config.branch_no);
         mLoginBean.getJsonData().setAs_operid(userName);
         mLoginBean.getJsonData().setAs_operpsw(passWord);
 
@@ -80,7 +80,7 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            Log.e("-----",jsonData);
         }
     }
 

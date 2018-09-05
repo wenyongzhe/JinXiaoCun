@@ -46,6 +46,7 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_regit)
     Button btn_regit;
 
+    @BindView(R.id.btn_systemset)
     Button btn_systemset;
 
     ProgressDialog progressDialog;
@@ -55,17 +56,8 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         ButterKnife.bind(this);
 
-        tv_version = findViewById(R.id.tv_vision);
-        tv_deviceid = findViewById(R.id.tv_deviceid);
-        editUser = (EditText) findViewById(R.id.et_user_code);
-        editPassword = (EditText) findViewById(R.id.et_pwd);
-        btn_regit = findViewById(R.id.btn_regit);
-
-        btn_login = (Button) findViewById(R.id.btn_login);
-        btn_systemset = (Button) findViewById(R.id.btn_systemset);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

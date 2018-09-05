@@ -24,7 +24,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity implements TaskInterface{
 
-    private Unbinder unbinder;
     protected LinearLayout mLinearLayout;
     public MyActionBar mMyActionBar;
 
@@ -34,7 +33,6 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
         setContentView(R.layout.activity_base);
         mMyActionBar = findViewById(R.id.actionbar);
         mLinearLayout = findViewById(R.id.content);
-        unbinder = ButterKnife.bind(this);
         Application.getInstance().addActivity(this);
         getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -62,7 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
 
     @Override
     protected void onDestroy() {
-        unbinder.unbind();
         Application.getInstance().finishActivity(this);
         super.onDestroy();
     }

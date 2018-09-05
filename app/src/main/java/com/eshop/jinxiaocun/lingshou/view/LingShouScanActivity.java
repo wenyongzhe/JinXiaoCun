@@ -38,11 +38,11 @@ import butterknife.ButterKnife;
 public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
 
     @BindView(R.id.ly1_sp)
-    private Spinner mSpinner1;
+    Spinner mSpinner1;
     @BindView(R.id.ly2_sp)
-    private Spinner mSpinner2;
+    Spinner mSpinner2;
     @BindView(R.id.ly3_sp)
-    private Spinner mSpinner3;
+    public Spinner mSpinner3;
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;

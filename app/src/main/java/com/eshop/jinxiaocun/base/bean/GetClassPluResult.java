@@ -11,7 +11,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String unit_no;//””     //单位
     private String item_clsno;//””  //类别
     private String main_supcust;//”” //主供应商
-    private String Price;//10         //进价
+    private String price;//10         //进价
     private String sale_price;//20 …..//售价
     private String base_price;//30 …//批发价
     private String vip_price;//28 ..//会员价
@@ -80,11 +80,11 @@ public class GetClassPluResult extends ListBean implements Serializable{
     }
 
     public String getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(String price) {
-        Price = price;
+        price = price;
     }
 
     public String getSale_price() {

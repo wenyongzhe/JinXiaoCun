@@ -64,15 +64,17 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
 
     @Override
     public void handleResule(int flag, Object o) {
+        Message ms = new Message();
         switch (flag){
             case Config.MESSAGE_QRYCLASSINFO:
                 mQryClassResult = (List<QryClassResult>) o;
-                mTwoListView.setMainListBean(mQryClassResult,new MainListListener());
+                ms.what = 1;
+                mHandler.sendMessage(ms);
                 mISelectGoods.getClassPluInfo(mQryClassResult.get(0).getType_no(),1);
                 break;
             case Config.MESSAGE_GETCLASSPLUINFO:
-                Message ms = new Message();
                 ms.obj = o;
+                ms.what = 2;
                 mHandler.sendMessage(ms);
                 break;
         }
@@ -82,8 +84,17 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            mGetClassPluResult = (List<GetClassPluResult>) msg.obj;
-            mTwoListView.setDetailListBean(mGetClassPluResult,new DetailListListener());
+            switch (msg.what){
+                case 1:
+                    mTwoListView.setMainListBean(mQryClassResult,new MainListListener());
+                    break;
+                case 2:
+                    mGetClassPluResult = (List<GetClassPluResult>) msg.obj;
+                    mTwoListView.setDetailListBean(mGetClassPluResult,new DetailListListener());
+                    break;
+
+            }
+
         }
     };
 

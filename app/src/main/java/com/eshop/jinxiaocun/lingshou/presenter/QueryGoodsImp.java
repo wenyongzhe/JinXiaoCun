@@ -5,6 +5,7 @@ import android.util.Log;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.QryClassResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.lingshou.bean.GetClassPluInfoBean;
@@ -51,11 +52,11 @@ public class QueryGoodsImp implements IQueryGoods {
         }
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            List<QryClassResult> mQryClassInfoBeanResult =  mJsonFormatImp.JsonToList(jsonData,QryClassResult.class);
+            List<GetClassPluResult> mGetClassPluResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_QRYCLASSINFO,mQryClassInfoBeanResult);
+                mHandler.handleResule(Config.MESSAGE_GETCLASSPLUINFO,mGetClassPluResult);
             }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mQryClassInfoBeanResult);
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetClassPluResult);
             }
         }
     }

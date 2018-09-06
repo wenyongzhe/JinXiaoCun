@@ -74,6 +74,7 @@
 
     <string name="list_item_ProdStore">所在库位</string>
     <string name="list_item_ProdCode">商品编码</string>
+    <string name="list_item_Searchstr">查询关键词、编码、助词码、附加码</string>
     <string name="list_item_ProdName">商品名称</string>
     <string name="list_item_BarCode">商品条码</string>
     <string name="list_item_ProdStock">商品库存</string>

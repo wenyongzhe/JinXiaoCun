@@ -1,4 +1,4 @@
-package com.eshop.jinxiaocun.widget;
+package com.eshop.jinxiaocun.lingshou.view;
 
 
 import android.view.LayoutInflater;
@@ -9,19 +9,23 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
-import com.eshop.jinxiaocun.base.bean.ListBean;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
 
-public class TwoListDetailAdapter extends BaseAdapter {
+public class QueryGoodsListAdapter extends BaseAdapter {
 
     private List<GetClassPluResult> listInfo;
 
 
-    public TwoListDetailAdapter(List<GetClassPluResult> listInfo) {
+    public QueryGoodsListAdapter(List<GetClassPluResult> listInfo) {
+        this.listInfo = listInfo;
+    }
+
+    public void setListInfo(List<GetClassPluResult> listInfo) {
+        this.listInfo.clear();
         this.listInfo = listInfo;
     }
 
@@ -51,8 +55,7 @@ public class TwoListDetailAdapter extends BaseAdapter {
 
         tvTitle.setText(listInfo.get(position).getItem_name());
         tv_message.setText(listInfo.get(position).getItem_no());
-        tv_price.setText(listInfo.get(position).getSale_price()+);
-
+        tv_price.setText(listInfo.get(position).getSale_price());
         return convertView;
     }
 }

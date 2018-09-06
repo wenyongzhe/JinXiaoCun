@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
@@ -142,6 +143,5 @@ public class Application extends android.app.Application {
             e.printStackTrace();
         }
     }
-
 
 }

@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.main.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -82,6 +83,5 @@ public class MainActivity extends BaseActivity {
     public void onPostExecute(Object o) {
         super.onPostExecute(o);
     }
-
 
 }

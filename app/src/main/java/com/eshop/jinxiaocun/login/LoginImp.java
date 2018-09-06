@@ -100,7 +100,7 @@ public class LoginImp implements ILogin {
             RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
             if(jsonBean==null){
                 Config.posid = "123";
-                Config.branch_no = "123";
+                Config.branch_no = "000001";
                 Config.soft_name = "123";
             }else{
                 Config.posid = jsonBean.getPosid();

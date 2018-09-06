@@ -24,6 +24,9 @@ public abstract class BaseListFragment extends BaseFragment{
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case Config.MESSAGE_REFLASH:
+                    if(mDanJuAdapter==null){
+                        return;
+                    }
                     mListView.setAdapter(mDanJuAdapter);
                     mDanJuAdapter.notifyDataSetChanged();
                     reflashList();

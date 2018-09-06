@@ -154,7 +154,9 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected void onDestroy() {
         super.onDestroy();
         //mBarcodeScan.stop();
-        mBarcodeScan.close();
+        if(mBarcodeScan!=null){
+            mBarcodeScan.close();
+        }
         unregisterReceiver(mScanDataReceiver);
     }
 }

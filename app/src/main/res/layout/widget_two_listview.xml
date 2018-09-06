@@ -6,17 +6,18 @@
               android:layout_height="fill_parent">
 
     <ListView
+        android:background="@color/text_grey3"
         android:id="@+id/lv_main"
-        android:layout_weight="0.6"
+        android:layout_weight="0.7"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent">
     </ListView>
 
     <com.eshop.jinxiaocun.widget.RefreshListView
         android:id="@+id/lv_detail"
-        android:layout_weight="0.4"
+        android:layout_weight="0.3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_marginTop="-1px"
         android:cacheColorHint="@color/transparent"
         android:divider="@drawable/bg_gray_horizonter_divider_line"

@@ -51,7 +51,7 @@ public class TwoListDetailAdapter extends BaseAdapter {
 
         tvTitle.setText(listInfo.get(position).getItem_name());
         tv_message.setText(listInfo.get(position).getItem_no());
-        tv_price.setText(listInfo.get(position).getSale_price()+);
+        tv_price.setText(listInfo.get(position).getSale_price()+Application.mContext.getString(R.string.yuan));
 
         return convertView;
     }

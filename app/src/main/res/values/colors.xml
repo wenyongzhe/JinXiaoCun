@@ -35,6 +35,7 @@
     <color name="bg_grid_nor">#FFFFFF</color>
     <color name="bg_grid_press">#E1E1E1</color>
     <color name="text_grey2">#969696</color>
+    <color name="text_grey3">#CCCCCC</color>
     <color name="text_blue">#3A74D9</color>
     <color name="text_red">#872C2C</color>
     <color name="primary_color">#2b4361</color>

@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,12 +30,14 @@ import com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoshouDanListAdapter;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class QueryFragment extends BaseListFragment implements INetWorResult {
     private List<GetClassPluResult> mListData = new ArrayList<>();
+    private List<GetClassPluResult> selectList = new ArrayList<>();
     private EditText et_query;
     private IQueryGoods mQueryGoods;
 
@@ -98,6 +102,21 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
                 mListData = (List<GetClassPluResult>) o;
                 ((QueryGoodsListAdapter)mDanJuAdapter).setListInfo(mListData);
                 mHandle.sendEmptyMessage(Config.MESSAGE_REFLASH);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        try {
+                            selectList.add(mListData.get(i-1));
+                            Intent mIntent = new Intent();
+                            mIntent.putExtra("SelectList", (Serializable) selectList);
+                            getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
+                            getActivity().finish();
+                        }catch (Exception e){
+
+                        }
+
+                    }
+                });
                 break;
         }
 

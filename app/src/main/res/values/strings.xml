@@ -154,7 +154,7 @@
     <string name="list_item_Beizhu">备注</string>
     <string name="list_item_apply">申请</string>
 
-
+    <string name="yuan">元</string>
     <!-- 下拉刷新 -->
     <string name="pull_to_refreshing">下拉刷新</string>
     <string name="last_update">最后更新</string>

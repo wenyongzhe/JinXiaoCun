@@ -10,6 +10,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
+import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
@@ -27,8 +28,8 @@ import butterknife.OnClick;
 public class PandianPihaoCreateActivity extends CommonBaseActivity implements INetWorResult {
 
 
-    @BindView(R.id.tv_pd_pihao)
-    TextView mTvPihao;
+    @BindView(R.id.tv_pd_dianjuhao)
+    TextView mTvDianjuhao;
     @BindView(R.id.tv_pd_storeNo)
     TextView mTvStoreNo;
     @BindView(R.id.tv_pd_operId)
@@ -55,12 +56,12 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
 
     @Override
     protected void loadData() {
-//        mServerApi = new PandianImp(this);
+        mServerApi = new PandianImp(this);
 
         IOtherModel api = new OtherModelImp(this);
         SheetNoBean bean = new SheetNoBean();
-        bean.JsonDate.trans_no="PI";
-        bean.JsonDate.branch_no="0001";
+        bean.JsonData.trans_no="PD";
+        bean.JsonData.branch_no="0001";
         api.getSheetNoData(bean);
 
     }
@@ -91,8 +92,8 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
             return;
         }
 
-        if(TextUtils.isEmpty(mTvPihao.getText().toString())){
-            Toast.makeText(this,"盘点批次号不能为空!",Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(mTvDianjuhao.getText().toString())){
+            Toast.makeText(this,"单据号不能为空!",Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -103,7 +104,7 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
 
 
         PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
-        bean.JsonData.as_sheetno =mTvPihao.getText().toString();//盘点批次号
+        bean.JsonData.as_sheetno =mTvDianjuhao.getText().toString();//单据号
         bean.JsonData.as_branch_no =mTvStoreNo.getText().toString().trim();//门店号
         bean.JsonData.as_oper_range =mSelectPandianFanweiBeanEntity.getType_id(); //盘点范围
         bean.JsonData.as_check_cls =mSelectPandianLeibieBeanEntity==null?"":mSelectPandianLeibieBeanEntity.getType_no(); //盘点类别
@@ -121,7 +122,6 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     protected void initView() {
         setTopToolBar("盘点批号申请",R.mipmap.ic_left_light,"",0,"");
 
-        mTvPihao.setText("PD20180001");
         mTvStoreNo.setText("0001");
         mTvOperId.setText("1001");
         mTvDate.setText("2018-9-5");
@@ -186,14 +186,18 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
+            //业务单据号
+            case Config.MESSAGE_OK:
+                SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
+                mTvDianjuhao.setText(sheetNoBeanResult.getSheetno());
+                break;
+            case Config.MESSAGE_ERROR:
+                Toast.makeText(PandianPihaoCreateActivity.this,"获取业务单据号失败："+o.toString(),Toast.LENGTH_SHORT).show();
+                break;
             //盘点批号生成
             case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
-                PandianPihaoCreateBeanResult obj = (PandianPihaoCreateBeanResult) o;
-                isApplySuccess = false;
-                if(obj.status.equals("0")){
-                    isApplySuccess = true;
-                    Toast.makeText(PandianPihaoCreateActivity.this,obj.msg,Toast.LENGTH_SHORT).show();
-                }
+                isApplySuccess = true;
+                Toast.makeText(PandianPihaoCreateActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
                 break;
             case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
                 isApplySuccess = false;

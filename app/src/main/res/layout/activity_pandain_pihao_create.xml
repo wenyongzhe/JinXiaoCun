@@ -21,10 +21,10 @@
             android:layout_weight="3"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:text="盘点批号" />
+            android:text="单据号" />
 
         <TextView
-            android:id="@+id/tv_pd_pihao"
+            android:id="@+id/tv_pd_dianjuhao"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"

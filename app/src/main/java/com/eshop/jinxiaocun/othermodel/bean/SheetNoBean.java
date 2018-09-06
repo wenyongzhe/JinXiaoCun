@@ -11,10 +11,10 @@ import com.eshop.jinxiaocun.utils.WebConfig;
 
 public class SheetNoBean extends BaseBean {
 
-    public SheetNoBean.SheetNoJsonDataBean JsonDate;
+    public SheetNoBean.SheetNoJsonDataBean JsonData;
     public SheetNoBean(){
         setStrCmd(WebConfig.GetSheetNo);
-        JsonDate = new SheetNoBean.SheetNoJsonDataBean();
+        JsonData = new SheetNoBean.SheetNoJsonDataBean();
     }
 
     public class SheetNoJsonDataBean{

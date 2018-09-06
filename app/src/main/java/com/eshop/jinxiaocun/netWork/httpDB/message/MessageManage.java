@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.netWork.httpDB.message;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
@@ -18,12 +20,14 @@ public class MessageManage {
 
     private static MessageManage myMessageManage = null;
     private IMessagePost messagePost;
+    private Handler mHandler;
 
     public static void  init(Context context){
     }
 
-    public MessageManage() {
+    private MessageManage() {
         messagePost = new HandlerMessagePost();
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static MessageManage getInstance(){
@@ -37,15 +41,30 @@ public class MessageManage {
         return myMessageManage;
     }
 
-    public void postMessage(Object obj){
-        messagePost.postMessage(obj);
+    public void postMessage(final Object obj){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                messagePost.postMessage(obj);
+            }
+        });
     }
 
-    public void postError(IOException e,IResponseListener obj){
-        messagePost.postError(e,obj);
+    public void postError(final IOException e,final IResponseListener obj){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                messagePost.postError(e,obj);
+            }
+        });
     }
 
-    public void postResult(Response response , IResponseListener obj){
-        messagePost.postResult(response,obj);
+    public void postResult(final Response response , final IResponseListener obj){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                messagePost.postResult(response,obj);
+            }
+        });
     }
 }

@@ -13,7 +13,6 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -58,9 +57,9 @@ public class OtherModelImp implements IOtherModel {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<SheetNoBeanResult> resultItemList =  mJsonFormatImp.JsonToList(jsonData,SheetNoBeanResult.class);
+                SheetNoBeanResult resultItem=  mJsonFormatImp.JsonToBean(jsonData,SheetNoBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,resultItemList);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultItem);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
                 }

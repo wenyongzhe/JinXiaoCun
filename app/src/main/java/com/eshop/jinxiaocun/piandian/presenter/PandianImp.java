@@ -170,11 +170,11 @@ public class PandianImp implements IPandian {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            PandianPihaoCreateBeanResult mBeanResult = null;
+//            PandianPihaoCreateBeanResult mBeanResult = null;
             try {
-                mBeanResult =  mJsonFormatImp.JsonToBean(jsonData,PandianPihaoCreateBeanResult.class);
+//                mBeanResult =  mJsonFormatImp.JsonToBean(jsonData,PandianPihaoCreateBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_OK,mBeanResult);
+                    mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_OK,Msg);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOCREATE_ERROR,Msg);
                 }

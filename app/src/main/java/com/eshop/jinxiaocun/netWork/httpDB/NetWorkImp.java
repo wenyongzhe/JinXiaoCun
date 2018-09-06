@@ -87,8 +87,8 @@ public class NetWorkImp implements INetWork {
                     //添加OkHttp3的拦截器
                     .addInterceptor(httpLoggingInterceptor)
                     .addNetworkInterceptor(new CacheInterceptor())
-                    .writeTimeout(2, TimeUnit.MINUTES).readTimeout(2, TimeUnit.MINUTES)
-                    .cache(new Cache(sdcache.getAbsoluteFile(), cacheSize))
+                    .writeTimeout(20, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
+                    //.cache(new Cache(sdcache.getAbsoluteFile(), cacheSize))
                     .build();
         }
         return myOkHttpClient;

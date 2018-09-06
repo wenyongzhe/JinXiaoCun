@@ -32,6 +32,11 @@ public class HandlerMessagePost implements IMessagePost {
     public void postResult(Response response, IResponseListener o) {
         byte[] b = new byte[0]; //获取数据的bytes
         try {
+            if(response.code() !=200){
+                o.handleResult(response,response.message() );
+                o.handleResultJson("-1",response.message(),"");
+                return;
+            }
             b = response.body().bytes();
             String info = new String(b, "GB2312"); //然后将其转为gb2312
             Result mResult = mJsonFormatImp.JsonToBean(info, Result.class);
@@ -39,6 +44,8 @@ public class HandlerMessagePost implements IMessagePost {
             o.handleResultJson(mResult.status,mResult.msg,mResult.jsonData);
         } catch (Exception e) {
             e.printStackTrace();
+            o.handleResult(response,e.getMessage() );
+            o.handleResultJson("-1",e.getMessage(),"");
         }
     }
 

@@ -23,6 +23,7 @@ public class Config {
     public static String posid = "-1";
     public static String soft_name = "-1";//软件名称
     public static String jigou_no = "";//机构号 (登录返回 便要设置值)
+    public static String PerNum = "50";//每页条数
 
     public final static int MESSAGE_OK = 0;
     public final static int MESSAGE_ERROR = -1;

@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -37,12 +41,15 @@ import butterknife.ButterKnife;
 
 public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
 
-    @BindView(R.id.ly1_sp)
+    /*@BindView(R.id.ly1_sp)
     Spinner mSpinner1;
     @BindView(R.id.ly2_sp)
     Spinner mSpinner2;
     @BindView(R.id.ly3_sp)
-    public Spinner mSpinner3;
+    public Spinner mSpinner3;*/
+    @BindView(R.id.et_barcode)
+    EditText et_barcode;
+
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
@@ -90,6 +97,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mUpMainBean.setOrd_Amt("");//Ord_Amt”:””             //定金
     }
 
+    //设置要结算流水的数据
     private void setDetailBean(UpDetailBean mUpDetailBean){
         mUpDetailBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
         mUpDetailBean.setPOSID(Config.DeviceID);
@@ -106,9 +114,18 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
-        mSpinner1 = findViewById(R.id.ly1_sp);
+       /* mSpinner1 = findViewById(R.id.ly1_sp);
         mSpinner2 = findViewById(R.id.ly2_sp);
-        mSpinner3 = findViewById(R.id.ly3_sp);
+        mSpinner3 = findViewById(R.id.ly3_sp);*/
+        et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == 0) {
+                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
+                }
+                return false;
+            }
+        });
 
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
@@ -123,9 +140,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         list.add("不良品");
         ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(LingShouScanActivity.this, R.layout.my_simple_spinner_item, list);
         mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
-        mSpinner1.setAdapter(mTuiHupoAdapter);
+        /*mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);
-        mSpinner3.setAdapter(mTuiHupoAdapter);
+        mSpinner3.setAdapter(mTuiHupoAdapter);*/
 
         mLingShouScanAdapter = new LingShouScanAdapter(selectList);
         mListview.setAdapter(mLingShouScanAdapter);
@@ -143,7 +160,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 GoodGetBeanResult mGoodGetBeanResult = (GoodGetBeanResult)o;
                 UpDetailBean mUpDetailBean = new UpDetailBean();
                 mUpDetailBean.setBarCode(mGoodGetBeanResult.JsonData.get(0).item_no);//条码
-                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).Price);//进价
+                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).price);//进价
                 mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
                 setDetailBean(mUpDetailBean);
                 setViewData(mGoodGetBeanResult);

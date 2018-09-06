@@ -16,7 +16,7 @@ public class GoodGetBeanResult extends BaseResult{
         public String unit_no;    //单位
         public String item_clsno;  //类别
         public String main_supcust; //主供应商
-        public String Price;        //进价
+        public String price;        //进价
         public String sale_price;//售价
         public String base_price;//批发价
         public String vip_price;//会员价

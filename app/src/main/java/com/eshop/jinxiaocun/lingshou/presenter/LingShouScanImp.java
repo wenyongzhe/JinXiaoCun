@@ -58,6 +58,10 @@ public class LingShouScanImp implements ILingshouScan {
         GoodGetBean mGoodGetBean = new GoodGetBean();
         mGoodGetBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGoodGetBean.getJsonData().setAs_item_no(barCode);
+        mGoodGetBean.getJsonData().setOper_id(Config.posid);
+        mGoodGetBean.getJsonData().setPerNum(Config.PerNum);
+        mGoodGetBean.getJsonData().setPageNum("1");
+
         Map map = ReflectionUtils.obj2Map(mGoodGetBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodInforInterface());
     }

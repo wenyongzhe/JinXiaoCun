@@ -127,7 +127,7 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
                 GoodGetBeanResult mGoodGetBeanResult = (GoodGetBeanResult)o;
                 UpDetailBean mUpDetailBean = new UpDetailBean();
                 mUpDetailBean.setBarCode(mGoodGetBeanResult.JsonData.get(0).item_no);//条码
-                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).Price);//进价
+                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).price);//进价
                 mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
                 setDetailBean(mUpDetailBean);
                 setViewData(mGoodGetBeanResult);

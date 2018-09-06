@@ -24,6 +24,10 @@ public class GoodGetBean extends BaseBean{
     public class GoodGetJsonData {
         private String as_branchNo;// 门店机构
         private String as_item_no;// 商品编码
+        private String oper_id;//“1001”//操作员代码
+        private String PerNum;//每页显示数量
+        private String PageNum;//页码
+
         private String as_searchstr;//查询关键词、编码、助词码、附加码等模糊查询
 
         public String getAs_searchstr() {
@@ -48,6 +52,30 @@ public class GoodGetBean extends BaseBean{
 
         public void setAs_item_no(String as_item_no) {
             this.as_item_no = as_item_no;
+        }
+
+        public String getOper_id() {
+            return oper_id;
+        }
+
+        public void setOper_id(String oper_id) {
+            this.oper_id = oper_id;
+        }
+
+        public String getPerNum() {
+            return PerNum;
+        }
+
+        public void setPerNum(String perNum) {
+            PerNum = perNum;
+        }
+
+        public String getPageNum() {
+            return PageNum;
+        }
+
+        public void setPageNum(String pageNum) {
+            PageNum = pageNum;
         }
     }
 

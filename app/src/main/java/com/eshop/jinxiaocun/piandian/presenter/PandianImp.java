@@ -93,8 +93,8 @@ public class PandianImp implements IPandian {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<PandianFanweiBeanResult> mBeanResultList  =  mJsonFormatImp.JsonToList(jsonData,PandianFanweiBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PandianFanweiBeanResult> mBeanResultList  =  mJsonFormatImp.JsonToList(jsonData,PandianFanweiBeanResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,mBeanResultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
@@ -143,8 +143,8 @@ public class PandianImp implements IPandian {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<PandianStoreJigouBeanResultItem> resultItemList =  mJsonFormatImp.JsonToList(jsonData,PandianStoreJigouBeanResultItem.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PandianStoreJigouBeanResultItem> resultItemList =  mJsonFormatImp.JsonToList(jsonData,PandianStoreJigouBeanResultItem.class);
                     mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_OK,resultItemList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_PANDIANSTOREJIGOU_ERROR,Msg);
@@ -200,8 +200,8 @@ public class PandianImp implements IPandian {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<PandianPihaoHuoquBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianPihaoHuoquBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PandianPihaoHuoquBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianPihaoHuoquBeanResult.class);
                     mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOHUOQU_OK,resultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_PANDIANPIHAOHUOQU_ERROR,Msg);
@@ -228,8 +228,8 @@ public class PandianImp implements IPandian {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<PandianDetailBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianDetailBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PandianDetailBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianDetailBeanResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

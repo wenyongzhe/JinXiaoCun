@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.piandian.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -42,16 +43,14 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         return R.layout.activity_pandian_pihao_list;
     }
 
-
-
     protected void initView() {
         mLayoutBottom.setVisibility(View.GONE);
         setTopToolBar("盘点批号列表",R.mipmap.ic_left_light,"",R.mipmap.add,"");
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
             public void onRefresh() {
-                pageIndex = 0;
-                loadData();
+                pageIndex = 1;
+                getPandianPihaoHuoqu();
             }
         });
 
@@ -59,7 +58,7 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
             @Override
             public void onRefresh() {
                 pageIndex++;
-                loadData();
+                getPandianPihaoHuoqu();
             }
         });
 
@@ -71,6 +70,7 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         setHeaderTitle(R.id.tv_5,R.string.list_item_Beizhu,150);
 
         mAdapter = new PandianPihaoListAdapter(this,mListDatas);
+        mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
     }
@@ -87,10 +87,20 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         bean.JsonData.trans_no="PD";//单据标识
         bean.JsonData.PerNum=pageSize;//每页显示数量
         bean.JsonData.PageNum=pageIndex;//页码
-        bean.JsonData.approveflag="1"; //审核标识  只取已审核的数据 (1代表已审核)
-        bean.JsonData.branch_no=Config.jigou_no; //机构号(保留)
+        bean.JsonData.approveflag="0"; //审核标识  只取已审核的数据 (1代表已审核,0代表未审核)
+        bean.JsonData.branch_no="0001"; //机构号(保留)
         mServerApi.getPandianPihaoHuoqu(bean);
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        super.onItemClick(parent, view, position, id);
+
+        Intent intent = new Intent();
+        intent.putExtra("PandianPihao",mListDatas.get(position-1));
+        setResult(11,intent);
+        finish();
     }
 
     @Override
@@ -101,7 +111,7 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         switch (flag){
             //盘点批号获取
             case Config.MESSAGE_PANDIANPIHAOHUOQU_OK:
-                if(pageIndex==0){
+                if(pageIndex==1){
                     mListDatas = (List<PandianPihaoHuoquBeanResult>) o;
                 }else{
                     mListDatas.addAll((List<PandianPihaoHuoquBeanResult>) o);

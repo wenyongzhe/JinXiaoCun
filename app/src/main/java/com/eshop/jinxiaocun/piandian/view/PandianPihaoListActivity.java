@@ -1,7 +1,6 @@
 package com.eshop.jinxiaocun.piandian.view;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -128,9 +127,15 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
     @Override
     protected void onTopBarRightClick() {
         super.onTopBarRightClick();
-        startActivity(new Intent(PandianPihaoListActivity.this,PandianPihaoCreateActivity.class));
+        startActivityForResult(new Intent(PandianPihaoListActivity.this,PandianPihaoCreateActivity.class),1);
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode ==11){
+            pageIndex = 1;
+            getPandianPihaoHuoqu();
+        }
+    }
 }

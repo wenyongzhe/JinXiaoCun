@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,10 +17,10 @@ import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBean;
-import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBeanResult;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
 import butterknife.BindView;
@@ -102,7 +103,6 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
             return;
         }
 
-
         PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
         bean.JsonData.as_sheetno =mTvDianjuhao.getText().toString();//单据号
         bean.JsonData.as_branch_no =mTvStoreNo.getText().toString().trim();//门店号
@@ -113,9 +113,6 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
         bean.JsonData.as_memo =TextUtils.isEmpty(mTvBz.getText().toString().trim())?"":mTvBz.getText().toString().trim(); //备注
         mServerApi.getPandianPihaoCreateData(bean);
 
-
-
-
     }
 
     @Override
@@ -124,9 +121,8 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
 
         mTvStoreNo.setText("0001");
         mTvOperId.setText("1001");
-        mTvDate.setText("2018-9-5");
+        mTvDate.setText(DateUtility.getCurrentDate());
         mTvBz.setText("测试");
-
 
         mTvPandianfanwei.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -170,7 +166,6 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
                 }
             }
 
-
         }
 
         if(requestCode == 2 && resultCode == 22){
@@ -179,7 +174,6 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
                 mTvPandianType.setText(mSelectPandianLeibieBeanEntity.getType_name());
             }
         }
-
 
     }
 
@@ -205,5 +199,29 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
                 break;
         }
     }
+
+    @Override
+    protected boolean onTopBarLeftClick() {
+        resultActivity();
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(KeyEvent.KEYCODE_BACK == keyCode){
+            resultActivity();            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void resultActivity(){
+        if(isApplySuccess){
+            setResult(11);
+        }
+        finish();
+    }
+
 
 }

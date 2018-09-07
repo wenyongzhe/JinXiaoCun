@@ -62,7 +62,7 @@ public class PandianPihaoListAdapter extends BaseAdapter {
         TextView tv_Beizhu = ViewHolderUtils.get(convertView, R.id.tv_Beizhu);
 
 
-        tv_Status.setText("已审核");
+        tv_Status.setText("未审核");
         tv_PandianPihao.setText(obj.getSheet_no());//盘点批号
         tv_Fanwei.setText(obj.getOper_range_name());//范围
         tv_Type.setText(obj.getCheck_cls());//类别

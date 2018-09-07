@@ -59,4 +59,7 @@
     <color name="bg_grey3">#C4C4C4</color>
     <color name="bg_grey4">#9ea7b3</color>
     <color name="bg_grey5">#acacac</color>
+    <color name="dialogcolor">#000000</color>
+    <color name="red">#ffff0000</color>
+    <color name="mid_gray">#979797</color>
 </resources>

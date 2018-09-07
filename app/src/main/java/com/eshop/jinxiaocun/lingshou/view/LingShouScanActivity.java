@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,12 +28,14 @@ import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
@@ -44,13 +48,19 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     public Spinner mSpinner3;*/
     @BindView(R.id.et_barcode)
     EditText et_barcode;
+    @BindView(R.id.btn_add)
+    Button btSell;//销售
+    @BindView(R.id.btn_delete)
+    Button btn_delete;//删除
+    @BindView(R.id.btn_modify_count)
+    Button btn_modify_count;//改数
 
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     protected List<SaleFlowBean> mSaleFlowBeanList;
     private LingShouScanAdapter mLingShouScanAdapter;
-    List<GetClassPluResult> selectList = new ArrayList<>();
+    private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,9 +119,14 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
-       /* mSpinner1 = findViewById(R.id.ly1_sp);
-        mSpinner2 = findViewById(R.id.ly2_sp);
-        mSpinner3 = findViewById(R.id.ly3_sp);*/
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mLingShouScanAdapter.setItemClickPosition(i);
+                mLingShouScanAdapter.notifyDataSetInvalidated();
+            }
+        });
+        btSell.setText(R.string.bt_sell);
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -123,11 +138,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             }
         });
 
-
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
         setHeaderTitle(R.id.tv_2, R.string.list_item_Price, 100);
-
 
         List<String> list = new ArrayList<>();
         list.add("正品");
@@ -139,8 +152,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         /*mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);
         mSpinner3.setAdapter(mTuiHupoAdapter);*/
-
-        mLingShouScanAdapter = new LingShouScanAdapter(selectList);
+        mLingShouScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mLingShouScanAdapter);
         mLingShouScanAdapter.notifyDataSetChanged();
     }
@@ -154,8 +166,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_GOODS_INFOR:
                 List<GetClassPluResult> mGoodGetBeanResult = (List<GetClassPluResult>)o;
-                selectList.addAll(mGoodGetBeanResult);
-                mLingShouScanAdapter.notifyDataSetChanged();
+                reflashList(mGoodGetBeanResult);
 
 //                UpDetailBean mUpDetailBean = new UpDetailBean();
 //                mUpDetailBean.setBarCode(mGoodGetBeanResult.get(0).item_no);//条码
@@ -178,7 +189,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     更新界面数据
      */
     private void setViewData(List<GoodGetBeanResult.GoodGetBeanJson> mGoodGetBeanResult) {
-
     }
 
     @Override
@@ -198,10 +208,30 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         switch (resultCode){
             case Config.RESULT_SELECT_GOODS:
                 List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-                selectList.addAll(mGetClassPluResult);
-                mLingShouScanAdapter.notifyDataSetChanged();
+                reflashList(mGetClassPluResult);
                 break;
         }
+    }
 
+    private void reflashList(List<GetClassPluResult> mGetClassPluResult){
+        mListData.addAll(mGetClassPluResult);
+        mLingShouScanAdapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.btn_add)
+    void sell() {
+    }
+
+    @OnClick(R.id.btn_delete)
+    void delete() {
+
+    }
+
+    @OnClick(R.id.btn_modify_count)
+    void modifyCount() {
+        Intent intent = new Intent();
+        intent.putExtra("countN", "1111");
+        intent.setClass(this, ModifyCountDialog.class);
+        startActivityForResult(intent, 1);
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class LingShouScanAdapter extends BaseAdapter {
 
     private List<GetClassPluResult> listInfo;
-
+    private int itemClickPosition = -1;
 
     public LingShouScanAdapter(List<GetClassPluResult> listInfo) {
         this.listInfo = listInfo;
@@ -54,12 +54,16 @@ public class LingShouScanAdapter extends BaseAdapter {
         item_name.setText(listInfo.get(position).getItem_name());
 
 
-//        if (itemClickPosition == position) {
-//            convertView.setBackgroundResource(R.color.list_background);
-//        } else {
-//            convertView.setBackgroundResource(R.color.transparent1);
-//        }
+        if (itemClickPosition == position) {
+            convertView.setBackgroundResource(R.color.list_background);
+        } else {
+            convertView.setBackgroundResource(R.color.transparent1);
+        }
 
         return convertView;
+    }
+
+    public void setItemClickPosition(int itemClickPosition) {
+        this.itemClickPosition = itemClickPosition;
     }
 }

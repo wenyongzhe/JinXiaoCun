@@ -89,7 +89,7 @@ public class FinishDanJuFragment extends BaseListFragment implements INetWorResu
 
 
 //        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
-//        mXiaoshouDanAdapter = new FinishListAdapter(mDanJuMainBeanResult.JsonData);
+//        mXiaoshouDanAdapter = new FinishListAdapter(mDanJuMainBeanResult.jsonData);
 //        mListView.setAdapter(mXiaoshouDanAdapter);
 //        mXiaoshouDanAdapter.notifyDataSetChanged();
     }

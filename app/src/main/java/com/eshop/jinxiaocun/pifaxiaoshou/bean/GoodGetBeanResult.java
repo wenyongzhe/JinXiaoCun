@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GoodGetBeanResult extends BaseResult{
 
-    public List<GoodGetBeanJson> JsonData;
+    public List<GoodGetBeanJson> jsonData;
     
     public class GoodGetBeanJson{
         public String item_no;//商品编码

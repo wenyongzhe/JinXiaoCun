@@ -89,7 +89,7 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
         }
 
 //        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
-//        mXiaoshouDanAdapter = new CaoGaoListAdapter(mDanJuMainBeanResult.JsonData);
+//        mXiaoshouDanAdapter = new CaoGaoListAdapter(mDanJuMainBeanResult.jsonData);
 //        mListView.setAdapter(mXiaoshouDanAdapter);
 //        mXiaoshouDanAdapter.notifyDataSetChanged();
     }

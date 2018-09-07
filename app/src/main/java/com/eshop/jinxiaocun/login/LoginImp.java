@@ -50,7 +50,7 @@ public class LoginImp implements ILogin {
         map.put("SoftVer",Config.VersionCode+"");
         map.put("strCmd",WebConfig.getPosLogin());
         map.put("Sign","");
-        map.put("JsonData",jsonData);
+        map.put("jsonData",jsonData);
 
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new LoginInterface());
 

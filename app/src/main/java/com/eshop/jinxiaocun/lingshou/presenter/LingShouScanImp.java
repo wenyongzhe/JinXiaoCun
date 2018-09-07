@@ -1,13 +1,12 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
-import android.database.Cursor;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
-import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
@@ -21,13 +20,12 @@ import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.PluLikeBean;
-import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -166,17 +164,16 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResult(Response event,String result) {
-            GoodGetBeanResult mGoodGetBeanResult =  mJsonFormatImp.JsonToBean(result,GoodGetBeanResult.class);
-            if(mGoodGetBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
-            }
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
+            }
         }
     }
 

@@ -124,13 +124,13 @@ public class JsonManager {
         return mJsonFormat.jsonToList(json,cls);
     }
 
-//    private Map<String, MixOrderEntity.JsonData> getOrederBodyBean(JSONObject jsondata) {
+//    private Map<String, MixOrderEntity.jsonData> getOrederBodyBean(JSONObject jsondata) {
 //        try {
-//            Map<String, MixOrderEntity.JsonData> map = new HashMap<>();
+//            Map<String, MixOrderEntity.jsonData> map = new HashMap<>();
 //            Iterator<String> keys = jsondata.keys();
 //            while (keys.hasNext()){
 //                String key = keys.next();
-//                MixOrderEntity.JsonData jsonObj = (MixOrderEntity.JsonData) jsonToBean(jsondata.getJSONObject(key).toString(),MixOrderEntity.JsonData.class);
+//                MixOrderEntity.jsonData jsonObj = (MixOrderEntity.jsonData) jsonToBean(jsondata.getJSONObject(key).toString(),MixOrderEntity.jsonData.class);
 //                map.put(key,jsonObj);
 //            }
 //            return map;
@@ -157,7 +157,7 @@ public class JsonManager {
         return null;
     }
 
-//    public List<Map<String,MixOrderEntity.JsonData>> getOrderDataBeanList(String json) {
+//    public List<Map<String,MixOrderEntity.jsonData>> getOrderDataBeanList(String json) {
 //        try {
 //            JSONObject jsonObject = new JSONObject(json);
 //            JSONArray mJSONArray = jsonObject.getJSONArray("Data");
@@ -188,16 +188,16 @@ public class JsonManager {
     }
 
 
-//    public Map<String, MixOrderEntity.JsonData> getOrderFootBean(String json) {
+//    public Map<String, MixOrderEntity.jsonData> getOrderFootBean(String json) {
 //        try {
 //            JSONObject jsonObject = new JSONObject(json);
 //            jsonObject = jsonObject.getJSONObject("Footer");
 //
-//            Map<String, MixOrderEntity.JsonData> map = new HashMap<>();
+//            Map<String, MixOrderEntity.jsonData> map = new HashMap<>();
 //            Iterator<String> keys = jsonObject.keys();
 //            while (keys.hasNext()){
 //                String key = keys.next();
-//                MixOrderEntity.JsonData jsonObj = (MixOrderEntity.JsonData) jsonToBean(jsonObject.getJSONObject(key).toString(),MixOrderEntity.JsonData.class);
+//                MixOrderEntity.jsonData jsonObj = (MixOrderEntity.jsonData) jsonToBean(jsonObject.getJSONObject(key).toString(),MixOrderEntity.jsonData.class);
 //                map.put(key,jsonObj);
 //            }
 //            return map;

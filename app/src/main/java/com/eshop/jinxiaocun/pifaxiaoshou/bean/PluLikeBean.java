@@ -5,20 +5,20 @@ import com.eshop.jinxiaocun.utils.WebConfig;
 
 public class PluLikeBean extends BaseBean{
 
-    private GoodGetJsonData JsonData;
+    private GoodGetJsonData jsonData;
 
 
     public PluLikeBean() {
         setStrCmd(WebConfig.GetPLULikeInfo);
-        JsonData = new GoodGetJsonData();
+        jsonData = new GoodGetJsonData();
     }
 
     public GoodGetJsonData getJsonData() {
-        return JsonData;
+        return jsonData;
     }
 
     public void setJsonData(GoodGetJsonData jsonData) {
-        JsonData = jsonData;
+        jsonData = jsonData;
     }
 
     public class GoodGetJsonData {

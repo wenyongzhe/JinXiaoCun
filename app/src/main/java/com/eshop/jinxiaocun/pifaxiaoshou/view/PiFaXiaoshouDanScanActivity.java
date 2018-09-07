@@ -126,9 +126,9 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
             case Config.MESSAGE_GOODS_INFOR:
                 GoodGetBeanResult mGoodGetBeanResult = (GoodGetBeanResult)o;
                 UpDetailBean mUpDetailBean = new UpDetailBean();
-                mUpDetailBean.setBarCode(mGoodGetBeanResult.JsonData.get(0).item_no);//条码
-                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).price);//进价
-                mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
+                mUpDetailBean.setBarCode(mGoodGetBeanResult.jsonData.get(0).item_no);//条码
+                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.jsonData.get(0).price);//进价
+                mUpDetailBean.setSalePrice(mGoodGetBeanResult.jsonData.get(0).sale_price);//售价
                 setDetailBean(mUpDetailBean);
                 setViewData(mGoodGetBeanResult);
                 break;

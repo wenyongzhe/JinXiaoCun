@@ -44,7 +44,7 @@ public class XiaoshouDanAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_xiaoshoudan,parent,false);
         }
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        tvTitle.setText(listInfo.get(position).JsonData.get(0).item_no);
+        tvTitle.setText(listInfo.get(position).jsonData.get(0).item_no);
         return convertView;
     }
 }

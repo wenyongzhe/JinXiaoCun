@@ -18,7 +18,7 @@ public class WebServiceManager {
         soapObject.addProperty("DevID", Config.DeviceID);
         soapObject.addProperty("SoftVer", Config.VersionCode);
         soapObject.addProperty("strCmd", strCmd);
-        soapObject.addProperty("JsonData", jsonData);
+        soapObject.addProperty("jsonData", jsonData);
         return accessWcf(soapObject, "PostData", WebConfig.getTimeOut());
     }
 

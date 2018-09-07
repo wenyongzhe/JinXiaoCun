@@ -47,10 +47,10 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
 //    //取盘点类别数据
 //    private void getPandianLeibieData(){
 //        PandianLeibieBean bean = new PandianLeibieBean();
-//        bean.JsonData.as_branchNo="";//门店号
-//        bean.JsonData.as_posId="";//pos id
-//        bean.JsonData.as_type="1";//'1'类别 '0' 品牌
-//        bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
+//        bean.jsonData.as_branchNo="";//门店号
+//        bean.jsonData.as_posId="";//pos id
+//        bean.jsonData.as_type="1";//'1'类别 '0' 品牌
+//        bean.jsonData.as_clsorbrno="";//指定的类型或者品牌
 //        mServerApi.getPandianTypeData(bean);
 //    }
 
@@ -67,25 +67,25 @@ public class PandianCreateActivity extends BaseActivity implements INetWorResult
 //    //盘点批号生成
 //    private void getPandianPihaoCreateData(){
 //        PandianPihaoCreateBean bean = new PandianPihaoCreateBean();
-//        bean.JsonData.as_sheetno ="PD20180001";//盘点批次号
-//        bean.JsonData.as_branch_no ="0001";//门店号
-//        bean.JsonData.as_oper_range ="0"; //盘点范围
-//        bean.JsonData.as_check_cls =""; //盘点类别
-//        bean.JsonData.as_oper_id ="1001"; //操作员ID
-//        bean.JsonData.as_oper_date =""; //操作日期
-//        bean.JsonData.as_memo =""; //备注
+//        bean.jsonData.as_sheetno ="PD20180001";//盘点批次号
+//        bean.jsonData.as_branch_no ="0001";//门店号
+//        bean.jsonData.as_oper_range ="0"; //盘点范围
+//        bean.jsonData.as_check_cls =""; //盘点类别
+//        bean.jsonData.as_oper_id ="1001"; //操作员ID
+//        bean.jsonData.as_oper_date =""; //操作日期
+//        bean.jsonData.as_memo =""; //备注
 //        mServerApi.getPandianPihaoCreateData(bean);
 //    }
 
 //    //盘点批号获取
 //    private void getPandianPihaoHuoqu(){
 //        PandianPihaoHuoquBean bean = new PandianPihaoHuoquBean();
-//        bean.JsonData.sheet_no="PD20180001";//获取所有可填%
-//        bean.JsonData.trans_no="PD";//单据标识
-//        bean.JsonData.PerNum=10;//每页显示数量
-//        bean.JsonData.PageNum=1;//页码
-//        bean.JsonData.approveflag="1"; //审核标识
-//        bean.JsonData.branch_no=""; //机构号(保留)
+//        bean.jsonData.sheet_no="PD20180001";//获取所有可填%
+//        bean.jsonData.trans_no="PD";//单据标识
+//        bean.jsonData.PerNum=10;//每页显示数量
+//        bean.jsonData.PageNum=1;//页码
+//        bean.jsonData.approveflag="1"; //审核标识
+//        bean.jsonData.branch_no=""; //机构号(保留)
 //        mServerApi.getPandianPihaoHuoqu(bean);
 //
 //    }

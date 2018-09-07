@@ -33,7 +33,7 @@ public class ReflectionUtils {
                 // 获取在对象f中属性fields[i]对应的对象中的变量
                 Object o = fields[i].get(obj);
                 if (o != null)
-                    if(varName.equals("JsonData")){
+                    if(varName.equalsIgnoreCase("jsonData")){
                         map.put(varName, mJsonFormatImp.ObjetToString(o));
                     }else
                         map.put(varName, o.toString());

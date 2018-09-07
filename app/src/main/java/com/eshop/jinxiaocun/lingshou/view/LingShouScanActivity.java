@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -24,11 +23,7 @@ import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
-import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IXiaoShouScan;
-import com.eshop.jinxiaocun.pifaxiaoshou.presenter.PiFaXiaoShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
@@ -121,7 +116,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == 0) {
-                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
+//                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
+                    mLingShouScanImp.getPLULikeInfo(v.getText().toString().trim());
                 }
                 return false;
             }
@@ -157,13 +153,16 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_ERROR:
                 break;
             case Config.MESSAGE_GOODS_INFOR:
-                GoodGetBeanResult mGoodGetBeanResult = (GoodGetBeanResult)o;
-                UpDetailBean mUpDetailBean = new UpDetailBean();
-                mUpDetailBean.setBarCode(mGoodGetBeanResult.JsonData.get(0).item_no);//条码
-                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.JsonData.get(0).price);//进价
-                mUpDetailBean.setSalePrice(mGoodGetBeanResult.JsonData.get(0).sale_price);//售价
-                setDetailBean(mUpDetailBean);
-                setViewData(mGoodGetBeanResult);
+                List<GetClassPluResult> mGoodGetBeanResult = (List<GetClassPluResult>)o;
+                selectList.addAll(mGoodGetBeanResult);
+                mLingShouScanAdapter.notifyDataSetChanged();
+
+//                UpDetailBean mUpDetailBean = new UpDetailBean();
+//                mUpDetailBean.setBarCode(mGoodGetBeanResult.get(0).item_no);//条码
+//                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.get(0).price);//进价
+//                mUpDetailBean.setSalePrice(mGoodGetBeanResult.get(0).sale_price);//售价
+//                setDetailBean(mUpDetailBean);
+//                setViewData(mGoodGetBeanResult);
                 break;
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult mGetFlowNoBeanResult = (GetFlowNoBeanResult)o;
@@ -178,7 +177,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     /*
     更新界面数据
      */
-    private void setViewData(GoodGetBeanResult mGoodGetBeanResult) {
+    private void setViewData(List<GoodGetBeanResult.GoodGetBeanJson> mGoodGetBeanResult) {
 
     }
 

@@ -153,6 +153,8 @@
     <string name="list_item_Cangku">仓库</string>
     <string name="list_item_Beizhu">备注</string>
     <string name="list_item_apply">申请</string>
+    <string name="list_item_XSPrice">销售价格</string>
+    <string name="list_item_StoreNum">库存数量</string>
 
     <string name="yuan">元</string>
     <!-- 下拉刷新 -->

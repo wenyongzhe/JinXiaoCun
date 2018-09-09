@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.piandian.bean.PandianDetailBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
@@ -52,12 +51,6 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
 //        mServerApi.getPandianStoreJigouData(bean);
     }
 
-    //获取盘点明细
-    private void getPandianDetailData(){
-        PandianDetailBean bean = new PandianDetailBean();
-        bean.JsonData.sheet_no="201807055551";//盘点批号
-//        mServerApi.getPandianDetailData(bean);
-    }
 
     @Override
     protected void initView() {

@@ -32,7 +32,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected int getLayoutId() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
+        View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom_one, null);
         mLinearLayout.addView(bottomView,-1,params);
         return getLayoutContentId();
     }

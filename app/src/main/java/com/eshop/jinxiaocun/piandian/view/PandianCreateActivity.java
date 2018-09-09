@@ -2,9 +2,11 @@ package com.eshop.jinxiaocun.piandian.view;
 
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -15,6 +17,7 @@ import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class PandianCreateActivity extends CommonBaseActivity implements INetWorResult {
 
@@ -38,11 +41,6 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
         return R.layout.activity_pandian_create;
     }
 
-    @Override
-    protected void loadData() {
-
-    }
-
 
     //取盘点门店机构
     private void getPandianStoreJigouData(){
@@ -63,6 +61,7 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
 
     @Override
     protected void initView() {
+        super.initView();
         setTopToolBar("盘点生成单",R.mipmap.ic_left_light,"",0,"");
         mTvPandianpihao.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -71,6 +70,20 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
                 startActivityForResult(intent,1);
             }
         });
+    }
+
+
+    @OnClick(R.id.btn_pd_next)
+    public void onClickNext(View v){
+        if(TextUtils.isEmpty(mTvPandianpihao.getText().toString())){
+            Toast.makeText(PandianCreateActivity.this,"盘点批号不能为空！",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(PandianCreateActivity.this,PandianScanActivity.class);
+        intent.putExtra("sheet_no",mTvPandianpihao.getText().toString());
+        startActivity(intent);
+
     }
 
 

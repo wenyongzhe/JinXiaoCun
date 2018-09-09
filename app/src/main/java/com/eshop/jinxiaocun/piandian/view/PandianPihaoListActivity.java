@@ -42,7 +42,9 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         return R.layout.activity_pandian_pihao_list;
     }
 
+    @Override
     protected void initView() {
+        super.initView();
         mLayoutBottom.setVisibility(View.GONE);
         setTopToolBar("盘点批号列表",R.mipmap.ic_left_light,"",R.mipmap.add,"");
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
@@ -74,7 +76,9 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
 
     }
 
+    @Override
     protected void loadData() {
+        super.loadData();
         mServerApi = new PandianImp(this);
         getPandianPihaoHuoqu();
     }

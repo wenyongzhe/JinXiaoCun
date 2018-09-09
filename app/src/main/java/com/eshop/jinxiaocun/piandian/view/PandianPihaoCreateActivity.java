@@ -56,9 +56,9 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     }
 
     @Override
-    protected void loadData() {
+    protected void initData() {
+        super.initData();
         mServerApi = new PandianImp(this);
-
         IOtherModel api = new OtherModelImp(this);
         SheetNoBean bean = new SheetNoBean();
         bean.JsonData.trans_no="PD";

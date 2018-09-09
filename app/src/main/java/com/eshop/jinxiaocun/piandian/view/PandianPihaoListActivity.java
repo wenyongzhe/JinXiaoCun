@@ -77,8 +77,8 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
     }
 
     @Override
-    protected void loadData() {
-        super.loadData();
+    protected void initData() {
+        super.initData();
         mServerApi = new PandianImp(this);
         getPandianPihaoHuoqu();
     }

@@ -53,12 +53,12 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         initView();
-        loadData();
+        initData();
     }
 
     protected abstract @LayoutRes int getLayoutId();
 
-    protected void loadData(){}
+    protected void initData(){}
     protected void initView(){}
     //如果返回ture则子类自己处理自己的逻辑，否则父类处理
     protected boolean onTopBarLeftClick(){return false;}

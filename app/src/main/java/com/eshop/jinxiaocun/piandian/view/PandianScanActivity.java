@@ -35,8 +35,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     }
 
     @Override
-    protected void loadData() {
-        super.loadData();
+    protected void initData() {
+        super.initData();
         mSheetNo = getIntent().getStringExtra("sheet_no");
 
 

@@ -13,6 +13,7 @@ import android.widget.GridView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
+import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.piandian.view.PandianListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
@@ -88,6 +89,9 @@ public class HomeFragment extends BaseFragment {
             case 3:
                 break;
             case 4:
+                intent.setClass(Application.mContext, LingShouScanActivity.class);
+                intent.putExtra(Config.SHEET_NO,"");
+                startActivity(intent);
                 break;
             case 5:
                 break;

@@ -43,7 +43,6 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         loadData();
         initView();
     }
@@ -97,7 +96,7 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
         mSpinner1 = findViewById(R.id.ly1_sp);
         mSpinner2 = findViewById(R.id.ly2_sp);
         mSpinner3 = findViewById(R.id.ly3_sp);
-
+        ButterKnife.bind(this);
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 150);
         setHeaderTitle(R.id.tv_1, R.string.list_item_CountN5, 100);

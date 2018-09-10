@@ -140,7 +140,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
-        setHeaderTitle(R.id.tv_2, R.string.list_item_Price, 100);
+        setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
+        setHeaderTitle(R.id.tv_4, R.string.list_item_Price, 100);
 
         List<String> list = new ArrayList<>();
         list.add("正品");
@@ -210,6 +211,14 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
                 reflashList(mGetClassPluResult);
                 break;
+            case RESULT_OK:
+                String mCount =  data.getStringExtra("countN");
+                int itemClickPosition = mLingShouScanAdapter.getItemClickPosition();
+                GetClassPluResult item = mListData.get(itemClickPosition);
+                item.setSale_qnty(mCount);
+                mLingShouScanAdapter.notifyDataSetChanged();
+                break;
+
         }
     }
 
@@ -229,8 +238,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     @OnClick(R.id.btn_modify_count)
     void modifyCount() {
+        int itemClickPosition = mLingShouScanAdapter.getItemClickPosition();
+        GetClassPluResult mGetClassPluResult = mListData.get(itemClickPosition);
         Intent intent = new Intent();
-        intent.putExtra("countN", "1111");
+        intent.putExtra("countN", mGetClassPluResult.getSale_qnty());
         intent.setClass(this, ModifyCountDialog.class);
         startActivityForResult(intent, 1);
     }

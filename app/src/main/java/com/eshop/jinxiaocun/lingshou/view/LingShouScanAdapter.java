@@ -48,7 +48,9 @@ public class LingShouScanAdapter extends BaseAdapter {
         TextView item_name = ViewHolderUtils.get(convertView, R.id.item_name);
         TextView item_no = ViewHolderUtils.get(convertView, R.id.item_no);
         TextView sale_price = ViewHolderUtils.get(convertView, R.id.sale_price);
+        TextView sale_qnty = ViewHolderUtils.get(convertView, R.id.sale_qnty);
 
+        sale_qnty.setText(listInfo.get(position).getSale_qnty());
         sale_price.setText(listInfo.get(position).getSale_price());
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
@@ -65,5 +67,9 @@ public class LingShouScanAdapter extends BaseAdapter {
 
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
+    }
+
+    public int getItemClickPosition() {
+        return itemClickPosition;
     }
 }

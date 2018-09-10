@@ -23,6 +23,8 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String change_price;//1//前台议价
     private String enable_batch;//0 //是否为批次商品
 
+    private String sale_qnty;//:1 //数量
+
     public String getItem_no() {
         return item_no;
     }
@@ -149,6 +151,14 @@ public class GetClassPluResult extends ListBean implements Serializable{
 
     public void setEnable_discount(String enable_discount) {
         this.enable_discount = enable_discount;
+    }
+
+    public String getSale_qnty() {
+        return sale_qnty==null?"1":sale_qnty;
+    }
+
+    public void setSale_qnty(String sale_qnty) {
+        this.sale_qnty = sale_qnty;
     }
 
     public String getChange_price() {

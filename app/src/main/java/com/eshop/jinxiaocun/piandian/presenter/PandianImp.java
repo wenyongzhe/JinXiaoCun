@@ -78,6 +78,18 @@ public class PandianImp implements IPandian {
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.PandianDetailInterface());
     }
 
+    @Override
+    public void uploadPandianRecordHeadData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.UploadPandianRecordHeadInterface());
+    }
+
+    @Override
+    public void uploadPandianDetailData(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PandianImp.UploadPandianDetailInterface());
+    }
+
     //取盘点范围
     class PandianFanweiInterface implements IResponseListener {
 
@@ -240,4 +252,59 @@ public class PandianImp implements IPandian {
             }
         }
     }
+
+    //上传盘点明细
+    class UploadPandianDetailInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_SUCCESS,Msg);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //上传盘点记录头
+    class UploadPandianRecordHeadInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_SUCCESS,Msg);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

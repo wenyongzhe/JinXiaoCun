@@ -25,10 +25,13 @@ import com.eshop.jinxiaocun.piandian.adapter.PandianScanAdapter;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.UploadPandianDetailDataEntity;
+import com.eshop.jinxiaocun.piandian.bean.UploadRecordHeadDataEntity;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -61,16 +64,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @BindView(R.id.et_pd_bz)
     EditText mEtBz;
 
-    @BindView(R.id.listview)
-    ListView mListView;
-    @BindView(R.id.btn_add)
-    Button mBtnAdd;
+
 
     private IPandian mServerApi;
     private IQueryGoods mQueryGoods;
     private IOtherModel api;
     private PandianPihaoHuoquBeanResult mPandianPihao;
-    private String mSheetNo;//单据号
     private PandianScanAdapter mAdapter;
     private List<PandianDetailBeanResult> mListPandianDetailData = new ArrayList<>();
 
@@ -80,11 +79,61 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     }
 
     @Override
+    protected boolean scanBefore() {
+        return true;
+    }
+
+    @Override
     protected void scanResultData(String barcode) {
         if(!TextUtils.isEmpty(barcode)){
             //模糊查询 取第一条数据 （到时候要换成精准查询接口的）
             mQueryGoods.getPLULikeInfo(barcode,0);
         }
+    }
+
+    @Override
+    protected boolean addBefore() {
+
+        if(mListPandianDetailData ==null || mListPandianDetailData.size()==0){
+            Toast.makeText(PandianScanActivity.this,"请扫描/添加盘点商品，再保存!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void addAfter() {
+        //在上传盘点单到后台保存前，获取盘点单号
+        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
+            SheetNoBean bean = new SheetNoBean();
+            bean.JsonData.trans_no = "CR";
+            bean.JsonData.branch_no="0001";
+            api.getSheetNoData(bean);
+        }else{
+            uploadRecordHeadData();
+            uploadPandianDetailData();
+        }
+    }
+
+    @Override
+    protected boolean deleteBefore() {
+        return false;
+    }
+
+    @Override
+    protected void deleteAfter() {
+
+    }
+
+    @Override
+    protected boolean modifyCountBefore() {
+        return false;
+    }
+
+    @Override
+    protected void modifyCountAfter() {
+
     }
 
     @Override
@@ -156,6 +205,45 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mServerApi.getPandianDetailData(bean);
     }
 
+    //上传记录头
+    private void uploadRecordHeadData(){
+        UploadRecordHeadDataEntity bean = new UploadRecordHeadDataEntity();
+
+        bean.JsonData.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号 通过getsheetno获取
+        bean.JsonData.check_no = mTvPihao.getText().toString().trim();//盘点批次号
+        bean.JsonData.trans_no = "CY";//"CY"  单据类型
+        bean.JsonData.branch_no = mTvStore.getText().toString().trim();//盘点门店
+        bean.JsonData.oper_range = MyUtils.convertToInt(mPandianPihao.getOper_range(),0);//10 //盘点类型
+        bean.JsonData.oper_id = mTvOperId.getText().toString().trim();//操作员
+        bean.JsonData.oper_date = DateUtility.getCurrentTime(); //操作时间
+        bean.JsonData.memo = mEtBz.getText().toString().trim();//备注
+        mServerApi.uploadPandianRecordHeadData(bean);
+    }
+
+    private void uploadPandianDetailData(){
+
+        UploadPandianDetailDataEntity bean = new UploadPandianDetailDataEntity();
+        List<UploadPandianDetailDataEntity.UploadPandianDetail> uploadData = new ArrayList<>();
+
+        for (PandianDetailBeanResult obj : mListPandianDetailData) {
+            UploadPandianDetailDataEntity.UploadPandianDetail data = new UploadPandianDetailDataEntity.UploadPandianDetail();
+            data.item_no = obj.getItem_no();//编码
+            data.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号
+            data.item_barcode = mTvPihao.getText().toString().trim();//批次号
+            data.in_price = obj.getIn_price();//进价
+            data.sale_price = obj.getSale_price();//销价
+            data.check_qty = obj.getCheck_qty();//盘点数量
+            data.produce_date = "";//生产日期
+            data.valid_date = "" ;//有效日期
+            data.as_dealflag = 0;//1：表示该单结束
+            uploadData.add(data);
+        }
+
+        bean.JsonData = uploadData;
+        mServerApi.uploadPandianDetailData(bean);
+
+    }
+
     //选择商品时  添加到列表中去
     private void addGoodsData(List<GetClassPluResult> selectGoodsList){
         if(selectGoodsList !=null && selectGoodsList.size()>0){
@@ -181,7 +269,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         obj.setIn_price(MyUtils.convertToFloat(goods.getPrice(),0f));
                         obj.setSale_price(MyUtils.convertToFloat(goods.getSale_price(),0f));
                         obj.setStock_qty(MyUtils.convertToInt(goods.getStock_qty(),0));
-                        obj.setCheck_qty(1);
+                        obj.setCheck_qty(MyUtils.convertToInt(goods.getSale_qnty(),1));
                         obj.setBalance_qty(0);
                         mListPandianDetailData.add(obj);
                     }
@@ -196,7 +284,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     obj.setIn_price(MyUtils.convertToFloat(goods.getPrice(),0f));
                     obj.setSale_price(MyUtils.convertToFloat(goods.getSale_price(),0f));
                     obj.setStock_qty(MyUtils.convertToInt(goods.getStock_qty(),0));
-                    obj.setCheck_qty(1);
+                    obj.setCheck_qty(MyUtils.convertToInt(goods.getSale_qnty(),1));
                     obj.setBalance_qty(0);
                     mListPandianDetailData.add(obj);
                 }
@@ -206,37 +294,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     }
 
 
-    @OnClick(R.id.btn_add)
-    public void onClickAdd(){
-        if(mListPandianDetailData ==null || mListPandianDetailData.size()==0){
-            Toast.makeText(PandianScanActivity.this,"请扫描/添加盘点商品，再保存!",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //在上传盘点单到后台保存前，获取盘点单号
-        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
-            SheetNoBean bean = new SheetNoBean();
-            bean.JsonData.trans_no = "CR";
-            bean.JsonData.branch_no="0001";
-            api.getSheetNoData(bean);
-            return;
-        }
-
-
-
-        Toast.makeText(PandianScanActivity.this,"不用再获取业务单据号",Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    @OnClick(R.id.btn_delete)
-    public void onClickDelete(){
-
-    }
-
-    @OnClick(R.id.btn_modify_count)
-    public void onClickModifyCount(){
-
-    }
 
 
     @Override
@@ -274,9 +331,18 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.MESSAGE_SHEETNO_OK:
                 SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
                 mTvOrderNo.setText(sheetNoBeanResult==null?"":sheetNoBeanResult.getSheetno());
+                addAfter();
                 break;
             case Config.MESSAGE_SHEETNO_ERROR:
                 Toast.makeText(PandianScanActivity.this,"获取业务单据号失败："+o.toString(),Toast.LENGTH_SHORT).show();
+                break;
+            //上传记录头 上传盘点明细  成功
+            case Config.MESSAGE_SUCCESS:
+                Toast.makeText(PandianScanActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
+                break;
+            //上传记录头或上传盘点明细  失败
+            case Config.MESSAGE_FAIL:
+                Toast.makeText(PandianScanActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
                 break;
 
         }

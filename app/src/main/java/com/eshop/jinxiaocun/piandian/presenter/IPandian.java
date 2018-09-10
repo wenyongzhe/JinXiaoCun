@@ -22,5 +22,9 @@ public interface IPandian {
     void getPandianPihaoHuoqu(BaseBean bean);
     //获取盘点明细
     void getPandianDetailData(BaseBean bean);
+    //上传盘点单记录头
+    void uploadPandianRecordHeadData(BaseBean bean);
+    //上传盘点明细
+    void uploadPandianDetailData(BaseBean bean);
 
 }

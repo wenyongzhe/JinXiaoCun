@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
+import com.eshop.jinxiaocun.lingshou.view.LingShouScanAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
@@ -22,6 +24,8 @@ import android.hardware.BarcodeScan;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener {
 
@@ -32,6 +36,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected String sheet_no = "";
     protected DanJuMainBeanResultItem mDanJuMainBeanResultItem;
     protected ListView mListview;
+    protected MyBaseAdapter mScanAdapter;
+    protected int itemClickPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +69,26 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 
         mUpMainBean = new UpMainBean();
         mUpDetailBeanList = new ArrayList<>();
+        loadData();
+        initView();
+    }
+
+    @Override
+    protected void initView() {
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                itemClickPosition = i;
+                mScanAdapter.setItemClickPosition(i);
+                mScanAdapter.notifyDataSetInvalidated();
+
+            }
+        });
     }
 
     /*
-    扫描返回数据
-     */
+        扫描返回数据
+         */
     private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver() {
 
         @Override

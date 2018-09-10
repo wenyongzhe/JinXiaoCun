@@ -11,15 +11,16 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.base.view.MyBaseAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
 
-public class LingShouScanAdapter extends BaseAdapter {
+public class LingShouScanAdapter extends MyBaseAdapter {
 
     private List<GetClassPluResult> listInfo;
-    private int itemClickPosition = -1;
+
 
     public LingShouScanAdapter(List<GetClassPluResult> listInfo) {
         this.listInfo = listInfo;
@@ -55,21 +56,8 @@ public class LingShouScanAdapter extends BaseAdapter {
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
 
-
-        if (itemClickPosition == position) {
-            convertView.setBackgroundResource(R.color.list_background);
-        } else {
-            convertView.setBackgroundResource(R.color.transparent1);
-        }
-
-        return convertView;
+        return super.getView(position,convertView,parent);
     }
 
-    public void setItemClickPosition(int itemClickPosition) {
-        this.itemClickPosition = itemClickPosition;
-    }
 
-    public int getItemClickPosition() {
-        return itemClickPosition;
-    }
 }

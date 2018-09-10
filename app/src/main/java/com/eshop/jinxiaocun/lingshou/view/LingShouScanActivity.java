@@ -59,14 +59,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     protected List<SaleFlowBean> mSaleFlowBeanList;
-    private LingShouScanAdapter mLingShouScanAdapter;
+
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadData();
-        initView();
     }
 
     //接收条码
@@ -115,17 +113,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @SuppressLint("WrongViewCast")
     @Override
     protected void initView() {
+        super.initView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mLingShouScanAdapter.setItemClickPosition(i);
-                mLingShouScanAdapter.notifyDataSetInvalidated();
-            }
-        });
         btSell.setText(R.string.bt_sell);
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -153,9 +145,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         /*mSpinner1.setAdapter(mTuiHupoAdapter);
         mSpinner2.setAdapter(mTuiHupoAdapter);
         mSpinner3.setAdapter(mTuiHupoAdapter);*/
-        mLingShouScanAdapter = new LingShouScanAdapter(mListData);
-        mListview.setAdapter(mLingShouScanAdapter);
-        mLingShouScanAdapter.notifyDataSetChanged();
+        mScanAdapter = new LingShouScanAdapter(mListData);
+        mListview.setAdapter(mScanAdapter);
+        mScanAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -213,10 +205,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case RESULT_OK:
                 String mCount =  data.getStringExtra("countN");
-                int itemClickPosition = mLingShouScanAdapter.getItemClickPosition();
+                int itemClickPosition = mScanAdapter.getItemClickPosition();
                 GetClassPluResult item = mListData.get(itemClickPosition);
                 item.setSale_qnty(mCount);
-                mLingShouScanAdapter.notifyDataSetChanged();
+                mScanAdapter.notifyDataSetChanged();
                 break;
 
         }
@@ -224,7 +216,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     private void reflashList(List<GetClassPluResult> mGetClassPluResult){
         mListData.addAll(mGetClassPluResult);
-        mLingShouScanAdapter.notifyDataSetChanged();
+        mScanAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.btn_add)
@@ -233,12 +225,17 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     @OnClick(R.id.btn_delete)
     void delete() {
+        try {
+            mListData.remove(itemClickPosition);
+            mScanAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+
+        }
 
     }
 
     @OnClick(R.id.btn_modify_count)
     void modifyCount() {
-        int itemClickPosition = mLingShouScanAdapter.getItemClickPosition();
         GetClassPluResult mGetClassPluResult = mListData.get(itemClickPosition);
         Intent intent = new Intent();
         intent.putExtra("countN", mGetClassPluResult.getSale_qnty());

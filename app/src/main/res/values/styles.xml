@@ -108,7 +108,7 @@
     </style>
 
     <style name="Button_blue">
-        <item name="android:background">@color/button_background</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/txt_size16</item>
         <item name="android:paddingLeft">10dp</item>

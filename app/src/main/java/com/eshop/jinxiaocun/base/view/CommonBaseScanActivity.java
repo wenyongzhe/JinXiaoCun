@@ -81,58 +81,58 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         textView.setGravity(Gravity.CENTER);
         textView.setVisibility(View.VISIBLE);
 
-        switch (tv_id){
-
-            case R.id.tv_0:
-                View view_0 = this.findViewById(R.id.view_0);
-                view_0.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_1:
-                View view_1 = this.findViewById(R.id.view_1);
-                view_1.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_2:
-                View view_2 = this.findViewById(R.id.view_2);
-                view_2.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_3:
-                View view_3 = this.findViewById(R.id.view_3);
-                view_3.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_4:
-                View view_4 = this.findViewById(R.id.view_4);
-                view_4.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_5:
-                View view_5 = this.findViewById(R.id.view_5);
-                view_5.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_6:
-                View view_6= this.findViewById(R.id.view_6);
-                view_6.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_7:
-                View view_7 = this.findViewById(R.id.view_7);
-                view_7.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_8:
-                View view_8 = this.findViewById(R.id.view_8);
-                view_8.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_9:
-                View view_9 = this.findViewById(R.id.view_9);
-                view_9.setVisibility(View.VISIBLE);
-                break;
-        }
+//        switch (tv_id){
+//
+//            case R.id.tv_0:
+//                View view_0 = this.findViewById(R.id.view_0);
+//                view_0.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_1:
+//                View view_1 = this.findViewById(R.id.view_1);
+//                view_1.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_2:
+//                View view_2 = this.findViewById(R.id.view_2);
+//                view_2.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_3:
+//                View view_3 = this.findViewById(R.id.view_3);
+//                view_3.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_4:
+//                View view_4 = this.findViewById(R.id.view_4);
+//                view_4.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_5:
+//                View view_5 = this.findViewById(R.id.view_5);
+//                view_5.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_6:
+//                View view_6= this.findViewById(R.id.view_6);
+//                view_6.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_7:
+//                View view_7 = this.findViewById(R.id.view_7);
+//                view_7.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_8:
+//                View view_8 = this.findViewById(R.id.view_8);
+//                view_8.setVisibility(View.VISIBLE);
+//                break;
+//
+//            case R.id.tv_9:
+//                View view_9 = this.findViewById(R.id.view_9);
+//                view_9.setVisibility(View.VISIBLE);
+//                break;
+//        }
     }
 
     @Override

@@ -18,7 +18,7 @@
 
             <TextView
                 android:id="@+id/tv_product_name"
-                style="@style/TextView_Grey"
+                style="@style/AutoScrollTextView"
                 android:layout_width="150dip"
                 android:layout_height="match_parent"
                 android:gravity="center"

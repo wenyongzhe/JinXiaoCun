@@ -63,6 +63,7 @@ public class PandianScanAdapter extends BaseAdapter {
         TextView tv_pd_number = ViewHolderUtils.get(convertView, R.id.tv_pd_number);
         TextView tv_diff_number = ViewHolderUtils.get(convertView, R.id.tv_diff_number);
 
+        tv_product_name.setSelected(true);
         tv_product_name.setText(obj.getItem_name());
         tv_product_code.setText(obj.getItem_no());
         tv_spec.setText(obj.getItem_size());

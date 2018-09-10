@@ -283,4 +283,98 @@ public class MyUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yymmdd");
         return sdf.format(new Date());
     }
+
+
+    /**
+     * 类型转换函数 安全
+     */
+    public final static String convertToString(Object object,String defaultvalut){
+
+        if(object==null || "".equals(object.toString().trim())||
+                "null".equals(object.toString().trim())){
+            return defaultvalut;
+        }
+
+        try{
+            return String.valueOf(object.toString().trim());
+        }catch (Exception e){
+            return defaultvalut;
+        }
+    }
+
+    /**
+     * 类型转换函数 安全
+     */
+    public final static float convertToFloat(Object object,float defaultvalut){
+
+        if(object==null || "".equals(object.toString().trim())){
+            return defaultvalut;
+        }
+        try{
+            return Float.valueOf(object.toString().trim());
+        }catch (Exception e){
+            try{
+                return Double.valueOf(object.toString().trim()).floatValue();
+            }catch (Exception ex){
+                return defaultvalut;
+            }
+
+        }
+    }
+
+    /**
+     * 类型转换函数 安全
+     */
+    public final static double convertToDouble(Object object,double defaultvalut){
+
+        if(object==null || "".equals(object.toString().trim())){
+            return defaultvalut;
+        }
+        try{
+            return Double.valueOf(object.toString().trim());
+        }catch (Exception e){
+            return defaultvalut;
+        }
+    }
+
+    /**
+     * 类型转换函数 安全
+     */
+    public final static int convertToInt(Object value,int defaultValue){
+        if (value == null || "".equals(value.toString().trim())) {
+            return defaultValue;
+        }
+//        无符号整形（unsigned int）变量的取值范围为：0～4294967295 ；
+//        而整形（int）变量的取值范围为：2147483648～2147483647 .
+        try{
+            return Integer.parseInt(value.toString().trim());
+        }catch (Exception e){
+            try{
+                return Double.valueOf(value.toString().trim()).intValue();
+            }catch (Exception e1){
+                return defaultValue;
+            }
+        }
+
+    }
+    /**
+     * 类型转换函数 安全
+     */
+    public final static Long convertToLong(Object value,Long defaultValue){
+        if (value == null || "".equals(value.toString().trim())) {
+            return defaultValue;
+        }
+        //最大值是9223372036854775807。
+        try{
+            return Long.parseLong(value.toString().trim());
+        }catch (Exception e){
+            try{
+                return Double.valueOf(value.toString().trim()).longValue();
+            }catch (Exception e1){
+                return defaultValue;
+            }
+        }
+    }
+
+
 }

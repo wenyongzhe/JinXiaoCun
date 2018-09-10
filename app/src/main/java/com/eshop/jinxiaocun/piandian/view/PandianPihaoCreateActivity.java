@@ -181,11 +181,11 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     public void handleResule(int flag, Object o) {
         switch (flag){
             //业务单据号
-            case Config.MESSAGE_OK:
+            case Config.MESSAGE_SHEETNO_OK:
                 SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
                 mTvDianjuhao.setText(sheetNoBeanResult.getSheetno());
                 break;
-            case Config.MESSAGE_ERROR:
+            case Config.MESSAGE_SHEETNO_ERROR:
                 Toast.makeText(PandianPihaoCreateActivity.this,"获取业务单据号失败："+o.toString(),Toast.LENGTH_SHORT).show();
                 break;
             //盘点批号生成

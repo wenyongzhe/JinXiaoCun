@@ -129,7 +129,7 @@
     </style>
 
     <style name="AutoScrollTextView">
-        <item name="android:textColor">@color/bg_grey4</item>
+        <item name="android:textColor">@color/text_grey1</item>
         <item name="android:textSize">@dimen/txt_size16</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">marquee</item>

@@ -35,6 +35,8 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
     @BindView(R.id.et_pd_bz)
     EditText mEtBz;
 
+    private PandianPihaoHuoquBeanResult mPandianPihao;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_pandian_create;
@@ -74,7 +76,7 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
         }
 
         Intent intent = new Intent(PandianCreateActivity.this,PandianScanActivity.class);
-        intent.putExtra("sheet_no",mTvPandianpihao.getText().toString());
+        intent.putExtra("PandianPihaoEntity",mPandianPihao);
         startActivity(intent);
 
     }
@@ -90,16 +92,16 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1 && resultCode==11){
-            PandianPihaoHuoquBeanResult obj = (PandianPihaoHuoquBeanResult) data.getSerializableExtra("PandianPihao");
-
-            mTvPandianpihao.setText(obj.getSheet_no());
-            mTvStoreNo.setText(obj.getBranch_name());
-            mTvFanwei.setText(obj.getOper_range_name());
-            mTvType.setText(obj.getCheck_cls());
-            mTvOperId.setText(obj.getOper_id());
-            mTvDate.setText(obj.getOper_date());
-            mEtBz.setText(obj.getMemo());
-
+            mPandianPihao = (PandianPihaoHuoquBeanResult) data.getSerializableExtra("PandianPihao");
+            if(mPandianPihao !=null){
+                mTvPandianpihao.setText(mPandianPihao.getSheet_no());
+                mTvStoreNo.setText(mPandianPihao.getBranch_name());
+                mTvFanwei.setText(mPandianPihao.getOper_range_name());
+                mTvType.setText(mPandianPihao.getCheck_cls());
+                mTvOperId.setText(mPandianPihao.getOper_id());
+                mTvDate.setText(mPandianPihao.getOper_date());
+                mEtBz.setText(mPandianPihao.getMemo());
+            }
         }
 
     }

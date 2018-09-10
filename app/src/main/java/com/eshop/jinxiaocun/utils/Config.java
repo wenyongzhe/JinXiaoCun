@@ -42,6 +42,8 @@ public class Config {
     public final static int MESSAGE_PANDIANPIHAOHUOQU_ERROR = 14;
     public final static int MESSAGE_QRYCLASSINFO = 15;
     public final static int MESSAGE_GETCLASSPLUINFO = 16;
+    public final static int MESSAGE_SHEETNO_OK = 17;
+    public final static int MESSAGE_SHEETNO_ERROR = 18;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

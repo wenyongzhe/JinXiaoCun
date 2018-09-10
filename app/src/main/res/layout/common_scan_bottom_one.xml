@@ -216,6 +216,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:id="@+id/li"
+        android:visibility="gone"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/tv_check_num"
@@ -236,6 +237,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_scan_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="5dp"
@@ -250,12 +252,8 @@
             android:layout_height="match_parent"
             style="@style/Button_blue"
             android:layout_weight="1"
+            android:layout_marginRight="1dp"
             android:text="@string/add" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
 
         <Button
             android:id="@+id/btn_delete"
@@ -263,12 +261,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginRight="1dp"
             android:text="@string/delete" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
 
         <Button
             android:id="@+id/btn_modify_count"

@@ -33,4 +33,151 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="单号:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_orderNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            style="@style/AutoScrollTextView"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="范围:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_fanwei"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            style="@style/TextView_Grey"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="批号:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_pihao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            style="@style/AutoScrollTextView"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="操作员:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_operId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            style="@style/TextView_Grey"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="仓库:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            style="@style/TextView_Grey"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="备注:"
+            />
+
+        <EditText
+            android:id="@+id/et_pd_bz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            style="@style/EditText_Black"
+            android:layout_marginRight="5dp"
+            android:gravity="center|left"
+            android:textColor="@color/text_grey1"
+            />
+
+    </LinearLayout>
+
 </LinearLayout>

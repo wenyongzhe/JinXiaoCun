@@ -9,11 +9,14 @@ import android.support.annotation.LayoutRes;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+
+import butterknife.BindView;
 
 /**
  * Author: 安仔夏天勤奋
@@ -22,7 +25,6 @@ import com.eshop.jinxiaocun.utils.CommonUtility;
  */
 
 public abstract class CommonBaseScanActivity extends CommonBaseActivity implements AdapterView.OnItemClickListener{
-
 
     protected BarcodeScan mBarcodeScan;//扫描控制
 

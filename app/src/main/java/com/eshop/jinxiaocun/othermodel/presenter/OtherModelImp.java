@@ -57,14 +57,14 @@ public class OtherModelImp implements IOtherModel {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                SheetNoBeanResult resultItem=  mJsonFormatImp.JsonToBean(jsonData,SheetNoBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,resultItem);
+                    SheetNoBeanResult resultItem=  mJsonFormatImp.JsonToBean(jsonData,SheetNoBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_SHEETNO_OK,resultItem);
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                    mHandler.handleResule(Config.MESSAGE_SHEETNO_ERROR,Msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                mHandler.handleResule(Config.MESSAGE_SHEETNO_ERROR,e.getMessage());
                 e.printStackTrace();
             }
         }

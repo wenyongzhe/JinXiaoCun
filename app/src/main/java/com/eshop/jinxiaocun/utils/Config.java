@@ -44,6 +44,8 @@ public class Config {
     public final static int MESSAGE_GETCLASSPLUINFO = 16;
     public final static int MESSAGE_SHEETNO_OK = 17;
     public final static int MESSAGE_SHEETNO_ERROR = 18;
+    public final static int MESSAGE_FAIL = 19;
+    public final static int MESSAGE_SUCCESS = 20;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

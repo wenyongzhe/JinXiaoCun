@@ -24,6 +24,8 @@ public class WebConfig {
     public static final String QryClassInfo= "QryClassInfo";//查询商品分类
     public static final String GetClassPluInfo= "GetClassPluInfo";//查询分类商品 getclassplunfo
     public static final String GetSheetNo= "GetSheetNo";//获取业务单据号
+    public static final String W_PD_MASTER= "W-PD-MASTER";//上传盘点单记录头
+    public static final String W_PD_DETAIL= "W-PD-DETAIL";//上传盘点明细
 
     public static String getPosLogin() {
         return POS_LOGIN;

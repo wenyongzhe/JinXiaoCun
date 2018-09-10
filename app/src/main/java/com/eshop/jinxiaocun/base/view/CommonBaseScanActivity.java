@@ -11,12 +11,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
@@ -26,10 +28,27 @@ import butterknife.BindView;
 
 public abstract class CommonBaseScanActivity extends CommonBaseActivity implements AdapterView.OnItemClickListener{
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+    @BindView(R.id.listview)
+    protected ListView mListView;
+    @BindView(R.id.ll_scan_bottom)
+    protected LinearLayout mLayoutScanBottom;
+    @BindView(R.id.btn_add)
+    protected Button mBtnAdd;
+    @BindView(R.id.btn_delete)
+    protected Button mBtnDelete;
+    @BindView(R.id.btn_modify_count)
+    protected Button mBtnModifyCount;
 
+    protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();
+    protected abstract boolean scanBefore();//扫描前
     protected abstract void scanResultData(String barcode);//扫描返回的数据
+    protected abstract boolean addBefore();//添加前
+    protected abstract void addAfter();
+    protected abstract boolean deleteBefore();//删除前
+    protected abstract void deleteAfter();
+    protected abstract boolean modifyCountBefore();//修改数前
+    protected abstract void modifyCountAfter();
 
     @Override
     protected int getLayoutId() {
@@ -66,6 +85,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
             String action = intent.getAction();
             if (action.equals("ACTION_BAR_SCAN")) {
                 String str = intent.getStringExtra("EXTRA_SCAN_DATA");
+                if(!scanBefore()){
+                    return;
+                }
                 scanResultData(str);
             }
         }
@@ -74,6 +96,33 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @OnClick(R.id.btn_add)
+    public void onClickAdd(){
+        if(!addBefore()){
+            return;
+        }
+
+        addAfter();
+    }
+
+    @OnClick(R.id.btn_delete)
+    public void onClickDelete(){
+        if(!deleteBefore()){
+            return;
+        }
+
+        deleteAfter();
+    }
+
+    @OnClick(R.id.btn_modify_count)
+    public void onClickModifyCount(){
+        if(!modifyCountBefore()){
+            return;
+        }
+
+        modifyCountAfter();
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){

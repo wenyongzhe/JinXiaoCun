@@ -24,11 +24,6 @@ import butterknife.BindView;
 
 public class PandianPihaoListActivity extends CommonBaseListActivity implements INetWorResult{
 
-    @BindView(R.id.rfListview)
-    RefreshListView mListView;
-    @BindView(R.id.ll_bottom)
-    LinearLayout mLayoutBottom;
-
     /** 页数 */
     protected int pageIndex = 1;
     /** 每次请求的条数 */
@@ -81,6 +76,47 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         super.initData();
         mServerApi = new PandianImp(this);
         getPandianPihaoHuoqu();
+    }
+
+
+    @Override
+    protected boolean createOrderBefore() {
+        return false;
+    }
+
+    @Override
+    protected void createOrderAfter() {
+
+    }
+
+    @Override
+    protected boolean deleteBefore() {
+        return false;
+    }
+
+    @Override
+    protected void deleteAfter() {
+
+    }
+
+    @Override
+    protected boolean modifyBefore() {
+        return false;
+    }
+
+    @Override
+    protected void modifyAfter() {
+
+    }
+
+    @Override
+    protected boolean uploadBefore() {
+        return false;
+    }
+
+    @Override
+    protected void uploadAfter() {
+
     }
 
     //盘点批号获取

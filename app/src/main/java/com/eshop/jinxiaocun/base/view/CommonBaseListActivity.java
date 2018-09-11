@@ -4,11 +4,16 @@ import android.support.annotation.LayoutRes;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.widget.RefreshListView;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -19,7 +24,30 @@ import com.eshop.jinxiaocun.utils.CommonUtility;
 
 public abstract class CommonBaseListActivity extends CommonBaseActivity implements AdapterView.OnItemClickListener {
 
+
+    @BindView(R.id.rfListview)
+    protected RefreshListView mListView;
+    @BindView(R.id.ll_bottom)
+    protected LinearLayout mLayoutBottom;
+    @BindView(R.id.bottom_btn_create)
+    protected Button mBtnCreate;
+    @BindView(R.id.bottom_btn_modify)
+    protected Button mBtnModify;
+    @BindView(R.id.bottom_btn_del)
+    protected Button mBtnDelete;
+    @BindView(R.id.bottom_btn_upload)
+    protected Button mBtnUpload;
+
+    //子类去实现
     protected abstract @LayoutRes int getLayoutContentId();
+    protected abstract boolean createOrderBefore();//开单前
+    protected abstract void createOrderAfter();
+    protected abstract boolean deleteBefore();//删除前
+    protected abstract void deleteAfter();
+    protected abstract boolean modifyBefore();//修改前
+    protected abstract void modifyAfter();
+    protected abstract boolean uploadBefore();//上传前
+    protected abstract void uploadAfter();
 
     @Override
     protected int getLayoutId() {
@@ -32,6 +60,32 @@ public abstract class CommonBaseListActivity extends CommonBaseActivity implemen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @OnClick(R.id.bottom_btn_create)
+    public void onClickCreate(){
+        if(!createOrderBefore()){
+            return;
+        }
+        createOrderAfter();
+    }
+
+    @OnClick(R.id.bottom_btn_modify)
+    public void onClickModify(){
+        if(!modifyBefore())return;
+        modifyAfter();
+    }
+
+    @OnClick(R.id.bottom_btn_del)
+    public void onClickDelete(){
+        if(!deleteBefore())return;
+        deleteAfter();
+    }
+
+    @OnClick(R.id.bottom_btn_upload)
+    public void onClickUpload(){
+        if(!uploadBefore())return;
+        uploadAfter();
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){

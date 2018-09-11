@@ -248,7 +248,7 @@
             android:background="@color/divider" />
 
         <Button
-            android:id="@+id/top_btn_del"
+            android:id="@+id/bottom_btn_del"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/Button_blue"
@@ -261,7 +261,7 @@
             android:background="@color/divider" />
 
         <Button
-            android:id="@+id/top_btn_upload"
+            android:id="@+id/bottom_btn_upload"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/Button_blue"

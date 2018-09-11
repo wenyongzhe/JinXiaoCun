@@ -69,6 +69,7 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleError(Object event) {
+
             Log.e("-----",event.toString());
         }
 

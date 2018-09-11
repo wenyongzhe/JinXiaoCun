@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.netWork.httpDB.message.MessageManage;
+import com.eshop.jinxiaocun.utils.MD5Util;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.NetWorkUtil;
 
@@ -133,6 +134,8 @@ public class NetWorkImp implements INetWork {
 
     @Override
     public void doGet(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
+        String md5 = MD5Util.string2MD5(paramsMap.get("JsonData")==null?paramsMap.get("jsonData"):paramsMap.get("JsonData"));
+        paramsMap.put("Sign",md5.toUpperCase());
         doGet(url,paramsMap,null,iResponseListener);
     }
 
@@ -185,6 +188,8 @@ public class NetWorkImp implements INetWork {
 
     @Override
     public void doPost(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
+        String md5 = MD5Util.string2MD5(paramsMap.get("JsonData")==null?paramsMap.get("jsonData"):paramsMap.get("JsonData"));
+        paramsMap.put("Sign",md5.toUpperCase());
         doPost(url,paramsMap,null,iResponseListener);
 
     }

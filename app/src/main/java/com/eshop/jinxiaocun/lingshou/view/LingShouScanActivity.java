@@ -219,6 +219,29 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mScanAdapter.notifyDataSetChanged();
     }
 
+    private void setSaleFlowBean(){
+        for(int i=0; i<mListData.size(); i++){
+            SaleFlowBean mSaleFlowBean = new SaleFlowBean();
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+
+            mSaleFlowBean.setBranch_no(Config.branch_no);
+            mSaleFlowBean.setFlow_no(i+"");
+            mSaleFlowBean.setFlow_id("");
+            mSaleFlowBean.setItem_no(mGetClassPluResult.getItem_no());
+            mSaleFlowBean.setSource_price(mGetClassPluResult.getSale_price());
+            mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
+            mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
+
+            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            mSaleFlowBean.setSale_money(money);
+            mSaleFlowBean.setSell_way("A");
+            mSaleFlowBean.setSale_man(Config.UserName);
+            mSaleFlowBean.setSpec_flag("");
+
+            mSaleFlowBeanList.add(mSaleFlowBean);
+        }
+    }
+
     @OnClick(R.id.btn_add)
     void sell() {
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,6 +36,7 @@ import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPiciDialog;
 
 import java.util.ArrayList;
@@ -74,6 +76,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private PandianPihaoHuoquBeanResult mPandianPihao;
     private PandianScanAdapter mAdapter;
     private List<PandianDetailBeanResult> mListPandianDetailData = new ArrayList<>();
+    private PandianDetailBeanResult mSelectPandianDetailEntity = null;
 
     @Override
     protected int getLayoutContentId() {
@@ -113,6 +116,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_9,R.string.list_item_DiffCount,100);//差异数量
 
         mAdapter = new PandianScanAdapter(this,mListPandianDetailData);
+        mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
     }
@@ -354,22 +358,60 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     @Override
     protected boolean deleteBefore() {
-        return false;
+        if(mListPandianDetailData ==null || mListPandianDetailData.size()==0){
+            Toast.makeText(PandianScanActivity.this,"没有盘点商品，不能做删除操作!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(mSelectPandianDetailEntity ==null){
+            Toast.makeText(PandianScanActivity.this,"请选择要删除的商品!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void deleteAfter() {
+        for (int i = 0; i < mListPandianDetailData.size(); i++) {
+            if(mListPandianDetailData.get(i).getItem_no().equals(mSelectPandianDetailEntity.getItem_no())){
+                mSelectPandianDetailEntity = null;
+                mListPandianDetailData.remove(i);
+                mAdapter.setItemClickPosition(-1);
+                mAdapter.setListInfo(mListPandianDetailData);
+                break;
+            }
+        }
 
     }
 
     @Override
     protected boolean modifyCountBefore() {
-        return false;
+        if(mListPandianDetailData ==null || mListPandianDetailData.size()==0){
+            Toast.makeText(PandianScanActivity.this,"没有盘点商品，不能做改数操作!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(mSelectPandianDetailEntity ==null){
+            Toast.makeText(PandianScanActivity.this,"请选择要改数的商品!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void modifyCountAfter() {
+        Intent intent = new Intent();
+        intent.putExtra("countN", mSelectPandianDetailEntity.getCheck_qty()+"");
+        intent.setClass(this, ModifyCountDialog.class);
+        startActivityForResult(intent, 22);
+    }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        super.onItemClick(parent, view, position, id);
+        mSelectPandianDetailEntity = mListPandianDetailData.get(position);
+        mAdapter.setItemClickPosition(position);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -459,6 +501,18 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mListPandianDetailData.add(obj);
             mAdapter.setListInfo(mListPandianDetailData);
 
+        }
+
+        //修改数量
+        if(requestCode == 22 && resultCode == RESULT_OK){
+            String countN = data.getStringExtra("countN");
+            for (int i = 0; i < mListPandianDetailData.size(); i++) {
+                if(mListPandianDetailData.get(i).getItem_no().equals(mSelectPandianDetailEntity.getItem_no())){
+                    mListPandianDetailData.get(i).setCheck_qty(MyUtils.convertToInt(countN,0));
+                    mAdapter.setListInfo(mListPandianDetailData);
+                    break;
+                }
+            }
         }
     }
 

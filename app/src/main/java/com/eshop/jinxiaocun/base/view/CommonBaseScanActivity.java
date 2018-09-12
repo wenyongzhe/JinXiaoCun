@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -113,7 +114,25 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
             return;
         }
 
-        deleteAfter();
+        AlertUtil.showAlert(this, R.string.dialog_title, "您确定要删除吗？", R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    deleteAfter();
+                }catch (Exception ex){
+                    AlertUtil.showToast("删除失败！原因："+ex.getMessage(),CommonBaseScanActivity.this);
+                }
+                AlertUtil.dismissDialog();
+            }
+        }, R.string.cancel, new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertUtil.dismissDialog();
+            }
+        });
+
+
     }
 
     @OnClick(R.id.btn_modify_count)

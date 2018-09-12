@@ -271,8 +271,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mSaleFlowBean.setOper_date(DateUtility.getCurrentTime());
             mSaleFlowBean.setIsfreshcodefrag("");
             mSaleFlowBean.setBatch_code(mGetClassPluResult.getItem_barcode());
-            mSaleFlowBean.setBatch_made_date(mGetClassPluResult.getProduce_date());
-            mSaleFlowBean.setBatch_valid_date(mGetClassPluResult.getValid_date());
+            mSaleFlowBean.setBatch_made_date(mGetClassPluResult.getProduce_date()==null?DateUtility.getCurrentTime():mGetClassPluResult.getProduce_date());
+            mSaleFlowBean.setBatch_valid_date(mGetClassPluResult.getValid_date()==null?DateUtility.getCurrentTime():mGetClassPluResult.getValid_date());
             if(i == (mListData.size()-1)){
                 mSaleFlowBean.setbDealFlag("1");
             }else{

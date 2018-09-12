@@ -6,13 +6,13 @@ import java.util.List;
 
 public class GetFlowNoBeanResult extends BaseResult{
 
-    private List<FlowNoJson> jsonData;
+    private FlowNoJson jsonData;
 
-    public List<FlowNoJson> getJsonData() {
+    public FlowNoJson getJsonData() {
         return jsonData;
     }
 
-    public void setJsonData(List<FlowNoJson> jsonData) {
+    public void setJsonData(FlowNoJson jsonData) {
         jsonData = jsonData;
     }
 

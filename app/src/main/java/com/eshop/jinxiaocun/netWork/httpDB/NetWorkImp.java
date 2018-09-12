@@ -189,7 +189,7 @@ public class NetWorkImp implements INetWork {
     @Override
     public void doPost(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
         String md5 = MD5Util.string2MD5(paramsMap.get("JsonData")==null?paramsMap.get("jsonData"):paramsMap.get("JsonData"));
-        paramsMap.put("Sign",md5.toUpperCase());
+        paramsMap.put(paramsMap.get("Sign")==null?"sign":"Sign",md5.toUpperCase());
         doPost(url,paramsMap,null,iResponseListener);
 
     }

@@ -46,7 +46,7 @@ public class OtherModelImp implements IOtherModel {
     @Override
     public void getGoodsPiciInfo(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new OtherModelImp.GoodsPiciInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GoodsPiciInterface());
     }
 
 
@@ -96,6 +96,7 @@ public class OtherModelImp implements IOtherModel {
                 if(status.equals(Config.MESSAGE_OK+"")){
                     List<GoodsPiciInfoBeanResult> resultItem=  mJsonFormatImp.JsonToList(jsonData,GoodsPiciInfoBeanResult.class);
                     mHandler.handleResule(Config.RESULT_SUCCESS,resultItem);
+                    mHandler.handleResule(Config.MESSAGE_PICI,resultItem);
                 }else{
                     mHandler.handleResule(Config.RESULT_FAIL,Msg);
                 }

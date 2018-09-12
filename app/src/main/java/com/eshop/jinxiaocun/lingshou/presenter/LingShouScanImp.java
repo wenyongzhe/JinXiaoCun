@@ -14,6 +14,7 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.UpSallFlowBean;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
@@ -75,7 +76,7 @@ public class LingShouScanImp implements ILingshouScan {
 
     //销售商品取价
     @Override
-    public void getPluPrice(String barCode) {
+    public void getPluPrice() {
         GetPluPriceBean mGetPluPrice = new GetPluPriceBean();
         mGetPluPrice.getJsonData().setAs_branchNo(Config.branch_no);
         mGetPluPrice.getJsonData().setAs_flowno(Config.posid);
@@ -92,6 +93,15 @@ public class LingShouScanImp implements ILingshouScan {
         mSellSubBean.getJsonData().setAs_flowno("123");//结账流水
         Map map = ReflectionUtils.obj2Map(mSellSubBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SellSubInterface());
+    }
+
+    @Override
+    public void upSallFlow(List listdata) {
+        UpSallFlowBean mUpSallFlowBean = new UpSallFlowBean();
+        mUpSallFlowBean.setJsonData(listdata);
+        Map map = ReflectionUtils.obj2Map(mUpSallFlowBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface());
+
     }
 
     @Override
@@ -118,17 +128,16 @@ public class LingShouScanImp implements ILingshouScan {
         @Override
         public void handleResult(Response event, String result) {
             //{"status":"0","msg":"","jsonData":"{\"FlowNo\":\"0\"}","sign":""}
-            GetFlowNoBeanResult mGetFlowNoBeanResult =  mJsonFormatImp.JsonToBean(result,GetFlowNoBeanResult.class);
-            if(mGetFlowNoBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_FLOW_NO,mGetFlowNoBeanResult);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
-            }
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult =  mJsonFormatImp.JsonToBean(jsonData,GetFlowNoBeanResult.FlowNoJson.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_FLOW_NO,mGetFlowNoBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetFlowNoBeanResult);
+            }
         }
     }
 
@@ -186,17 +195,16 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResult(Response event,String result) {
-            GetPluPriceBeanResult mGetPluPriceBeanResult =  mJsonFormatImp.JsonToBean(result,GetPluPriceBeanResult.class);
-            if(mGetPluPriceBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGetPluPriceBeanResult);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
-            }
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            List<GetPluPriceBeanResult> mGetPluPriceBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetPluPriceBeanResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GETPLU_PRICE,mGetPluPriceBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
+            }
         }
     }
 
@@ -218,6 +226,27 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mSellSubBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mSellSubBeanResult);
+            }
+        }
+    }
+
+    //上传销售流水
+    class UpSallFlowInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_UP_SALL_FLOW,null);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,null);
             }
         }
     }

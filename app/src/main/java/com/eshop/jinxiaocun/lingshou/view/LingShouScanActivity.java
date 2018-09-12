@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.ColorFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -25,8 +26,13 @@ import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
+import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
@@ -58,7 +64,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
+    private IOtherModel mIOtherModel;
     protected List<SaleFlowBean> mSaleFlowBeanList;
+    private String FlowNo = "";
 
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
@@ -78,6 +86,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         super.loadData();
         mSaleFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
+        mIOtherModel = new OtherModelImp(this);
         if(!newSheet){
             mLingShouScanImp.getSheetDetail(sheet_no);
         }else
@@ -157,24 +166,32 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_ERROR:
                 break;
+            case Config.MESSAGE_PICI:
+                List<GoodsPiciInfoBeanResult> mGoodsPiciInfoBeanResult = (List<GoodsPiciInfoBeanResult>)o;
+                GetClassPluResult mGetClassPluResult = mListData.get(mListData.size()-1);
+                mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.get(0).getItem_barcode());
+                mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.get(0).getProduce_date());
+                mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
+                break;
             case Config.MESSAGE_GOODS_INFOR:
-                List<GetClassPluResult> mGoodGetBeanResult = (List<GetClassPluResult>)o;
-                reflashList(mGoodGetBeanResult);
-
-//                UpDetailBean mUpDetailBean = new UpDetailBean();
-//                mUpDetailBean.setBarCode(mGoodGetBeanResult.get(0).item_no);//条码
-//                mUpDetailBean.setBuyPrice(mGoodGetBeanResult.get(0).price);//进价
-//                mUpDetailBean.setSalePrice(mGoodGetBeanResult.get(0).sale_price);//售价
-//                setDetailBean(mUpDetailBean);
-//                setViewData(mGoodGetBeanResult);
+                List<GetClassPluResult> mGetClassPluResultList = (List<GetClassPluResult>)o;
+                reflashList(mGetClassPluResultList);
+                //getPiCi(mGetClassPluResultList);
                 break;
             case Config.MESSAGE_FLOW_NO:
-                GetFlowNoBeanResult mGetFlowNoBeanResult = (GetFlowNoBeanResult)o;
-                if(mGetFlowNoBeanResult.getJsonData() != null && mGetFlowNoBeanResult.getJsonData().size()>0){
-                    GetFlowNoBeanResult.FlowNoJson json = mGetFlowNoBeanResult.getJsonData().get(0);
+                GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
+                if(mGetFlowNoBeanResult != null ){
+                    FlowNo = mGetFlowNoBeanResult.getFlowNo();
+                    setSaleFlowBean();
                 }
+                break;
+            case Config.MESSAGE_UP_SALL_FLOW:
+                mLingShouScanImp.getPluPrice();
+                break;
+            case Config.MESSAGE_GETPLU_PRICE:
 
                 break;
+
         }
     }
 
@@ -195,6 +212,14 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         startActivityForResult(mIntent,100);
     }
 
+    private void getPiCi(List<GetClassPluResult> mGetClassPluResult){
+        GoodsPiciInfoBean mGoodsPiciInfoBean = new GoodsPiciInfoBean();
+        mGoodsPiciInfoBean.JsonData.as_branchNo = Config.branch_no;
+        mGoodsPiciInfoBean.JsonData.as_posid = Config.posid;
+        mGoodsPiciInfoBean.JsonData.as_item_no = mGetClassPluResult.get(0).getItem_no();
+        mIOtherModel.getGoodsPiciInfo(mGoodsPiciInfoBean);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -202,6 +227,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.RESULT_SELECT_GOODS:
                 List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
                 reflashList(mGetClassPluResult);
+                //getPiCi(mGetClassPluResult);
                 break;
             case RESULT_OK:
                 String mCount =  data.getStringExtra("countN");
@@ -225,8 +251,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             GetClassPluResult mGetClassPluResult = mListData.get(i);
 
             mSaleFlowBean.setBranch_no(Config.branch_no);
-            mSaleFlowBean.setFlow_no(i+"");
-            mSaleFlowBean.setFlow_id("");
+            mSaleFlowBean.setFlow_no(FlowNo);
+            mSaleFlowBean.setFlow_id(i+"");
             mSaleFlowBean.setItem_no(mGetClassPluResult.getItem_no());
             mSaleFlowBean.setSource_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
@@ -237,13 +263,30 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mSaleFlowBean.setSell_way("A");
             mSaleFlowBean.setSale_man(Config.UserName);
             mSaleFlowBean.setSpec_flag("");
+            mSaleFlowBean.setSpec_sheet_no("");
+            mSaleFlowBean.setPosid(Config.posid);
+            mSaleFlowBean.setVoucher_no("");
+            mSaleFlowBean.setCounter_no("");
+            mSaleFlowBean.setOper_id(Config.UserName);
+            mSaleFlowBean.setOper_date(DateUtility.getCurrentTime());
+            mSaleFlowBean.setIsfreshcodefrag("");
+            mSaleFlowBean.setBatch_code(mGetClassPluResult.getItem_barcode());
+            mSaleFlowBean.setBatch_made_date(mGetClassPluResult.getProduce_date());
+            mSaleFlowBean.setBatch_valid_date(mGetClassPluResult.getValid_date());
+            if(i == (mListData.size()-1)){
+                mSaleFlowBean.setbDealFlag("1");
+            }else{
+                mSaleFlowBean.setbDealFlag("0");
+            }
 
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
+        mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
     }
 
     @OnClick(R.id.btn_add)
     void sell() {
+        mLingShouScanImp.getFlowNo();
     }
 
     @OnClick(R.id.btn_delete)

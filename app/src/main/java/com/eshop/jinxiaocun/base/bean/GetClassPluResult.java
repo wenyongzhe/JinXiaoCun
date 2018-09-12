@@ -23,6 +23,11 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String change_price;//1//前台议价
     private String enable_batch;//0 //是否为批次商品
 
+    private String item_barcode;// 批次号
+    private String produce_date; //生产日期
+    private String valid_date;//有效日期
+
+
     private String sale_qnty;//:1 //数量
 
     public String getItem_no() {
@@ -175,5 +180,29 @@ public class GetClassPluResult extends ListBean implements Serializable{
 
     public void setEnable_batch(String enable_batch) {
         this.enable_batch = enable_batch;
+    }
+
+    public String getItem_barcode() {
+        return item_barcode;
+    }
+
+    public void setItem_barcode(String item_barcode) {
+        this.item_barcode = item_barcode;
+    }
+
+    public String getProduce_date() {
+        return produce_date;
+    }
+
+    public void setProduce_date(String produce_date) {
+        this.produce_date = produce_date;
+    }
+
+    public String getValid_date() {
+        return valid_date;
+    }
+
+    public void setValid_date(String valid_date) {
+        this.valid_date = valid_date;
     }
 }

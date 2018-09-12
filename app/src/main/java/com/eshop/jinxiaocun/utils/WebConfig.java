@@ -28,6 +28,8 @@ public class WebConfig {
     public static final String W_PD_DETAIL= "W-PD-DETAIL";//上传盘点明细
     public static final String W_SALEFLOW= "W-SALEFLOW";//上传销售流水
     public static final String R_PLU_BATCH= "R-PLU-BATCH";//获取商品批次信息
+    public static final String QryPluStock= "QryPluStock";//商品库存查询
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

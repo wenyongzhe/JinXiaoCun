@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:textSize="@dimen/txt_size16"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:text="条码" />
+
+        <EditText
+            android:id="@+id/et_barcode"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:imeOptions="actionSend"
+            style="@style/EditText_Grey_Border"
+            android:gravity="left|center_vertical"
+            android:hint="请扫描条码或输入条码"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

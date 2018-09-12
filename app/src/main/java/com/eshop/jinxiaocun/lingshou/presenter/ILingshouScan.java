@@ -10,7 +10,7 @@ public interface ILingshouScan {
     public void getPluPrice();//销售商品取价
     public void sellSub();//结算
     public void upSallFlow(List list);//上传销售流水
-
+    public void upPlayFlow(List list);//上传付款流水
 
 
 }

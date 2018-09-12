@@ -14,6 +14,7 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
 import com.eshop.jinxiaocun.lingshou.bean.UpSallFlowBean;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
@@ -102,6 +103,14 @@ public class LingShouScanImp implements ILingshouScan {
         Map map = ReflectionUtils.obj2Map(mUpSallFlowBean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface());
 
+    }
+
+    @Override
+    public void upPlayFlow(List list) {
+        UpPalyFlowBean mUpPalyFlowBean = new UpPalyFlowBean();
+        mUpPalyFlowBean.setJsonData(list);
+        Map map = ReflectionUtils.obj2Map(mUpPalyFlowBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpPlayFlowInterface());
     }
 
     @Override
@@ -245,6 +254,27 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_UP_SALL_FLOW,null);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,null);
+            }
+        }
+    }
+
+    //上传付款
+    class UpPlayFlowInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_UP_PLAY_FLOW,null);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,null);
             }

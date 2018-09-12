@@ -24,6 +24,7 @@ import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
@@ -188,8 +189,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_UP_SALL_FLOW:
                 mLingShouScanImp.getPluPrice();
                 break;
+            case Config.MESSAGE_UP_PLAY_FLOW:
+                break;
             case Config.MESSAGE_GETPLU_PRICE:
-
+                List<GetPluPriceBeanResult> mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
                 break;
 
         }

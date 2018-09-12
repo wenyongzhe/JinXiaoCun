@@ -51,6 +51,7 @@ public class Config {
     public final static int MESSAGE_UP_SALL_FLOW = 21;
     public final static int MESSAGE_PICI = 22;
     public final static int MESSAGE_GETPLU_PRICE = 23;
+    public final static int MESSAGE_UP_PLAY_FLOW = 24;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

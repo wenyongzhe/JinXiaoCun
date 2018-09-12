@@ -46,6 +46,8 @@ public class Config {
     public final static int MESSAGE_SHEETNO_ERROR = 18;
     public final static int MESSAGE_FAIL = 19;
     public final static int MESSAGE_SUCCESS = 20;
+    public final static int RESULT_SUCCESS= 21;
+    public final static int RESULT_FAIL= 22;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

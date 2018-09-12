@@ -13,6 +13,7 @@ public interface IOtherModel {
 
     //获取业务单据号数据
     void getSheetNoData(BaseBean bean);
-
+    //获取商品批次信息
+    void getGoodsPiciInfo(BaseBean bean);
 
 }

@@ -156,6 +156,10 @@
     <string name="list_item_apply">申请</string>
     <string name="list_item_XSPrice">销售价格</string>
     <string name="list_item_StoreNum">库存数量</string>
+    <string name="list_item_Pihao">批号</string>
+    <string name="list_item_Shopinfo">门店信息</string>
+    <string name="list_item_BeginDate">起始时间</string>
+    <string name="list_item_EndDate">结束时间</string>
 
     <string name="yuan">元</string>
     <!-- 下拉刷新 -->

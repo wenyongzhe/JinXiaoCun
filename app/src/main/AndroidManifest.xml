@@ -105,6 +105,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".widget.MoneyDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyleBottom"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity android:name=".stock.view.StockCheckActivity"
             android:screenOrientation="portrait"

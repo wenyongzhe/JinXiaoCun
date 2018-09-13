@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.BillType;
@@ -25,6 +26,8 @@ import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
+import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
@@ -36,6 +39,7 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
+import com.eshop.jinxiaocun.widget.MoneyDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +71,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private ILingshouScan mLingShouScanImp;
     private IOtherModel mIOtherModel;
     protected List<SaleFlowBean> mSaleFlowBeanList;
+    protected List<PlayFlowBean> mPlayFlowBeanList;
     private String FlowNo = "";
 
     private List<GetClassPluResult> mListData = new ArrayList<>();
@@ -86,6 +91,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     protected void loadData() {
         super.loadData();
         mSaleFlowBeanList = new ArrayList<>();
+        mPlayFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
         if(!newSheet){
@@ -183,17 +189,26 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
                     FlowNo = mGetFlowNoBeanResult.getFlowNo();
+                    FlowNo += DateUtility.getCurrentTime2();
                     setSaleFlowBean();
                 }
                 break;
             case Config.MESSAGE_UP_SALL_FLOW:
                 mLingShouScanImp.getPluPrice();
                 break;
-            case Config.MESSAGE_UP_PLAY_FLOW:
-                break;
             case Config.MESSAGE_GETPLU_PRICE:
                 List<GetPluPriceBeanResult> mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
+                Intent intent = new Intent(this, MoneyDialog.class);
+                startActivityForResult(intent,100);
                 break;
+            case Config.MESSAGE_UP_PLAY_FLOW:
+                mLingShouScanImp.sellSub(FlowNo);
+                break;
+            case Config.MESSAGE_SELL_SUB:
+                ToastUtils.showShort(R.string.message_sell_ok);
+                finish();
+                break;
+
 
         }
     }
@@ -238,6 +253,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 GetClassPluResult item = mListData.get(itemClickPosition);
                 item.setSale_qnty(mCount);
                 mScanAdapter.notifyDataSetChanged();
+                break;
+            case Config.MESSAGE_MONEY:
+                String mMoney =  data.getStringExtra("countN");
+                setPlayFlowBean(mMoney);
                 break;
 
         }
@@ -285,6 +304,43 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
         mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+    }
+
+    private void setPlayFlowBean(String payAmount){
+        for(int i=0; i<mListData.size(); i++){
+            PlayFlowBean mPlayFlowBean = new PlayFlowBean();
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+
+            mPlayFlowBean.setBranch_no(Config.branch_no);
+            mPlayFlowBean.setFlow_no(FlowNo);
+            mPlayFlowBean.setFlow_id(i+"");
+            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            mPlayFlowBean.setSale_amount(money);
+            mPlayFlowBean.setPay_way("");
+            mPlayFlowBean.setSell_way("A");
+            mPlayFlowBean.setCard_no("");
+            mPlayFlowBean.setVip_no("");
+            mPlayFlowBean.setCoin_no("RMB");
+            mPlayFlowBean.setCoin_rate("");
+            mPlayFlowBean.setPay_amount(payAmount);//付款金额
+            mPlayFlowBean.setVoucher_no("");
+            mPlayFlowBean.setPosid(Config.posid);
+            mPlayFlowBean.setCounter_no("");
+            mPlayFlowBean.setOper_id(Config.UserName);
+            mPlayFlowBean.setSale_man(Config.UserName);
+            mPlayFlowBean.setShift_no("");
+            mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
+            mPlayFlowBean.setMemo("");
+            mPlayFlowBean.setWorderno("");
+            if(i == (mListData.size()-1)){
+                mPlayFlowBean.setbDealFlag("1");
+            }else{
+                mPlayFlowBean.setbDealFlag("0");
+            }
+
+            mPlayFlowBeanList.add(mPlayFlowBean);
+        }
+        mLingShouScanImp.upPlayFlow(mPlayFlowBeanList);
     }
 
     @OnClick(R.id.btn_add)

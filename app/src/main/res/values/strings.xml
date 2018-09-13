@@ -173,4 +173,5 @@
     <!--零售-->
     <string name="bt_sell">结算</string>
     <string name="ok">确定</string>
+    <string name="message_sell_ok">结算完成</string>
 </resources>

@@ -88,10 +88,10 @@ public class LingShouScanImp implements ILingshouScan {
 
     //结算
     @Override
-    public void sellSub() {
+    public void sellSub(String flowno) {
         SellSubBean mSellSubBean = new SellSubBean();
         mSellSubBean.getJsonData().setAs_branchNo(Config.branch_no);
-        mSellSubBean.getJsonData().setAs_flowno("123");//结账流水
+        mSellSubBean.getJsonData().setAs_flowno(flowno);//结账流水
         Map map = ReflectionUtils.obj2Map(mSellSubBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SellSubInterface());
     }
@@ -232,7 +232,7 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             SellSubBeanResult.SellSubJsonData mSellSubBeanResult =  mJsonFormatImp.JsonToBean(jsonData,SellSubBeanResult.SellSubJsonData.class);
             if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mSellSubBeanResult);
+                mHandler.handleResule(Config.MESSAGE_SELL_SUB,mSellSubBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mSellSubBeanResult);
             }

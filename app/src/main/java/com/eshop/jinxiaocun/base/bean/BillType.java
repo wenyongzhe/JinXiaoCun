@@ -1,7 +1,6 @@
 package com.eshop.jinxiaocun.base.bean;
 
 /**
- * Created by zwei on 2017/6/26.
  *  单据类型
  */
 

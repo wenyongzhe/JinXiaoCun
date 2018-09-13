@@ -87,18 +87,19 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
     protected void initData() {
         super.initData();
         mDanJuList = new DanJuListImp(this);
+        getPifaXiaoshouData();
     }
 
     private void getPifaXiaoshouData() {
 
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
-        mDanJuMainBean.JsonData.POSID = "";
-        mDanJuMainBean.JsonData.UserId = "";
-        mDanJuMainBean.JsonData.SheetType = "";//单据类型
-        mDanJuMainBean.JsonData.Oper_ID = "";//操作员ID
-        mDanJuMainBean.JsonData.BeginTime = "";
-        mDanJuMainBean.JsonData.EndTime = "";
-        mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
+        mDanJuMainBean.JsonData.POSID = Config.posid;
+        mDanJuMainBean.JsonData.UserId = "1001";
+        mDanJuMainBean.JsonData.SheetType = Config.YwType.SS.toString();//单据类型
+        mDanJuMainBean.JsonData.Oper_ID = Config.posid;//操作员ID
+        mDanJuMainBean.JsonData.BeginTime = "2018/09/03";
+        mDanJuMainBean.JsonData.EndTime = "2018/09/13";
+        mDanJuMainBean.JsonData.CheckFlag = "1";//审核标志
         mDanJuMainBean.JsonData.PageNum = mPageSize;
         mDanJuMainBean.JsonData.Page = mPageIndex;
         mDanJuList.getDanJuList(mDanJuMainBean);

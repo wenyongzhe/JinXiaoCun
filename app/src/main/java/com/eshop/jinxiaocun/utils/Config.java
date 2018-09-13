@@ -81,4 +81,18 @@ public class Config {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
+    public enum YwType{
+        //业务类型
+        YH,//要货
+        PO,//采购订单
+        PI,//采购入仓
+        MO,//配送出库
+        MI,//配送入库
+        SS,//批发订单
+        SO,//批发出库
+        RI,//批发退货
+        PD,//盘点批次号
+        CR,//盘点单号
+    }
+
 }

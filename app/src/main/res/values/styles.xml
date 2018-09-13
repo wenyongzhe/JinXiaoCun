@@ -181,4 +181,24 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="TextView_DateTime">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">@dimen/txt_size16</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/textview_bg</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:drawableRight">@mipmap/date</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextView_DateTime_Unline">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">@dimen/txt_size16</item>
+        <item name="android:gravity">end|center_vertical</item>
+        <item name="android:background">@drawable/edit_bg</item>
+        <item name="android:drawableRight">@mipmap/date</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

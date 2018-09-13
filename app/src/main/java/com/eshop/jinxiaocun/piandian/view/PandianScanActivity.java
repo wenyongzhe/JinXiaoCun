@@ -36,6 +36,7 @@ import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPiciDialog;
 
@@ -452,15 +453,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }
                 break;
             case Config.MESSAGE_SHEETNO_ERROR:
-                Toast.makeText(PandianScanActivity.this,"获取业务单据号失败："+o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
             //上传记录头 上传盘点明细  成功
             case Config.MESSAGE_SUCCESS:
-                Toast.makeText(PandianScanActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast(o.toString());
                 break;
             //上传记录头或上传盘点明细  失败
             case Config.MESSAGE_FAIL:
-                Toast.makeText(PandianScanActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast(o.toString());
                 break;
             //获取商品批次信息
             case Config.RESULT_SUCCESS:
@@ -495,9 +496,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             obj.setStock_qty(MyUtils.convertToInt(mScanOrSelectGoods.getStock_qty(),0));
             obj.setCheck_qty(MyUtils.convertToInt(mScanOrSelectGoods.getSale_qnty(),1));
             obj.setBalance_qty(0);
-            obj.setProduce_date(pici);
+            obj.setProduce_date("");
             obj.setValid_date("");
-            obj.setItem_barcode("");//批次号
+            obj.setItem_barcode(pici);//批次号
             mListPandianDetailData.add(obj);
             mAdapter.setListInfo(mListPandianDetailData);
 

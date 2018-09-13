@@ -3,12 +3,14 @@ package com.eshop.jinxiaocun.widget;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.view.Application;
 
 
 public class AlertUtil {
@@ -131,13 +133,36 @@ public class AlertUtil {
 	 * 在子线程也可以调用
 	 */
 	public static void showToast(int message, Context paramContext) {
-		Toast.makeText(paramContext, getString(message), Toast.LENGTH_LONG).show();
+//		Toast.makeText(paramContext, getString(message), Toast.LENGTH_LONG).show();
+		Toast toast = Toast.makeText(paramContext, getString(message), Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER,0,0);
+		toast.show();
 	}
 	/**
 	 * 在子线程也可以调用
 	 */
 	public static void showToast(String message, Context paramContext) {
-		Toast.makeText(paramContext, message, Toast.LENGTH_LONG).show();
+//		Toast.makeText(paramContext, message, Toast.LENGTH_LONG).show();
+		Toast toast = Toast.makeText(paramContext, message, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER,0,0);
+		toast.show();
+	}
+
+	/**
+	 * 在子线程也可以调用
+	 */
+	public static void showToast(int message) {
+		Toast toast = Toast.makeText(Application.mContext, getString(message), Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER,0,0);
+		toast.show();
+	}
+	/**
+	 * 在子线程也可以调用
+	 */
+	public static void showToast(String message) {
+		Toast toast = Toast.makeText(Application.mContext, message, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER,0,0);
+		toast.show();
 	}
 }
 

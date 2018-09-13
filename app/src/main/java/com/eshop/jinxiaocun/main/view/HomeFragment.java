@@ -17,6 +17,7 @@ import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.piandian.view.PandianListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaXiaoshouListActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 
@@ -34,13 +35,17 @@ public class HomeFragment extends BaseFragment {
             R.mipmap.img_jieqian_dayin, R.mipmap.img_mendian_qinghuo,
             R.mipmap.img_receipt_geli,
             R.mipmap.img_peisong_geli,
-            R.mipmap.img_diaobo_geli,R.mipmap.img_pandian_geli
+            R.mipmap.img_diaobo_geli,
+            R.mipmap.img_pandian_geli,
+            R.mipmap.img_mendian_qinghuo
     };
     private int[] nameIds = { R.string.menu_goods_manager,
             R.string.menu_caigoudan, R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
             R.string.menu_kuaishushoukuang,
-            R.string.menu_diaobo_manage,R.string.menu_pandian_manage
+            R.string.menu_diaobo_manage,
+            R.string.menu_pandian_manage,
+            R.string.menu_pifa_xiaoshou
     };
 
     public static Fragment newInstance() {
@@ -100,6 +105,10 @@ public class HomeFragment extends BaseFragment {
                 break;
             case 6:
                 intent.setClass(Application.mContext, PandianListActivity.class);
+                startActivity(intent);
+                break;
+            case 7://批发销售列表
+                intent.setClass(Application.mContext, PifaXiaoshouListActivity.class);
                 startActivity(intent);
                 break;
 

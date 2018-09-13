@@ -109,6 +109,11 @@
         <activity android:name=".stock.view.StockCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".pifaxiaoshou.view.PifaXiaoshouListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

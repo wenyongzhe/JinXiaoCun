@@ -35,7 +35,7 @@ public class ModifyGoodsPiciDialog extends Activity {
         txtPici.requestFocus();
 
         Intent intent = getIntent();
-        txtPici.setText(intent.getStringExtra("countN"));
+        txtPici.setText(intent.getStringExtra("GoodsPici"));
         txtPici.selectAll();
 
         closeEditTextKeyboard();
@@ -60,7 +60,7 @@ public class ModifyGoodsPiciDialog extends Activity {
     @OnClick(R.id.btn_ok)
     void OnOk(){
         if (TextUtils.isEmpty(txtPici.getText().toString().trim())) {
-            MyUtils.showToast("请输入批次号！", this);
+            AlertUtil.showToast("请输入批次号！");
             return;
         }
 
@@ -83,6 +83,7 @@ public class ModifyGoodsPiciDialog extends Activity {
                 InputMethodManager.HIDE_NOT_ALWAYS);
         Intent intent = new Intent();
         setResult(RESULT_CANCELED, intent);
+        AlertUtil.showToast("不填写批次，该商品不作盘点！");
         finish();
     }
 }

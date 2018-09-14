@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center|top"
+              android:background="@color/item_gray_line"
               android:orientation="vertical">
 
    <!-- <include
@@ -19,7 +20,7 @@
     <ImageView
         android:background="@mipmap/banner"
         android:layout_width="fill_parent"
-        android:layout_height="160dp"/>
+        android:layout_height="170dp"/>
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
@@ -29,7 +30,8 @@
         android:gravity="center"
         android:listSelector="@null"
         android:numColumns="3"
-        android:verticalSpacing="0dp" >
+        android:verticalSpacing="1px"
+        android:horizontalSpacing="1px">
     </GridView>
 
 </LinearLayout>

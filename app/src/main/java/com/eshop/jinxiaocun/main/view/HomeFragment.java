@@ -31,13 +31,13 @@ public class HomeFragment extends BaseFragment {
     GridView gridview;
 
     private Unbinder unbinder;
-    private int[] iconIds = { R.mipmap.img_shangpin_chaxun,
-            R.mipmap.img_jieqian_dayin, R.mipmap.img_mendian_qinghuo,
-            R.mipmap.img_receipt_geli,
-            R.mipmap.img_peisong_geli,
-            R.mipmap.img_diaobo_geli,
-            R.mipmap.img_pandian_geli,
-            R.mipmap.img_mendian_qinghuo
+    private int[] iconIds = { R.drawable.spgl,
+            R.drawable.cgd, R.drawable.xsd,
+            R.drawable.kcgl,
+            R.drawable.kssk,
+            R.drawable.tbgl,
+            R.drawable.pdgl,
+            R.drawable.spgl
     };
     private int[] nameIds = { R.string.menu_goods_manager,
             R.string.menu_caigoudan, R.string.menu_xiaoshoudan,

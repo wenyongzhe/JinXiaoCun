@@ -3,15 +3,15 @@ package com.eshop.jinxiaocun.lingshou.bean;
 public class PlayFlowBean{
     private String branch_no;//1001” //门店号
     private String flow_no;//””//小票号
-    private String flow_id;//”1 //流水号
-    private String sale_amount;//;//10 //销售金额
+    private int flow_id;//”1 //流水号
+    private double sale_amount;//;//10 //销售金额
     private String pay_way;//”//支付方式
     private String sell_way;//A” //A:正常 B:退货
-    private String card_no;//1 //卡号
-    private String vip_no;//1 //会员号
+    private int card_no;//1 //卡号
+    private int vip_no;//1 //会员号
     private String coin_no;//RMB” //货币标识 RMB
-    private String coin_rate;//0.8 //汇率
-    private String pay_amount;//” //付款金额
+    private double coin_rate;//0.8 //汇率
+    private double pay_amount;//” //付款金额
     private String voucher_no;//”//引用单号
     private String posid;//”//POS机号
     private String counter_no;//”//柜台号
@@ -39,19 +39,16 @@ public class PlayFlowBean{
         this.flow_no = flow_no;
     }
 
-    public String getFlow_id() {
+    public int getFlow_id() {
         return flow_id;
     }
 
-    public void setFlow_id(String flow_id) {
+    public void setFlow_id(int flow_id) {
         this.flow_id = flow_id;
     }
 
-    public String getSale_amount() {
-        return sale_amount;
-    }
 
-    public void setSale_amount(String sale_amount) {
+    public void setSale_amount(float sale_amount) {
         this.sale_amount = sale_amount;
     }
 
@@ -71,19 +68,19 @@ public class PlayFlowBean{
         this.sell_way = sell_way;
     }
 
-    public String getCard_no() {
+    public int getCard_no() {
         return card_no;
     }
 
-    public void setCard_no(String card_no) {
+    public void setCard_no(int card_no) {
         this.card_no = card_no;
     }
 
-    public String getVip_no() {
+    public int getVip_no() {
         return vip_no;
     }
 
-    public void setVip_no(String vip_no) {
+    public void setVip_no(int vip_no) {
         this.vip_no = vip_no;
     }
 
@@ -95,19 +92,36 @@ public class PlayFlowBean{
         this.coin_no = coin_no;
     }
 
-    public String getCoin_rate() {
-        return coin_rate;
-    }
 
-    public void setCoin_rate(String coin_rate) {
+    public void setCoin_rate(float coin_rate) {
         this.coin_rate = coin_rate;
     }
 
-    public String getPay_amount() {
+    public double getSale_amount() {
+        return sale_amount;
+    }
+
+    public void setSale_amount(double sale_amount) {
+        this.sale_amount = sale_amount;
+    }
+
+    public double getCoin_rate() {
+        return coin_rate;
+    }
+
+    public void setCoin_rate(double coin_rate) {
+        this.coin_rate = coin_rate;
+    }
+
+    public double getPay_amount() {
         return pay_amount;
     }
 
-    public void setPay_amount(String pay_amount) {
+    public void setPay_amount(double pay_amount) {
+        this.pay_amount = pay_amount;
+    }
+
+    public void setPay_amount(float pay_amount) {
         this.pay_amount = pay_amount;
     }
 

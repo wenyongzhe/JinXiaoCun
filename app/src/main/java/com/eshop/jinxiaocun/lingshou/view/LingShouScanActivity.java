@@ -313,16 +313,16 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(FlowNo);
-            mPlayFlowBean.setFlow_id(i+"");
-            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            mPlayFlowBean.setFlow_id(i);
+            Float money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price());
             mPlayFlowBean.setSale_amount(money);
             mPlayFlowBean.setPay_way("");
             mPlayFlowBean.setSell_way("A");
-            mPlayFlowBean.setCard_no("");
-            mPlayFlowBean.setVip_no("");
+            mPlayFlowBean.setCard_no(1);
+            mPlayFlowBean.setVip_no(1);
             mPlayFlowBean.setCoin_no("RMB");
-            mPlayFlowBean.setCoin_rate("");
-            mPlayFlowBean.setPay_amount(payAmount);//付款金额
+            mPlayFlowBean.setCoin_rate(0.8);
+            mPlayFlowBean.setPay_amount(Float.parseFloat(payAmount));//付款金额
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("");

@@ -61,8 +61,8 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
         mServerApi = new PandianImp(this);
         IOtherModel api = new OtherModelImp(this);
         SheetNoBean bean = new SheetNoBean();
-        bean.JsonData.trans_no="PD";
-        bean.JsonData.branch_no="0001";
+        bean.JsonData.trans_no=Config.YwType.PD.toString();
+        bean.JsonData.branch_no=Config.branch_no;
         api.getSheetNoData(bean);
 
     }

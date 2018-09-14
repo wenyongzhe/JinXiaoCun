@@ -54,6 +54,7 @@ public class Config {
     public final static int MESSAGE_UP_PLAY_FLOW = 24;
     public final static int MESSAGE_SELL_SUB = 25;
     public final static int MESSAGE_MONEY = 26;
+    public final static int MESSAGE_GOODS_INFOR_FAIL = 27;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

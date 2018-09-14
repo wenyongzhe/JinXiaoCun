@@ -186,12 +186,17 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
-            if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mGoodGetBeanResult);
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,Msg);
+                }
+            }catch (Exception e){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,e.getMessage());
             }
+
         }
     }
 

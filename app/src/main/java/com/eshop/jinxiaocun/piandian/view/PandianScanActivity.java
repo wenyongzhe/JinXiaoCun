@@ -16,7 +16,9 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.IQueryGoods;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.presenter.QueryGoodsImp;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
@@ -71,7 +73,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     EditText mEtBz;
 
     private IPandian mServerApi;
-    private IQueryGoods mQueryGoods;
+    private ILingshouScan mQueryGoodsApi;
     private GetClassPluResult mScanOrSelectGoods;
     private IOtherModel mOtherApi;
     private PandianPihaoHuoquBeanResult mPandianPihao;
@@ -145,7 +147,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         super.initData();
 
         mServerApi = new PandianImp(this);
-        mQueryGoods = new QueryGoodsImp(this);
+        mQueryGoodsApi = new LingShouScanImp(this);
         mOtherApi = new OtherModelImp(this);
         //如果是单品盘点则不取盘点明细 否则取盘点明细
         if(!isDianpin){
@@ -361,8 +363,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     protected void scanResultData(String barcode) {
         if(!TextUtils.isEmpty(barcode)){
-            //模糊查询 取第一条数据 （到时候要换成精准查询接口的）
-            mQueryGoods.getPLULikeInfo(barcode,0);
+            //到时候要换成精准查询接口的
+            mQueryGoodsApi.getPLUInfo(barcode);
         }
     }
 
@@ -484,7 +486,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.MESSAGE_ERROR:
                 break;
             //扫描时返回搜索的数据
-            case Config.MESSAGE_GETCLASSPLUINFO:
+            case Config.MESSAGE_GOODS_INFOR:
                 mEtBarcode.requestFocus();
                 mEtBarcode.setFocusable(true);
                 mEtBarcode.setText("");
@@ -493,6 +495,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     //模糊查询 取第一条数据 （到时候要换成精准查询接口的）
                     addGoodsData(goodsData.get(0));
                 }
+                break;
+            case Config.MESSAGE_GOODS_INFOR_FAIL:
+                mEtBarcode.requestFocus();
+                mEtBarcode.setFocusable(true);
+                mEtBarcode.setText("");
+                AlertUtil.showToast("不在盘点范围!");
                 break;
 
             //业务单据号

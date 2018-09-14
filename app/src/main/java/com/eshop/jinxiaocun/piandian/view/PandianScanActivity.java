@@ -178,7 +178,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
         bean.JsonData.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号 通过getsheetno获取
         bean.JsonData.check_no = mTvPihao.getText().toString().trim();//盘点批次号
-        bean.JsonData.trans_no = "CY";//"CY"  单据类型
+        bean.JsonData.trans_no = Config.YwType.CY.toString();//"CY"  单据类型
         bean.JsonData.branch_no = mPandianPihao.getBranch_no();//盘点门店
         bean.JsonData.oper_range = MyUtils.convertToInt(mPandianPihao.getOper_range(),0);//10 //盘点类型
         bean.JsonData.oper_id = mTvOperId.getText().toString().trim();//操作员
@@ -400,15 +400,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     @Override
     protected void addAfter() {
-        //在上传盘点单到后台保存前，获取盘点单号
-//        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
-//            SheetNoBean bean = new SheetNoBean();
-//            bean.JsonData.trans_no = Config.YwType.CR.toString();
-//            bean.JsonData.branch_no=Config.branch_no;
-//            mOtherApi.getSheetNoData(bean);
-//        }else{
-//            uploadRecordHeadData();
-//        }
+//        在上传盘点单到后台保存前，获取盘点单号
+        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
+            SheetNoBean bean = new SheetNoBean();
+            bean.JsonData.trans_no = Config.YwType.CR.toString();
+            bean.JsonData.branch_no=Config.branch_no;
+            mOtherApi.getSheetNoData(bean);
+        }else{
+            uploadRecordHeadData();
+        }
     }
 
     @Override

@@ -96,6 +96,7 @@ public class Config {
         RI,//批发退货
         PD,//盘点批次号
         CR,//盘点单号
+        CY//"CY"  单据类型
     }
 
 }

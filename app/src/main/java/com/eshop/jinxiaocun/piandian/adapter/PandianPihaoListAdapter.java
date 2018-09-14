@@ -66,7 +66,7 @@ public class PandianPihaoListAdapter extends BaseAdapter {
         tv_PandianPihao.setText(obj.getSheet_no());//盘点批号
         tv_Fanwei.setText(obj.getOper_range_name());//范围
         tv_Type.setText(obj.getCheck_cls());//类别
-        tv_Cangku.setText("");//仓库
+        tv_Cangku.setText(obj.getBranch_name());//仓库
         tv_Beizhu.setText(obj.getMemo());//备注
 
         if (itemClickPosition == position) {

@@ -58,10 +58,10 @@ public class PandianScanAdapter extends BaseAdapter {
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
         TextView tv_xsprice = ViewHolderUtils.get(convertView, R.id.tv_xsprice);
         TextView tv_unit = ViewHolderUtils.get(convertView, R.id.tv_unit);
-        TextView tv_store_name = ViewHolderUtils.get(convertView, R.id.tv_store_name);
+//        TextView tv_store_name = ViewHolderUtils.get(convertView, R.id.tv_store_name);
         TextView tv_store_num = ViewHolderUtils.get(convertView, R.id.tv_store_num);
         TextView tv_pd_number = ViewHolderUtils.get(convertView, R.id.tv_pd_number);
-        TextView tv_diff_number = ViewHolderUtils.get(convertView, R.id.tv_diff_number);
+//        TextView tv_diff_number = ViewHolderUtils.get(convertView, R.id.tv_diff_number);
 
         tv_product_name.setSelected(true);
         tv_product_name.setText(obj.getItem_name());
@@ -70,10 +70,10 @@ public class PandianScanAdapter extends BaseAdapter {
         tv_price.setText(obj.getIn_price()+"");
         tv_xsprice.setText(obj.getSale_price()+"");
         tv_unit.setText(obj.getUnit_no());
-        tv_store_name.setText(obj.getBranch_no());
+//        tv_store_name.setText(obj.getBranch_no());
         tv_store_num.setText(obj.getStock_qty()+"");
         tv_pd_number.setText(obj.getCheck_qty()+"");
-        tv_diff_number.setText(obj.getBalance_qty()+"");
+//        tv_diff_number.setText(obj.getBalance_qty()+"");
 
 
         if (itemClickPosition == position) {

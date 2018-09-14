@@ -80,6 +80,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private PandianDetailBeanResult mSelectPandianDetailEntity = null;
     private boolean isDianpin=false;//true为单品盘点
+    private boolean isSure = false;//true为继续保存
 
     @Override
     protected int getLayoutContentId() {
@@ -101,7 +102,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mTvPihao.setText(mPandianPihao.getSheet_no());
             mTvPihao.setSelected(true);
             mTvOperId.setText(mPandianPihao.getOper_id());
-            mTvStore.setText("[1001]总仓库");
+            mTvStore.setText("["+mPandianPihao.getBranch_no()+"]"+mPandianPihao.getBranch_name());
             mEtBz.setText(mPandianPihao.getMemo());
         }
         CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
@@ -116,10 +117,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_3,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_4,R.string.list_item_XSPrice,100);//销售价格
         setHeaderTitle(R.id.tv_5,R.string.list_item_Unit,80);//单位
-        setHeaderTitle(R.id.tv_6,R.string.list_item_StoreName,150);//仓库名称
-        setHeaderTitle(R.id.tv_7,R.string.list_item_StoreNum,100);//库存数量
-        setHeaderTitle(R.id.tv_8,R.string.list_item_CountN4,100);//盘点数量
-        setHeaderTitle(R.id.tv_9,R.string.list_item_DiffCount,100);//差异数量
+//        setHeaderTitle(R.id.tv_6,R.string.list_item_StoreName,150);//仓库名称
+        setHeaderTitle(R.id.tv_6,R.string.list_item_StoreNum,100);//库存数量
+        setHeaderTitle(R.id.tv_7,R.string.list_item_CountN4,100);//盘点数量
+//        setHeaderTitle(R.id.tv_9,R.string.list_item_DiffCount,100);//差异数量
 
         mAdapter = new PandianScanAdapter(this,mAddPandianGoodsDetailData);
         mListView.setOnItemClickListener(this);
@@ -163,8 +164,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     //获取商品批次信息
     private void getGoodsPiciInfo(String product_code){
         GoodsPiciInfoBean bean = new GoodsPiciInfoBean();
-        bean.JsonData.as_branchNo="";//门店号
-        bean.JsonData.as_posid="";
+        bean.JsonData.as_branchNo=Config.branch_no;//门店号
+        bean.JsonData.as_posid=Config.posid;
         bean.JsonData.as_item_no=product_code;//商品编码
         mOtherApi.getGoodsPiciInfo(bean);
     }
@@ -176,7 +177,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         bean.JsonData.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号 通过getsheetno获取
         bean.JsonData.check_no = mTvPihao.getText().toString().trim();//盘点批次号
         bean.JsonData.trans_no = "CY";//"CY"  单据类型
-        bean.JsonData.branch_no = mTvStore.getText().toString().trim();//盘点门店
+        bean.JsonData.branch_no = mPandianPihao.getBranch_no();//盘点门店
         bean.JsonData.oper_range = MyUtils.convertToInt(mPandianPihao.getOper_range(),0);//10 //盘点类型
         bean.JsonData.oper_id = mTvOperId.getText().toString().trim();//操作员
         bean.JsonData.oper_date = DateUtility.getCurrentTime(); //操作时间
@@ -235,13 +236,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     PandianDetailBeanResult obj = new PandianDetailBeanResult();
                     obj.setItem_name(scanOrSelectGoods.getItem_name());
                     obj.setItem_no(scanOrSelectGoods.getItem_no());
-                    obj.setBranch_no("");
+                    obj.setBranch_no(mScanOrSelectGoods.getItem_no());
                     obj.setItem_size(scanOrSelectGoods.getItem_size());
                     obj.setUnit_no(scanOrSelectGoods.getUnit_no());
                     obj.setIn_price(MyUtils.convertToFloat(scanOrSelectGoods.getPrice(),0f));
                     obj.setSale_price(MyUtils.convertToFloat(scanOrSelectGoods.getSale_price(),0f));
                     obj.setStock_qty(MyUtils.convertToInt(scanOrSelectGoods.getStock_qty(),0));
-                    obj.setCheck_qty(MyUtils.convertToInt(scanOrSelectGoods.getSale_qnty(),1));
+                    obj.setCheck_qty(1);
                     obj.setBalance_qty(0);
                     obj.setProduce_date("");
                     obj.setValid_date("");
@@ -259,6 +260,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             if(scanOrSelectGoods.getEnable_batch().equals("1")){//1为有批次商品
                 //去取商品批次信息
                 getGoodsPiciInfo(scanOrSelectGoods.getItem_no());
+            }else{
+                AlertUtil.showToast("不在盘点范围!");
             }
 
         }else{
@@ -286,13 +289,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         PandianDetailBeanResult obj = new PandianDetailBeanResult();
         obj.setItem_name(mScanOrSelectGoods.getItem_name());
         obj.setItem_no(mScanOrSelectGoods.getItem_no());
-        obj.setBranch_no("");
+        obj.setBranch_no(mScanOrSelectGoods.getItem_no());
         obj.setItem_size(mScanOrSelectGoods.getItem_size());
         obj.setUnit_no(mScanOrSelectGoods.getUnit_no());
         obj.setIn_price(MyUtils.convertToFloat(mScanOrSelectGoods.getPrice(),0f));
         obj.setSale_price(MyUtils.convertToFloat(mScanOrSelectGoods.getSale_price(),0f));
         obj.setStock_qty(MyUtils.convertToInt(mScanOrSelectGoods.getStock_qty(),0));
-        obj.setCheck_qty(MyUtils.convertToInt(mScanOrSelectGoods.getSale_qnty(),1));
+        obj.setCheck_qty(1);
         obj.setBalance_qty(0);
 
         //单品盘点  选择的商品或扫描的商品没有批次可以填空 有批次就去取商品批次信息
@@ -320,6 +323,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 for (PandianDetailBeanResult entity : mPandianDetailData) {
                     if(mScanOrSelectGoods.getItem_no().equals(entity.getItem_no())){
                         isSave = true;
+                        break;
                     }
                 }
 
@@ -370,21 +374,39 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             return false;
         }
 
+        if(!isDianpin){
+            int difNumder = mPandianDetailData.size() - mAddPandianGoodsDetailData.size();
+            if(difNumder != 0){//没盘完不要上传
+                AlertUtil.showAlert(this, R.string.dialog_title,
+                        "还有"+difNumder+"种商品没有盘完，请检查!", R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                            }
+                        }, R.string.cancel, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                            }
+                        });
+                return false;
+            }
+        }
+
         return true;
     }
 
     @Override
     protected void addAfter() {
         //在上传盘点单到后台保存前，获取盘点单号
-        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
-            SheetNoBean bean = new SheetNoBean();
-            bean.JsonData.trans_no = "CR";
-            bean.JsonData.branch_no="0001";
-            mOtherApi.getSheetNoData(bean);
-        }else{
-            uploadRecordHeadData();
-            uploadPandianDetailData();
-        }
+//        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
+//            SheetNoBean bean = new SheetNoBean();
+//            bean.JsonData.trans_no = Config.YwType.CR.toString();
+//            bean.JsonData.branch_no=Config.branch_no;
+//            mOtherApi.getSheetNoData(bean);
+//        }else{
+//            uploadRecordHeadData();
+//        }
     }
 
     @Override
@@ -484,9 +506,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.MESSAGE_SHEETNO_ERROR:
                 AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
-            //上传记录头 上传盘点明细  成功
+            //上传记录头 成功 上传盘点明细
             case Config.MESSAGE_SUCCESS:
                 AlertUtil.showToast(o.toString());
+                uploadPandianDetailData();
                 break;
             //上传记录头或上传盘点明细  失败
             case Config.MESSAGE_FAIL:
@@ -518,13 +541,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             PandianDetailBeanResult obj = new PandianDetailBeanResult();
             obj.setItem_name(mScanOrSelectGoods.getItem_name());
             obj.setItem_no(mScanOrSelectGoods.getItem_no());
-            obj.setBranch_no("");
+            obj.setBranch_no(mPandianPihao.getBranch_name());
             obj.setItem_size(mScanOrSelectGoods.getItem_size());
             obj.setUnit_no(mScanOrSelectGoods.getUnit_no());
             obj.setIn_price(MyUtils.convertToFloat(mScanOrSelectGoods.getPrice(),0f));
             obj.setSale_price(MyUtils.convertToFloat(mScanOrSelectGoods.getSale_price(),0f));
             obj.setStock_qty(MyUtils.convertToInt(mScanOrSelectGoods.getStock_qty(),0));
-            obj.setCheck_qty(MyUtils.convertToInt(mScanOrSelectGoods.getSale_qnty(),1));
+            obj.setCheck_qty(1);
             obj.setBalance_qty(0);
             obj.setProduce_date("");
             obj.setValid_date("");
@@ -535,6 +558,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             for (PandianDetailBeanResult entity : mPandianDetailData) {
                 if(mScanOrSelectGoods.getItem_no().equals(entity.getItem_no())){
                     isSave = true;
+                    break;
                 }
             }
 

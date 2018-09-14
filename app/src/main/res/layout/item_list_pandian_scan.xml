@@ -65,13 +65,13 @@
                 android:gravity="center"
                 android:maxLines="1" />
 
-            <TextView
-                android:id="@+id/tv_store_name"
-                style="@style/TextView_Grey"
-                android:layout_width="150dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_store_name"-->
+                <!--style="@style/TextView_Grey"-->
+                <!--android:layout_width="150dip"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:maxLines="1" />-->
 
             <TextView
                 android:id="@+id/tv_store_num"
@@ -89,13 +89,13 @@
                 android:gravity="center"
                 android:maxLines="1" />
 
-            <TextView
-                android:id="@+id/tv_diff_number"
-                style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_diff_number"-->
+                <!--style="@style/TextView_Grey"-->
+                <!--android:layout_width="100dip"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:maxLines="1" />-->
 
 
 

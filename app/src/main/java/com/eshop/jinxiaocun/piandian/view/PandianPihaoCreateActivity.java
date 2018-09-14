@@ -119,10 +119,10 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     protected void initView() {
         setTopToolBar("盘点批号申请",R.mipmap.ic_left_light,"",0,"");
 
-        mTvStoreNo.setText("0001");
-        mTvOperId.setText("1001");
-        mTvDate.setText(DateUtility.getCurrentDate());
-        mTvBz.setText("测试");
+        mTvStoreNo.setText(Config.branch_no);
+        mTvOperId.setText(Config.posid);
+        mTvDate.setText(DateUtility.getCurrentTime());
+        mTvBz.setText("");
 
         mTvPandianfanwei.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override

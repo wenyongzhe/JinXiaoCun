@@ -102,7 +102,7 @@ public class LoginActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case Config.MESSAGE_OK:
-                    ToastUtils.showLong("注册成功！");
+                    //ToastUtils.showLong("注册成功！");
                     OnLogin();
                     break;
                 case Config.MESSAGE_ERROR:
@@ -110,6 +110,7 @@ public class LoginActivity extends BaseActivity {
                     OnLogin();
                     break;
                 case Config.MESSAGE_INTENT:
+                    ToastUtils.showLong("登录成功！");
                     Intent intent = new Intent();
                     intent.setClass(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

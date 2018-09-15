@@ -77,7 +77,7 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
 
         Intent intent = new Intent(PandianCreateActivity.this,PandianScanActivity.class);
         intent.putExtra("PandianPihaoEntity",mPandianPihao);
-        startActivity(intent);
+        startActivityForResult(intent,2);
 
     }
 
@@ -102,6 +102,10 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
                 mTvDate.setText(mPandianPihao.getOper_date());
                 mEtBz.setText(mPandianPihao.getMemo());
             }
+        }
+
+        if(requestCode == 2 && resultCode==22){
+            finish();
         }
 
     }

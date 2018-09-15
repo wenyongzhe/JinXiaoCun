@@ -514,10 +514,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.MESSAGE_SHEETNO_ERROR:
                 AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
-            //上传记录头 成功 上传盘点明细
+            //上传记录头 成功
             case Config.MESSAGE_SUCCESS:
                 AlertUtil.showToast(o.toString());
                 uploadPandianDetailData();
+                break;
+            // 上传盘点明细 成功
+            case Config.MESSAGE_RESULT_SUCCESS:
+                AlertUtil.showToast(o.toString());
                 break;
             //上传记录头或上传盘点明细  失败
             case Config.MESSAGE_FAIL:

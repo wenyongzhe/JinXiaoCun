@@ -269,7 +269,7 @@ public class PandianImp implements IPandian {
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_SUCCESS,"盘点明细成功!");
+                    mHandler.handleResule(Config.MESSAGE_RESULT_SUCCESS,"盘点明细成功!");
                 }else{
                     mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
                 }

@@ -58,12 +58,12 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
             }
         });
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,100);
-        setHeaderTitle(R.id.tv_1,R.string.list_item_PandianPihao,200);
-        setHeaderTitle(R.id.tv_2,R.string.list_item_Fanwei,150);
-        setHeaderTitle(R.id.tv_3,R.string.list_item_Type,150);
-        setHeaderTitle(R.id.tv_4,R.string.list_item_Cangku,150);
-        setHeaderTitle(R.id.tv_5,R.string.list_item_Beizhu,150);
+//        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,100);
+        setHeaderTitle(R.id.tv_0,R.string.list_item_PandianPihao,200);
+        setHeaderTitle(R.id.tv_1,R.string.list_item_Fanwei,150);
+        setHeaderTitle(R.id.tv_2,R.string.list_item_Type,150);
+        setHeaderTitle(R.id.tv_3,R.string.list_item_Cangku,150);
+        setHeaderTitle(R.id.tv_4,R.string.list_item_Beizhu,150);
 
         mAdapter = new PandianPihaoListAdapter(this,mListDatas);
         mListView.setOnItemClickListener(this);

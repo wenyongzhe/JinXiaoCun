@@ -192,6 +192,7 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
             case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
                 isApplySuccess = true;
                 Toast.makeText(PandianPihaoCreateActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
+                resultActivity();
                 break;
             case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
                 isApplySuccess = false;

@@ -107,7 +107,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mTvStore.setText("["+mPandianPihao.getBranch_no()+"]"+mPandianPihao.getBranch_name());
             mEtBz.setText(mPandianPihao.getMemo());
         }
-        CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
+//        CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
         CommonUtility.getInstance().closeKeyboard(this,mEtBz);
         mEtBarcode.setOnKeyListener(onKey);
         setTopToolBar("盘点明细",R.mipmap.ic_left_light,"",R.mipmap.add,"");

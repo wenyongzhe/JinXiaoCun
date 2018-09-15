@@ -38,7 +38,7 @@ public class ModifyCountDialog extends Activity {
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
 
-        closeEditTextKeyboard();
+//        closeEditTextKeyboard();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);
         int screen_height = DensityUtil.getInstance().getScreenHeight(this);

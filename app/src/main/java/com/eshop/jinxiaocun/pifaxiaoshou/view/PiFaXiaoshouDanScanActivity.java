@@ -43,8 +43,6 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadData();
-        initView();
     }
 
     //接收条码

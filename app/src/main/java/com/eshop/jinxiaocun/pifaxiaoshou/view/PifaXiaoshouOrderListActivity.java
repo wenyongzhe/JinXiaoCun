@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -63,8 +64,8 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59");
 
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,150);
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);
+        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,80);// 单据状态
+        setHeaderTitle(R.id.tv_1,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);
         setHeaderTitle(R.id.tv_3,R.string.list_item_OrderDate,150);
 
@@ -146,12 +147,12 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
     @Override
     protected boolean createOrderBefore() {
-        return false;
+        return true;
     }
 
     @Override
     protected void createOrderAfter() {
-
+        startActivity(new Intent(this,PifaXiaoshouOrderScanActivity.class));
     }
 
     @Override

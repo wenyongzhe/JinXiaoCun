@@ -37,6 +37,10 @@ import butterknife.OnClick;
 
 public class PifaXiaoshouListActivity extends CommonBaseListActivity implements INetWorResult {
 
+    @BindView(R.id.dt_startDate)
+    TextView mTvStartDate;
+    @BindView(R.id.dt_endDate)
+    TextView mTvEndDate;
 
     private PifaXiaoshouListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
@@ -55,6 +59,10 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
         super.initView();
 
         setTopToolBar("批发销售订单列表", R.mipmap.ic_left_light, "", 0, "");
+
+        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00");
+        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59");
+
 
         setHeaderTitle(R.id.tv_0,R.string.list_item_Status,150);
         setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);
@@ -113,31 +121,29 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
         mAdapter.notifyDataSetInvalidated();
     }
 
-//    @OnClick(R.id.dt_startDate)
-//    void OnStartDate(){
-//        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
-//                .setListener(listenerStart)
-//                .setInitialDate(new Date())
-//                .build()
-//                .show();
-//    }
-//
-//    private SlideDateTimeListener listenerStart = new SlideDateTimeListener() {
-//
-//        @Override
-//        public void onDateTimeSet(Date date) {
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(date);
-//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            String strDate = format.format(calendar.getTime());
-//            mTvStartDate.setText(strDate);
-//        }
-//
-//        @Override
-//        public void onDateTimeCancel() {
-//
-//        }
-//    };
+    @OnClick(R.id.dt_startDate)
+    void OnStartDate(){
+        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
+                .setListener(listenerStart)
+                .setInitialDate(new Date())
+                .build()
+                .show();
+    }
+
+    private SlideDateTimeListener listenerStart = new SlideDateTimeListener() {
+        @Override
+        public void onDateTimeSet(Date date) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = format.format(calendar.getTime());
+            mTvStartDate.setText(strDate);
+        }
+        @Override
+        public void onDateTimeCancel() {
+
+        }
+    };
 
     @Override
     protected boolean createOrderBefore() {

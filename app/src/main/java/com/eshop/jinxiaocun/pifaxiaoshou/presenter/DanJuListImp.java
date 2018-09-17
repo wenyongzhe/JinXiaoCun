@@ -8,12 +8,14 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -46,23 +48,22 @@ public class DanJuListImp implements IDanJuList {
 
         @Override
         public void handleResult(Response event, String result) {
-            DanJuMainBeanResult mDanJuMainBeanResult = null;
-            try {
-                mDanJuMainBeanResult =  mJsonFormatImp.JsonToBean(result,DanJuMainBeanResult.class);
-                if(mDanJuMainBeanResult.status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,mDanJuMainBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuMainBeanResult);
-                }
-            } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_ERROR,mDanJuMainBeanResult);
-                e.printStackTrace();
-            }
+
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-
+            try {
+                List<DanJuMainBeanResultItem> listResult =  mJsonFormatImp.JsonToList(jsonData,DanJuMainBeanResultItem.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_OK,listResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

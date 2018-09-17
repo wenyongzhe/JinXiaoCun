@@ -182,14 +182,12 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
     @Override
     public void handleResule(int flag, Object o) {
         mListView.onRefreshComplete();
-        DanJuMainBeanResult mDanJuMainBeanResult = (DanJuMainBeanResult) o;
-
         switch (flag) {
             case Config.MESSAGE_OK:
                 if(mPageIndex==1){
-                    mListInfo = mDanJuMainBeanResult.JsonData;
+                    mListInfo = (List<DanJuMainBeanResultItem>)o;
                 }else{
-                    mListInfo.addAll(mDanJuMainBeanResult.JsonData);
+                    mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 }
                 mAdapter.setListInfo(mListInfo);
                 break;

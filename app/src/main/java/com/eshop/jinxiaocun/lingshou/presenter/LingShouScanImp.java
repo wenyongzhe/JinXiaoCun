@@ -114,6 +114,11 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
+    public void getOptAuth() {
+
+    }
+
+    @Override
     public void getSheetDetail(String sheetNo) {
         DanJuDetailBean mDanJuDetailBean = new DanJuDetailBean();
         DanJuDetailBean.DanJuJsonData mDanJuJsonData = mDanJuDetailBean.getJsonData();

@@ -4,9 +4,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.login.Bean.LoginBean;
+import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
 import com.eshop.jinxiaocun.login.Bean.RegistBean;
 import com.eshop.jinxiaocun.login.Bean.RegistBeanResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
@@ -25,11 +27,11 @@ import okhttp3.Response;
 
 public class LoginImp implements ILogin {
 
-    private Handler mHandler;
+    private INetWorResult mHandler;
     private INetWork mINetWork;
     JsonFormatImp mJsonFormatImp = new JsonFormatImp();
 
-    public LoginImp(Handler mHandler) {
+    public LoginImp(INetWorResult mHandler) {
         this.mHandler = mHandler;
         mINetWork = new NetWorkImp(Application.mContext);
     }
@@ -76,12 +78,17 @@ public class LoginImp implements ILogin {
         @Override
         public void handleResult(Response event,String result) {
             Log.e("-----",result);
-            mHandler.sendEmptyMessage(Config.MESSAGE_INTENT);
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             Log.e("-----",jsonData);
+            LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_INTENT,jsonBean);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,jsonBean);
+            }
         }
     }
 
@@ -108,7 +115,7 @@ public class LoginImp implements ILogin {
                 Config.branch_no = jsonBean.getBranch_no();
                 Config.soft_name = jsonBean.getSoft_name();
             }
-            mHandler.sendEmptyMessage(Config.MESSAGE_OK);
+            mHandler.handleResule(Config.MESSAGE_OK,jsonBean);
         }
     }
 

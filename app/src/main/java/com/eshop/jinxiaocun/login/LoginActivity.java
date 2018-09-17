@@ -16,7 +16,10 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
 import com.eshop.jinxiaocun.main.view.MainActivity;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
@@ -27,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements INetWorResult {
 
     @BindView(R.id.et_user_code)
     EditText editUser;
@@ -90,7 +93,7 @@ public class LoginActivity extends BaseActivity {
         editPassword.setText("1001");
         editPassword.setSelection(editPassword.length());
 
-        loginAction = new LoginImp(mHandler);
+        loginAction = new LoginImp(this);
 
         closeEditTextKeyboard();
         HomeProhibit();
@@ -110,6 +113,10 @@ public class LoginActivity extends BaseActivity {
                     OnLogin();
                     break;
                 case Config.MESSAGE_INTENT:
+
+//                    Config.intValue =
+
+
                     ToastUtils.showLong("登录成功！");
                     Intent intent = new Intent();
                     intent.setClass(LoginActivity.this, MainActivity.class);
@@ -213,5 +220,29 @@ public class LoginActivity extends BaseActivity {
         Intent intent2 = new Intent("com.geenk.action.HOMEKEY_SWITCH_STATE");
         intent2.putExtra("enable", true);
         getApplicationContext().sendBroadcast(intent2);
+    }
+
+    @Override
+    public void handleResule(int flag, Object o) {
+        switch (flag){
+            case Config.MESSAGE_OK:
+                //ToastUtils.showLong("注册成功！");
+                OnLogin();
+                break;
+            case Config.MESSAGE_ERROR:
+                ToastUtils.showLong("注册失败！");
+                OnLogin();
+                break;
+            case Config.MESSAGE_INTENT:
+                LoginBeanResult mGetFlowNoBeanResult = (LoginBeanResult)o;
+                Config.intValue = mGetFlowNoBeanResult.getIntValue();
+                Config.strgrant = mGetFlowNoBeanResult.getStrgrant();
+
+                ToastUtils.showLong("登录成功！");
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

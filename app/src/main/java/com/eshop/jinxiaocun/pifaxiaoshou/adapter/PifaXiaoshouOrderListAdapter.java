@@ -1,6 +1,5 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +19,13 @@ import java.util.List;
  * 描述
  */
 
-public class PifaXiaoshouListAdapter extends BaseAdapter {
+public class PifaXiaoshouOrderListAdapter extends BaseAdapter {
 
     private List<DanJuMainBeanResultItem> listInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
 
-    public PifaXiaoshouListAdapter(List<DanJuMainBeanResultItem> listInfo) {
+    public PifaXiaoshouOrderListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -49,7 +48,7 @@ public class PifaXiaoshouListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou,parent,false);
+            convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou_order,parent,false);
         }
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
         tvTitle.setText(listInfo.get(position).Branch_No);

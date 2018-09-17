@@ -7,9 +7,8 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouListAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
@@ -35,14 +34,14 @@ import butterknife.OnClick;
  * 描述
  */
 
-public class PifaXiaoshouListActivity extends CommonBaseListActivity implements INetWorResult {
+public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
-    private PifaXiaoshouListAdapter mAdapter;
+    private PifaXiaoshouOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
 
@@ -51,7 +50,7 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_pifa_xiaoshou_list;
+        return R.layout.activity_pifa_xiaoshou_order_list;
     }
 
     @Override
@@ -85,7 +84,7 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
             }
         });
 
-        mAdapter = new PifaXiaoshouListAdapter(mListInfo);
+        mAdapter = new PifaXiaoshouOrderListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 

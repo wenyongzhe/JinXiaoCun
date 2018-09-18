@@ -30,6 +30,7 @@ public class WebConfig {
     public static final String W_PAYFLOW= "W-PayFlow";//上传付款
     public static final String R_PLU_BATCH= "R-PLU-BATCH";//获取商品批次信息
     public static final String QryPluStock= "QryPluStock";//商品库存查询
+    public static final String GetCustomerInfo= "GetCustomerInfo";//客户信息
 
 
     public static String getPosLogin() {

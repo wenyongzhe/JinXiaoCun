@@ -1,6 +1,5 @@
-package com.eshop.jinxiaocun.pifaxiaoshou.adapter;
+package com.eshop.jinxiaocun.othermodel.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
@@ -16,17 +16,17 @@ import java.util.List;
 
 /**
  * @Author Lu An
- * 创建时间  2018/9/13
+ * 创建时间  2018/9/18
  * 描述
  */
 
-public class PifaXiaoshouListAdapter extends BaseAdapter {
+public class CustomerInfoListAdapter extends BaseAdapter {
 
-    private List<DanJuMainBeanResultItem> listInfo;
+    private List<CustomerInfoBeanResult> listInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
 
-    public PifaXiaoshouListAdapter(List<DanJuMainBeanResultItem> listInfo) {
+    public CustomerInfoListAdapter(List<CustomerInfoBeanResult> listInfo) {
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -49,10 +49,16 @@ public class PifaXiaoshouListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou,parent,false);
+            convertView = inflater.inflate(R.layout.item_list_customer_info,parent,false);
         }
-        TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        tvTitle.setText(listInfo.get(position).Branch_No);
+
+        TextView tv_customer_name = ViewHolderUtils.get(convertView, R.id.tv_customer_name);
+        TextView tv_customer_id = ViewHolderUtils.get(convertView, R.id.tv_customer_id);
+        TextView tv_customer_zjm = ViewHolderUtils.get(convertView, R.id.tv_customer_zjm);
+
+        tv_customer_name.setText(listInfo.get(position).getName());
+        tv_customer_id.setText(listInfo.get(position).getId());
+        tv_customer_zjm.setText(listInfo.get(position).getZjm());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -62,7 +68,7 @@ public class PifaXiaoshouListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListInfo(List<DanJuMainBeanResultItem> listInfo) {
+    public void setListInfo(List<CustomerInfoBeanResult> listInfo) {
         this.listInfo = listInfo;
         notifyDataSetChanged();
     }

@@ -383,6 +383,7 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
                     mMinDate,
                     mMaxDate);
                 dateFragment.setTargetFragment(SlideDateTimeDialogFragment.this, 100);
+                dateFragment.mCallback = SlideDateTimeDialogFragment.this;
                 return dateFragment;
             case 1:
                 TimeFragment timeFragment = TimeFragment.newInstance(
@@ -391,7 +392,8 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
                     mCalendar.get(Calendar.MINUTE),
                     mIsClientSpecified24HourTime,
                     mIs24HourTime);
-                timeFragment.setTargetFragment(SlideDateTimeDialogFragment.this, 200);
+//                timeFragment.setTargetFragment(SlideDateTimeDialogFragment.this, 200);
+                timeFragment.mCallback = SlideDateTimeDialogFragment.this;
                 return timeFragment;
             default:
                 return null;

@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -7,9 +8,8 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouListAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
@@ -35,14 +35,14 @@ import butterknife.OnClick;
  * 描述
  */
 
-public class PifaXiaoshouListActivity extends CommonBaseListActivity implements INetWorResult {
+public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
-    private PifaXiaoshouListAdapter mAdapter;
+    private PifaXiaoshouOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
 
@@ -51,7 +51,7 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_pifa_xiaoshou_list;
+        return R.layout.activity_pifa_xiaoshou_order_list;
     }
 
     @Override
@@ -60,12 +60,12 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
 
         setTopToolBar("批发销售订单列表", R.mipmap.ic_left_light, "", 0, "");
 
-        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00");
-        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59");
+        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
+        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,150);
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);
+        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,80);// 单据状态
+        setHeaderTitle(R.id.tv_1,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);
         setHeaderTitle(R.id.tv_3,R.string.list_item_OrderDate,150);
 
@@ -85,7 +85,7 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
             }
         });
 
-        mAdapter = new PifaXiaoshouListAdapter(mListInfo);
+        mAdapter = new PifaXiaoshouOrderListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
@@ -147,12 +147,12 @@ public class PifaXiaoshouListActivity extends CommonBaseListActivity implements 
 
     @Override
     protected boolean createOrderBefore() {
-        return false;
+        return true;
     }
 
     @Override
     protected void createOrderAfter() {
-
+        startActivity(new Intent(this,PifaXiaoshouOrderScanActivity.class));
     }
 
     @Override

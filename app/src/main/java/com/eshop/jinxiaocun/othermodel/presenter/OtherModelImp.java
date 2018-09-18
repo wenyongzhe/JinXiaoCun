@@ -8,11 +8,15 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
+import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
+
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +51,23 @@ public class OtherModelImp implements IOtherModel {
     public void getGoodsPiciInfo(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GoodsPiciInterface());
+    }
+
+    @Override
+    public void getCustomerInfo(String type ,String sheetType ,String zjm,int pageIndex,int pageSize) {
+
+        CustomerInfoBean bean = new CustomerInfoBean();
+        bean.JsonData.POSId = Config.posid;
+        bean.JsonData.UserId = Config.UserId;//操作员
+        bean.JsonData.Type = type;// 1门店机构 2分部
+        bean.JsonData.BranchNo = Config.branch_no; //机构号
+        bean.JsonData.SheetType = sheetType;//单据类型
+        bean.JsonData.zjm = zjm;//助记码不生效
+        bean.JsonData.Page = pageIndex;
+        bean.JsonData.PageNum = pageSize;
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CustomerInfoInterface());
     }
 
 
@@ -102,6 +123,34 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //获取客户信息
+    class CustomerInfoInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<CustomerInfoBeanResult> resultItem=  mJsonFormatImp.JsonToList(jsonData,CustomerInfoBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultItem);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
                 e.printStackTrace();
             }
         }

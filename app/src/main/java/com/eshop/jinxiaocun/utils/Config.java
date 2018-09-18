@@ -8,6 +8,7 @@ public class Config {
 
     public static String UserCode = "";
     public static String UserName = "";
+    public static String UserId = "1001";
 
     public static String DeviceID = "";
     public static String IP="192.168.10.67";

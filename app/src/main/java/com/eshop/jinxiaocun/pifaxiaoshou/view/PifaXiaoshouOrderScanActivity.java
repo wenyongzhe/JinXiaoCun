@@ -12,6 +12,8 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
@@ -35,6 +37,8 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     @BindView(R.id.tv_pf_store)
     TextView mTvUserStore;
 
+    private CustomerInfoBeanResult mCustomerInfo;
+
     @Override
     protected int getLayoutContentId() {
         return R.layout.activity_pifa_xiaoshou_order_scan;
@@ -52,7 +56,8 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-
+                Intent intent = new Intent(PifaXiaoshouOrderScanActivity.this, SelectCustomerListActivity.class);
+                startActivityForResult(intent,2);
             }
         });
 
@@ -103,6 +108,12 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+        }
+
+        //选择的客户
+        if(requestCode == 2 && resultCode == 22){
+            mCustomerInfo = (CustomerInfoBeanResult) data.getSerializableExtra("CustomerInfo");
+            mTvUser.setText(mCustomerInfo.getName());
         }
 
 

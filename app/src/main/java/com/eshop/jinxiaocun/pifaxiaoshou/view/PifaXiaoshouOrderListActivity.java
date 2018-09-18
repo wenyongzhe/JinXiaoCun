@@ -60,8 +60,8 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
         setTopToolBar("批发销售订单列表", R.mipmap.ic_left_light, "", 0, "");
 
-        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00");
-        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59");
+        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
+        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
 
         setHeaderTitle(R.id.tv_0,R.string.list_item_Status,80);// 单据状态

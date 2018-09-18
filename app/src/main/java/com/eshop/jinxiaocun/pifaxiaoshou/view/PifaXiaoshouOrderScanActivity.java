@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,10 +15,12 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderScanAdapter;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,6 +41,10 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     TextView mTvUserStore;
 
     private CustomerInfoBeanResult mCustomerInfo;
+    private PifaXiaoshouOrderScanAdapter mAdapter;
+
+    private List<GetClassPluResult> mListDatas=new ArrayList<>();
+    private GetClassPluResult mSelectGoodsEntity;
 
     @Override
     protected int getLayoutContentId() {
@@ -50,6 +57,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
         setTopToolBar("批发订单生成", R.mipmap.ic_left_light, "", R.mipmap.add, "");
         mEtBarcode.setOnKeyListener(onKey);
+        mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
         mTvUserStore.setText("[1001]总仓库");
 
@@ -63,13 +71,13 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
         setHeaderTitle(R.id.tv_0,R.string.list_item_ProdName,150);//商品名称
         setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
-        setHeaderTitle(R.id.tv_2,R.string.list_item_Spec,100);//规格
+        setHeaderTitle(R.id.tv_2,R.string.list_item_Amount,100);//金额
         setHeaderTitle(R.id.tv_3,R.string.list_item_Price,100);//价格
-        setHeaderTitle(R.id.tv_4,R.string.list_item_XSPrice,100);//销售价格
-        setHeaderTitle(R.id.tv_5,R.string.list_item_Unit,80);//单位
-        setHeaderTitle(R.id.tv_6,R.string.list_item_StoreNum,100);//库存数量
-        setHeaderTitle(R.id.tv_7,R.string.list_item_CountN4,100);//盘点数量
+        setHeaderTitle(R.id.tv_4,R.string.list_item_CountN5,100);//数量
 
+        mAdapter = new PifaXiaoshouOrderScanAdapter(mListDatas);
+        mListView.setOnItemClickListener(this);
+        mListView.setAdapter(mAdapter);
 
     }
 
@@ -98,6 +106,14 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     }
 
     @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        super.onItemClick(parent, view, position, id);
+        mSelectGoodsEntity = mListDatas.get(position);
+        mAdapter.setItemClickPosition(position);
+        mAdapter.notifyDataSetInvalidated();
+    }
+
+    @Override
     public void handleResule(int flag, Object o) {
 
     }
@@ -108,6 +124,8 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+            mListDatas.addAll(selectGoodsList);
+            mAdapter.setListInfo(mListDatas);
         }
 
         //选择的客户

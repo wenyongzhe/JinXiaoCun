@@ -39,6 +39,13 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected Button mBtnDelete;
     @BindView(R.id.btn_modify_count)
     protected Button mBtnModifyCount;
+    @BindView(R.id.ll_scan_bottom_zsl_zje)
+    protected LinearLayout mLayoutScanBottomZslZje;
+    @BindView(R.id.tv_ZSL)
+    TextView mTvZsl;//总数量
+    @BindView(R.id.tv_ZJE)
+    TextView mTvZje;//总金额
+
 
     protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();

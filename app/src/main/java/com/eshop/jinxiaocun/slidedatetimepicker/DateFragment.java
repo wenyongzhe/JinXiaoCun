@@ -33,7 +33,7 @@ public class DateFragment extends Fragment
         void onDateChanged(int year, int month, int day);
     }
 
-    private DateChangedListener mCallback;
+    public DateChangedListener mCallback;
     private CustomDatePicker mDatePicker;
 
     public DateFragment()
@@ -50,15 +50,15 @@ public class DateFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        try
-        {
-            mCallback = (DateChangedListener) getTargetFragment();
-        }
-        catch (ClassCastException e)
-        {
-            throw new ClassCastException("Calling fragment must implement " +
-                "DateFragment.DateChangedListener interface");
-        }
+//        try
+//        {
+//            mCallback = (DateChangedListener) getTargetFragment();
+//        }
+//        catch (ClassCastException e)
+//        {
+//            throw new ClassCastException("Calling fragment must implement " +
+//                "DateFragment.DateChangedListener interface");
+//        }
     }
 
     /**

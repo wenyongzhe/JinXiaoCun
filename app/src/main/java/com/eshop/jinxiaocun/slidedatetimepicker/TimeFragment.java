@@ -36,7 +36,7 @@ public class TimeFragment extends Fragment
         void onTimeChanged(int hour, int minute);
     }
 
-    private TimeChangedListener mCallback;
+    public TimeChangedListener mCallback;
     private TimePicker mTimePicker;
 
     public TimeFragment()
@@ -53,15 +53,15 @@ public class TimeFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        try
-        {
-            mCallback = (TimeChangedListener) getTargetFragment();
-        }
-        catch (ClassCastException e)
-        {
-            throw new ClassCastException("Calling fragment must implement " +
-                "TimeFragment.TimeChangedListener interface");
-        }
+//        try
+//        {
+//            mCallback = (TimeChangedListener) getTargetFragment();
+//        }
+//        catch (ClassCastException e)
+//        {
+//            throw new ClassCastException("Calling fragment must implement " +
+//                "TimeFragment.TimeChangedListener interface");
+//        }
     }
 
     /**

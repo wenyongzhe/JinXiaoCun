@@ -151,16 +151,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
         setHeaderTitle(R.id.tv_4, R.string.list_item_Price, 100);
 
-        List<String> list = new ArrayList<>();
-        list.add("正品");
-        list.add("赠品");
-        list.add("促销品");
-        list.add("不良品");
-        ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(LingShouScanActivity.this, R.layout.my_simple_spinner_item, list);
-        mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
-        /*mSpinner1.setAdapter(mTuiHupoAdapter);
-        mSpinner2.setAdapter(mTuiHupoAdapter);
-        mSpinner3.setAdapter(mTuiHupoAdapter);*/
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
         mScanAdapter.notifyDataSetChanged();
@@ -206,7 +196,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELL_SUB:
                 ToastUtils.showShort(R.string.message_sell_ok);
-                finish();
                 break;
 
 

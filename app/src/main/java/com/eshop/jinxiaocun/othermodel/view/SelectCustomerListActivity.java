@@ -1,6 +1,10 @@
 package com.eshop.jinxiaocun.othermodel.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.BarcodeScan;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,6 +35,7 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     private List<CustomerInfoBeanResult> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
 
+    protected BarcodeScan mBarcodeScan;//扫描控制
     private int mPageIndex = 1;
     private int mPageSize = 20;
 
@@ -75,22 +80,51 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     @Override
     protected void initData() {
         super.initData();
+        IntentFilter scanDataIntentFilter = new IntentFilter();
+        scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
+        registerReceiver(mScanDataReceiver, scanDataIntentFilter);
+        try {
+            mBarcodeScan = new BarcodeScan(this);
+            mBarcodeScan.open();
+        }catch (Exception e){
+
+        }
         mServerApi = new OtherModelImp(this);
         getCustomerInfo("1","","",mPageIndex,mPageSize);
+
     }
     //手动输入条码事件
     View.OnKeyListener onKey= new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_UP){
-                getCustomerInfo("1","",
-                        TextUtils.isEmpty(mEtBarcode.getText().toString().trim())?"":mEtBarcode.getText().toString().trim()
-                        ,mPageIndex,mPageSize);
+                scanResultData(mEtBarcode.getText().toString().trim());
                 return true;
             }
             return false;
         }
     };
+
+    /*
+     *扫描返回数据
+     */
+    private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            if (action.equals("ACTION_BAR_SCAN")) {
+                String str = intent.getStringExtra("EXTRA_SCAN_DATA");
+                scanResultData(str);
+            }
+        }
+    };
+
+    private void scanResultData (String zjm){
+        mPageIndex = 1;
+        getCustomerInfo("1","",TextUtils.isEmpty(zjm)?"":zjm,mPageIndex,mPageSize);
+    }
     private void getCustomerInfo(String type ,String sheetType ,String zjm,int pageIndex,int pageSize) {
         mServerApi.getCustomerInfo(type,sheetType,zjm,pageIndex,pageSize);
     }
@@ -161,5 +195,14 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     @Override
     protected void uploadAfter() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mBarcodeScan!=null){
+            mBarcodeScan.close();
+        }
+        unregisterReceiver(mScanDataReceiver);
     }
 }

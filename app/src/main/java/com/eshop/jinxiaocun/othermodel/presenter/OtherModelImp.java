@@ -70,6 +70,19 @@ public class OtherModelImp implements IOtherModel {
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CustomerInfoInterface());
     }
 
+    //上传单据主表信息
+    @Override
+    public void uploadDanjuMainInfo(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UploadDanjuMianInterface());
+    }
+
+    @Override
+    public void uploadDanjuDetailInfo(BaseBean bean) {
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UploadDanjuDetailInterface());
+    }
+
 
     //获取业务单据号
     class SheetNoInterface implements IResponseListener {
@@ -151,6 +164,60 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //上传单据主表
+    class UploadDanjuMianInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_SUCCESS,"上传单据主表成功!");
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //上传盘点明细
+    class UploadDanjuDetailInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_RESULT_SUCCESS,"单据明细成功!");
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
                 e.printStackTrace();
             }
         }

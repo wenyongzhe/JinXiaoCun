@@ -15,5 +15,9 @@ public interface IOtherModel {
     void getGoodsPiciInfo(BaseBean bean);
     //获取客户信息
     void getCustomerInfo(String type ,String sheetType ,String zjm,int pageIndex,int pageSize);
+    //上传单据主表信息
+    void uploadDanjuMainInfo(BaseBean bean);
+    //上传单据明细信息
+    void uploadDanjuDetailInfo(BaseBean bean);
 
 }

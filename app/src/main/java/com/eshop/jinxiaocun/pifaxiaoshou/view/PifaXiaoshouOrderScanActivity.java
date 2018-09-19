@@ -13,15 +13,27 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
+import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuDetailBean;
+import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderScanAdapter;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -40,11 +52,15 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     @BindView(R.id.tv_pf_store)
     TextView mTvUserStore;
 
+    private IOtherModel mOtherApi;
+    private ILingshouScan mQueryGoodsApi;
+
     private CustomerInfoBeanResult mCustomerInfo;
     private PifaXiaoshouOrderScanAdapter mAdapter;
 
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
     private GetClassPluResult mSelectGoodsEntity;
+    private String mStr_OrderNo;//批发订单单据号
 
     @Override
     protected int getLayoutContentId() {
@@ -84,6 +100,10 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     @Override
     protected void initData() {
         super.initData();
+
+        mOtherApi = new OtherModelImp(this);
+        mQueryGoodsApi = new LingShouScanImp(this);
+
     }
 
     //手动输入条码事件
@@ -113,9 +133,119 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
         mAdapter.notifyDataSetInvalidated();
     }
 
+    private void addGoodsData(GetClassPluResult scanOrSelectGoods){
+        if(scanOrSelectGoods !=null){
+
+            boolean isSame = false;
+            for (int i = 0; i < mListDatas.size(); i++) {
+                if(mListDatas.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())){
+                    //已经存在自动+1
+                    int pdNumber = MyUtils.convertToInt(mListDatas.get(i).getSale_qnty(),1)+1;
+                    mListDatas.get(i).setSale_qnty(pdNumber+"");
+                    isSame = true;
+                    break;
+                }
+            }
+            if(!isSame){//已经存在直接刷新
+                mListDatas.add(scanOrSelectGoods);
+            }
+            mAdapter.setListInfo(mListDatas);
+            upDateUI();
+        }
+    }
+
+    private void upDateUI(){
+        int zsl = 0;
+        float zje = 0f;
+        for (GetClassPluResult data : mListDatas) {
+            zsl += MyUtils.convertToInt(data.getSale_qnty(),0);
+            zje += MyUtils.convertToFloat(data.getSale_qnty(),0)*
+                    MyUtils.convertToFloat(data.getBase_price(),0);
+        }
+
+        mTvZsl.setText(zsl+"");
+        mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
+    }
+
+    //上传记录头数据（即上传主表信息）
+    private void uploadRecordHeadData(){
+        UploadDanjuMainBean bean = new UploadDanjuMainBean();
+        bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
+        bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
+        bean.JsonData.T_Branch_No = mCustomerInfo.getId();//对方门店/仓库
+        bean.JsonData.USER_ID = Config.UserId;//用户ID
+        bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期
+        mOtherApi.uploadDanjuMainInfo(bean);
+    }
+
+    //上传批发商品明细数据
+    private void uploadGoodDetailData(){
+        List<UploadDanjuDetailBean.UploadDanjuDetail> jsonData = new ArrayList<>();
+        for (GetClassPluResult data : mListDatas) {
+            UploadDanjuDetailBean.UploadDanjuDetail obj = new UploadDanjuDetailBean.UploadDanjuDetail();
+            obj.POSID = Config.posid;
+            obj.BillNo = mStr_OrderNo;//单据号
+            obj.BarCode = data.getItem_no();//编码
+            obj.Name = data.getItem_name();//名称
+            obj.Unit = data.getUnit_no();//单位
+            obj.CheckNum = MyUtils.convertToInt(data.getSale_qnty(),0);//数量
+            obj.StockNum = MyUtils.convertToInt(data.getStock_qty(),0);//库存数量
+            obj.BuyPrice = MyUtils.convertToFloat(data.getPrice(),0f);//进价
+            obj.SalePrice = MyUtils.convertToFloat(data.getSale_price(),0f);//销价
+            obj.sub_amt = obj.CheckNum*obj.SalePrice;//金额
+            obj.MadeDate = data.getProduce_date();//生产日期
+            obj.VaildDate = data.getValid_date();//有效日期
+            obj.Enable_batch = MyUtils.convertToInt(data.getEnable_batch(),0);
+            jsonData.add(obj);
+        }
+
+        UploadDanjuDetailBean bean = new UploadDanjuDetailBean();
+        bean.JsonData = jsonData;
+        mOtherApi.uploadDanjuDetailInfo(bean);
+
+    }
+
     @Override
     public void handleResule(int flag, Object o) {
-
+        switch (flag){
+            //业务单据号
+            case Config.MESSAGE_SHEETNO_OK:
+                SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
+                mStr_OrderNo =sheetNoBeanResult.getSheetno();
+                if(mStr_OrderNo !=null && !TextUtils.isEmpty(mStr_OrderNo) ){
+                    addAfter();//去上传主表信息
+                }
+                break;
+            case Config.MESSAGE_SHEETNO_ERROR:
+                AlertUtil.showToast("获取业务单据号失败："+o.toString());
+                break;
+            //扫描时返回搜索的数据
+            case Config.MESSAGE_GOODS_INFOR:
+                mEtBarcode.requestFocus();
+                mEtBarcode.setFocusable(true);
+                mEtBarcode.setText("");
+                List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
+                if(goodsData !=null && goodsData.size()>0){
+                    //第一条数据 （精准查询接口的）
+                    addGoodsData(goodsData.get(0));
+                }
+                break;
+            //上传单据主表 成功
+            case Config.MESSAGE_SUCCESS:
+                AlertUtil.showToast(o.toString());
+                uploadGoodDetailData();// 上传批发商品明细
+                break;
+            // 上传单据明细 成功
+            case Config.MESSAGE_RESULT_SUCCESS:
+                AlertUtil.showToast(o.toString());
+                setResult(22);
+                finish();
+                break;
+            //上传单据主表或上传单据明细  失败
+            case Config.MESSAGE_FAIL:
+                AlertUtil.showToast(o.toString());
+                break;
+        }
     }
 
     @Override
@@ -124,8 +254,9 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-            mListDatas.addAll(selectGoodsList);
-            mAdapter.setListInfo(mListDatas);
+            if(selectGoodsList !=null && selectGoodsList.size()>0){
+                addGoodsData(selectGoodsList.get(0));
+            }
         }
 
         //选择的客户
@@ -134,6 +265,18 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
             mTvUser.setText(mCustomerInfo.getName());
         }
 
+        //修改数量
+        if(requestCode == 22 && resultCode == RESULT_OK){
+            String countN = data.getStringExtra("countN");
+            for (int i = 0; i < mListDatas.size(); i++) {
+                if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+                    mListDatas.get(i).setSale_qnty(countN);
+                    mAdapter.setListInfo(mListDatas);
+                    upDateUI();
+                    break;
+                }
+            }
+        }
 
     }
 
@@ -144,12 +287,19 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
     @Override
     protected void scanResultData(String barcode) {
-
+        if(!TextUtils.isEmpty(barcode)){
+            //精准查询接口的
+            mQueryGoodsApi.getPLUInfo(barcode);
+        }
     }
 
     //保存前
     @Override
     protected boolean addBefore() {
+        if(mListDatas.size()==0){
+            AlertUtil.showToast("请添加商品，再保存!");
+            return false;
+        }
         if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
             AlertUtil.showToast("请选择客户，再保存!");
             return false;
@@ -159,27 +309,69 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
     @Override
     protected void addAfter() {
-
+//        在上传保存前，获取批发订单单据号
+        if(TextUtils.isEmpty(mStr_OrderNo)){
+            SheetNoBean bean = new SheetNoBean();
+            bean.JsonData.trans_no = Config.YwType.SS.toString();
+            bean.JsonData.branch_no=Config.branch_no;
+            mOtherApi.getSheetNoData(bean);
+        }else{
+            uploadRecordHeadData();
+        }
     }
 
     @Override
     protected boolean deleteBefore() {
-        return false;
+        if(mListDatas ==null || mListDatas.size()==0){
+            AlertUtil.showToast("没有批发商品，不能做删除操作!");
+            return false;
+        }
+        if(mSelectGoodsEntity ==null){
+            AlertUtil.showToast("请选择要删除的商品!");
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void deleteAfter() {
-
+        for (int i = 0; i < mListDatas.size(); i++) {
+            if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+                mSelectGoodsEntity = null;
+                mListDatas.remove(i);
+                mAdapter.setItemClickPosition(-1);
+                mAdapter.setListInfo(mListDatas);
+                upDateUI();
+                break;
+            }
+        }
     }
 
     @Override
     protected boolean modifyCountBefore() {
-        return false;
+        if(mListDatas ==null || mListDatas.size()==0){
+            AlertUtil.showToast("没有批发商品，不能做改数操作!");
+            return false;
+        }
+        if(mSelectGoodsEntity ==null){
+            AlertUtil.showToast("请选择要改数的商品!");
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void modifyCountAfter() {
+        Intent intent = new Intent();
+        intent.putExtra("countN", mSelectGoodsEntity.getSale_qnty()+"");
+        intent.setClass(this, ModifyCountDialog.class);
+        startActivityForResult(intent, 22);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mListDatas.clear();
     }
 
 }

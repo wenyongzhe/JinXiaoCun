@@ -82,7 +82,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private PandianDetailBeanResult mSelectPandianDetailEntity = null;
     private boolean isDianpin=false;//true为单品盘点
-    private boolean isSure = false;//true为继续保存
 
     @Override
     protected int getLayoutContentId() {
@@ -363,7 +362,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     protected void scanResultData(String barcode) {
         if(!TextUtils.isEmpty(barcode)){
-            //到时候要换成精准查询接口的
+            //精准查询接口的
             mQueryGoodsApi.getPLUInfo(barcode);
         }
     }
@@ -372,7 +371,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected boolean addBefore() {
 
         if(mAddPandianGoodsDetailData ==null || mAddPandianGoodsDetailData.size()==0){
-            Toast.makeText(PandianScanActivity.this,"请扫描/添加盘点商品，再保存!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("请扫描/添加盘点商品，再保存!");
             return false;
         }
 
@@ -414,12 +413,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     protected boolean deleteBefore() {
         if(mAddPandianGoodsDetailData ==null || mAddPandianGoodsDetailData.size()==0){
-            Toast.makeText(PandianScanActivity.this,"没有盘点商品，不能做删除操作!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("没有盘点商品，不能做删除操作!");
             return false;
         }
 
         if(mSelectPandianDetailEntity ==null){
-            Toast.makeText(PandianScanActivity.this,"请选择要删除的商品!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("请选择要删除的商品!");
             return false;
         }
         return true;
@@ -442,12 +441,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     protected boolean modifyCountBefore() {
         if(mAddPandianGoodsDetailData ==null || mAddPandianGoodsDetailData.size()==0){
-            Toast.makeText(PandianScanActivity.this,"没有盘点商品，不能做改数操作!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("没有盘点商品，不能做改数操作!");
             return false;
         }
 
         if(mSelectPandianDetailEntity ==null){
-            Toast.makeText(PandianScanActivity.this,"请选择要改数的商品!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("请选择要改数的商品!");
             return false;
         }
         return true;
@@ -492,7 +491,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mEtBarcode.setText("");
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
-                    //模糊查询 取第一条数据 （到时候要换成精准查询接口的）
+                    //取第一条数据 （精准查询接口的）
                     addGoodsData(goodsData.get(0));
                 }
                 break;

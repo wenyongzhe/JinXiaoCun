@@ -63,7 +63,7 @@ public class PandianImp implements IPandian {
     @Override
     public void getPandianPihaoCreateData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianImp.PandianPihaoCreateInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new PandianImp.PandianPihaoCreateInterface());
     }
 
     @Override
@@ -81,13 +81,13 @@ public class PandianImp implements IPandian {
     @Override
     public void uploadPandianRecordHeadData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianImp.UploadPandianRecordHeadInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new PandianImp.UploadPandianRecordHeadInterface());
     }
 
     @Override
     public void uploadPandianDetailData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new PandianImp.UploadPandianDetailInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new PandianImp.UploadPandianDetailInterface());
     }
 
     //取盘点范围

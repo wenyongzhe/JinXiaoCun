@@ -13,6 +13,8 @@ public class WebConfig {
     public static final String GetPLULikeInfo = "GetPLULikeInfo";//模糊查询商品信息
     public static final String QrySheetHead = "QrySheetHead";//单据主表查询
     public static final String QrySheetDetail= "QrySheetHead";//单据明细查询;
+    public static final String SaveSheetHead = "SaveSheetHead";//上传单据主表
+    public static final String SaveSheetDetail = "SaveSheetDetail";//上传单据明细
     public static final String GetFlowNo = "GetFlowNo";
     public static final String GetPluPrice = "GetPluPrice";//销售商品取价
     public static final String R_PD_RANGE = "R-PD-RANGE";//取盘点范围

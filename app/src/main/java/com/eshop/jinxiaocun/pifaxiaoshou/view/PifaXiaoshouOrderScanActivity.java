@@ -171,6 +171,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     private void uploadRecordHeadData(){
         UploadDanjuMainBean bean = new UploadDanjuMainBean();
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
+        bean.JsonData.SheetType = Config.YwType.SS.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
         bean.JsonData.T_Branch_No = mCustomerInfo.getId();//对方门店/仓库
         bean.JsonData.USER_ID = Config.UserId;//用户ID
@@ -195,7 +196,8 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
             obj.sub_amt = obj.CheckNum*obj.SalePrice;//金额
             obj.MadeDate = data.getProduce_date();//生产日期
             obj.VaildDate = data.getValid_date();//有效日期
-            obj.Enable_batch = MyUtils.convertToInt(data.getEnable_batch(),0);
+            obj.Enable_batch = data.getEnable_batch();
+            obj.EndFlag = "y";
             jsonData.add(obj);
         }
 

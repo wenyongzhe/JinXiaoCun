@@ -39,8 +39,8 @@ public class UploadDanjuDetailBean extends BaseBean {
         public String GoodsSeat = "";       //货架号
         public String MadeDate = "";//生产日期
         public String VaildDate = "";   //有效日期
-        public int Enable_batch = 0;
-        public int EndFlag = 0;
+        public String Enable_batch = "";//是否为批次商品
+        public String EndFlag = "y";
     }
 
 }

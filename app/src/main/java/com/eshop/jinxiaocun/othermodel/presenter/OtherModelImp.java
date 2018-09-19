@@ -196,7 +196,7 @@ public class OtherModelImp implements IOtherModel {
         }
     }
 
-    //上传盘点明细
+    //上传单据明细
     class UploadDanjuDetailInterface implements IResponseListener {
 
         @Override

@@ -382,7 +382,7 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
                     mCalendar.get(Calendar.DAY_OF_MONTH),
                     mMinDate,
                     mMaxDate);
-                dateFragment.setTargetFragment(SlideDateTimeDialogFragment.this, 100);
+//                dateFragment.setTargetFragment(SlideDateTimeDialogFragment.this, 100);
                 dateFragment.mCallback = SlideDateTimeDialogFragment.this;
                 return dateFragment;
             case 1:

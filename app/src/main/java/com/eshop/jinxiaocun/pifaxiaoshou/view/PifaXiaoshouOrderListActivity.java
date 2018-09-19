@@ -102,12 +102,12 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.POSID = Config.posid;
-        mDanJuMainBean.JsonData.UserId = "1001";
+        mDanJuMainBean.JsonData.UserId = Config.UserId;
         mDanJuMainBean.JsonData.SheetType = Config.YwType.SS.toString();//单据类型
         mDanJuMainBean.JsonData.Oper_ID = Config.posid;//操作员ID
-        mDanJuMainBean.JsonData.BeginTime = "2018/09/03";
-        mDanJuMainBean.JsonData.EndTime = "2018/09/13";
-        mDanJuMainBean.JsonData.CheckFlag = "1";//审核标志
+        mDanJuMainBean.JsonData.BeginTime = mTvStartDate.getText().toString();
+        mDanJuMainBean.JsonData.EndTime = mTvEndDate.getText().toString();
+        mDanJuMainBean.JsonData.CheckFlag = "0";//审核标志
         mDanJuMainBean.JsonData.PageNum = mPageSize;
         mDanJuMainBean.JsonData.Page = mPageIndex;
         mDanJuList.getDanJuList(mDanJuMainBean);
@@ -138,6 +138,30 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = format.format(calendar.getTime());
             mTvStartDate.setText(strDate);
+        }
+        @Override
+        public void onDateTimeCancel() {
+
+        }
+    };
+
+    @OnClick(R.id.dt_endDate)
+    void OnEndDate(){
+        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
+                .setListener(listenerEnd)
+                .setInitialDate(new Date())
+                .build()
+                .show();
+    }
+
+    private SlideDateTimeListener listenerEnd = new SlideDateTimeListener() {
+        @Override
+        public void onDateTimeSet(Date date) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = format.format(calendar.getTime());
+            mTvEndDate.setText(strDate);
         }
         @Override
         public void onDateTimeCancel() {

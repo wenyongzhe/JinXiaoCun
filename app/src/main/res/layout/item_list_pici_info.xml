@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="批次号:" />
+        <TextView
+            android:id="@+id/tv_pici_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="生产日期:" />
+        <TextView
+            android:id="@+id/tv_sc_Date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有效日期:" />
+        <TextView
+            android:id="@+id/tv_yx_Date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="数  量:" />
+        <TextView
+            android:id="@+id/tv_product_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

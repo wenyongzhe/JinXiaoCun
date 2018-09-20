@@ -1,12 +1,14 @@
 package com.eshop.jinxiaocun.othermodel.bean;
 
+import java.io.Serializable;
+
 /**
  * @Author Lu An
  * 创建时间  2018/9/12 0012
  * 描述
  */
 
-public class GoodsPiciInfoBeanResult {
+public class GoodsPiciInfoBeanResult implements Serializable {
 
     private String item_barcode;// 批次号
     private String produce_date; //生产日期

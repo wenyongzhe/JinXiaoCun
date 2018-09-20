@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/white"
+    >
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:divider="@color/divider"
+        android:dividerHeight="1dip"
+        android:listSelector="#00000000"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textSize="@dimen/txt_size18"
+        android:layout_marginTop="10dp"
+        android:text="可手动输入批次号" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/TextView_Grey"
+            android:paddingRight="10dp"
+            android:text="批次号" />
+
+        <EditText
+            android:id="@+id/et_pici"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:imeOptions="actionSend"
+            style="@style/EditText_Grey_Border"
+            android:gravity="left|center_vertical"
+            android:hint="请输入批次"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="生产日期：" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/dt_startDate"
+            style="@style/TextView_DateTime"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有期日期：" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/dt_endDate"
+            style="@style/TextView_DateTime"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_sure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Button_dark"
+        android:layout_margin="10dp"
+        android:text="确定"
+        />
+
+
+
+</LinearLayout>

@@ -26,7 +26,15 @@
 
             <TextView
                 android:id="@+id/tv_product_code"
-                style="@style/TextView_Grey"
+                style="@style/AutoScrollTextView"
+                android:layout_width="150dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_product_pici"
+                style="@style/AutoScrollTextView"
                 android:layout_width="150dip"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -65,22 +73,6 @@
                 android:gravity="center"
                 android:maxLines="1" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_store_name"-->
-                <!--style="@style/TextView_Grey"-->
-                <!--android:layout_width="150dip"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:gravity="center"-->
-                <!--android:maxLines="1" />-->
-
-            <TextView
-                android:id="@+id/tv_store_num"
-                style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
             <TextView
                 android:id="@+id/tv_pd_number"
                 style="@style/TextView_Grey"
@@ -88,16 +80,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:maxLines="1" />
-
-            <!--<TextView-->
-                <!--android:id="@+id/tv_diff_number"-->
-                <!--style="@style/TextView_Grey"-->
-                <!--android:layout_width="100dip"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:gravity="center"-->
-                <!--android:maxLines="1" />-->
-
-
 
         </LinearLayout>
     </LinearLayout>

@@ -43,6 +43,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPiciDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -389,42 +390,23 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             obj.setValid_date(piciInfo.getValid_date());
             obj.setItem_barcode(piciInfo.getItem_barcode());//批次号
 
-//            if(isBelongToPiciPandian){
-                boolean isSame = false;
-                for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                    if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(obj.getItem_no())
-                            && mAddPandianGoodsDetailData.get(i).getItem_barcode().equals(obj.getItem_barcode())
-                            ){
-                        //已经存在自动+1
-                        int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
-                        mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
-                        isSame = true;
-                        break;
-                    }
+            boolean isSame = false;
+            for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
+                if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(obj.getItem_no())
+                        && mAddPandianGoodsDetailData.get(i).getItem_barcode().equals(obj.getItem_barcode())
+                        ){
+                    //已经存在自动+1
+                    int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
+                    mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
+                    isSame = true;
+                    break;
                 }
-                if(!isSame){//不存在列表中 添加到列表里
-                    mAddPandianGoodsDetailData.add(obj);
-                }
-                mAdapter.setListInfo(mAddPandianGoodsDetailData);
-//            }else {
-//                //本商品批次不在盘点单中
-//                boolean isSame = false;
-//                for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-//                    if (mAddPandianGoodsDetailData.get(i).getItem_no().equals(mScanOrSelectGoods.getItem_no())
-//                            && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
-//                            ) {
-//                        //已经存在自动+1
-//                        int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty() + 1;
-//                        mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
-//                        isSame = true;
-//                        break;
-//                    }
-//                }
-//                if (!isSame) {//不存在列表中 添加到列表里
-//                    mAddPandianGoodsDetailData.add(obj);
-//                }
-//                mAdapter.setListInfo(mAddPandianGoodsDetailData);
-//            }
+            }
+            if(!isSame){//不存在列表中 添加到列表里
+                mAddPandianGoodsDetailData.add(obj);
+            }
+            mAdapter.setListInfo(mAddPandianGoodsDetailData);
+
 
         }else{
             AlertUtil.showToast("不在盘点范围!");
@@ -568,13 +550,20 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mEtBarcode.setText("");
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
-                    //取第一条数据 （精准查询接口的）
-                    if(isDianpin){//单品盘点
-                        addDianpinGoodsData(goodsData.get(0));
+                    if(goodsData.size()==1){
+                        //精准查询接口的  可能有多条数据
+                        if(isDianpin){//单品盘点
+                            addDianpinGoodsData(goodsData.get(0));
+                        }else{
+                            addNoDianpinGoodsData(goodsData.get(0));
+                        }
                     }else{
-                        addNoDianpinGoodsData(goodsData.get(0));
+                        Intent intent = new Intent(PandianScanActivity.this,SelectPandianGoodsListActivity.class);
+                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
+                        startActivityForResult(intent,44);
                     }
-
+                }else{
+                    AlertUtil.showToast("该条码没有对应的商品数据!");
                 }
                 break;
             case Config.MESSAGE_GOODS_INFOR_FAIL:
@@ -619,12 +608,23 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-            if(isDianpin){
-                //单品盘点
-                addDianpinGoodsData(selectGoodsList.get(0));
+            if(selectGoodsList !=null && selectGoodsList.size()>0){
+                if(selectGoodsList.size()==1){
+                    if(isDianpin){//单品盘点
+                        addDianpinGoodsData(selectGoodsList.get(0));
+                    }else{
+                        addNoDianpinGoodsData(selectGoodsList.get(0));
+                    }
+                }else{
+                    Intent intent = new Intent(PandianScanActivity.this,SelectPandianGoodsListActivity.class);
+                    intent.putExtra("GoodsInfoList", (Serializable) selectGoodsList);
+                    startActivityForResult(intent,44);
+                }
+
             }else{
-                addNoDianpinGoodsData(selectGoodsList.get(0));
+                AlertUtil.showToast("该条码没有对应的商品数据!");
             }
+
         }
 
         //选择批次信息
@@ -654,11 +654,27 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }
             }
         }
+
+        //搜索返回多条数据 ，选择其中一条
+        if(requestCode == 44 && resultCode == RESULT_OK){
+            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+            if(isDianpin){//单品盘点
+                addDianpinGoodsData(entity);
+            }else{
+                addNoDianpinGoodsData(entity);
+            }
+        }
+
+        if(requestCode == 44 && resultCode == RESULT_CANCELED){
+            AlertUtil.showToast("放弃盘点该商品!");
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mAddPandianGoodsDetailData.clear();
+        mPandianDetailData.clear();
     }
 }

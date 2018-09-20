@@ -130,6 +130,11 @@
         <activity android:name=".othermodel.view.SelectPiciInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".piandian.view.SelectPandianGoodsListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

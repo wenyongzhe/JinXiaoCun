@@ -196,6 +196,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELL_SUB:
                 ToastUtils.showShort(R.string.message_sell_ok);
+                finish();
                 break;
 
 

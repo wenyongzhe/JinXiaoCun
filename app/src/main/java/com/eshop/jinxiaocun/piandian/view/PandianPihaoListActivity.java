@@ -123,11 +123,11 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
     private void getPandianPihaoHuoqu(){
         PandianPihaoHuoquBean bean = new PandianPihaoHuoquBean();
         bean.JsonData.sheet_no="%";//获取所有可填%
-        bean.JsonData.trans_no="PD";//单据标识
+        bean.JsonData.trans_no=Config.YwType.PD.toString();//单据标识
         bean.JsonData.PerNum=pageSize;//每页显示数量
         bean.JsonData.PageNum=pageIndex;//页码
         bean.JsonData.approveflag="0"; //审核标识  只取已审核的数据 (1代表已审核,0代表未审核)
-        bean.JsonData.branch_no="0001"; //机构号(保留)
+        bean.JsonData.branch_no=Config.branch_no; //机构号(保留)
         mServerApi.getPandianPihaoHuoqu(bean);
 
     }

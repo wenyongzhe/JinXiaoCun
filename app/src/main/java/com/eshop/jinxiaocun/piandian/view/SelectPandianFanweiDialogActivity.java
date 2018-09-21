@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -20,6 +19,7 @@ import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
                 mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_ERROR:
-                Toast.makeText(SelectPandianFanweiDialogActivity.this,"获取盘点范围错误: "+o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast("获取盘点范围错误: "+o.toString());
                 break;
         }
     }

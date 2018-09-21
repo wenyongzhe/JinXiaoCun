@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -20,6 +19,7 @@ import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,8 +92,8 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
     //取盘点类别数据
     private void getPandianLeibieData(){
         PandianLeibieBean bean = new PandianLeibieBean();
-        bean.JsonData.as_branchNo="";//门店号
-        bean.JsonData.as_posId="";//pos id
+        bean.JsonData.as_branchNo=Config.branch_no;//门店号
+        bean.JsonData.as_posId=Config.posid;//pos id
         bean.JsonData.as_type = mAsType;//'1'类别 '0' 品牌
         bean.JsonData.as_clsorbrno="";//指定的类型或者品牌
         mServerApi.getPandianTypeData(bean);
@@ -118,7 +118,7 @@ public class SelectPandianTypeDialogActivity extends Activity implements INetWor
                 mAdapter.setData(listData);
                 break;
             case Config.MESSAGE_PANDIANLEIBIE_ERROR:
-                Toast.makeText(SelectPandianTypeDialogActivity.this,"获取盘点类别错误: "+o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast("获取盘点类别错误: "+o.toString());
                 break;
         }
     }

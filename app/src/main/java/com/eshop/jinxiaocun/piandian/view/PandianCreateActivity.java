@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianStoreJigouBean;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
 import butterknife.BindView;
@@ -71,7 +72,7 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
     @OnClick(R.id.btn_pd_next)
     public void onClickNext(View v){
         if(TextUtils.isEmpty(mTvPandianpihao.getText().toString())){
-            Toast.makeText(PandianCreateActivity.this,"盘点批号不能为空！",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("盘点批号不能为空！");
             return;
         }
 

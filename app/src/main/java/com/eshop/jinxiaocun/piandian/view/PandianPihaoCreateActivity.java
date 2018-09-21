@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -21,6 +20,7 @@ import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 
 import butterknife.BindView;
@@ -72,34 +72,34 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
     private void getPandianPihaoCreateData(){
 
         if(isApplySuccess){
-            Toast.makeText(this,"盘点批号申请成功，不能重复申请!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("盘点批号申请成功，不能重复申请!");
             return;
         }
 
         if(mSelectPandianFanweiBeanEntity == null){
-            Toast.makeText(this,"请选择盘点范围!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("请选择盘点范围!");
             return;
         }else {
             if (mSelectPandianFanweiBeanEntity.getType_name().contains("类别") || mSelectPandianFanweiBeanEntity.getType_name().contains("品牌")) {
                 if(mSelectPandianLeibieBeanEntity == null){
-                    Toast.makeText(this,"请选择类别品牌!",Toast.LENGTH_SHORT).show();
+                    AlertUtil.showToast("请选择类别品牌!");
                     return;
                 }
             }
         }
 
         if(TextUtils.isEmpty(mTvStoreNo.getText().toString())){
-            Toast.makeText(this,"门店号不能为空!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("门店号不能为空!");
             return;
         }
 
         if(TextUtils.isEmpty(mTvDianjuhao.getText().toString())){
-            Toast.makeText(this,"单据号不能为空!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("单据号不能为空!");
             return;
         }
 
         if(TextUtils.isEmpty(mTvOperId.getText().toString())){
-            Toast.makeText(this,"操作员ID不能为空!",Toast.LENGTH_SHORT).show();
+            AlertUtil.showToast("操作员ID不能为空!");
             return;
         }
 
@@ -186,17 +186,17 @@ public class PandianPihaoCreateActivity extends CommonBaseActivity implements IN
                 mTvDianjuhao.setText(sheetNoBeanResult.getSheetno());
                 break;
             case Config.MESSAGE_SHEETNO_ERROR:
-                Toast.makeText(PandianPihaoCreateActivity.this,"获取业务单据号失败："+o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
             //盘点批号生成
             case Config.MESSAGE_PANDIANPIHAOCREATE_OK:
                 isApplySuccess = true;
-                Toast.makeText(PandianPihaoCreateActivity.this,o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast(o.toString());
                 resultActivity();
                 break;
             case Config.MESSAGE_PANDIANPIHAOCREATE_ERROR:
                 isApplySuccess = false;
-                Toast.makeText(PandianPihaoCreateActivity.this,"申请失败："+o.toString(),Toast.LENGTH_SHORT).show();
+                AlertUtil.showToast("申请失败："+o.toString());
                 break;
         }
     }

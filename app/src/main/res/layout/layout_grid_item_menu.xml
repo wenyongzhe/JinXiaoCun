@@ -3,25 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="135dp"
     android:background="@drawable/grid_menu_selector"
-    android:padding="@dimen/layout_margin30"
+    android:padding="@dimen/layout_margin20"
     android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:background="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/tv_title"
         style="@style/TextView_Grey"
+        android:textSize="@dimen/txt_size18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
         android:text="子项" />
 
 </LinearLayout>

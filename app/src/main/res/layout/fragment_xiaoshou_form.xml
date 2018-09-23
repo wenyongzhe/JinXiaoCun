@@ -16,7 +16,7 @@
         <com.eshop.jinxiaocun.widget.ImageTextView
             android:layout_weight="1"
             android:id="@+id/myView_xiaoshou"
-            imageText:leftImage="@drawable/tab05_unsel"
+            imageText:leftImage="@drawable/jc"
             imageText:subTitle="@string/item_title_xiaoshoudan"
             imageText:subMessage="@string/item_message_maihuo"
             android:layout_width="0dp"
@@ -27,7 +27,7 @@
         <com.eshop.jinxiaocun.widget.ImageTextView
             android:id="@+id/myView_xiaoshoutui"
             android:layout_weight="1"
-            imageText:leftImage="@drawable/tab05_unsel"
+            imageText:leftImage="@drawable/jc"
             android:layout_width="0dp"
             imageText:subTitle="@string/item_title_xiaoshoutuihuodan"
             imageText:subMessage="@string/item_message_tuihuo"
@@ -42,7 +42,7 @@
         <com.eshop.jinxiaocun.widget.ImageTextView
             android:id="@+id/myView_lingshou"
             android:layout_weight="1"
-            imageText:leftImage="@drawable/tab05_unsel"
+            imageText:leftImage="@drawable/jc"
             android:layout_width="0dp"
             imageText:subTitle="@string/item_title_lingshou"
             imageText:subMessage="@string/item_message_lingshou"
@@ -52,7 +52,7 @@
 
         <com.eshop.jinxiaocun.widget.ImageTextView
             android:layout_weight="1"
-            imageText:leftImage="@drawable/tab05_unsel"
+            imageText:leftImage="@drawable/jc"
             android:layout_width="0dp"
             imageText:subTitle="@string/item_title_lingshou"
             imageText:subMessage="@string/item_message_lingshou"

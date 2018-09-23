@@ -35,6 +35,7 @@
     <string name="menu_xiaoshoudan">销售单</string>
     <string name="menu_kucunchaxun">库存查询</string>
     <string name="menu_kuaishushoukuang">快速收款</string>
+
     <string name="menu_kehu_manager">客户管理</string>
     <string name="menu_diaobo_manage">调拨管理</string>
     <string name="menu_pandian_manage">盘点管理</string>

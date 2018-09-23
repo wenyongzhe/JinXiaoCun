@@ -40,7 +40,7 @@ public class ImageTextView extends LinearLayout {
             switch (attr) {
                 case R.styleable.ImageTextView_leftImage:
                     resourceId = typedArray.getResourceId( R.styleable.ImageTextView_leftImage, 0);
-                    iv_photo.setImageResource(resourceId > 0 ?resourceId:R.drawable.tab03_sel);
+                    iv_photo.setImageResource(resourceId > 0 ?resourceId:R.drawable.xs);
                     break;
                 case R.styleable.ImageTextView_subTitle:
                     resourceId = typedArray.getResourceId(

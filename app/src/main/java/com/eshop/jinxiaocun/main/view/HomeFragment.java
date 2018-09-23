@@ -32,7 +32,7 @@ public class HomeFragment extends BaseFragment {
 
     private Unbinder unbinder;
     private int[] iconIds = { R.drawable.spgl,
-            R.drawable.cgd, R.drawable.xsd,
+            R.drawable.cgd, R.drawable.xsdj,
             R.drawable.kcgl,
             R.drawable.kssk,
             R.drawable.tbgl,
@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
     private int[] nameIds = { R.string.menu_goods_manager,
             R.string.menu_caigoudan, R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
-            R.string.menu_kuaishushoukuang,
+            R.string.item_message_lingshou,
             R.string.menu_diaobo_manage,
             R.string.menu_pandian_manage,
             R.string.menu_pifa_xiaoshou

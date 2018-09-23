@@ -8,13 +8,13 @@
     <com.eshop.jinxiaocun.widget.ImageTextView
         android:layout_weight="1"
         android:id="@+id/imagetext1"
-        imageText:leftImage="@drawable/tab05_unsel"
+        imageText:leftImage="@drawable/jc"
         android:layout_width="0dp"
         android:layout_height="fill_parent"/>
 
     <com.eshop.jinxiaocun.widget.ImageTextView
         android:layout_weight="1"
-        imageText:leftImage="@drawable/tab05_unsel"
+        imageText:leftImage="@drawable/jc"
         android:layout_width="0dp"
         android:layout_height="fill_parent"/>
 

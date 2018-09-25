@@ -65,6 +65,14 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     Button btn_delete;//删除
     @BindView(R.id.btn_modify_count)
     Button btn_modify_count;//改数
+    @BindView(R.id.tv_check_num)
+    TextView tv_check_num;//总数
+    @BindView(R.id.ly_buttom1)
+    LinearLayout ly_buttom1;
+    @BindView(R.id.btn_yijia)
+    Button btn_yijia;//议价
+    @BindView(R.id.btn_zhekou)
+    Button btn_zhekou;//折扣
 
 
     private LinearLayout ly_kaidan;
@@ -135,6 +143,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
         btSell.setText(R.string.bt_sell);
+        tv_check_num.setText("总价：");
+        ly_buttom1.setVisibility(View.VISIBLE);
+
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -252,9 +263,15 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }
     }
 
-    private void reflashList(List<GetClassPluResult> mGetClassPluResult){
-        mListData.addAll(mGetClassPluResult);
+    private void reflashList(List<GetClassPluResult> mGetClassPluResultlist){
+        Double total = 0.00;
+        mListData.addAll(mGetClassPluResultlist);
         mScanAdapter.notifyDataSetChanged();
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            total += Double.parseDouble(mGetClassPluResult.getSale_price());
+        }
+        tv_check_num.setText("总价："+total);
     }
 
     private void setSaleFlowBean(){
@@ -343,6 +360,26 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         try {
             mListData.remove(itemClickPosition);
             mScanAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+
+        }
+
+    }
+
+    @OnClick(R.id.btn_zhekou)
+    void btn_zhekou() {
+        try {
+
+        }catch (Exception e){
+
+        }
+
+    }
+
+    @OnClick(R.id.btn_yijia)
+    void btn_yijia() {
+        try {
+            
         }catch (Exception e){
 
         }

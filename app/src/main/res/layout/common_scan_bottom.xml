@@ -236,6 +236,38 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/ly_buttom1"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/button_background"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_yijia"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            style="@style/Button_blue"
+            android:layout_weight="1"
+            android:text="@string/modifytotal" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider" />
+
+        <Button
+            android:id="@+id/btn_zhekou"
+            style="@style/Button_blue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/zhekou" />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="5dp"

@@ -12,10 +12,5 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/layout_margin35"/>
 
-    <!--<include layout="@layout/widget_text_spinner"/>-->
-
-   <!-- <include layout="@layout/widget_text_text"/>
-
-    <include layout="@layout/widget_text_text"/>-->
 
 </LinearLayout>

@@ -74,6 +74,8 @@
     <string name="billing">开单</string>
     <string name="modify">修改</string>
     <string name="modifycount">改数</string>
+    <string name="zhekou">折扣</string>
+    <string name="modifytotal">修改价格</string>
 
     <string name="list_item_ProdStore">所在库位</string>
     <string name="list_item_ProdCode">商品编码</string>

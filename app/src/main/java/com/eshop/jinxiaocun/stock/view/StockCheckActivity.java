@@ -43,7 +43,6 @@ public class StockCheckActivity extends CommonBaseScanActivity implements INetWo
         super.initView();
 
         mLayoutScanBottom.setVisibility(View.GONE);
-        CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
         mEtBarcode.setOnKeyListener(onKey);
         setTopToolBar("库存查询",R.mipmap.ic_left_light,"",0,"");
 

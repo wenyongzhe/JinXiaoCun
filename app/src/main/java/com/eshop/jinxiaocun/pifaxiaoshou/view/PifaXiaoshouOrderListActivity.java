@@ -138,6 +138,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = format.format(calendar.getTime());
             mTvStartDate.setText(strDate);
+            getPifaXiaoshouData();
         }
         @Override
         public void onDateTimeCancel() {
@@ -162,6 +163,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = format.format(calendar.getTime());
             mTvEndDate.setText(strDate);
+            getPifaXiaoshouData();
         }
         @Override
         public void onDateTimeCancel() {

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -18,12 +20,18 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
+import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimeListener;
+import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimePicker;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,12 +44,22 @@ import butterknife.OnClick;
  */
 public class PandianListActivity extends CommonBaseListActivity implements INetWorResult {
 
+    @BindView(R.id.dt_startDate)
+    TextView mTvStartDate;
+    @BindView(R.id.dt_endDate)
+    TextView mTvEndDate;
+
     private PandianListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mServerApi;
 
     private int mPageIndex = 1;
     private int mPageSize =20;
+
+    @Override
+    protected int getLayoutContentId() {
+        return R.layout.activity_piandian_list;
+    }
 
     @Override
     protected void initData() {
@@ -56,9 +74,9 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
         mDanJuMainBean.JsonData.sheettype = Config.YwType.PD.toString();//单据类型
         mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
-        mDanJuMainBean.JsonData.begintime = "";
-        mDanJuMainBean.JsonData.endtime = "";
-        mDanJuMainBean.JsonData.checkflag = "0";//审核标志
+        mDanJuMainBean.JsonData.begintime = mTvStartDate.getText().toString();
+        mDanJuMainBean.JsonData.endtime = mTvEndDate.getText().toString();
+        mDanJuMainBean.JsonData.checkflag = "0";//1代表审核 0代表没有审核
         mDanJuMainBean.JsonData.pagenum = mPageSize;
         mDanJuMainBean.JsonData.page = mPageIndex;
         mServerApi.getDanJuList(mDanJuMainBean);
@@ -69,6 +87,8 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
         super.initView();
 
         setTopToolBar("盘点列表",R.mipmap.ic_left_light,"",0,"");
+        mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
+        mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -86,19 +106,22 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
             }
         });
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,150);
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);
-        setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);
-        setHeaderTitle(R.id.tv_3,R.string.list_item_OrderDate,150);
+        setHeaderTitle(R.id.tv_0,R.string.list_item_FormIndex,150);//单据号
+        setHeaderTitle(R.id.tv_1,R.string.list_item_ShopName,150); //门店名称
+        setHeaderTitle(R.id.tv_2,R.string.list_item_Fanwei,100);//范围
+        setHeaderTitle(R.id.tv_3,R.string.list_item_Cangku,150);//仓库
+        setHeaderTitle(R.id.tv_4,R.string.list_item_AllGoodsCount,100);//总商品数
+        setHeaderTitle(R.id.tv_5,R.string.list_item_Oper_Name,100);//总商品数
 
         mAdapter = new PandianListAdapter(mListInfo);
+        mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
     }
 
     @Override
     public void handleResule(int flag, Object o) {
-//        mListView.onRefreshComplete();
+        mListView.onRefreshComplete();
 //        switch (flag) {
 //            case Config.MESSAGE_OK:
 //                if(mPageIndex==1){
@@ -114,10 +137,69 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
 //        }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        super.onItemClick(parent, view, position, id);
+        mAdapter.setItemClickPosition(position-1);
+        mAdapter.notifyDataSetInvalidated();
+    }
+
+    @OnClick(R.id.dt_startDate)
+    void OnStartDate(){
+        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
+                .setListener(listenerStart)
+                .setInitialDate(new Date())
+                .build()
+                .show();
+    }
+
+    private SlideDateTimeListener listenerStart = new SlideDateTimeListener() {
+        @Override
+        public void onDateTimeSet(Date date) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = format.format(calendar.getTime());
+            mTvStartDate.setText(strDate);
+            getPandianListData();
+        }
+        @Override
+        public void onDateTimeCancel() {
+
+        }
+    };
+
+    @OnClick(R.id.dt_endDate)
+    void OnEndDate(){
+        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
+                .setListener(listenerEnd)
+                .setInitialDate(new Date())
+                .build()
+                .show();
+    }
+
+    private SlideDateTimeListener listenerEnd = new SlideDateTimeListener() {
+        @Override
+        public void onDateTimeSet(Date date) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = format.format(calendar.getTime());
+            mTvEndDate.setText(strDate);
+            getPandianListData();
+        }
+        @Override
+        public void onDateTimeCancel() {
+
+        }
+    };
 
     @Override
-    protected int getLayoutContentId() {
-        return R.layout.activity_piandian_list;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==2 && resultCode ==22){
+            getPandianListData();
+        }
     }
 
     @Override
@@ -127,7 +209,7 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
 
     @Override
     protected void createOrderAfter() {
-        startActivity(new Intent(PandianListActivity.this,PandianCreateActivity.class));
+        startActivityForResult(new Intent(PandianListActivity.this,PandianCreateActivity.class),2);
     }
 
     @Override

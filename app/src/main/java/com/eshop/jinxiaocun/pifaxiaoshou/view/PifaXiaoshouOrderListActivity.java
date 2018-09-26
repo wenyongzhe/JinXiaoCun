@@ -64,10 +64,11 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,80);// 单据状态
-        setHeaderTitle(R.id.tv_1,R.string.list_item_FormIndex,150);//单据号
-        setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);
-        setHeaderTitle(R.id.tv_3,R.string.list_item_OrderDate,150);
+        setHeaderTitle(R.id.tv_0,R.string.list_item_FormIndex,150);//单据号
+        setHeaderTitle(R.id.tv_1,R.string.list_item_BillType,100);// 单据类型
+        setHeaderTitle(R.id.tv_2,R.string.list_item_ShopName,150); //门店名称
+        setHeaderTitle(R.id.tv_3,R.string.list_item_AllGoodsCount,100);//总商品数
+        setHeaderTitle(R.id.tv_4,R.string.list_item_ValidDate,150);//交货日期
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -116,8 +117,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-        AlertUtil.showToast("position " + position);
-        mAdapter.setItemClickPosition(position);
+        mAdapter.setItemClickPosition(position-1);
         mAdapter.notifyDataSetInvalidated();
     }
 

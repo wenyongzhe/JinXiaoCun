@@ -153,6 +153,7 @@
     <string name="list_item_SupplierCode">供应商编码</string>
     <string name="list_item_ProductDate">生产日期</string>
     <string name="list_item_ProdType">商品类型</string>
+    <string name="list_item_ValidDate">交货日期</string>
 
     <string name="list_item_Pici_Name">批次号</string>
     <string name="list_item_PandianPihao">盘点批号</string>
@@ -165,8 +166,11 @@
     <string name="list_item_StoreNum">库存数量</string>
     <string name="list_item_Pihao">批号</string>
     <string name="list_item_Shopinfo">门店信息</string>
+    <string name="list_item_ShopName">门店名称</string>
     <string name="list_item_BeginDate">起始时间</string>
     <string name="list_item_EndDate">结束时间</string>
+    <string name="list_item_AllGoodsCount">总商品数量</string>
+    <string name="list_item_Oper_Name">操作员</string>
 
     <string name="yuan">元</string>
     <!-- 下拉刷新 -->

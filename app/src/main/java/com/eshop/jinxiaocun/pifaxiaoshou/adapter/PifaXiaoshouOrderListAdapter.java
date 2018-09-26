@@ -50,8 +50,19 @@ public class PifaXiaoshouOrderListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou_order,parent,false);
         }
-        TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        tvTitle.setText(listInfo.get(position).Branch_No);
+        TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
+        TextView tvOrderType = ViewHolderUtils.get(convertView, R.id.tv_order_type);
+        TextView tvShopname = ViewHolderUtils.get(convertView, R.id.tv_shopname);
+        TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
+        TextView tvValidDate = ViewHolderUtils.get(convertView, R.id.tv_valid_Date);
+
+        tvOrderNo.setSelected(true);
+        tvShopname.setSelected(true);
+        tvOrderNo.setText(listInfo.get(position).getSheet_No());
+        tvOrderType.setText(listInfo.get(position).getSheetType());
+        tvShopname.setText(listInfo.get(position).getShopName());
+        tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
+        tvValidDate.setText(listInfo.get(position).getValid_date());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);

@@ -48,9 +48,22 @@ public class PandianListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_pandian,parent,false);
         }
-        TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        tvTitle.setText(listInfo.get(position).Branch_No);
+        TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
+        TextView tvShopname = ViewHolderUtils.get(convertView, R.id.tv_shopname);
+        TextView tvFanwei = ViewHolderUtils.get(convertView, R.id.tv_pd_fanwei);
+        TextView tvCangku = ViewHolderUtils.get(convertView, R.id.tv_Cangku);
+        TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
+        TextView tvOperName = ViewHolderUtils.get(convertView, R.id.tv_OperName);
 
+        tvOrderNo.setSelected(true);
+        tvShopname.setSelected(true);
+
+        tvOrderNo.setText(listInfo.get(position).getSheet_No());
+        tvShopname.setText(listInfo.get(position).getShopName());
+        tvFanwei.setText(listInfo.get(position).getOper_Range());
+        tvCangku.setText(listInfo.get(position).getBranch_No());
+        tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
+        tvOperName.setText(listInfo.get(position).getOper_Name());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);

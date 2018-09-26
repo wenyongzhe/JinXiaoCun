@@ -12,5 +12,5 @@ public interface ILingshouScan {
     public void upSallFlow(List list);//上传销售流水
     public void upPlayFlow(List list);//上传付款流水
     public void getOptAuth();//获取折扣权限
-
+    public void getBillDiscount(Double total,String FlowNo);//整单议价、折扣
 }

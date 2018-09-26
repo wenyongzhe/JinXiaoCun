@@ -40,6 +40,7 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
+import com.eshop.jinxiaocun.widget.ZheKouDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,13 +75,16 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @BindView(R.id.btn_zhekou)
     Button btn_zhekou;//折扣
 
-
+    private final static int SELL = 110;
+    private final static int SELL_DANPING_YIJIA = 111;
+    private final static int SELL_ZHENDAN_YIJIA = 112;
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     private IOtherModel mIOtherModel;
     protected List<SaleFlowBean> mSaleFlowBeanList;
     protected List<PlayFlowBean> mPlayFlowBeanList;
     private String FlowNo = "";
+    private Double total = 0.00;
 
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
@@ -106,7 +110,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mLingShouScanImp.getSheetDetail(sheet_no);
         }else
             initMainBean();
-//        mLingShouScanImp.getFlowNo();
+        mLingShouScanImp.getFlowNo();
 //        mLingShouScanImp.sellSub();
     }
 
@@ -189,9 +193,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
-                    FlowNo = mGetFlowNoBeanResult.getFlowNo();
-                    FlowNo += DateUtility.getCurrentTime2();
-                    setSaleFlowBean();
+                    FlowNo = mGetFlowNoBeanResult.getFlowNo()+1;
                 }
                 break;
             case Config.MESSAGE_UP_SALL_FLOW:
@@ -256,17 +258,36 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 mScanAdapter.notifyDataSetChanged();
                 break;
             case Config.MESSAGE_MONEY:
-                String mMoney =  data.getStringExtra("countN");
-                setPlayFlowBean(mMoney);
+                if(requestCode == 100){
+                    String mMoney =  data.getStringExtra("countN");
+                    setPlayFlowBean(mMoney);
+                }else if(requestCode == 200){
+                    String zhekou =  data.getStringExtra("countN");
+                    total = Double.parseDouble(zhekou);
+                    tv_check_num.setText("总价："+total);
+                    getBillDiscount(total);
+                }
+                break;
+            case Config.MESSAGE_INTENT_ZHEKOU:
+                String zhekou =  data.getStringExtra("countN");
+                int int_zhekou = Integer.decode(zhekou);
+                total = int_zhekou*total;
+                tv_check_num.setText("总价："+total);
+                getBillDiscount(total);
                 break;
 
         }
     }
 
+    //整单议价、折扣
+    private void getBillDiscount(Double total){
+        mLingShouScanImp.getBillDiscount(total,FlowNo);
+    }
+
     private void reflashList(List<GetClassPluResult> mGetClassPluResultlist){
-        Double total = 0.00;
         mListData.addAll(mGetClassPluResultlist);
         mScanAdapter.notifyDataSetChanged();
+        total = 0.0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += Double.parseDouble(mGetClassPluResult.getSale_price());
@@ -274,7 +295,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         tv_check_num.setText("总价："+total);
     }
 
-    private void setSaleFlowBean(){
+    private void setSaleFlowBean(int flag){
         for(int i=0; i<mListData.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
             GetClassPluResult mGetClassPluResult = mListData.get(i);
@@ -310,7 +331,15 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
-        mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+        switch (flag){
+            case SELL:
+                mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+                break;
+            case SELL_ZHENDAN_YIJIA:
+                btn_yijia();
+                break;
+        }
+
     }
 
     private void setPlayFlowBean(String payAmount){
@@ -321,7 +350,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(FlowNo);
             mPlayFlowBean.setFlow_id(i);
-            Float money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price());
+            Float money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())/100;
             mPlayFlowBean.setSale_amount(money);
             mPlayFlowBean.setPay_way("");
             mPlayFlowBean.setSell_way("A");
@@ -352,7 +381,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     @OnClick(R.id.btn_add)
     void sell() {
-        mLingShouScanImp.getFlowNo();
+        setSaleFlowBean(SELL);
     }
 
     @OnClick(R.id.btn_delete)
@@ -369,7 +398,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @OnClick(R.id.btn_zhekou)
     void btn_zhekou() {
         try {
-
+            if(total==null ||total == 0){
+                return;
+            }
+            Intent intent = new Intent(this, ZheKouDialog.class);
+            startActivityForResult(intent,100);
         }catch (Exception e){
 
         }
@@ -379,7 +412,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @OnClick(R.id.btn_yijia)
     void btn_yijia() {
         try {
-            
+            if(total==null ||total == 0){
+                return;
+            }
+            Intent intent = new Intent(this, MoneyDialog.class);
+            startActivityForResult(intent,200);
         }catch (Exception e){
 
         }

@@ -8,6 +8,8 @@ import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
+import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
@@ -116,6 +118,43 @@ public class LingShouScanImp implements ILingshouScan {
     @Override
     public void getOptAuth() {
 
+    }
+
+    @Override
+    public void getBillDiscount(Double total,String FlowNo) {
+        BillDiscountBean mBillDiscountBean = new BillDiscountBean();
+        mBillDiscountBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mBillDiscountBean.getJsonData().setAs_flowno(FlowNo);
+        mBillDiscountBean.getJsonData().setAs_type("A");
+        mBillDiscountBean.getJsonData().setAs_discount(total+"");
+        mBillDiscountBean.getJsonData().setCashier_id(Config.UserId);
+        mBillDiscountBean.getJsonData().setCashier_pw(Config.PASSWORD);
+
+        Map map = ReflectionUtils.obj2Map(mBillDiscountBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new BillDiscountInterface());
+    }
+
+    //获取流水
+    class BillDiscountInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+            Log.e("error", event.toString());
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            BillDiscountBeanResult mBillDiscountBeanResult =  mJsonFormatImp.JsonToBean(jsonData,BillDiscountBeanResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_FLOW_NO,mBillDiscountBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mBillDiscountBeanResult);
+            }
+        }
     }
 
     @Override

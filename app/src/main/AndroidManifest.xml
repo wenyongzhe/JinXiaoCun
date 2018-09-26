@@ -97,6 +97,12 @@
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
+            android:name=".widget.ZheKouDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyleBottom"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
             android:name=".piandian.view.PandianScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />

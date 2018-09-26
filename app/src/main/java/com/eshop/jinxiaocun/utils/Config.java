@@ -11,7 +11,8 @@ public class Config {
     public static String UserId = "1001";
 
     public static String DeviceID = "";
-    public static String IP="192.168.10.67";
+//    public static String IP="192.168.10.67";
+    public static String IP="120.79.209.140";
     public static String IP_POIN=":1433/";
     public static String DB_NAME="EWESHOP";
     public static String USER_NAME="sa";
@@ -61,6 +62,8 @@ public class Config {
     public final static int MESSAGE_MONEY = 26;
     public final static int MESSAGE_GOODS_INFOR_FAIL = 27;
     public final static int MESSAGE_RESULT_SUCCESS= 28;
+    public final static int MESSAGE_INTENT_ZHEKOU = 29;
+    public final static int MESSAGE_INTENT_YIJIA = 30;
     public final static int RESULT_SELECT_GOODS = 200;
 
     //流水号

@@ -15,15 +15,18 @@ public class DanJuMainBean extends BaseBean{
 
 
     public class DanJuJsonData {
-        public String BeginTime;//开始时间
-        public String EndTime;//结束时间
-        public String CheckFlag;//审核标志
-        public int PageNum;//每页数量
-        public int Page; //页码
-        public String Oper_ID;//操作员ID
-        public String POSID;
-        public String UserId;  //用户ID
-        public String SheetType; //单据类型
+
+        public String pos_id;
+        public String branchNo;
+        public String sheettype;//单据类型
+        public String begintime;//开始时间
+        public String endtime;//结束时间
+        public String checkflag;//审核标志
+        public int pagenum;//每页数量
+        public int page;//页码
+        public String operid;//操作员
+
+
     }
 
 }

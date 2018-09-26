@@ -586,16 +586,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 break;
             //上传记录头 成功
             case Config.MESSAGE_SUCCESS:
-                AlertUtil.showToast(o.toString());
                 uploadPandianDetailData();// 上传盘点明细
                 break;
             // 上传盘点明细 成功
             case Config.MESSAGE_RESULT_SUCCESS:
+                mOtherApi.sheetSave(Config.YwType.CY.toString(),mTvOrderNo.getText().toString());//保存业务单据
+                break;
+            //保存业务单据 成功
+            case Config.RESULT_SUCCESS:
                 AlertUtil.showToast(o.toString());
                 setResult(22);
                 finish();
                 break;
-            //上传记录头或上传盘点明细  失败
+            //上传记录头或上传盘点明细  保存业务单据 失败
             case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;

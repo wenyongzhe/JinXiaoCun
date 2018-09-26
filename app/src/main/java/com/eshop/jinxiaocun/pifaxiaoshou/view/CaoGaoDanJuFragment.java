@@ -33,15 +33,15 @@ public class CaoGaoDanJuFragment extends BaseListFragment implements INetWorResu
     @Override
     protected void loadData() {
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
-        mDanJuMainBean.JsonData.POSID = "";
-        mDanJuMainBean.JsonData.UserId = "";
-        mDanJuMainBean.JsonData.SheetType = "";//单据类型
-        mDanJuMainBean.JsonData.Oper_ID = "";//操作员ID
-        mDanJuMainBean.JsonData.BeginTime = "";
-        mDanJuMainBean.JsonData.EndTime = "";
-        mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
-        mDanJuMainBean.JsonData.PageNum = limit;
-        mDanJuMainBean.JsonData.Page = page;
+        mDanJuMainBean.JsonData.pos_id = Config.posid;
+        mDanJuMainBean.JsonData.branchNo = Config.branch_no;
+        mDanJuMainBean.JsonData.sheettype = "";//单据类型
+        mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
+        mDanJuMainBean.JsonData.begintime = "";
+        mDanJuMainBean.JsonData.endtime = "";
+        mDanJuMainBean.JsonData.checkflag = "0";//审核标志
+        mDanJuMainBean.JsonData.pagenum = limit;
+        mDanJuMainBean.JsonData.page = page;
         mDanJuList.getDanJuList(mDanJuMainBean);
     }
 

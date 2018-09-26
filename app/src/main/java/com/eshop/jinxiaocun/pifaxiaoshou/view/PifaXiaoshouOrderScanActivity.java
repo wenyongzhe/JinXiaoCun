@@ -234,16 +234,21 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
                 break;
             //上传单据主表 成功
             case Config.MESSAGE_SUCCESS:
-                AlertUtil.showToast(o.toString());
+//                AlertUtil.showToast(o.toString());
                 uploadGoodDetailData();// 上传批发商品明细
                 break;
             // 上传单据明细 成功
             case Config.MESSAGE_RESULT_SUCCESS:
+//                AlertUtil.showToast(o.toString());
+                mOtherApi.sheetSave(Config.YwType.SS.toString(),mStr_OrderNo);//保存业务单据
+                break;
+            //保存业务单据 成功
+            case Config.RESULT_SUCCESS:
                 AlertUtil.showToast(o.toString());
                 setResult(22);
                 finish();
                 break;
-            //上传单据主表或上传单据明细  失败
+            //上传单据主表或上传单据明细 保存业务单据 失败
             case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;

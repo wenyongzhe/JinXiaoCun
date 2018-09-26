@@ -12,6 +12,7 @@ import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -81,6 +82,18 @@ public class OtherModelImp implements IOtherModel {
     public void uploadDanjuDetailInfo(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UploadDanjuDetailInterface());
+    }
+
+    @Override
+    public void sheetSave(String orderType, String orderNo) {
+        SheetSaveBean bean = new SheetSaveBean();
+        bean.JsonData.trans_no = orderType ;//单据类型
+        bean.JsonData.branchNo= Config.branch_no ; //门店机构
+        bean.JsonData.Sheet_No= orderNo ;//单据号
+        bean.JsonData.oper_id= Config.UserId ; //操作员
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SheetSaveInterface());
     }
 
 
@@ -187,10 +200,10 @@ public class OtherModelImp implements IOtherModel {
                 if(status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_SUCCESS,"上传单据主表成功!");
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"上传单据主表失败："+Msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
+                mHandler.handleResule(Config.MESSAGE_FAIL,"上传单据主表失败："+e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -212,12 +225,39 @@ public class OtherModelImp implements IOtherModel {
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_RESULT_SUCCESS,"单据明细成功!");
+                    mHandler.handleResule(Config.MESSAGE_RESULT_SUCCESS,"上传单据明细成功!");
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_FAIL,Msg);
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"上传单据明细失败："+Msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_FAIL,e.getMessage());
+                mHandler.handleResule(Config.MESSAGE_FAIL,"上传单据明细失败："+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //保存业务单据
+    class SheetSaveInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.RESULT_SUCCESS,"保存成功!");
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"保存失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"保存失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

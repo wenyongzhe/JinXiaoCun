@@ -19,5 +19,6 @@ public interface IOtherModel {
     void uploadDanjuMainInfo(BaseBean bean);
     //上传单据明细信息
     void uploadDanjuDetailInfo(BaseBean bean);
-
+    //SheetSave保存业务单据
+    void sheetSave(String orderType ,String orderNo );
 }

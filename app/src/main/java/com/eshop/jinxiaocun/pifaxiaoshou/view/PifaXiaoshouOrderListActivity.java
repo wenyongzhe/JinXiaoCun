@@ -101,15 +101,15 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
     private void getPifaXiaoshouData() {
 
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
-        mDanJuMainBean.JsonData.POSID = Config.posid;
-        mDanJuMainBean.JsonData.UserId = Config.UserId;
-        mDanJuMainBean.JsonData.SheetType = Config.YwType.SS.toString();//单据类型
-        mDanJuMainBean.JsonData.Oper_ID = Config.posid;//操作员ID
-        mDanJuMainBean.JsonData.BeginTime = mTvStartDate.getText().toString();
-        mDanJuMainBean.JsonData.EndTime = mTvEndDate.getText().toString();
-        mDanJuMainBean.JsonData.CheckFlag = "0";//审核标志
-        mDanJuMainBean.JsonData.PageNum = mPageSize;
-        mDanJuMainBean.JsonData.Page = mPageIndex;
+        mDanJuMainBean.JsonData.pos_id = Config.posid;
+        mDanJuMainBean.JsonData.branchNo = Config.branch_no;
+        mDanJuMainBean.JsonData.sheettype = Config.YwType.SS.toString();//单据类型
+        mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
+        mDanJuMainBean.JsonData.begintime = mTvStartDate.getText().toString();
+        mDanJuMainBean.JsonData.endtime = mTvEndDate.getText().toString();
+        mDanJuMainBean.JsonData.checkflag = "0";//审核标志
+        mDanJuMainBean.JsonData.pagenum = mPageSize;
+        mDanJuMainBean.JsonData.page = mPageIndex;
         mDanJuList.getDanJuList(mDanJuMainBean);
     }
 
@@ -172,13 +172,40 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
     };
 
     @Override
+    public void handleResule(int flag, Object o) {
+        mListView.onRefreshComplete();
+        switch (flag) {
+            case Config.MESSAGE_OK:
+                if(mPageIndex==1){
+                    mListInfo = (List<DanJuMainBeanResultItem>)o;
+                }else{
+                    mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
+                }
+                mAdapter.setListInfo(mListInfo);
+                break;
+            case Config.MESSAGE_ERROR:
+                AlertUtil.showToast(o.toString());
+                break;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==2 && resultCode ==22){
+            getPifaXiaoshouData();
+        }
+    }
+
+    @Override
     protected boolean createOrderBefore() {
         return true;
     }
 
     @Override
     protected void createOrderAfter() {
-        startActivity(new Intent(this,PifaXiaoshouOrderScanActivity.class));
+        startActivityForResult(new Intent(this,PifaXiaoshouOrderScanActivity.class),2);
     }
 
     @Override
@@ -211,23 +238,6 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
     }
 
-    @Override
-    public void handleResule(int flag, Object o) {
-        mListView.onRefreshComplete();
-        switch (flag) {
-            case Config.MESSAGE_OK:
-                if(mPageIndex==1){
-                    mListInfo = (List<DanJuMainBeanResultItem>)o;
-                }else{
-                    mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
-                }
-                mAdapter.setListInfo(mListInfo);
-                break;
-            case Config.MESSAGE_ERROR:
-                AlertUtil.showToast(o.toString());
-                break;
-        }
 
-    }
 
 }

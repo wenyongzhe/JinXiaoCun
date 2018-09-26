@@ -52,15 +52,15 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
 
     private void getPandianListData(){
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
-        mDanJuMainBean.JsonData.POSID = Config.posid;
-        mDanJuMainBean.JsonData.UserId = "";
-        mDanJuMainBean.JsonData.SheetType = "";//单据类型
-        mDanJuMainBean.JsonData.Oper_ID = "";//操作员ID
-        mDanJuMainBean.JsonData.BeginTime = "";
-        mDanJuMainBean.JsonData.EndTime = "";
-        mDanJuMainBean.JsonData.CheckFlag = "";//审核标志
-        mDanJuMainBean.JsonData.PageNum = mPageSize;
-        mDanJuMainBean.JsonData.Page = mPageIndex;
+        mDanJuMainBean.JsonData.pos_id = Config.posid;
+        mDanJuMainBean.JsonData.branchNo = Config.branch_no;
+        mDanJuMainBean.JsonData.sheettype = Config.YwType.PD.toString();//单据类型
+        mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
+        mDanJuMainBean.JsonData.begintime = "";
+        mDanJuMainBean.JsonData.endtime = "";
+        mDanJuMainBean.JsonData.checkflag = "0";//审核标志
+        mDanJuMainBean.JsonData.pagenum = mPageSize;
+        mDanJuMainBean.JsonData.page = mPageIndex;
         mServerApi.getDanJuList(mDanJuMainBean);
     }
 

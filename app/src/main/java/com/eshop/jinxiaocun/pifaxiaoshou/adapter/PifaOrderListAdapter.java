@@ -19,13 +19,13 @@ import java.util.List;
  * 描述
  */
 
-public class PifaXiaoshouOrderListAdapter extends BaseAdapter {
+public class PifaOrderListAdapter extends BaseAdapter {
 
     private List<DanJuMainBeanResultItem> listInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
 
-    public PifaXiaoshouOrderListAdapter(List<DanJuMainBeanResultItem> listInfo) {
+    public PifaOrderListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -48,7 +48,7 @@ public class PifaXiaoshouOrderListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou_order,parent,false);
+            convertView = inflater.inflate(R.layout.item_list_pifa_order,parent,false);
         }
         TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
         TextView tvOrderType = ViewHolderUtils.get(convertView, R.id.tv_order_type);

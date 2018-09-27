@@ -23,7 +23,7 @@ import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderScanAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderScanAdapter;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -40,10 +40,10 @@ import butterknife.BindView;
 /**
  * Author: 安仔夏天勤奋
  * Date: 2018/9/17
- * Desc: 批发销售订单扫描
+ * Desc: 批发订单扫描
  */
 
-public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
+public class PifaOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
@@ -56,7 +56,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
     private ILingshouScan mQueryGoodsApi;
 
     private CustomerInfoBeanResult mCustomerInfo;
-    private PifaXiaoshouOrderScanAdapter mAdapter;
+    private PifaOrderScanAdapter mAdapter;
 
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
     private GetClassPluResult mSelectGoodsEntity;
@@ -64,7 +64,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_pifa_xiaoshou_order_scan;
+        return R.layout.activity_pifa_order_scan;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(PifaXiaoshouOrderScanActivity.this, SelectCustomerListActivity.class);
+                Intent intent = new Intent(PifaOrderScanActivity.this, SelectCustomerListActivity.class);
                 startActivityForResult(intent,2);
             }
         });
@@ -91,7 +91,7 @@ public class PifaXiaoshouOrderScanActivity extends CommonBaseScanActivity implem
         setHeaderTitle(R.id.tv_3,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_4,R.string.list_item_CountN5,100);//数量
 
-        mAdapter = new PifaXiaoshouOrderScanAdapter(mListDatas);
+        mAdapter = new PifaOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
@@ -22,13 +21,13 @@ import java.util.Locale;
  * 描述
  */
 
-public class PifaXiaoshouOrderScanAdapter extends BaseAdapter {
+public class PifaOrderScanAdapter extends BaseAdapter {
 
     private List<GetClassPluResult> listInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
 
-    public PifaXiaoshouOrderScanAdapter(List<GetClassPluResult> listInfo) {
+    public PifaOrderScanAdapter(List<GetClassPluResult> listInfo) {
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -51,7 +50,7 @@ public class PifaXiaoshouOrderScanAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_list_pifa_xiaoshou_order_scan,parent,false);
+            convertView = inflater.inflate(R.layout.item_list_pifa_order_scan,parent,false);
         }
         TextView tv_product_name = ViewHolderUtils.get(convertView, R.id.tv_product_name);
         TextView tv_product_code = ViewHolderUtils.get(convertView, R.id.tv_product_code);

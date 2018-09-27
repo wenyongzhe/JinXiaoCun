@@ -120,11 +120,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".pifaxiaoshou.view.PifaXiaoshouOrderListActivity"
+            android:name=".pifaxiaoshou.view.PifaOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".pifaxiaoshou.view.PifaXiaoshouOrderScanActivity"
+            android:name=".pifaxiaoshou.view.PifaOrderScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity

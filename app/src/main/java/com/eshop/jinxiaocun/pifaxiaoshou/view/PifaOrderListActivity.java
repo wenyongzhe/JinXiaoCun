@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaXiaoshouOrderListAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
@@ -32,17 +32,17 @@ import butterknife.OnClick;
 /**
  * @Author Lu An
  * 创建时间  2018/9/13 0013
- * 描述
+ * 描述 批发订单
  */
 
-public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implements INetWorResult {
+public class PifaOrderListActivity extends CommonBaseListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
-    private PifaXiaoshouOrderListAdapter mAdapter;
+    private PifaOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
 
@@ -51,7 +51,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_pifa_xiaoshou_order_list;
+        return R.layout.activity_pifa_order_list;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
             }
         });
 
-        mAdapter = new PifaXiaoshouOrderListAdapter(mListInfo);
+        mAdapter = new PifaOrderListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
@@ -205,7 +205,7 @@ public class PifaXiaoshouOrderListActivity extends CommonBaseListActivity implem
 
     @Override
     protected void createOrderAfter() {
-        startActivityForResult(new Intent(this,PifaXiaoshouOrderScanActivity.class),2);
+        startActivityForResult(new Intent(this,PifaOrderScanActivity.class),2);
     }
 
     @Override

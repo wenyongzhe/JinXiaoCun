@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/white"
+    >
+
+    <Button
+        android:id="@+id/btn_pifa_order"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="20dp"
+        android:text="批发订单"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+    <Button
+        android:id="@+id/btn_pifa_chuku"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="10dp"
+        android:text="批发出库单"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+    <Button
+        android:id="@+id/btn_pifa_tuihuo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="10dp"
+        android:text="批发退货单"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+</LinearLayout>

@@ -143,6 +143,11 @@
         <activity android:name=".piandian.view.PandianManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".pifaxiaoshou.view.PifaManagerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

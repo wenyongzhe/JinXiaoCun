@@ -111,7 +111,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 //        CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
         CommonUtility.getInstance().closeKeyboard(this,mEtBz);
         mEtBarcode.setOnKeyListener(onKey);
-        setTopToolBar("盘点明细",R.mipmap.ic_left_light,"",R.mipmap.add,"");
+        setTopToolBar("盘点明细",R.mipmap.ic_left_light,"",0,"添加商品");
         mBtnAdd.setText(R.string.btnSave);
 
         setHeaderTitle(R.id.tv_0,R.string.list_item_ProdName,150);//商品名称

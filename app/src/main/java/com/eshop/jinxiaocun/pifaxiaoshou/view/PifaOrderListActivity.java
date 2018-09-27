@@ -58,7 +58,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
     protected void initView() {
         super.initView();
 
-        setTopToolBar("批发销售订单列表", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBar("批发订单列表", R.mipmap.ic_left_light, "", 0, "");
 
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");

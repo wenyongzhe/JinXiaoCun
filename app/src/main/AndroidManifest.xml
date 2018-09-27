@@ -101,7 +101,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".piandian.view.PandianScanActivity"
             android:screenOrientation="portrait"
@@ -132,15 +131,18 @@
             android:name=".othermodel.view.SelectCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".othermodel.view.SelectPiciInfoActivity"
+        <activity
+            android:name=".othermodel.view.SelectPiciInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".piandian.view.SelectPandianGoodsListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
-        <activity android:name=".piandian.view.SelectPandianGoodsListActivity"
+        <activity android:name=".piandian.view.PandianManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
     </application>
 
 </manifest>

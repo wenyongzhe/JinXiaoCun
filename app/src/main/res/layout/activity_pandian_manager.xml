@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/white"
+    >
+
+    <Button
+        android:id="@+id/btn_create_pd"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="20dp"
+        android:text="生成盘点单"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+
+
+
+
+</LinearLayout>

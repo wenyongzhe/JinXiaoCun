@@ -35,6 +35,7 @@ public class WebConfig {
     public static final String QryPluStock= "QryPluStock";//商品库存查询
     public static final String GetCustomerInfo= "GetCustomerInfo";//客户信息
     public static final String BillDiscount= "BillDiscount";//整单折扣、议价
+    public static final String GetPayMode= "GetPayMode";//付款方式
 
     public static String getPosLogin() {
         return POS_LOGIN;

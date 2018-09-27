@@ -2,14 +2,11 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.ColorFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -27,7 +24,6 @@ import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
-import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
@@ -111,7 +107,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }else
             initMainBean();
         mLingShouScanImp.getFlowNo();
-//        mLingShouScanImp.sellSub();
+        mLingShouScanImp.getPayMode();
     }
 
     private void initMainBean(){
@@ -211,7 +207,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 ToastUtils.showShort(R.string.message_sell_ok);
                 finish();
                 break;
+            case Config.MESSAGE_GET_PAY_MODE:
 
+                break;
 
         }
     }

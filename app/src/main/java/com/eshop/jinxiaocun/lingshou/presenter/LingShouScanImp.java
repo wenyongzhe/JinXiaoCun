@@ -12,6 +12,8 @@ import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetPayModeBean;
+import com.eshop.jinxiaocun.lingshou.bean.GetPayModeResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
@@ -26,6 +28,7 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.PluLikeBean;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MD5Util;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
@@ -132,6 +135,38 @@ public class LingShouScanImp implements ILingshouScan {
 
         Map map = ReflectionUtils.obj2Map(mBillDiscountBean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new BillDiscountInterface());
+    }
+
+    @Override
+    public void getPayMode() {
+        GetPayModeBean mGetPayModeBean = new GetPayModeBean();
+        mGetPayModeBean.getJsonData().setAs_branchNo(Config.branch_no);
+
+        Map map = ReflectionUtils.obj2Map(mGetPayModeBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetPayModeInterface());
+    }
+
+    //付款方式
+    class GetPayModeInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+            Log.e("error", event.toString());
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            List<GetPayModeResult> mGetPayModeResult =  mJsonFormatImp.JsonToList(jsonData,GetPayModeResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GET_PAY_MODE,mGetPayModeResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetPayModeResult);
+            }
+        }
     }
 
     //获取流水

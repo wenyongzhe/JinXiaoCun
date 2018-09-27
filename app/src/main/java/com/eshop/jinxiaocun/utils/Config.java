@@ -65,6 +65,7 @@ public class Config {
     public final static int MESSAGE_INTENT_ZHEKOU = 29;
     public final static int MESSAGE_INTENT_YIJIA = 30;
     public final static int RESULT_SELECT_GOODS = 200;
+    public final static int MESSAGE_GET_PAY_MODE = 31;
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

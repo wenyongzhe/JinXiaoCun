@@ -72,7 +72,7 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
-        mDanJuMainBean.JsonData.sheettype = Config.YwType.PD.toString();//单据类型
+        mDanJuMainBean.JsonData.sheettype = Config.YwType.CR.toString();//单据类型
         mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
         mDanJuMainBean.JsonData.begintime = mTvStartDate.getText().toString();
         mDanJuMainBean.JsonData.endtime = mTvEndDate.getText().toString();

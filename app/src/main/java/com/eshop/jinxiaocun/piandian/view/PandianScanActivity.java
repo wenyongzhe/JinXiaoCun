@@ -175,7 +175,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
         bean.JsonData.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号 通过getsheetno获取
         bean.JsonData.check_no = mTvPihao.getText().toString().trim();//盘点批次号
-        bean.JsonData.trans_no = Config.YwType.CY.toString();//"CY"  单据类型
+        bean.JsonData.trans_no = Config.YwType.CR.toString();//单据类型
         bean.JsonData.branch_no = mPandianPihao.getBranch_no();//盘点门店
         bean.JsonData.oper_range = MyUtils.convertToInt(mPandianPihao.getOper_range(),0);//10 //盘点类型
         bean.JsonData.oper_id = mTvOperId.getText().toString().trim();//操作员
@@ -590,7 +590,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 break;
             // 上传盘点明细 成功
             case Config.MESSAGE_RESULT_SUCCESS:
-                mOtherApi.sheetSave(Config.YwType.CY.toString(),mTvOrderNo.getText().toString());//保存业务单据
+                mOtherApi.sheetSave(Config.YwType.CR.toString(),mTvOrderNo.getText().toString());//保存业务单据
                 break;
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:

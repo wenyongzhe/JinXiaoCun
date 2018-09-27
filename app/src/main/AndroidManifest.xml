@@ -148,6 +148,22 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
+        <activity android:name=".pifaxiaoshou.view.PifaChukuListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".pifaxiaoshou.view.PifaChukuScanActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".pifaxiaoshou.view.PifaTuihuoListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".pifaxiaoshou.view.PifaTuihuoScanActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

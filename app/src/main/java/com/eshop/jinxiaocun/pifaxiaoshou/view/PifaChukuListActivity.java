@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderListAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaChukuListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
@@ -31,18 +31,18 @@ import butterknife.OnClick;
 
 /**
  * @Author Lu An
- * 创建时间  2018/9/13 0013
- * 描述 批发订单
+ * 创建时间  2018/9/27
+ * 描述 批发出库
  */
 
-public class PifaOrderListActivity extends CommonBaseListActivity implements INetWorResult {
+public class PifaChukuListActivity extends CommonBaseListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
-    private PifaOrderListAdapter mAdapter;
+    private PifaChukuListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
 
@@ -51,14 +51,14 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_pifa_order_list;
+        return R.layout.activity_pifa_chuku_list;
     }
 
     @Override
     protected void initView() {
         super.initView();
 
-        setTopToolBar("批发订单列表", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBar("批发出库列表", R.mipmap.ic_left_light, "", 0, "");
 
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
@@ -74,7 +74,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             @Override
             public void onRefresh() {
                 mPageIndex = 1;
-                getPifaOrderData();
+                getPifaChukuData();
             }
         });
 
@@ -82,11 +82,11 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             @Override
             public void onRefresh() {
                 mPageIndex++;
-                getPifaOrderData();
+                getPifaChukuData();
             }
         });
 
-        mAdapter = new PifaOrderListAdapter(mListInfo);
+        mAdapter = new PifaChukuListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
@@ -96,15 +96,15 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
     protected void initData() {
         super.initData();
         mDanJuList = new DanJuListImp(this);
-        getPifaOrderData();
+        getPifaChukuData();
     }
 
-    private void getPifaOrderData() {
+    private void getPifaChukuData() {
 
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
-        mDanJuMainBean.JsonData.sheettype = Config.YwType.SS.toString();//单据类型
+        mDanJuMainBean.JsonData.sheettype = Config.YwType.SO.toString();//单据类型
         mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
         mDanJuMainBean.JsonData.begintime = mTvStartDate.getText().toString();
         mDanJuMainBean.JsonData.endtime = mTvEndDate.getText().toString();
@@ -138,7 +138,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = format.format(calendar.getTime());
             mTvStartDate.setText(strDate);
-            getPifaOrderData();
+            getPifaChukuData();
         }
         @Override
         public void onDateTimeCancel() {
@@ -163,7 +163,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = format.format(calendar.getTime());
             mTvEndDate.setText(strDate);
-            getPifaOrderData();
+            getPifaChukuData();
         }
         @Override
         public void onDateTimeCancel() {
@@ -194,7 +194,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode ==22){
-            getPifaOrderData();
+            getPifaChukuData();
         }
     }
 
@@ -205,7 +205,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
 
     @Override
     protected void createOrderAfter() {
-        startActivityForResult(new Intent(this,PifaOrderScanActivity.class),2);
+        startActivityForResult(new Intent(this,PifaChukuScanActivity.class),2);
     }
 
     @Override

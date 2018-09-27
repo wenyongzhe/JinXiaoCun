@@ -32,12 +32,12 @@ public class PifaManagerActivity extends CommonBaseActivity {
 
     @OnClick(R.id.btn_pifa_chuku)
     public void onClickPifaChuku(){
-
+        startActivity(new Intent(this,PifaChukuListActivity.class));
     }
 
     @OnClick(R.id.btn_pifa_tuihuo)
     public void onClickPifaTuihuo(){
-
+        startActivity(new Intent(this,PifaTuihuoListActivity.class));
     }
 
 }

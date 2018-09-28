@@ -160,7 +160,7 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
                 }
                 mAdapter.setListInfo(mListInfo);
                 break;
-            case Config.MESSAGE_ERROR:
+            case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;
         }

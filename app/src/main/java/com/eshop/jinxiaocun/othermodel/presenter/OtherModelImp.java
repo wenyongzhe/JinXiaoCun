@@ -298,7 +298,7 @@ public class OtherModelImp implements IOtherModel {
         }
     }
 
-    //查询供应商
+    //供应商获取
     class ProviderInfoInterface implements IResponseListener {
 
         @Override

@@ -150,7 +150,7 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
                 mListInfo = (List<WarehouseInfoBeanResult>) o;
                 mAdapter.setListInfo(mListInfo);
                 break;
-            case Config.MESSAGE_ERROR:
+            case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;
         }

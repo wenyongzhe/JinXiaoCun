@@ -6,17 +6,15 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
-import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
+import com.eshop.jinxiaocun.caigou.adapter.CaigouRucangScanAdapter;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
@@ -25,7 +23,6 @@ import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
-import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
 import com.eshop.jinxiaocun.utils.Config;
@@ -43,11 +40,11 @@ import butterknife.BindView;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2018/9/27
- * Desc: 采购订单扫描
+ * Date: 2018/9/28
+ * Desc: 采购入仓扫描
  */
 
-public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
+public class CaigouRucangScanActivity extends CommonBaseScanActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
@@ -61,22 +58,22 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     private ProviderInfoBeanResult mProviderInfo;//供应商信息
     private WarehouseInfoBeanResult mWarehouseInfo;//仓库信息
-    private CaigouOrderScanAdapter mAdapter;
+    private CaigouRucangScanAdapter mAdapter;
 
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
     private GetClassPluResult mSelectGoodsEntity;
-    private String mStr_OrderNo;//采购订单单据号
+    private String mStr_OrderNo;//采购入仓单据号
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_caigou_order_scan;
+        return R.layout.activity_caigou_rucang_scan;
     }
 
     @Override
     protected void initView() {
         super.initView();
 
-        setTopToolBar("采购订单生成", R.mipmap.ic_left_light, "", 0, "添加商品");
+        setTopToolBar("采购入仓生成", R.mipmap.ic_left_light, "", 0, "添加商品");
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
@@ -84,8 +81,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mTvProvider.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectProviderListActivity.class);
-                intent.putExtra("SheetType",Config.YwType.PO.toString());
+                Intent intent = new Intent(CaigouRucangScanActivity.this, SelectProviderListActivity.class);
+                intent.putExtra("SheetType",Config.YwType.PI.toString());
                 startActivityForResult(intent,2);
             }
         });
@@ -93,8 +90,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mTvReceivingWarehouse.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectWarehouseListActivity.class);
-                intent.putExtra("SheetType",Config.YwType.PO.toString());
+                Intent intent = new Intent(CaigouRucangScanActivity.this, SelectWarehouseListActivity.class);
+                intent.putExtra("SheetType",Config.YwType.PI.toString());
                 startActivityForResult(intent,3);
             }
         });
@@ -105,7 +102,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         setHeaderTitle(R.id.tv_3,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_4,R.string.list_item_CountN5,100);//数量
 
-        mAdapter = new CaigouOrderScanAdapter(mListDatas);
+        mAdapter = new CaigouRucangScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
@@ -185,7 +182,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private void uploadRecordHeadData(){
         UploadDanjuMainBean bean = new UploadDanjuMainBean();
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
-        bean.JsonData.SheetType = Config.YwType.PO.toString(); //单据类型
+        bean.JsonData.SheetType = Config.YwType.PI.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
         bean.JsonData.T_Branch_No = mWarehouseInfo.getId();//对方门店/仓库
         bean.JsonData.SupCust_No = mProviderInfo.getId();//供应商客户代码
@@ -255,7 +252,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             // 上传单据明细 成功
             case Config.MESSAGE_RESULT_SUCCESS:
 //                AlertUtil.showToast(o.toString());
-                mOtherApi.sheetSave(Config.YwType.PO.toString(),mStr_OrderNo);//保存业务单据
+                mOtherApi.sheetSave(Config.YwType.PI.toString(),mStr_OrderNo);//保存业务单据
                 break;
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:
@@ -343,10 +340,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected void addAfter() {
-//        在上传保存前，获取采购订单单据号
+//        在上传保存前，获取采购入仓单据号
         if(TextUtils.isEmpty(mStr_OrderNo)){
             SheetNoBean bean = new SheetNoBean();
-            bean.JsonData.trans_no = Config.YwType.PO.toString();
+            bean.JsonData.trans_no = Config.YwType.PI.toString();
             bean.JsonData.branch_no=Config.branch_no;
             mOtherApi.getSheetNoData(bean);
         }else{

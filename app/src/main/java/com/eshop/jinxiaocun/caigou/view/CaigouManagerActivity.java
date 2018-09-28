@@ -32,7 +32,7 @@ public class CaigouManagerActivity extends CommonBaseActivity {
 
     @OnClick(R.id.btn_caigou_rucang)
     public void onClickCaigouRucang() {
-
+        startActivity(new Intent(this,CaigouRuCangListActivity.class));
     }
 
 

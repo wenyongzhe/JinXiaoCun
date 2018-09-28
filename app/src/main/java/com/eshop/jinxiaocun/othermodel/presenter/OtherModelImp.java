@@ -11,8 +11,12 @@ import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
+import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
+import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBean;
+import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -94,6 +98,37 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SheetSaveInterface());
+    }
+
+    //查询供应商
+    @Override
+    public void getProviderInfo(String sheetType,String zjm, int pageIndex, int pageSize) {
+        ProviderBean bean = new ProviderBean();
+        bean.JsonData.pos_id = Config.posid;
+        bean.JsonData.user_id = Config.UserId ; //操作员
+        bean.JsonData.type= "";
+        bean.JsonData.branchNo = Config.branch_no ; //门店/机构
+        bean.JsonData.sheettype = sheetType;//当前操作的单据类型
+        bean.JsonData.zjm = zjm;//
+        bean.JsonData.page = pageIndex;//每页显示的数量
+        bean.JsonData.pagenum = pageSize;//每页显示的数量
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new ProviderInfoInterface());
+    }
+
+    //查询仓库信息
+    @Override
+    public void getWarehouseUnfo(String sheetType) {
+        WarehouseInfoBean bean = new WarehouseInfoBean();
+        bean.JsonData.pos_id = Config.posid;
+        bean.JsonData.user_id = Config.UserId;//操作员
+        bean.JsonData.type = "P";
+        bean.JsonData.sheettype = sheetType;//当前操作的单据类型
+        bean.JsonData.branchNo = Config.branch_no;//门店/机构
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new WarehouseInfoInterface());
     }
 
 
@@ -258,6 +293,62 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_FAIL,"保存失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //查询供应商
+    class ProviderInfoInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<ProviderInfoBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,ProviderInfoBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"查询失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"查询失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //查询仓库
+    class WarehouseInfoInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<WarehouseInfoBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,WarehouseInfoBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"查询失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"查询失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

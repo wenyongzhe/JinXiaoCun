@@ -17,13 +17,17 @@ import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuDetailBean;
 import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
+import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
+import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
+import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -47,15 +51,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
-    @BindView(R.id.tv_pf_user)
-    DrawableTextView mTvUser;
-    @BindView(R.id.tv_pf_store)
-    TextView mTvUserStore;
+    @BindView(R.id.tv_provider)
+    DrawableTextView mTvProvider;//供应商
+    @BindView(R.id.tv_receiving_warehouse)
+    DrawableTextView mTvReceivingWarehouse;//收货仓库
 
     private IOtherModel mOtherApi;
     private ILingshouScan mQueryGoodsApi;
 
-    private CustomerInfoBeanResult mCustomerInfo;
+    private ProviderInfoBeanResult mProviderInfo;//供应商信息
+    private WarehouseInfoBeanResult mWarehouseInfo;//仓库信息
     private CaigouOrderScanAdapter mAdapter;
 
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
@@ -75,13 +80,22 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvUserStore.setText("[1001]总仓库");
 
-        mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
+        mTvProvider.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectCustomerListActivity.class);
+                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectProviderListActivity.class);
+                intent.putExtra("SheetType",Config.YwType.PO.toString());
                 startActivityForResult(intent,2);
+            }
+        });
+
+        mTvReceivingWarehouse.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
+            @Override
+            public void onDrawableRightClickListener(View view) {
+                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectWarehouseListActivity.class);
+                intent.putExtra("SheetType",Config.YwType.PO.toString());
+                startActivityForResult(intent,3);
             }
         });
 
@@ -173,7 +187,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
         bean.JsonData.SheetType = Config.YwType.PO.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
-        bean.JsonData.T_Branch_No = mCustomerInfo.getId();//对方门店/仓库
+        bean.JsonData.T_Branch_No = "";//对方门店/仓库
+        bean.JsonData.SupCust_No = mProviderInfo.getId();//供应商客户代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
         bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期
         mOtherApi.uploadDanjuMainInfo(bean);
@@ -266,10 +281,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             }
         }
 
-        //选择的客户
+        //选择的供应商
         if(requestCode == 2 && resultCode == 22){
-            mCustomerInfo = (CustomerInfoBeanResult) data.getSerializableExtra("CustomerInfo");
-            mTvUser.setText(mCustomerInfo.getName());
+            mProviderInfo = (ProviderInfoBeanResult) data.getSerializableExtra("ProviderInfo");
+            mTvProvider.setText(mProviderInfo.getName());
+        }
+
+        //选择仓库信息
+        if(requestCode == 3 && resultCode == 22){
+            mWarehouseInfo = (WarehouseInfoBeanResult) data.getSerializableExtra("WarehouseInfo");
+            mTvReceivingWarehouse.setText(mWarehouseInfo.getName());
         }
 
         //修改数量
@@ -307,10 +328,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("请添加商品，再保存!");
             return false;
         }
-        if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
-            AlertUtil.showToast("请选择客户，再保存!");
+        if(TextUtils.isEmpty(mTvProvider.getText().toString().trim())){
+            AlertUtil.showToast("请选择供应商，再保存!");
             return false;
         }
+
+        if(TextUtils.isEmpty(mTvReceivingWarehouse.getText().toString().trim())){
+            AlertUtil.showToast("请选择收货仓库，再保存!");
+            return false;
+        }
+
         return true;
     }
 

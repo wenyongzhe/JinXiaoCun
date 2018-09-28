@@ -47,10 +47,10 @@
             android:layout_height="match_parent"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:text="客户" />
+            android:text="供应商" />
 
         <com.eshop.jinxiaocun.widget.DrawableTextView
-            android:id="@+id/tv_pf_user"
+            android:id="@+id/tv_provider"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
@@ -75,14 +75,14 @@
             android:layout_height="match_parent"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:text="仓库" />
+            android:text="收货仓库" />
 
-        <TextView
-            android:id="@+id/tv_pf_store"
+        <com.eshop.jinxiaocun.widget.DrawableTextView
+            android:id="@+id/tv_receiving_warehouse"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Grey"
+            style="@style/TextView_Select"
             android:gravity="center_vertical|left"
             />
 

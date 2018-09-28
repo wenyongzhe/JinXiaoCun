@@ -21,4 +21,9 @@ public interface IOtherModel {
     void uploadDanjuDetailInfo(BaseBean bean);
     //SheetSave保存业务单据
     void sheetSave(String orderType ,String orderNo );
+    //查询供应商
+    void getProviderInfo(String sheetType,String zjm,int pageIndex,int pageSize);
+    //获取仓库信息
+    void getWarehouseUnfo(String sheetType);
+
 }

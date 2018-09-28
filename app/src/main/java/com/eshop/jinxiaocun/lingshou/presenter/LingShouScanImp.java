@@ -163,6 +163,12 @@ public class LingShouScanImp implements ILingshouScan {
             List<GetPayModeResult> mGetPayModeResult =  mJsonFormatImp.JsonToList(jsonData,GetPayModeResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_GET_PAY_MODE,mGetPayModeResult);
+                if(mGetPayModeResult!=null){
+                    Config.PayType.clear();
+                    for(int i=0; i<mGetPayModeResult.size(); i++){
+                        Config.PayType.put(mGetPayModeResult.get(i).getPay_way(),mGetPayModeResult.get(i).getPay_way());
+                    }
+                }
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetPayModeResult);
             }

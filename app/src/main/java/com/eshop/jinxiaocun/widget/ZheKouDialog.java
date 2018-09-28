@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -52,6 +54,7 @@ public class ZheKouDialog extends Activity {
             localLayoutParams.width = screen_width-100;
         localLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(localLayoutParams);
+        mH.sendEmptyMessageDelayed(2,300);
     }
 
     private void closeEditTextKeyboard() {
@@ -88,6 +91,19 @@ public class ZheKouDialog extends Activity {
         }else {
             MyUtils.showToast("折扣不能为空。",ZheKouDialog.this);
         }
+    }
+
+    Handler mH = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            showSoftKeyboard();
+        }
+    };
+
+    public void showSoftKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @OnClick(R.id.btn_cancel)

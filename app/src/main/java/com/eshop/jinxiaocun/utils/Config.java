@@ -4,6 +4,8 @@ import android.os.Environment;
 
 import com.eshop.jinxiaocun.db.DBHelper;
 
+import java.util.HashMap;
+
 public class Config {
 
     public static String UserCode = "";
@@ -93,6 +95,9 @@ public class Config {
     public static String getSdCardPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
+
+    public static HashMap<String, String> PayType = new HashMap<>();
+
 
     public enum YwType{
         //业务类型

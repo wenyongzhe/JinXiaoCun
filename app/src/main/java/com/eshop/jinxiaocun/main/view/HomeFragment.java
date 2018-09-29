@@ -17,6 +17,7 @@ import com.eshop.jinxiaocun.caigou.view.CaigouManagerActivity;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.peisong.view.PeisongManagerActivity;
+import com.eshop.jinxiaocun.peisong.view.YaohuoOrderListActivity;
 import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
@@ -43,7 +44,7 @@ public class HomeFragment extends BaseFragment {
             R.drawable.spgl,
             R.drawable.spgl
     };
-    private int[] nameIds = { R.string.menu_goods_manager,
+    private int[] nameIds = { R.string.menu_yaohuo_order,
             R.string.menu_caigoudan, R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
             R.string.item_message_lingshou,
@@ -88,8 +89,9 @@ public class HomeFragment extends BaseFragment {
 
         switch (i){
             case 0:
+                intent.setClass(Application.mContext, YaohuoOrderListActivity.class);
+                startActivity(intent);
                 break;
-
             case 1:
                 intent.setClass(Application.mContext, CaigouManagerActivity.class);
                 startActivity(intent);

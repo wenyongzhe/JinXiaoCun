@@ -30,7 +30,7 @@ import butterknife.BindView;
 /**
  * Author: 安仔夏天勤奋
  * Date: 2018/9/28
- * Desc: 选择仓库
+ * Desc: 门店、仓库、机构、分部 都是用这个接口(就是名称是的叫法不一样)
  */
 public class SelectWarehouseListActivity extends CommonBaseListActivity implements INetWorResult {
 
@@ -43,6 +43,7 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
 
     protected BarcodeScan mBarcodeScan;//扫描控制
     private String mSheetType;
+    private int mShowType=1;//1门店、2仓库、3机构、4分部
 
     @Override
     protected int getLayoutContentId() {
@@ -53,14 +54,30 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
     protected void initView() {
         super.initView();
 
-        setTopToolBar("请选择仓库", R.mipmap.ic_left_light, "", 0, "");
+        mSheetType = getIntent().getStringExtra("SheetType");
+        mShowType = getIntent().getIntExtra("ShowType",1);
         mLayoutBottom.setVisibility(View.GONE);
         mEtBarcode.setOnKeyListener(onKey);
-        setHeaderTitle(R.id.tv_0,R.string.list_item_StoreName,150);
-        setHeaderTitle(R.id.tv_1,R.string.list_item_StoreCode,150);
-        setHeaderTitle(R.id.tv_2,R.string.list_item_Customer_zjm,150);
 
-        mSheetType = getIntent().getStringExtra("SheetType");
+        if(mShowType ==1){
+            setTopToolBar("请选择门店", R.mipmap.ic_left_light, "", 0, "");
+            setHeaderTitle(R.id.tv_0,R.string.list_item_ShopName,150);
+            setHeaderTitle(R.id.tv_1,R.string.list_item_ShopCode,150);
+        }else if(mShowType ==2){
+            setTopToolBar("请选择仓库", R.mipmap.ic_left_light, "", 0, "");
+            setHeaderTitle(R.id.tv_0,R.string.list_item_StoreName,150);
+            setHeaderTitle(R.id.tv_1,R.string.list_item_StoreCode,150);
+        }else if(mShowType ==3){
+            setTopToolBar("请选择机构", R.mipmap.ic_left_light, "", 0, "");
+            setHeaderTitle(R.id.tv_0,R.string.list_item_OrganizationName,150);
+            setHeaderTitle(R.id.tv_1,R.string.list_item_OrganizationCode,150);
+        }else if(mShowType ==4){
+            setTopToolBar("请选择分部", R.mipmap.ic_left_light, "", 0, "");
+            setHeaderTitle(R.id.tv_0,R.string.list_item_DepName,150);
+            setHeaderTitle(R.id.tv_1,R.string.list_item_DepCode,150);
+        }
+
+        setHeaderTitle(R.id.tv_2,R.string.list_item_Customer_zjm,150);
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override

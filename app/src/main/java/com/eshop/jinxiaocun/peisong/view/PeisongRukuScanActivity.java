@@ -85,6 +85,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             public void onDrawableRightClickListener(View view) {
                 Intent intent = new Intent(PeisongRukuScanActivity.this, SelectWarehouseListActivity.class);
                 intent.putExtra("SheetType",Config.YwType.MI.toString());
+                intent.putExtra("ShowType",2);
                 startActivityForResult(intent,2);
             }
         });
@@ -316,7 +317,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             return false;
         }
         if(TextUtils.isEmpty(mTvTiaoChu.getText().toString().trim())){
-            AlertUtil.showToast("请选择门店，再保存!");
+            AlertUtil.showToast("请选择调出，再保存!");
             return false;
         }
 

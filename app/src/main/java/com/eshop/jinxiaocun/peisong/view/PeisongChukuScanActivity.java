@@ -49,9 +49,9 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
     @BindView(R.id.tv_tiaochu)
-    DrawableTextView mTvTiaoChu;//调出
+    TextView mTvTiaoChu;//调出
     @BindView(R.id.tv_tiaoru)
-    TextView mTvTiaoRu;//调入
+    DrawableTextView mTvTiaoRu;//调入
 
     private IOtherModel mOtherApi;
     private ILingshouScan mQueryGoodsApi;
@@ -65,7 +65,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_peisong_ruku_scan;
+        return R.layout.activity_peisong_chuku_scan;
     }
 
     @Override
@@ -76,13 +76,14 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvTiaoRu.setText("["+Config.branch_no+"]");
+        mTvTiaoChu.setText("["+Config.branch_no+"]");
 
-        mTvTiaoChu.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
+        mTvTiaoRu.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
                 Intent intent = new Intent(PeisongChukuScanActivity.this, SelectWarehouseListActivity.class);
                 intent.putExtra("SheetType",Config.YwType.MO.toString());
+                intent.putExtra("ShowType",2);
                 startActivityForResult(intent,2);
             }
         });
@@ -275,7 +276,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         //选择的供应商
         if(requestCode == 2 && resultCode == 22){
             mStoreInfo = (WarehouseInfoBeanResult) data.getSerializableExtra("WarehouseInfo");
-            mTvTiaoChu.setText("["+mStoreInfo.getId()+"]"+mStoreInfo.getName());
+            mTvTiaoRu.setText("["+mStoreInfo.getId()+"]"+mStoreInfo.getName());
         }
 
         //修改数量
@@ -313,8 +314,8 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
             AlertUtil.showToast("请添加商品，再保存!");
             return false;
         }
-        if(TextUtils.isEmpty(mTvTiaoChu.getText().toString().trim())){
-            AlertUtil.showToast("请选择门店，再保存!");
+        if(TextUtils.isEmpty(mTvTiaoRu.getText().toString().trim())){
+            AlertUtil.showToast("请选择调入，再保存!");
             return false;
         }
 

@@ -49,12 +49,12 @@
             android:textSize="16sp"
             android:text="调出" />
 
-        <com.eshop.jinxiaocun.widget.DrawableTextView
+        <TextView
             android:id="@+id/tv_tiaochu"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Select"
+            style="@style/TextView_Grey"
             android:gravity="center_vertical|left"
             />
 
@@ -77,12 +77,12 @@
             android:textSize="16sp"
             android:text="调入" />
 
-        <TextView
+        <com.eshop.jinxiaocun.widget.DrawableTextView
             android:id="@+id/tv_tiaoru"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Grey"
+            style="@style/TextView_Select"
             android:gravity="center_vertical|left"
             />
 

@@ -54,13 +54,12 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     @BindView(R.id.tv_provider)
     DrawableTextView mTvProvider;//供应商
     @BindView(R.id.tv_receiving_warehouse)
-    DrawableTextView mTvReceivingWarehouse;//收货仓库
+    TextView mTvReceivingWarehouse;//收货仓库
 
     private IOtherModel mOtherApi;
     private ILingshouScan mQueryGoodsApi;
 
     private ProviderInfoBeanResult mProviderInfo;//供应商信息
-    private WarehouseInfoBeanResult mWarehouseInfo;//仓库信息
     private CaigouOrderScanAdapter mAdapter;
 
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
@@ -80,6 +79,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
+        mTvReceivingWarehouse.setText(Config.branch_no);
 
         mTvProvider.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -87,15 +87,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 Intent intent = new Intent(CaigouOrderScanActivity.this, SelectProviderListActivity.class);
                 intent.putExtra("SheetType",Config.YwType.PO.toString());
                 startActivityForResult(intent,2);
-            }
-        });
-
-        mTvReceivingWarehouse.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
-            @Override
-            public void onDrawableRightClickListener(View view) {
-                Intent intent = new Intent(CaigouOrderScanActivity.this, SelectWarehouseListActivity.class);
-                intent.putExtra("SheetType",Config.YwType.PO.toString());
-                startActivityForResult(intent,3);
             }
         });
 
@@ -187,7 +178,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
         bean.JsonData.SheetType = Config.YwType.PO.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
-        bean.JsonData.T_Branch_No = mWarehouseInfo.getId();//对方门店/仓库
+        bean.JsonData.T_Branch_No = "";//对方门店/仓库
         bean.JsonData.SupCust_No = mProviderInfo.getId();//供应商客户代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
         bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期
@@ -285,12 +276,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 2 && resultCode == 22){
             mProviderInfo = (ProviderInfoBeanResult) data.getSerializableExtra("ProviderInfo");
             mTvProvider.setText(mProviderInfo.getName());
-        }
-
-        //选择仓库信息
-        if(requestCode == 3 && resultCode == 22){
-            mWarehouseInfo = (WarehouseInfoBeanResult) data.getSerializableExtra("WarehouseInfo");
-            mTvReceivingWarehouse.setText(mWarehouseInfo.getName());
         }
 
         //修改数量

@@ -77,12 +77,12 @@
             android:textSize="16sp"
             android:text="收货仓库" />
 
-        <com.eshop.jinxiaocun.widget.DrawableTextView
+        <TextView
             android:id="@+id/tv_receiving_warehouse"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            style="@style/TextView_Select"
+            style="@style/TextView_Grey"
             android:gravity="center_vertical|left"
             />
 

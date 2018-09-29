@@ -14,7 +14,7 @@ public class ProviderBean extends BaseBean {
     public ProviderBean.ProviderJsonData JsonData;
 
     public ProviderBean (){
-        setStrCmd(WebConfig.QrySupplierInfo);
+        setStrCmd(WebConfig.GetSupplierInfo);
         JsonData = new ProviderBean.ProviderJsonData();
     }
 

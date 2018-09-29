@@ -36,7 +36,7 @@ public class WebConfig {
     public static final String GetCustomerInfo= "GetCustomerInfo";//客户信息
     public static final String BillDiscount= "BillDiscount";//整单折扣、议价
     public static final String GetPayMode= "GetPayMode";//付款方式
-    public static final String QrySupplierInfo= "QrySupplierInfo";//供应商查询
+    public static final String GetSupplierInfo= "GetSupplierInfo";//获取供应商
     public static final String GetBranchInfo= "GetBranchInfo";//仓库、分部获取
 
     public static String getPosLogin() {

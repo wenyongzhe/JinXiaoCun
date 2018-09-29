@@ -110,12 +110,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         if(!newSheet){
             mLingShouScanImp.getSheetDetail(sheet_no);
         }else
-            initMainBean();
+            //initMainBean();
         mLingShouScanImp.getFlowNo();
         mLingShouScanImp.getPayMode();
     }
 
-    private void initMainBean(){
+    /*private void initMainBean(){
         mUpMainBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
         mUpMainBean.setSheetType(BillType.SO+"");//单据类型-批发销售
         mUpMainBean.setSheet_No("");//单号
@@ -137,7 +137,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mUpDetailBean.setSupplyCode("");//SupplyCode
 
         mUpDetailBeanList.add(mUpDetailBean);
-    }
+    }*/
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -149,7 +149,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         ButterKnife.bind(this);
         btSell.setText(R.string.bt_sell);
         tv_check_num.setText("总价：");
-        ly_buttom1.setVisibility(View.VISIBLE);
+//        ly_buttom1.setVisibility(View.VISIBLE);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -224,7 +224,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELL_SUB:
                 ToastUtils.showShort(R.string.message_sell_ok);
-                AlertUtil.showAlert(LingShouScanActivity.this, "找零", zhaoling+"", "确定", new View.OnClickListener() {
+                AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+zhaoling, "确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         finish();

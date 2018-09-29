@@ -12,6 +12,8 @@ import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthBean;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPayModeBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPayModeResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
@@ -120,7 +122,36 @@ public class LingShouScanImp implements ILingshouScan {
 
     @Override
     public void getOptAuth() {
+        GetOptAuthBean mGetOptAuthBean = new GetOptAuthBean();
+        mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mGetOptAuthBean.getJsonData().setAs_operId(Config.UserId);
+        mGetOptAuthBean.getJsonData().setAs_passwd(Config.PASSWORD);
+        mGetOptAuthBean.getJsonData().setAi_grant(Config.strgrant);
+        Map map = ReflectionUtils.obj2Map(mGetOptAuthBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetOptAuthInterface());
+    }
 
+    //获取折扣权限
+    class GetOptAuthInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+            Log.e("error", event.toString());
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GET_OPT_AUTH,mGetOptAuthResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mGetOptAuthResult);
+            }
+        }
     }
 
     @Override

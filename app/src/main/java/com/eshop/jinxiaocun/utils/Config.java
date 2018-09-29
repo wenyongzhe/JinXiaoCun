@@ -15,7 +15,7 @@ public class Config {
     public static String DeviceID = "";
 //    public static String IP="192.168.10.67";
     public static String IP="120.79.209.140";
-    public static String IP_POIN=":1433/";
+    public static String IP_POIN="8080";
     public static String DB_NAME="EWESHOP";
     public static String USER_NAME="sa";
     public static String PASSWORD="123456";
@@ -68,6 +68,7 @@ public class Config {
     public final static int MESSAGE_INTENT_YIJIA = 30;
     public final static int RESULT_SELECT_GOODS = 200;
     public final static int MESSAGE_GET_PAY_MODE = 31;
+    public final static int MESSAGE_GET_OPT_AUTH = 32;
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

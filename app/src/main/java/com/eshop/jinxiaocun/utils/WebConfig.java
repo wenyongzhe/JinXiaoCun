@@ -3,7 +3,7 @@ package com.eshop.jinxiaocun.utils;
 public class WebConfig {
     public static final String DEFAULT_STRING = "123";
     private static final int TIME_OUT = 5 * 1000 * 60;
-    private static String WSDL_URI = "http://120.79.209.140:8080/MobilePos/API.asmx/";
+//    private static String WSDL_URI = "http://120.79.209.140:8080/MobilePos/API.asmx/";
     private static String NameSpace = "http://120.79.209.140:8080";
     private static String PostData = "PostData";
     private static String GetData = "GetData";
@@ -39,6 +39,8 @@ public class WebConfig {
     public static final String GetSupplierInfo= "GetSupplierInfo";//获取供应商
     public static final String GetBranchInfo= "GetBranchInfo";//仓库、分部获取
     public static final String SellSub= "SellSub";//结算
+    public static final String GetOptAuth= "GetOptAuth";//打折权限
+
 
 
     public static String getPosLogin() {
@@ -58,11 +60,13 @@ public class WebConfig {
     }
 
     public static String getPostWsdlUri() {
-        return WSDL_URI+PostData;
+
+        return "http://"+Config.IP+":"+Config.IP_POIN+"/MobilePos/API.asmx/"+PostData;
     }
 
     public static String getGetWsdlUri() {
-        return WSDL_URI+GetData;
+
+        return "http://"+Config.IP+":"+Config.IP_POIN+"/MobilePos/API.asmx/"+GetData;
     }
 
     public static String getNameSpace() {

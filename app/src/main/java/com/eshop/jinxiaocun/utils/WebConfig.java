@@ -38,6 +38,8 @@ public class WebConfig {
     public static final String GetPayMode= "GetPayMode";//付款方式
     public static final String GetSupplierInfo= "GetSupplierInfo";//获取供应商
     public static final String GetBranchInfo= "GetBranchInfo";//仓库、分部获取
+    public static final String SellSub= "SellSub";//结算
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

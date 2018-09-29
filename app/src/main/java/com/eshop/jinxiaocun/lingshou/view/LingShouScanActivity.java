@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,6 +35,8 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.LightProgressDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
@@ -81,7 +84,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     protected List<PlayFlowBean> mPlayFlowBeanList;
     private String FlowNo = "";
     private Double total = 0.00;
-
+    private List<GetPluPriceBeanResult> mGetPluPriceBeanResult;
+    private List<GetClassPluResult> mGetClassPluResultList;
+    private Double zhaoling = 0.0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
@@ -182,22 +187,36 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
                 break;
             case Config.MESSAGE_GOODS_INFOR:
-                List<GetClassPluResult> mGetClassPluResultList = (List<GetClassPluResult>)o;
-                reflashList(mGetClassPluResultList);
+                mGetClassPluResultList = (List<GetClassPluResult>)o;
+                reflashList(mGetClassPluResultList,true);
                 //getPiCi(mGetClassPluResultList);
                 break;
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
-                    FlowNo = mGetFlowNoBeanResult.getFlowNo()+1;
+                    FlowNo = mGetFlowNoBeanResult.getFlowNo();
+                    FlowNo = MyUtils.formatFlowNo(FlowNo);
                 }
                 break;
             case Config.MESSAGE_UP_SALL_FLOW:
-                mLingShouScanImp.getPluPrice();
+                mLingShouScanImp.getPluPrice(FlowNo);
                 break;
             case Config.MESSAGE_GETPLU_PRICE:
-                List<GetPluPriceBeanResult> mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
+                mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
+                if(mListData!=null){
+                    for(int i=0; i<mListData.size(); i++){
+                        GetClassPluResult mplu = mListData.get(i);
+                        for(int j=0; j<mGetPluPriceBeanResult.size(); j++){
+                            GetPluPriceBeanResult mpluSrc = mGetPluPriceBeanResult.get(j);
+                            if(mpluSrc.getItem_no().equalsIgnoreCase(mplu.getItem_no())){
+                                mplu.setSale_price(mpluSrc.getSale_price());
+                            }
+                        }
+                    }
+                    reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
+                }
                 Intent intent = new Intent(this, MoneyDialog.class);
+                intent.putExtra("total",total);
                 startActivityForResult(intent,100);
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW:
@@ -205,7 +224,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELL_SUB:
                 ToastUtils.showShort(R.string.message_sell_ok);
-                finish();
+                AlertUtil.showAlert(LingShouScanActivity.this, "找零", zhaoling+"", "确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
                 break;
             case Config.MESSAGE_GET_PAY_MODE:
 
@@ -213,6 +237,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
         }
     }
+
 
     /*
     更新界面数据
@@ -244,8 +269,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
             case Config.RESULT_SELECT_GOODS:
-                List<GetClassPluResult> mGetClassPluResult = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-                reflashList(mGetClassPluResult);
+                mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+                reflashList(mGetClassPluResultList,true);
                 //getPiCi(mGetClassPluResult);
                 break;
             case RESULT_OK:
@@ -258,7 +283,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_MONEY:
                 if(requestCode == 100){
                     String mMoney =  data.getStringExtra("countN");
-                    setPlayFlowBean(mMoney);
+                    zhaoling = Double.parseDouble(mMoney) - total;
+                    setPlayFlowBean(total+"");
                 }else if(requestCode == 200){
                     String zhekou =  data.getStringExtra("countN");
                     total = Double.parseDouble(zhekou);
@@ -282,8 +308,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mLingShouScanImp.getBillDiscount(total,FlowNo);
     }
 
-    private void reflashList(List<GetClassPluResult> mGetClassPluResultlist){
-        mListData.addAll(mGetClassPluResultlist);
+    private void reflashList(List<GetClassPluResult> mGetClassPluResultlist,boolean flag){
+        if(flag){
+            mListData.addAll(mGetClassPluResultlist);
+        }
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
         for(int i=0; i<mListData.size(); i++){
@@ -300,7 +328,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
             mSaleFlowBean.setBranch_no(Config.branch_no);
             mSaleFlowBean.setFlow_no(FlowNo);
-            mSaleFlowBean.setFlow_id(i+"");
+            mSaleFlowBean.setFlow_id((i+1)+"");
             mSaleFlowBean.setItem_no(mGetClassPluResult.getItem_no());
             mSaleFlowBean.setSource_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
@@ -341,39 +369,29 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     }
 
     private void setPlayFlowBean(String payAmount){
-        for(int i=0; i<mListData.size(); i++){
-            PlayFlowBean mPlayFlowBean = new PlayFlowBean();
-            GetClassPluResult mGetClassPluResult = mListData.get(i);
-
-            mPlayFlowBean.setBranch_no(Config.branch_no);
-            mPlayFlowBean.setFlow_no(FlowNo);
-            mPlayFlowBean.setFlow_id(i);
-            Float money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())/100;
-            mPlayFlowBean.setSale_amount(money);
-            mPlayFlowBean.setPay_way("");
-            mPlayFlowBean.setSell_way("A");
-            mPlayFlowBean.setCard_no(1);
-            mPlayFlowBean.setVip_no(1);
-            mPlayFlowBean.setCoin_no("RMB");
-            mPlayFlowBean.setCoin_rate(0.8);
-            mPlayFlowBean.setPay_amount(Float.parseFloat(payAmount));//付款金额
-            mPlayFlowBean.setVoucher_no("");
-            mPlayFlowBean.setPosid(Config.posid);
-            mPlayFlowBean.setCounter_no("");
-            mPlayFlowBean.setOper_id(Config.UserName);
-            mPlayFlowBean.setSale_man(Config.UserName);
-            mPlayFlowBean.setShift_no("");
-            mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
-            mPlayFlowBean.setMemo("");
-            mPlayFlowBean.setWorderno("");
-            if(i == (mListData.size()-1)){
-                mPlayFlowBean.setbDealFlag("1");
-            }else{
-                mPlayFlowBean.setbDealFlag("0");
-            }
-
-            mPlayFlowBeanList.add(mPlayFlowBean);
-        }
+        PlayFlowBean mPlayFlowBean = new PlayFlowBean();
+        mPlayFlowBean.setBranch_no(Config.branch_no);
+        mPlayFlowBean.setFlow_no(FlowNo);
+        mPlayFlowBean.setFlow_id(1);
+        mPlayFlowBean.setSale_amount(Float.parseFloat(payAmount));
+        mPlayFlowBean.setPay_way("RMB");
+        mPlayFlowBean.setSell_way("A");
+        mPlayFlowBean.setCard_no(1);
+        mPlayFlowBean.setVip_no(1);
+        mPlayFlowBean.setCoin_no("RMB");
+        mPlayFlowBean.setCoin_rate(1);
+        mPlayFlowBean.setPay_amount(Float.parseFloat(payAmount));//付款金额
+        mPlayFlowBean.setVoucher_no("");
+        mPlayFlowBean.setPosid(Config.posid);
+        mPlayFlowBean.setCounter_no("");
+        mPlayFlowBean.setOper_id(Config.UserName);
+        mPlayFlowBean.setSale_man(Config.UserName);
+        mPlayFlowBean.setShift_no("");
+        mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
+        mPlayFlowBean.setMemo("");
+        mPlayFlowBean.setWorderno("");
+        mPlayFlowBean.setbDealFlag("1");
+        mPlayFlowBeanList.add(mPlayFlowBean);
         mLingShouScanImp.upPlayFlow(mPlayFlowBeanList);
     }
 

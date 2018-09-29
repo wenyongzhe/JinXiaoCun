@@ -25,11 +25,13 @@ public class MoneyDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
+    Double total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_count);
+        total = getIntent().getDoubleExtra("total",0.0);
 
         ButterKnife.bind(this);
 
@@ -88,6 +90,10 @@ public class MoneyDialog extends Activity {
         }
 
         String countN = txtCountN.getText().toString().trim();
+        if(total>0.0 && Double.parseDouble(countN)<total){
+            MyUtils.showToast("请输入大于等于"+total+"的数！", this);
+            return;
+        }
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(MoneyDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);

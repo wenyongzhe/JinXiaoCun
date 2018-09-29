@@ -8,7 +8,7 @@ public class SellSubBean extends BaseBean{
     private SellSubJsonData JsonData;
 
     public SellSubBean() {
-        setStrCmd(WebConfig.GetFlowNo);
+        setStrCmd(WebConfig.SellSub);
         JsonData = new SellSubJsonData();
     }
 

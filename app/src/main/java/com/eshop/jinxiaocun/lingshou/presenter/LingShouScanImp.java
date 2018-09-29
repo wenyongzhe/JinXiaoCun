@@ -82,10 +82,10 @@ public class LingShouScanImp implements ILingshouScan {
 
     //销售商品取价
     @Override
-    public void getPluPrice() {
+    public void getPluPrice(String flow_no) {
         GetPluPriceBean mGetPluPrice = new GetPluPriceBean();
         mGetPluPrice.getJsonData().setAs_branchNo(Config.branch_no);
-        mGetPluPrice.getJsonData().setAs_flowno(Config.posid);
+        mGetPluPrice.getJsonData().setAs_flowno(flow_no);
         mGetPluPrice.getJsonData().setAs_cardno("");
         Map map = ReflectionUtils.obj2Map(mGetPluPrice);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface());
@@ -98,7 +98,7 @@ public class LingShouScanImp implements ILingshouScan {
         mSellSubBean.getJsonData().setAs_branchNo(Config.branch_no);
         mSellSubBean.getJsonData().setAs_flowno(flowno);//结账流水
         Map map = ReflectionUtils.obj2Map(mSellSubBean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SellSubInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SellSubInterface());
     }
 
     @Override

@@ -376,5 +376,10 @@ public class MyUtils {
         }
     }
 
+    public final static String formatFlowNo(String flowno){
+        flowno = String.format("%05d", Integer.decode(flowno)+1);
+        flowno = Config.branch_no+Config.posid+DateUtility.getCurrentDateYYMMdd() + flowno;
+        return flowno;
+    }
 
 }

@@ -7,7 +7,7 @@ public interface ILingshouScan {
     public void getSheetDetail(String sheetNo);//单据明细
     public void getPLUInfo(String barCode);//销售商品精确查询（编码）
     public void getPLULikeInfo(String barCode);//销售商品模糊查询
-    public void getPluPrice();//销售商品取价
+    public void getPluPrice(String flow_no);//销售商品取价
     public void sellSub(String flowno);//结算
     public void upSallFlow(List list);//上传销售流水
     public void upPlayFlow(List list);//上传付款流水

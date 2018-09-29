@@ -179,11 +179,13 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
         mOtherApi.uploadDanjuMainInfo(bean);
     }
 
-    //上传批发商品明细数据
+    //上传商品明细数据
     private void uploadGoodDetailData(){
         List<UploadDanjuDetailBean.UploadDanjuDetail> jsonData = new ArrayList<>();
-        for (GetClassPluResult data : mListDatas) {
+        for (int i=0;i<mListDatas.size();i++) {
+            GetClassPluResult data = mListDatas.get(i);
             UploadDanjuDetailBean.UploadDanjuDetail obj = new UploadDanjuDetailBean.UploadDanjuDetail();
+            obj.FLowID = ""+(i+1) ;//序号从1开始
             obj.POSID = Config.posid;
             obj.BillNo = mStr_OrderNo;//单据号
             obj.BarCode = data.getItem_no();//编码

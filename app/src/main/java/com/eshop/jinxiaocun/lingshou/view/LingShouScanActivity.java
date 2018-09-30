@@ -1,7 +1,6 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,10 +15,8 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
-import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
@@ -36,7 +33,6 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
-import com.eshop.jinxiaocun.widget.LightProgressDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
@@ -86,7 +82,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private Double total = 0.00;
     private List<GetPluPriceBeanResult> mGetPluPriceBeanResult;
     private List<GetClassPluResult> mGetClassPluResultList;
-    private Double zhaoling = 0.0;
+    private Double change = 0.0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
@@ -149,7 +145,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         ButterKnife.bind(this);
         btSell.setText(R.string.bt_sell);
         tv_check_num.setText("总价：");
-//        ly_buttom1.setVisibility(View.VISIBLE);
+        ly_buttom1.setVisibility(View.VISIBLE);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -224,7 +220,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELL_SUB:
                 ToastUtils.showShort(R.string.message_sell_ok);
-                AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+zhaoling, "确定", new View.OnClickListener() {
+                AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change, "确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         finish();
@@ -278,12 +274,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 int itemClickPosition = mScanAdapter.getItemClickPosition();
                 GetClassPluResult item = mListData.get(itemClickPosition);
                 item.setSale_qnty(mCount);
-                mScanAdapter.notifyDataSetChanged();
+                reflashList(mListData,false);
                 break;
             case Config.MESSAGE_MONEY:
                 if(requestCode == 100){
                     String mMoney =  data.getStringExtra("countN");
-                    zhaoling = Double.parseDouble(mMoney) - total;
+                    change = Double.parseDouble(mMoney) - total;
                     setPlayFlowBean(total+"");
                 }else if(requestCode == 200){
                     String zhekou =  data.getStringExtra("countN");
@@ -310,13 +306,21 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     private void reflashList(List<GetClassPluResult> mGetClassPluResultlist,boolean flag){
         if(flag){
+            for (int i=0; i<mListData.size(); i++){
+                for(int j=0; j<mGetClassPluResultlist.size(); j++){
+                    if(mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultlist.get(j).getItem_no().trim())){
+                        mGetClassPluResultlist.remove(j);
+                        break;
+                    }
+                }
+            }
             mListData.addAll(mGetClassPluResultlist);
         }
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
-            total += Double.parseDouble(mGetClassPluResult.getSale_price());
+            total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
         }
         tv_check_num.setText("总价："+total);
     }
@@ -403,8 +407,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @OnClick(R.id.btn_delete)
     void delete() {
         try {
+            if(mScanAdapter.getItemClickPosition() == -1){
+                ToastUtils.showShort("请选择商品");
+                return;
+            }
             mListData.remove(itemClickPosition);
-            mScanAdapter.notifyDataSetChanged();
+            reflashList(mListData,false);
         }catch (Exception e){
 
         }
@@ -441,6 +449,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     @OnClick(R.id.btn_modify_count)
     void modifyCount() {
+        if(mScanAdapter.getItemClickPosition() == -1){
+            ToastUtils.showShort("请选择商品");
+            return;
+        }
         GetClassPluResult mGetClassPluResult = mListData.get(itemClickPosition);
         Intent intent = new Intent();
         intent.putExtra("countN", mGetClassPluResult.getSale_qnty());

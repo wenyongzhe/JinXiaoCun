@@ -20,6 +20,7 @@ import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
@@ -70,9 +71,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     @BindView(R.id.btn_zhekou)
     Button btn_zhekou;//折扣
 
-    private final static int SELL = 110;
-    private final static int SELL_DANPING_YIJIA = 111;
-    private final static int SELL_ZHENDAN_YIJIA = 112;
+    public final static int SELL = 110;
+    public final static int SELL_DANPING_YIJIA = 111;
+    public final static int SELL_ZHENDAN_YIJIA = 112;
+    public final static int SELL_ZHENDAN_ZHEKOU = 113;
+
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     private IOtherModel mIOtherModel;
@@ -84,6 +87,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private List<GetClassPluResult> mGetClassPluResultList;
     private Double change = 0.0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
+    private GetOptAuthResult mGetOptAuthResult = null;
+    private boolean hasDiscount = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,12 +108,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mPlayFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
-        if(!newSheet){
+        /*if(!newSheet){
             mLingShouScanImp.getSheetDetail(sheet_no);
         }else
-            //initMainBean();
+            initMainBean();*/
         mLingShouScanImp.getFlowNo();
         mLingShouScanImp.getPayMode();
+        mLingShouScanImp.getOptAuth();
     }
 
     /*private void initMainBean(){
@@ -194,8 +200,20 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     FlowNo = MyUtils.formatFlowNo(FlowNo);
                 }
                 break;
-            case Config.MESSAGE_UP_SALL_FLOW:
-                mLingShouScanImp.getPluPrice(FlowNo);
+            case Config.MESSAGE_BILL_DISCOUNT_RETURN:
+                mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
+                if(mListData!=null){
+                    for(int i=0; i<mListData.size(); i++){
+                        GetClassPluResult mplu = mListData.get(i);
+                        for(int j=0; j<mGetPluPriceBeanResult.size(); j++){
+                            GetPluPriceBeanResult mpluSrc = mGetPluPriceBeanResult.get(j);
+                            if(mpluSrc.getItem_no().equalsIgnoreCase(mplu.getItem_no())){
+                                mplu.setSale_price(mpluSrc.getSale_price());
+                            }
+                        }
+                    }
+                    reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
+                }
                 break;
             case Config.MESSAGE_GETPLU_PRICE:
                 mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
@@ -230,7 +248,23 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_GET_PAY_MODE:
 
                 break;
-
+            case Config.MESSAGE_GET_OPT_AUTH:
+                mGetOptAuthResult = (GetOptAuthResult)o;
+                break;
+            case SELL:
+                mLingShouScanImp.getPluPrice(FlowNo,0);
+                break;
+            case SELL_ZHENDAN_YIJIA:
+                intent = new Intent(this, MoneyDialog.class);
+                startActivityForResult(intent,200);
+                break;
+            case SELL_ZHENDAN_ZHEKOU:
+                intent = new Intent(this, ZheKouDialog.class);
+                startActivityForResult(intent,100);
+                break;
+            case Config.MESSAGE_BILL_DISCOUNT:
+                mLingShouScanImp.getPluPrice(FlowNo,1);
+                break;
         }
     }
 
@@ -283,17 +317,19 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     setPlayFlowBean(total+"");
                 }else if(requestCode == 200){
                     String zhekou =  data.getStringExtra("countN");
-                    total = Double.parseDouble(zhekou);
-                    tv_check_num.setText("总价："+total);
-                    getBillDiscount(total);
+//                    total = Double.parseDouble(zhekou);
+//                    tv_check_num.setText("总价："+total);
+                    getBillDiscount(Double.parseDouble(zhekou));
+//                    setSaleFlowBean(SELL_ZHENDAN_YIJIA);
                 }
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
                 int int_zhekou = Integer.decode(zhekou);
-                total = int_zhekou*total;
-                tv_check_num.setText("总价："+total);
-                getBillDiscount(total);
+//                total = int_zhekou*total;
+//                tv_check_num.setText("总价："+total);
+//                setSaleFlowBean(SELL_ZHENDAN_YIJIA);
+                getBillDiscount(int_zhekou*total);
                 break;
 
         }
@@ -363,10 +399,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }
         switch (flag){
             case SELL:
-                mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL);
                 break;
             case SELL_ZHENDAN_YIJIA:
-                btn_yijia();
+                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL_ZHENDAN_YIJIA);
+                break;
+            case SELL_ZHENDAN_ZHEKOU:
+                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL_ZHENDAN_ZHEKOU);
                 break;
         }
 
@@ -425,8 +464,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             if(total==null ||total == 0){
                 return;
             }
-            Intent intent = new Intent(this, ZheKouDialog.class);
-            startActivityForResult(intent,100);
+            setSaleFlowBean(SELL_ZHENDAN_ZHEKOU);
+//            Intent intent = new Intent(this, ZheKouDialog.class);
+//            startActivityForResult(intent,100);
         }catch (Exception e){
 
         }
@@ -439,8 +479,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             if(total==null ||total == 0){
                 return;
             }
-            Intent intent = new Intent(this, MoneyDialog.class);
-            startActivityForResult(intent,200);
+            setSaleFlowBean(SELL_ZHENDAN_YIJIA);
+//            Intent intent = new Intent(this, MoneyDialog.class);
+//            startActivityForResult(intent,200);
         }catch (Exception e){
 
         }

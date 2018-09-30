@@ -69,6 +69,13 @@ public class Config {
     public final static int RESULT_SELECT_GOODS = 200;
     public final static int MESSAGE_GET_PAY_MODE = 31;
     public final static int MESSAGE_GET_OPT_AUTH = 32;
+    public final static int MESSAGE_BILL_DISCOUNT = 33;
+    public final static int MESSAGE_BILL_DISCOUNT_RETURN = 34;
+
+
+    public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
+    public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价
+    public final static String GRANT_ITEM_DISCOUNT = "3";//单笔折扣
 
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();

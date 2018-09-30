@@ -22,6 +22,7 @@ import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
 import com.eshop.jinxiaocun.lingshou.bean.UpSallFlowBean;
+import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
@@ -84,13 +85,13 @@ public class LingShouScanImp implements ILingshouScan {
 
     //销售商品取价
     @Override
-    public void getPluPrice(String flow_no) {
+    public void getPluPrice(String flow_no,int isBillDiscount) {
         GetPluPriceBean mGetPluPrice = new GetPluPriceBean();
         mGetPluPrice.getJsonData().setAs_branchNo(Config.branch_no);
         mGetPluPrice.getJsonData().setAs_flowno(flow_no);
         mGetPluPrice.getJsonData().setAs_cardno("");
         Map map = ReflectionUtils.obj2Map(mGetPluPrice);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface(isBillDiscount));
     }
 
     //结算
@@ -104,11 +105,11 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
-    public void upSallFlow(List listdata) {
+    public void upSallFlow(List listdata,int isBillDiscount) {
         UpSallFlowBean mUpSallFlowBean = new UpSallFlowBean();
         mUpSallFlowBean.setJsonData(listdata);
         Map map = ReflectionUtils.obj2Map(mUpSallFlowBean);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface(isBillDiscount));
 
     }
 
@@ -126,7 +127,7 @@ public class LingShouScanImp implements ILingshouScan {
         mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGetOptAuthBean.getJsonData().setAs_operId(Config.UserId);
         mGetOptAuthBean.getJsonData().setAs_passwd(Config.PASSWORD);
-        mGetOptAuthBean.getJsonData().setAi_grant(Config.strgrant);
+        mGetOptAuthBean.getJsonData().setAi_grant(Config.GRANT_BILLDIS_COUNT);
         Map map = ReflectionUtils.obj2Map(mGetOptAuthBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetOptAuthInterface());
     }
@@ -206,7 +207,7 @@ public class LingShouScanImp implements ILingshouScan {
         }
     }
 
-    //获取流水
+    //整单折扣、议价
     class BillDiscountInterface implements IResponseListener {
 
         @Override
@@ -222,7 +223,7 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             BillDiscountBeanResult mBillDiscountBeanResult =  mJsonFormatImp.JsonToBean(jsonData,BillDiscountBeanResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_FLOW_NO,mBillDiscountBeanResult);
+                mHandler.handleResule(Config.MESSAGE_BILL_DISCOUNT,mBillDiscountBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mBillDiscountBeanResult);
             }
@@ -319,6 +320,12 @@ public class LingShouScanImp implements ILingshouScan {
     //获取商品价格
     class GetGoodPriceInterface implements IResponseListener {
 
+        int isBillDiscount = 0;
+
+        public GetGoodPriceInterface(int isBillDiscount) {
+            this.isBillDiscount = isBillDiscount;
+        }
+
         @Override
         public void handleError(Object event) {
         }
@@ -331,7 +338,11 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             List<GetPluPriceBeanResult> mGetPluPriceBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetPluPriceBeanResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GETPLU_PRICE,mGetPluPriceBeanResult);
+                if(isBillDiscount == 0){
+                    mHandler.handleResule(Config.MESSAGE_GETPLU_PRICE,mGetPluPriceBeanResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_BILL_DISCOUNT_RETURN,mGetPluPriceBeanResult);
+                }
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
             }
@@ -363,6 +374,12 @@ public class LingShouScanImp implements ILingshouScan {
     //上传销售流水
     class UpSallFlowInterface implements IResponseListener {
 
+        int isisBillDiscount = 0;
+
+        public UpSallFlowInterface(int isisBillDiscount) {
+            this.isisBillDiscount = isisBillDiscount;
+        }
+
         @Override
         public void handleError(Object event) {
         }
@@ -374,7 +391,17 @@ public class LingShouScanImp implements ILingshouScan {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_UP_SALL_FLOW,null);
+                switch (isisBillDiscount){
+                    case  LingShouScanActivity.SELL:
+                        mHandler.handleResule(LingShouScanActivity.SELL,null);
+                        break;
+                    case  LingShouScanActivity.SELL_ZHENDAN_YIJIA:
+                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_YIJIA,null);
+                        break;
+                    case  LingShouScanActivity.SELL_ZHENDAN_ZHEKOU:
+                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_ZHEKOU,null);
+                        break;
+                }
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,null);
             }

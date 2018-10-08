@@ -35,8 +35,10 @@ public class HomeFragment extends BaseFragment {
     GridView gridview;
 
     private Unbinder unbinder;
-    private int[] iconIds = { R.drawable.spgl,
-            R.drawable.cgd, R.drawable.xsdj,
+    private int[] iconIds = {
+            R.drawable.spgl,
+            R.drawable.cgd,
+//            R.drawable.xsdj,
             R.drawable.kcgl,
             R.drawable.kssk,
             R.drawable.tbgl,
@@ -44,8 +46,10 @@ public class HomeFragment extends BaseFragment {
             R.drawable.spgl,
             R.drawable.spgl
     };
-    private int[] nameIds = { R.string.menu_yaohuo_order,
-            R.string.menu_caigoudan, R.string.menu_xiaoshoudan,
+    private int[] nameIds = {
+            R.string.menu_yaohuo_order,
+            R.string.menu_caigoudan,
+//            R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
             R.string.item_message_lingshou,
             R.string.menu_diaobo_manage,
@@ -96,31 +100,31 @@ public class HomeFragment extends BaseFragment {
                 intent.setClass(Application.mContext, CaigouManagerActivity.class);
                 startActivity(intent);
                 break;
+//            case 2:
+//                intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);
+//                intent.putExtra(Config.SHEET_NO,"");
+//                startActivity(intent);
+//                break;
             case 2:
-                intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);
-                intent.putExtra(Config.SHEET_NO,"");
-                startActivity(intent);
-                break;
-            case 3:
                 intent.setClass(Application.mContext, StockCheckActivity.class);
                 startActivity(intent);
                 break;
-            case 4:
+            case 3:
                 intent.setClass(Application.mContext, LingShouScanActivity.class);
                 intent.putExtra(Config.SHEET_NO,"");
                 startActivity(intent);
                 break;
-            case 5:
+            case 4:
                 break;
-            case 6:
+            case 5:
                 intent.setClass(Application.mContext, PandianManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 7://批发管理
+            case 6://批发管理
                 intent.setClass(Application.mContext, PifaManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 8://配送管理
+            case 7://配送管理
                 intent.setClass(Application.mContext, PeisongManagerActivity.class);
                 startActivity(intent);
                 break;

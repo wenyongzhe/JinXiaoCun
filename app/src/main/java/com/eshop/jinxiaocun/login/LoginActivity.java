@@ -242,6 +242,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

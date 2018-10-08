@@ -31,14 +31,14 @@ public class MainActivity extends BaseActivity {
         tabView= (TabView) findViewById(R.id.tabView);
         List<TabViewChild> tabViewChildList=new ArrayList<>();
         TabViewChild tabViewChild01=new TabViewChild(R.drawable.sydj,R.drawable.sy, Application.getInstance().getString(R.string.item_home),  HomeFragment.newInstance());
-        TabViewChild tabViewChild02=new TabViewChild(R.drawable.kcdj,R.drawable.kc, Application.getInstance().getString(R.string.item_kucun),  KuChunFragment.newInstance());
-        TabViewChild tabViewChild03=new TabViewChild(R.drawable.xsdj,R.drawable.xs, Application.getInstance().getString(R.string.item_xiaoshou), XiaoShouFragment.newInstance());
-        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tjdj,R.drawable.tj, Application.getInstance().getString(R.string.item_tongji),  TongJiFragment.newInstance());
+//        TabViewChild tabViewChild02=new TabViewChild(R.drawable.kcdj,R.drawable.kc, Application.getInstance().getString(R.string.item_kucun),  KuChunFragment.newInstance());
+//        TabViewChild tabViewChild03=new TabViewChild(R.drawable.xsdj,R.drawable.xs, Application.getInstance().getString(R.string.item_xiaoshou), XiaoShouFragment.newInstance());
+//        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tjdj,R.drawable.tj, Application.getInstance().getString(R.string.item_tongji),  TongJiFragment.newInstance());
         TabViewChild tabViewChild05=new TabViewChild(R.drawable.jcdj,R.drawable.jc, Application.getInstance().getString(R.string.item_jichu), jichuFragment.newInstance());
         tabViewChildList.add(tabViewChild01);
-        tabViewChildList.add(tabViewChild02);
-        tabViewChildList.add(tabViewChild03);
-        tabViewChildList.add(tabViewChild04);
+//        tabViewChildList.add(tabViewChild02);
+//        tabViewChildList.add(tabViewChild03);
+//        tabViewChildList.add(tabViewChild04);
         tabViewChildList.add(tabViewChild05);
         //end add data
         tabView.setTabViewDefaultPosition(0);

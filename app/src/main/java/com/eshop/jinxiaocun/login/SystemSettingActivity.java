@@ -73,7 +73,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, ActionBar.LayoutParams.FILL_PARENT);
         mLinearLayout.addView(getView(R.layout.activity_system_setting),-1,params);
 
-        mMyActionBar.setData("系统设置", R.mipmap.icon_back, "", 0, "", new ActionBarClickListener() {
+        mMyActionBar.setData("系统设置", R.mipmap.ic_left_light, "", 0, "", new ActionBarClickListener() {
             @Override
             public void onLeftClick() {
                 finish();

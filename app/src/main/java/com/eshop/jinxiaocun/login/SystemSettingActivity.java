@@ -1,22 +1,34 @@
 package com.eshop.jinxiaocun.login;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
+import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
 public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
 
@@ -29,6 +41,30 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
     @BindView(R.id.et_service_port)
     EditText txtSeverPort;
+
+    @BindView(R.id.btn_blue)
+    Button btn_blue;
+
+    TextView tv_blu_status;
+
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+    private BluetoothAdapter mBluetoothAdapter = null;
+    // Message types sent from the BluetoothService Handler
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int MESSAGE_TOAST = 5;
+    public static final int MESSAGE_CONNECTION_LOST = 6;
+    public static final int MESSAGE_UNABLE_CONNECT = 7;
+    public static final String TOAST = "toast";
+    // Key names received from the BluetoothService Handler
+    public static final String DEVICE_NAME = "device_name";
+
+    // Member object for the services
+    private BluetoothService mService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +95,63 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 //        txtShopGroup.setText(Config.ShopGroup);
 
         Button btnTest = (Button)findViewById(R.id.btn_test);
+        Button btn_blue = (Button)findViewById(R.id.btn_blue);
+        tv_blu_status = (TextView) findViewById(R.id.tv_blu_status);
         btnTest.setOnClickListener(this);
+        btn_blue.setOnClickListener(this);
 
         closeEditTextKeyboard();
+
+        // Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mService = new BluetoothService(this, mHandler);
+
+        btn_blue.setClickable(true);
+        // If the adapter is null, then Bluetooth is not supported
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+            btn_blue.setClickable(false);
+        }
+
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothService.STATE_CONNECTED:
+                            break;
+                        case BluetoothService.STATE_CONNECTING:
+                            tv_blu_status.setText("连接中~~~");
+                            break;
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            tv_blu_status.setText("没有连接");
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+
+                    break;
+                case MESSAGE_READ:
+
+                    break;
+                case MESSAGE_DEVICE_NAME:
+                    break;
+                case MESSAGE_UNABLE_CONNECT:     //无法连接设备
+                    Toast.makeText(getApplicationContext(), "Unable to connect device",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
+                    Toast.makeText(getApplicationContext(), "Device connection was lost",
+                            Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    };
 
     @Override
     protected void loadData() {
@@ -97,6 +186,35 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
                 MyUtils.showToast("参数保存成功！",SystemSettingActivity.this);
                 break;
+
+            case R.id.btn_blue:
+                Intent serverIntent = new Intent(SystemSettingActivity.this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (DEBUG)
+            Log.d("", "onActivityResult " + resultCode);
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE: {
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    // Get the device MAC address
+                    String address = data.getExtras().getString(
+                            DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                    // Get the BLuetoothDevice object
+                    if (BluetoothAdapter.checkBluetoothAddress(address)) {
+                        BluetoothDevice device = mBluetoothAdapter
+                                .getRemoteDevice(address);
+                        // Attempt to connect to the device
+                        mService.connect(device);
+                    }
+                }
+                break;
+            }
         }
     }
 

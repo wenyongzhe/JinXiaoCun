@@ -1,8 +1,11 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
@@ -25,6 +29,7 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
@@ -37,8 +42,14 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
+import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
+import com.eshop.jinxiaocun.zjPrinter.Command;
+import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
 
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,12 +59,6 @@ import butterknife.OnClick;
 
 public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
 
-    /*@BindView(R.id.ly1_sp)
-    Spinner mSpinner1;
-    @BindView(R.id.ly2_sp)
-    Spinner mSpinner2;
-    @BindView(R.id.ly3_sp)
-    public Spinner mSpinner3;*/
     @BindView(R.id.et_barcode)
     EditText et_barcode;
     @BindView(R.id.btn_add)
@@ -89,11 +94,51 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private GetOptAuthResult mGetOptAuthResult = null;
     private boolean hasDiscount = false;
+    private BluetoothService mService = null;
+    private static boolean is58mm = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mService = new BluetoothService(this, mHandler);
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothService.STATE_CONNECTED:
+                            break;
+                        case BluetoothService.STATE_CONNECTING:
+                            //tv_blu_status.setText("连接中~~~");
+                            break;
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            //tv_blu_status.setText("没有连接");
+                            break;
+                    }
+                    break;
+                case SystemSettingActivity.MESSAGE_WRITE:
+
+                    break;
+                case SystemSettingActivity.MESSAGE_READ:
+
+                    break;
+                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
+                    break;
+                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
+                    Toast.makeText(getApplicationContext(), "Unable to connect device",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
+                    Toast.makeText(getApplicationContext(), "Device connection was lost",
+                            Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    };
 
     //接收条码
     @Override
@@ -108,38 +153,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mPlayFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
-        /*if(!newSheet){
-            mLingShouScanImp.getSheetDetail(sheet_no);
-        }else
-            initMainBean();*/
         mLingShouScanImp.getFlowNo();
         mLingShouScanImp.getPayMode();
         mLingShouScanImp.getOptAuth();
     }
-
-    /*private void initMainBean(){
-        mUpMainBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
-        mUpMainBean.setSheetType(BillType.SO+"");//单据类型-批发销售
-        mUpMainBean.setSheet_No("");//单号
-        mUpMainBean.setBranch_No(Config.branch_no);//当前仓库
-        mUpMainBean.setOrd_Man_No(Config.UserName);//业务员
-        mUpMainBean.setPDA_No(Config.DeviceID);//PDA_No”:””	//PDA机号
-        mUpMainBean.setUSER_ID(Config.DeviceID);//USER_ID”:””       	//用户ID
-        mUpMainBean.setOper_Date(MyUtils.getCurrentTime());///Oper_Date”:”” 	//操作日期
-
-        mUpMainBean.setPayment("");//Payment”:”” //付款方式
-        mUpMainBean.setOrd_Amt("");//Ord_Amt”:””             //定金
-    }
-
-    //设置要结算流水的数据
-    private void setDetailBean(UpDetailBean mUpDetailBean){
-        mUpDetailBean.setFlow_ID(MyUtils.getCurrentTime());//时间流水ID
-        mUpDetailBean.setPOSID(Config.DeviceID);
-        mUpDetailBean.setBillNo("");//BillNo”:”” //单据号
-        mUpDetailBean.setSupplyCode("");//SupplyCode
-
-        mUpDetailBeanList.add(mUpDetailBean);
-    }*/
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -244,6 +261,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                         finish();
                     }
                 });
+                printMs();
                 break;
             case Config.MESSAGE_GET_PAY_MODE:
 
@@ -268,6 +286,142 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }
     }
 
+    //打印小票
+    private void printMs() {
+        if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            return;
+        }
+        Print_Ex();
+//        mSaleFlowBeanList
+    }
+
+    /**
+     * 打印自定义小票
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex() {
+
+        String lang = getString(R.string.strLang);
+        if ((lang.compareTo("cn")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
+            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+            String str = formatter.format(curDate);
+            String date = str + "\n\n\n\n\n\n";
+            if (is58mm) {
+
+                try {
+                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 6);//
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(qrcode);
+
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("NIKE专卖店\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("门店号: 888888\n单据  S00003333\n收银员：1001\n单据日期：xxxx-xx-xx\n打印时间：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
+                    SendDataByte("品名       数量    单价    金额\nNIKE跑鞋   10.00   899     8990\nNIKE篮球鞋 10.00   1599    15990\n".getBytes("GBK"));
+                    SendDataByte("数量：                20.00\n总计：                16889.00\n付款：                17000.00\n找零：                111.00\n".getBytes("GBK"));
+                    SendDataByte("公司名称：NIKE\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-11111111\n服务专线：400-xxx-xxxx\n================================\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+
+                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x02;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataString(date);
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                    SendDataByte(Command.GS_V_m_n);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 8);
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(qrcode);
+
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("NIKE专卖店\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("门店号: 888888\n单据  S00003333\n收银员：1001\n单据日期：xxxx-xx-xx\n打印时间：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
+                    SendDataByte("品名            数量    单价    金额\nNIKE跑鞋        10.00   899     8990\nNIKE篮球鞋      10.00   1599    15990\n".getBytes("GBK"));
+                    SendDataByte("数量：                20.00\n总计：                16889.00\n付款：                17000.00\n找零：                111.00\n".getBytes("GBK"));
+                    SendDataByte("公司名称：NIKE\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-11111111\n服务专线：400-xxx-xxxx\n===========================================\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x02;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataString(date);
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                    SendDataByte(Command.GS_V_m_n);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     *SendDataByte
+     */
+    private void SendDataByte(byte[] data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        mService.write(data);
+    }
+
+    /*
+     * SendDataString
+     */
+    private void SendDataString(String data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (data.length() > 0) {
+            try {
+                mService.write(data.getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
     /*
     更新界面数据

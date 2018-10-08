@@ -67,6 +67,18 @@
     <string name="btnSave">保存</string>
     <string name="btnTest">测试</string>
 
+    <!--  DeviceListActivity -->
+    <string name="scanning">扫描设备…</string>
+    <string name="select_device">选择连接的设备</string>
+    <string name="select_and_connect_device">搜索并连接蓝牙打印机</string>
+    <string name="none_paired">没有匹配的设备</string>
+    <string name="none_found">没有找到设备</string>
+    <string name="title_paired_devices">匹配的设备</string>
+    <string name="title_other_devices">其它可用设备</string>
+    <string name="button_scan">扫描设备</string>
+    <string name="not_connected">请先连接蓝牙打印机</string>
+    <string name="strLang">cn</string>
+
     <!-- 控制底部的按钮 -->
     <string name="help">帮助</string>
     <string name="add">添加</string>

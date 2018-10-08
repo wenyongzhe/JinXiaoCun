@@ -18,6 +18,9 @@
     <uses-permission android:name="android.permission.SERIAL_PORT" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <application
         android:name=".base.view.Application"
         android:allowBackup="true"
@@ -218,7 +221,10 @@
         <activity android:name=".peisong.view.YaohuoOrderScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
+        <activity android:name="com.eshop.jinxiaocun.zjPrinter.DeviceListActivity"
+                  android:label="@string/select_device"
+                  android:theme="@android:style/Theme.Dialog"
+                  android:configChanges="orientation|keyboardHidden" />
     </application>
 
 </manifest>

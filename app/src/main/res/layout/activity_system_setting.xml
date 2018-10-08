@@ -114,7 +114,22 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:text="@string/btnSave" />
-
+        <Button
+            android:id="@+id/btn_blue"
+            style="@style/Button_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/select_and_connect_device" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_blu_status"
+        style="@style/TextView_Black"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/layout_margin15"
+        android:gravity="end"/>
 </LinearLayout>

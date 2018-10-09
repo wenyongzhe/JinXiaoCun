@@ -25,7 +25,7 @@ public class jichuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, container, false);
+        View view = inflater.inflate(R.layout.activity_jichu, container, false);
 
         Button btn_setting = view.findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {

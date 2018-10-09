@@ -25,5 +25,7 @@ public interface IOtherModel {
     void getProviderInfo(String sheetType,String zjm,int pageIndex,int pageSize);
     //获取仓库信息
     void getWarehouseUnfo(String sheetType);
+    //业务单据审核
+    void sheetCheck(String orderType ,String orderNo );
 
 }

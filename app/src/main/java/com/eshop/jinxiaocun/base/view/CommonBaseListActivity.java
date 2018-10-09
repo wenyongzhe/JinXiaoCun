@@ -33,21 +33,21 @@ public abstract class CommonBaseListActivity extends CommonBaseActivity implemen
     protected Button mBtnCreate;
     @BindView(R.id.bottom_btn_modify)
     protected Button mBtnModify;
-    @BindView(R.id.bottom_btn_del)
-    protected Button mBtnDelete;
-    @BindView(R.id.bottom_btn_upload)
-    protected Button mBtnUpload;
+    @BindView(R.id.bottom_btn_delete_order)
+    protected Button mBtnDeleteOrder;
+    @BindView(R.id.bottom_btn_check)
+    protected Button mBtnCheck;
 
     //子类去实现
     protected abstract @LayoutRes int getLayoutContentId();
     protected abstract boolean createOrderBefore();//开单前
     protected abstract void createOrderAfter();
-    protected abstract boolean deleteBefore();//删除前
-    protected abstract void deleteAfter();
+    protected abstract boolean deleteOrderBefore();//删单前
+    protected abstract void deleteOrderAfter();
     protected abstract boolean modifyBefore();//修改前
     protected abstract void modifyAfter();
-    protected abstract boolean uploadBefore();//上传前
-    protected abstract void uploadAfter();
+    protected abstract boolean checkBefore();//审核前
+    protected abstract void checkAfter();
 
     @Override
     protected int getLayoutId() {
@@ -76,16 +76,16 @@ public abstract class CommonBaseListActivity extends CommonBaseActivity implemen
         modifyAfter();
     }
 
-    @OnClick(R.id.bottom_btn_del)
+    @OnClick(R.id.bottom_btn_delete_order)
     public void onClickDelete(){
-        if(!deleteBefore())return;
-        deleteAfter();
+        if(!deleteOrderBefore())return;
+        deleteOrderAfter();
     }
 
-    @OnClick(R.id.bottom_btn_upload)
+    @OnClick(R.id.bottom_btn_check)
     public void onClickUpload(){
-        if(!uploadBefore())return;
-        uploadAfter();
+        if(!checkBefore())return;
+        checkAfter();
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){

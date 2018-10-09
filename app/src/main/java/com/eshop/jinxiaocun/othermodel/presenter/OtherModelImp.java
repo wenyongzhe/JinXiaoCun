@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBean;
@@ -129,6 +130,18 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new WarehouseInfoInterface());
+    }
+    //业务单据审核
+    @Override
+    public void sheetCheck(String orderType, String orderNo) {
+        SheetCheckBean bean = new SheetCheckBean();
+        bean.JsonData.trans_no = orderType ;//单据类型
+        bean.JsonData.branchNo= Config.branch_no ; //门店机构
+        bean.JsonData.Sheet_No= orderNo ;//单据号
+        bean.JsonData.oper_id= Config.UserId ; //操作员
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SheetCheckInterface());
     }
 
 
@@ -349,6 +362,33 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_FAIL,"查询失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //业务单据审核
+    class SheetCheckInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.RESULT_SUCCESS,Msg);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"审核失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"审核失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

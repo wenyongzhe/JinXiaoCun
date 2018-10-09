@@ -168,12 +168,12 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     }
 
     @Override
-    protected boolean deleteBefore() {
+    protected boolean deleteOrderBefore() {
         return false;
     }
 
     @Override
-    protected void deleteAfter() {
+    protected void deleteOrderAfter() {
 
     }
 
@@ -188,12 +188,12 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     }
 
     @Override
-    protected boolean uploadBefore() {
+    protected boolean checkBefore() {
         return false;
     }
 
     @Override
-    protected void uploadAfter() {
+    protected void checkAfter() {
 
     }
 

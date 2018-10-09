@@ -40,6 +40,7 @@ public class WebConfig {
     public static final String GetBranchInfo= "GetBranchInfo";//仓库、分部获取
     public static final String SellSub= "SellSub";//结算
     public static final String GetOptAuth= "GetOptAuth";//打折权限
+    public static final String SheetCheck= "SheetCheck";//业务单据审核
 
 
 

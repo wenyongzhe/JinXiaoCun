@@ -249,12 +249,12 @@
             android:background="@color/divider" />
 
         <Button
-            android:id="@+id/bottom_btn_del"
+            android:id="@+id/bottom_btn_delete_order"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/Button_blue"
             android:layout_weight="1"
-            android:text="@string/delete" />
+            android:text="@string/deleteOrder" />
 
         <View
             android:layout_width="1dp"
@@ -262,12 +262,12 @@
             android:background="@color/divider" />
 
         <Button
-            android:id="@+id/bottom_btn_upload"
+            android:id="@+id/bottom_btn_check"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/Button_blue"
             android:layout_weight="1"
-            android:text="@string/upload" />
+            android:text="@string/shenhe" />
 
         <View
             android:layout_width="1dp"

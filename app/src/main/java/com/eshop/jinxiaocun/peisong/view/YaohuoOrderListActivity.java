@@ -63,7 +63,6 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
-
         setHeaderTitle(R.id.tv_0,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_1,R.string.list_item_BillType,100);// 单据类型
         setHeaderTitle(R.id.tv_2,R.string.list_item_ShopName,150); //门店名称
@@ -186,6 +185,14 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
             case Config.MESSAGE_ERROR:
                 AlertUtil.showToast(o.toString());
                 break;
+            case Config.RESULT_SUCCESS://审核成功
+                AlertUtil.showToast(o.toString());
+                mPageIndex = 1;
+                getYaohuoOrderData();
+                break;
+            case Config.RESULT_FAIL://审核失败
+                AlertUtil.showToast(o.toString());
+                break;
         }
 
     }
@@ -209,12 +216,12 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     }
 
     @Override
-    protected boolean deleteBefore() {
+    protected boolean deleteOrderBefore() {
         return false;
     }
 
     @Override
-    protected void deleteAfter() {
+    protected void deleteOrderAfter() {
 
     }
 
@@ -229,12 +236,12 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     }
 
     @Override
-    protected boolean uploadBefore() {
+    protected boolean checkBefore() {
         return false;
     }
 
     @Override
-    protected void uploadAfter() {
+    protected void checkAfter() {
 
     }
 

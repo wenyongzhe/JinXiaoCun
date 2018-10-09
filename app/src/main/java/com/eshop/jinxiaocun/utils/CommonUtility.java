@@ -18,6 +18,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -268,4 +269,54 @@ public class CommonUtility {
         wm.getDefaultDisplay().getMetrics(dm);
         return dm;
     }
+
+    /**
+     * 这个功能，用户是否有权限
+     * @param position 功能对应的位置 position从1的位置开始 权限对应序号
+     * @return true为有权限，false则没有权限
+     */
+    public boolean havePermission(int position){
+//        "strgrant":"1111111111111111111111111"  26种权限 1表示有权限 0表示没有权限
+//        权限对应序号依次为：
+//        @grant1  char(1),  --要货单 打开
+//        @grant2  char(1),  --要货单 审核
+//        @grant3  char(1),  --配送入库单  打开
+//        @grant4  char(1),  --配送入库单  审核
+//        @grant5  char(1),  --配送出库单  打开
+//        @grant6  char(1),  --配送出库单  审核
+//        @grant7  char(1),  --批发订单    打开
+//        @grant8  char(1),  --批发订单    审核
+//        @grant9  char(1),  --批发销售单  打开
+//        @grant10 char(1),  --批发销售单  审核
+//        @grant11 char(1),  --批发退货单  打开
+//        @grant12 char(1),  --批发退货单  审核
+//        @grant13 char(1),  --采购订单    打开
+//        @grant14 char(1),  --采购订单    审核
+//        @grant15 char(1),  --采购收货单  打开
+//        @grant16 char(1),  --采购收货单  审核
+//        @grant17 char(1),  --盘点号申请  申请
+//        @grant18 char(1),  --存货盘点单 保存
+//        @grant19 char(1),  --盘点差异处理单  打开
+//        @grant20 char(1),  --盘点差异处理单  审核
+//        @grant21 char(1),  --会员充值
+//        @grant22 char(1),  --会员积分
+//        @grant23 char(1),  --预售
+//        @grant24 char(1),  --退货
+//        @grant25 char(1),	--盘点机销售
+
+        position = position-1;
+        if(TextUtils.isEmpty(Config.strgrant)){
+            return false;
+        }
+        if(Config.strgrant.length()<position){//不在权限范围内
+            return false;
+        }
+
+        String a = Config.strgrant.substring(position,position+1);
+        if(a.equals("1")){//有权限
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -183,12 +183,12 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
     }
 
     @Override
-    protected boolean deleteBefore() {
+    protected boolean deleteOrderBefore() {
         return false;
     }
 
     @Override
-    protected void deleteAfter() {
+    protected void deleteOrderAfter() {
 
     }
 
@@ -203,12 +203,12 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
     }
 
     @Override
-    protected boolean uploadBefore() {
+    protected boolean checkBefore() {
         return false;
     }
 
     @Override
-    protected void uploadAfter() {
+    protected void checkAfter() {
 
     }
 

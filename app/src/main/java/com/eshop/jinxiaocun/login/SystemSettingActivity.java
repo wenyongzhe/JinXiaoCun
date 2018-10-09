@@ -154,6 +154,29 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     };
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the Bluetooth services
+        if (mService != null)
+            mService.stop();
+        if (DEBUG)
+            Log.e("", "--- ON DESTROY ---");
+    }
+
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
+
+        if (mService != null) {
+
+            if (mService.getState() == BluetoothService.STATE_NONE) {
+                // Start the Bluetooth services
+                mService.start();
+            }
+        }
+    }
+
+    @Override
     protected void loadData() {
 
     }

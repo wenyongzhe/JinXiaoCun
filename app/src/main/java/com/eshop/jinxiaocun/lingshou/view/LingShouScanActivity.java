@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -56,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
+
 
 public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
 
@@ -103,6 +106,29 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mService = new BluetoothService(this, mHandler);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the Bluetooth services
+        if (mService != null)
+            mService.stop();
+        if (DEBUG)
+            Log.e("", "--- ON DESTROY ---");
+    }
+
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
+
+        if (mService != null) {
+
+            if (mService.getState() == BluetoothService.STATE_NONE) {
+                // Start the Bluetooth services
+                mService.start();
+            }
+        }
+    }
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -112,11 +138,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                         case BluetoothService.STATE_CONNECTED:
                             break;
                         case BluetoothService.STATE_CONNECTING:
-                            //tv_blu_status.setText("连接中~~~");
+                            ToastUtils.showShort("连接中");
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
-                            //tv_blu_status.setText("没有连接");
+                            ToastUtils.showShort("没有连接");
                             break;
                     }
                     break;
@@ -129,11 +155,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 case SystemSettingActivity.MESSAGE_DEVICE_NAME:
                     break;
                 case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
-                    Toast.makeText(getApplicationContext(), "Unable to connect device",
+                    Toast.makeText(getApplicationContext(), "无法连接设备",
                             Toast.LENGTH_SHORT).show();
                     break;
                 case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-                    Toast.makeText(getApplicationContext(), "Device connection was lost",
+                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
                             Toast.LENGTH_SHORT).show();
 
             }

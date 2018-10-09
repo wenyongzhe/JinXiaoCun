@@ -28,6 +28,7 @@
         android:layout_weight="1"
         android:cacheColorHint="@color/transparent1"
         android:gravity="center"
+        android:layout_gravity="center"
         android:listSelector="@null"
         android:numColumns="3"
         android:verticalSpacing="1px"

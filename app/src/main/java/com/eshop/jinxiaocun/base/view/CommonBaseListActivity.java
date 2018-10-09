@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
 import butterknife.BindView;
@@ -79,13 +80,39 @@ public abstract class CommonBaseListActivity extends CommonBaseActivity implemen
     @OnClick(R.id.bottom_btn_delete_order)
     public void onClickDelete(){
         if(!deleteOrderBefore())return;
-        deleteOrderAfter();
+        AlertUtil.showAlert(this, R.string.dialog_title,
+                "确定删除所选的单据？", R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertUtil.dismissDialog();
+                        deleteOrderAfter();
+                    }
+                }, R.string.cancel, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertUtil.dismissDialog();
+                    }
+                });
+
     }
 
     @OnClick(R.id.bottom_btn_check)
     public void onClickUpload(){
         if(!checkBefore())return;
-        checkAfter();
+        AlertUtil.showAlert(this, R.string.dialog_title,
+                "确定审核所选的单据？", R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertUtil.dismissDialog();
+                        checkAfter();
+                    }
+                }, R.string.cancel, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertUtil.dismissDialog();
+                    }
+                });
+
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){

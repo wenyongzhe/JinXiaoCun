@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.peisong.adapter.YaohuoOrderListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
@@ -15,6 +17,7 @@ import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
 import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimeListener;
 import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimePicker;
+import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -45,7 +48,8 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     private YaohuoOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
-
+    private IOtherModel mServerApi;
+    private DanJuMainBeanResultItem mSelectMainBean;
     private int mPageIndex = 1;
     private int mPageSize = 20;
 
@@ -95,11 +99,11 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     protected void initData() {
         super.initData();
         mDanJuList = new DanJuListImp(this);
+        mServerApi= new OtherModelImp(this);
         getYaohuoOrderData();
     }
 
     private void getYaohuoOrderData() {
-
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
@@ -116,6 +120,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
+        mSelectMainBean = mListInfo.get(position-1);
         mAdapter.setItemClickPosition(position-1);
         mAdapter.notifyDataSetInvalidated();
     }
@@ -187,6 +192,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
                 break;
             case Config.RESULT_SUCCESS://审核成功
                 AlertUtil.showToast(o.toString());
+                mSelectMainBean = null;
                 mPageIndex = 1;
                 getYaohuoOrderData();
                 break;
@@ -237,12 +243,32 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
 
     @Override
     protected boolean checkBefore() {
-        return false;
+
+        if(!CommonUtility.getInstance().havePermission(2)){
+            AlertUtil.showToast("没有权限，不能做审核操作，请联系管理员!");
+            return false;
+        }
+
+        if(mListInfo.size()==0){
+            AlertUtil.showToast("没有单据，不能做审核操作!");
+            return false;
+        }
+
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+
+//        if(mSelectMainBean.getFlow_ID()==null){
+//            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
+//            return false;
+//        }
+        return true;
     }
 
     @Override
     protected void checkAfter() {
-
+        mServerApi.sheetCheck(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No());
     }
 
 

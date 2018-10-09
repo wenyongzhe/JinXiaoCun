@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.base.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
@@ -76,6 +77,14 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
                 onTopBarRightClick();
             }
         });
+    }
+
+    public void setTopToolBarRightTitle(String strTitle){
+        mMyActionBar.setRightTitle(strTitle);
+    }
+
+    public void setTopToolBarRightTitleAndStyle(String strTitle,@DrawableRes int drawableId){
+        mMyActionBar.setRightTitleAndStyle(strTitle,drawableId);
     }
 
     @Override

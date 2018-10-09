@@ -52,6 +52,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     private DanJuMainBeanResultItem mSelectMainBean;
     private int mPageIndex = 1;
     private int mPageSize = 20;
+    private String mCheckflag = "0";//0未审核，1审核
 
     @Override
     protected int getLayoutContentId() {
@@ -63,15 +64,17 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         super.initView();
 
         setTopToolBar("要货单列表", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
 
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_FormIndex,150);//单据号
-        setHeaderTitle(R.id.tv_1,R.string.list_item_BillType,100);// 单据类型
-        setHeaderTitle(R.id.tv_2,R.string.list_item_ShopName,150); //门店名称
-        setHeaderTitle(R.id.tv_3,R.string.list_item_AllGoodsCount,100);//总商品数
-        setHeaderTitle(R.id.tv_4,R.string.list_item_ValidDate,150);//交货日期
+        setHeaderTitle(R.id.tv_0,R.string.list_item_Status,100);//单据状态
+        setHeaderTitle(R.id.tv_1,R.string.list_item_FormIndex,150);//单据号
+        setHeaderTitle(R.id.tv_2,R.string.list_item_BillType,100);// 单据类型
+        setHeaderTitle(R.id.tv_3,R.string.list_item_ShopName,150); //门店名称
+        setHeaderTitle(R.id.tv_4,R.string.list_item_AllGoodsCount,100);//总商品数
+        setHeaderTitle(R.id.tv_5,R.string.list_item_ValidDate,150);//交货日期
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -111,7 +114,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         mDanJuMainBean.JsonData.operid = Config.UserId;//操作员ID
         mDanJuMainBean.JsonData.begintime = mTvStartDate.getText().toString();
         mDanJuMainBean.JsonData.endtime = mTvEndDate.getText().toString();
-        mDanJuMainBean.JsonData.checkflag = "0";//审核标志
+        mDanJuMainBean.JsonData.checkflag = mCheckflag;//审核标志
         mDanJuMainBean.JsonData.pagenum = mPageSize;
         mDanJuMainBean.JsonData.page = mPageIndex;
         mDanJuList.getDanJuList(mDanJuMainBean);
@@ -185,7 +188,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
                 }else{
                     mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 }
-                mAdapter.setListInfo(mListInfo);
+                mAdapter.setListInfo(mListInfo,mCheckflag);
                 break;
             case Config.MESSAGE_ERROR:
                 AlertUtil.showToast(o.toString());
@@ -207,6 +210,9 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode ==22){
+            setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
+            mCheckflag ="0";
+            mPageIndex =1;
             getYaohuoOrderData();
         }
     }
@@ -259,10 +265,10 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
             return false;
         }
 
-//        if(mSelectMainBean.getFlow_ID()==null){
-//            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
-//            return false;
-//        }
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
+            return false;
+        }
         return true;
     }
 
@@ -271,6 +277,20 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         mServerApi.sheetCheck(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No());
     }
 
+    @Override
+    protected void onTopBarRightClick() {
+        super.onTopBarRightClick();
 
-
+        if(mCheckflag.equals("0")){
+            setTopToolBarRightTitleAndStyle("未审核单",R.drawable.border_bg);
+            mCheckflag ="1";
+        }else if(mCheckflag.equals("1")){
+            setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
+            mCheckflag ="0";
+        }
+        mPageIndex =1;
+        mAdapter.setItemClickPosition(-1);
+        mSelectMainBean = null;
+        getYaohuoOrderData();
+    }
 }

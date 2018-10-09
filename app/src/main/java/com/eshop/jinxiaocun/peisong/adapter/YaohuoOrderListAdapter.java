@@ -24,6 +24,7 @@ public class YaohuoOrderListAdapter extends BaseAdapter {
     private List<DanJuMainBeanResultItem> listInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
+    private String mCheckflag = "0";//0未审核，1审核
 
     public YaohuoOrderListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
@@ -50,11 +51,18 @@ public class YaohuoOrderListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_list_yaohuo_order,parent,false);
         }
+        TextView tvOrderStatus = ViewHolderUtils.get(convertView, R.id.tv_order_status);
         TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
         TextView tvOrderType = ViewHolderUtils.get(convertView, R.id.tv_order_type);
         TextView tvShopname = ViewHolderUtils.get(convertView, R.id.tv_shopname);
         TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
         TextView tvValidDate = ViewHolderUtils.get(convertView, R.id.tv_valid_Date);
+
+        if(mCheckflag.equals("1")){
+            tvOrderStatus.setText("已审核");
+        }else{
+            tvOrderStatus.setText("未审核");
+        }
 
         tvOrderNo.setSelected(true);
         tvShopname.setSelected(true);
@@ -72,8 +80,9 @@ public class YaohuoOrderListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListInfo(List<DanJuMainBeanResultItem> listInfo) {
+    public void setListInfo(List<DanJuMainBeanResultItem> listInfo,String checkflag) {
         this.listInfo = listInfo;
+        this.mCheckflag = checkflag;
         notifyDataSetChanged();
     }
 

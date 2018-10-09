@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.widget;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -82,6 +84,35 @@ public final class MyActionBar extends LinearLayout {
             tvTitle.setVisibility(View.VISIBLE);
         } else {
             tvTitle.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置右边标题
+     *
+     * @param strTitle
+     */
+    public void setRightTitle(String strTitle) {
+        if (!TextUtils.isEmpty(strTitle)) {
+            tvRight.setText(strTitle);
+            tvRight.setVisibility(View.VISIBLE);
+        }else {
+            tvRight.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置右边标题及样式
+     *
+     * @param strTitle
+     */
+    public void setRightTitleAndStyle(String strTitle, @DrawableRes int drawableId) {
+        if (!TextUtils.isEmpty(strTitle)) {
+            tvRight.setText(strTitle);
+            tvRight.setBackgroundResource(drawableId);
+            tvRight.setVisibility(View.VISIBLE);
+        }else {
+            tvRight.setVisibility(View.GONE);
         }
     }
 

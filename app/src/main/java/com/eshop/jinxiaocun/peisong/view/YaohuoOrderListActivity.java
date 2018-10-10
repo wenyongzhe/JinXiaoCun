@@ -210,7 +210,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==2 && resultCode ==22){
-            setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
+            setTopToolBarRightTitle("审核单");
             mCheckflag ="0";
             mPageIndex =1;
             getYaohuoOrderData();
@@ -282,10 +282,10 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         super.onTopBarRightClick();
 
         if(mCheckflag.equals("0")){
-            setTopToolBarRightTitleAndStyle("未审核单",R.drawable.border_bg);
+            setTopToolBarRightTitle("未审核单");
             mCheckflag ="1";
         }else if(mCheckflag.equals("1")){
-            setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
+            setTopToolBarRightTitle("审核单");
             mCheckflag ="0";
         }
         mPageIndex =1;

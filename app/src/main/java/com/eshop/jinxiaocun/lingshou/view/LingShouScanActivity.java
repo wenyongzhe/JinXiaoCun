@@ -1,7 +1,9 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,6 +47,7 @@ import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
+import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
 
 import java.io.UnsupportedEncodingException;
@@ -94,16 +97,41 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private List<GetPluPriceBeanResult> mGetPluPriceBeanResult;
     private List<GetClassPluResult> mGetClassPluResultList;
     private Double change = 0.0;
+    private Double payMoney = 0.0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private GetOptAuthResult mGetOptAuthResult = null;
     private boolean hasDiscount = false;
     private BluetoothService mService = null;
     private static boolean is58mm = true;
+    private BluetoothAdapter mBluetoothAdapter = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mService = new BluetoothService(this, mHandler);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // If Bluetooth is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else {
+            if (mService == null)
+                mService = new BluetoothService(this, mHandler);
+        }
     }
 
     @Override
@@ -136,6 +164,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 case SystemSettingActivity.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
+                            ToastUtils.showShort("连接成功");
+                            printMs();
                             break;
                         case BluetoothService.STATE_CONNECTING:
                             ToastUtils.showShort("连接中");
@@ -284,10 +314,14 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change, "确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        finish();
+                        AlertUtil.dismissDialog();
+                        if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+                            Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
+                            startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
+                        }
                     }
                 });
-                printMs();
+//                printMs();
                 break;
             case Config.MESSAGE_GET_PAY_MODE:
 
@@ -318,6 +352,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             return;
         }
         Print_Ex();
+        finish();
 //        mSaleFlowBeanList
     }
 
@@ -332,27 +367,39 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
             String str = formatter.format(curDate);
-            String date = str + "\n\n\n\n\n\n";
+            String date = str + "\n\n\n";
             if (is58mm) {
 
                 try {
-                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 6);//
+//                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 6);//
                     Command.ESC_Align[2] = 0x01;
                     SendDataByte(Command.ESC_Align);
-                    SendDataByte(qrcode);
+//                    SendDataByte(qrcode);
 
                     SendDataByte(Command.ESC_Align);
                     Command.GS_ExclamationMark[2] = 0x11;
                     SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("NIKE专卖店\n".getBytes("GBK"));
+                    SendDataByte("专卖店\n".getBytes("GBK"));
                     Command.ESC_Align[2] = 0x00;
                     SendDataByte(Command.ESC_Align);
                     Command.GS_ExclamationMark[2] = 0x00;
                     SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("门店号: 888888\n单据  S00003333\n收银员：1001\n单据日期：xxxx-xx-xx\n打印时间：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
-                    SendDataByte("品名       数量    单价    金额\nNIKE跑鞋   10.00   899     8990\nNIKE篮球鞋 10.00   1599    15990\n".getBytes("GBK"));
-                    SendDataByte("数量：                20.00\n总计：                16889.00\n付款：                17000.00\n找零：                111.00\n".getBytes("GBK"));
-                    SendDataByte("公司名称：NIKE\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-11111111\n服务专线：400-xxx-xxxx\n================================\n".getBytes("GBK"));
+                    String mes = "";
+                    int shuliang = 0;
+                    mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "品名       数量    单价    金额\n";
+                    for(int i=0; i<mListData.size(); i++){
+                        GetClassPluResult mGetClassPluResult = mListData.get(i);
+                        Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
+                        shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                        mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
+                    }
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "数量：                "+shuliang+"\n总计：                "+total+"\n付款：                "+payMoney+"\n找零：                "+change+"\n";
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
+                    SendDataByte(mes.getBytes("GBK"));
                     Command.ESC_Align[2] = 0x01;
                     SendDataByte(Command.ESC_Align);
                     Command.GS_ExclamationMark[2] = 0x11;
@@ -363,11 +410,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     Command.GS_ExclamationMark[2] = 0x00;
                     SendDataByte(Command.GS_ExclamationMark);
 
-                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
+//                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
                     Command.ESC_Align[2] = 0x02;
                     SendDataByte(Command.ESC_Align);
                     SendDataString(date);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
                     SendDataByte(Command.GS_V_m_n);
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
@@ -406,7 +453,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     Command.ESC_Align[2] = 0x02;
                     SendDataByte(Command.ESC_Align);
                     SendDataString(date);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
                     SendDataByte(Command.GS_V_m_n);
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
@@ -478,6 +525,19 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
+            case SystemSettingActivity.REQUEST_CONNECT_DEVICE:
+                // When DeviceListActivity returns with a device to connect
+                // Get the device MAC address
+                String address = data.getExtras().getString(
+                        DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                // Get the BLuetoothDevice object
+                if (BluetoothAdapter.checkBluetoothAddress(address)) {
+                    BluetoothDevice device = mBluetoothAdapter
+                            .getRemoteDevice(address);
+                    // Attempt to connect to the device
+                    mService.connect(device);
+                }
+                break;
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
                 reflashList(mGetClassPluResultList,true);
@@ -493,7 +553,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_MONEY:
                 if(requestCode == 100){
                     String mMoney =  data.getStringExtra("countN");
-                    change = Double.parseDouble(mMoney) - total;
+                    payMoney = Double.parseDouble(mMoney);
+                    change = payMoney - total;
                     setPlayFlowBean(total+"");
                 }else if(requestCode == 200){
                     String zhekou =  data.getStringExtra("countN");

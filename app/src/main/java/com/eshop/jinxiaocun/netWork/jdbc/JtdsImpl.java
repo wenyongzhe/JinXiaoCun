@@ -19,7 +19,7 @@ public class JtdsImpl implements JdbcInterface{
     public void connectDb(){
         try {
             Class.forName(driverName);
-            dbConn = DriverManager.getConnection(dbURL,Config.USER_NAME, Config.PASSWORD);
+            dbConn = DriverManager.getConnection(dbURL,Config.DB_USER_NAME, Config.DB_PASSWORD);
             statement = dbConn.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();

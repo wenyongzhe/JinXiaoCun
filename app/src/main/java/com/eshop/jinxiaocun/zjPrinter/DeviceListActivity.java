@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and
@@ -161,7 +162,7 @@ public class DeviceListActivity extends Activity {
 				Intent intent = new Intent();
 				intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 				// Set result and finish this Activity
-				setResult(Activity.RESULT_OK, intent);
+				setResult(SystemSettingActivity.REQUEST_CONNECT_DEVICE, intent);
 				finish();
 			}
         }

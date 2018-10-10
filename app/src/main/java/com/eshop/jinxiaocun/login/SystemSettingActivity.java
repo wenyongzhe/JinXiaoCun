@@ -48,8 +48,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     TextView tv_blu_status;
 
     // Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;
+    public static final int REQUEST_CONNECT_DEVICE = 1;
+    public static final int REQUEST_ENABLE_BT = 2;
     private BluetoothAdapter mBluetoothAdapter = null;
     // Message types sent from the BluetoothService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -123,6 +123,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 case MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
+                            tv_blu_status.setText("连接成功");
                             break;
                         case BluetoothService.STATE_CONNECTING:
                             tv_blu_status.setText("连接中~~~");
@@ -152,6 +153,23 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             }
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // If Bluetooth is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else {
+            if (mService == null)
+                mService = new BluetoothService(this, mHandler);
+        }
+    }
 
     @Override
     public void onDestroy() {

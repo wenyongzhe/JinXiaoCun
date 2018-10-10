@@ -17,8 +17,8 @@ public class OrmLiteManager implements JdbcInterface {
     public OrmLiteManager() {
         try {
             connectionSource = new JdbcConnectionSource(Config.DB_URL);
-            ((JdbcConnectionSource) connectionSource).setUsername(Config.USER_NAME);
-            ((JdbcConnectionSource) connectionSource).setPassword(Config.PASSWORD);
+            ((JdbcConnectionSource) connectionSource).setUsername(Config.DB_USER_NAME);
+            ((JdbcConnectionSource) connectionSource).setPassword(Config.DB_PASSWORD);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,8 +40,8 @@ public class OrmLiteManager implements JdbcInterface {
     public void connectDb() {
        /* try {
             connectionSource = new JdbcConnectionSource(Config.DB_URL);
-            ((JdbcConnectionSource) connectionSource).setUsername(Config.USER_NAME);
-            ((JdbcConnectionSource) connectionSource).setPassword(Config.PASSWORD);
+            ((JdbcConnectionSource) connectionSource).setUsername(Config.DB_USER_NAME);
+            ((JdbcConnectionSource) connectionSource).setPassword(Config.DB_PASSWORD);
 
         } catch (SQLException e) {
             e.printStackTrace();

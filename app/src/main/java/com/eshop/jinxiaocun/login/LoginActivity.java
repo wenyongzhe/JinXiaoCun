@@ -6,19 +6,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
-import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
 import com.eshop.jinxiaocun.main.view.MainActivity;
 import com.eshop.jinxiaocun.utils.CommonUtility;
@@ -116,7 +113,8 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
 //                    Config.intValue =
 
-
+                    Config.PassWord = editPassword.getText().toString().trim();
+                    Config.UserName = editUser.getText().toString().trim();
                     ToastUtils.showLong("登录成功！");
                     Intent intent = new Intent();
                     intent.setClass(LoginActivity.this, MainActivity.class);

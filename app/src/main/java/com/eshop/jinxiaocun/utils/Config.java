@@ -9,7 +9,8 @@ import java.util.HashMap;
 public class Config {
 
     public static String UserCode = "";
-    public static String UserName = "";
+    public static String UserName = "1001";
+    public static String PassWord ="1001";
     public static String UserId = "1001";
 
     public static String DeviceID = "";
@@ -17,8 +18,8 @@ public class Config {
     public static String IP="120.79.209.140";
     public static String IP_POIN="8080";
     public static String DB_NAME="EWESHOP";
-    public static String USER_NAME="sa";
-    public static String PASSWORD="123456";
+    public static String DB_USER_NAME ="sa";
+    public static String DB_PASSWORD ="123456";
     public static String httpURL = "";
     public static String VersionName = "";
     public static int VersionCode = 1;

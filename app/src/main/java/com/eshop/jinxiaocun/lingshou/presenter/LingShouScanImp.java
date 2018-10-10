@@ -31,7 +31,6 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.PluLikeBean;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.utils.MD5Util;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
@@ -126,7 +125,7 @@ public class LingShouScanImp implements ILingshouScan {
         GetOptAuthBean mGetOptAuthBean = new GetOptAuthBean();
         mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGetOptAuthBean.getJsonData().setAs_operId(Config.UserId);
-        mGetOptAuthBean.getJsonData().setAs_passwd(Config.PASSWORD);
+        mGetOptAuthBean.getJsonData().setAs_passwd(Config.PassWord);
         mGetOptAuthBean.getJsonData().setAi_grant(Config.GRANT_BILLDIS_COUNT);
         Map map = ReflectionUtils.obj2Map(mGetOptAuthBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetOptAuthInterface());
@@ -163,7 +162,7 @@ public class LingShouScanImp implements ILingshouScan {
         mBillDiscountBean.getJsonData().setAs_type("A");
         mBillDiscountBean.getJsonData().setAs_discount(total+"");
         mBillDiscountBean.getJsonData().setCashier_id(Config.UserId);
-        mBillDiscountBean.getJsonData().setCashier_pw(Config.PASSWORD);
+        mBillDiscountBean.getJsonData().setCashier_pw(Config.PassWord);
 
         Map map = ReflectionUtils.obj2Map(mBillDiscountBean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new BillDiscountInterface());

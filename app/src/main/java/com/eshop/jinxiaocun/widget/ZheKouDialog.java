@@ -74,8 +74,8 @@ public class ZheKouDialog extends Activity {
             return;
         }
 
-        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>=100) {
-            MyUtils.showToast("请输入大于0小于100的折扣！", this);
+        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>100) {
+            MyUtils.showToast("请输入大于0小于等于100的折扣！", this);
             return;
         }
 

@@ -160,7 +160,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
         // If Bluetooth is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
+        if ( !mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(
                     BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);

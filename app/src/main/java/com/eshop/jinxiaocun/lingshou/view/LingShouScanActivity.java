@@ -566,11 +566,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
-                int int_zhekou = Integer.decode(zhekou);
+                Double int_zhekou = Double.parseDouble(zhekou);
                 if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant().equals("1")){
-                    if((int_zhekou/100)>Integer.decode(mGetOptAuthResult.getSavediscount()) && (int_zhekou/100)<Integer.decode(mGetOptAuthResult.getLimitdiscount())){
+                    if((int_zhekou/100)>=Double.parseDouble(mGetOptAuthResult.getSavediscount()) && (int_zhekou/100)<=Double.parseDouble(mGetOptAuthResult.getLimitdiscount())){
                     }else{
-                        ToastUtils.showShort("折扣必须在"+Integer.decode(mGetOptAuthResult.getSavediscount())*100+"-"+Integer.decode(mGetOptAuthResult.getLimitdiscount())*100);
+                        ToastUtils.showShort("折扣必须在"+Double.parseDouble(mGetOptAuthResult.getSavediscount())*100+"-"+Double.parseDouble(mGetOptAuthResult.getLimitdiscount())*100);
                         return;
                     }
                 }

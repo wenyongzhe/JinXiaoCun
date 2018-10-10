@@ -11,6 +11,8 @@ import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBean;
+import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
@@ -142,6 +144,25 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SheetCheckInterface());
+    }
+
+    /**
+     * 获取单据明细（单据明细查询）
+     * @param orderType 单据类型
+     * @param orderNo  单据号
+     * @param voucher_Type 引单明细 类型
+     */
+    @Override
+    public void getOrderDetail(String orderType, String orderNo, String voucher_Type) {
+        OrderDetailBean bean = new OrderDetailBean();
+        bean.JsonData.PosId = Config.posid;
+        bean.JsonData.UserId = Config.UserId;
+        bean.JsonData.SheetType = orderType;
+        bean.JsonData.SheetNo = orderNo;
+        bean.JsonData.cVoucher_Type = voucher_Type;
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new OrderDetailInterface());
     }
 
 
@@ -389,6 +410,34 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,"审核失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //单据明细查询
+    class OrderDetailInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<OrderDetailBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,OrderDetailBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"单据明细获取失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"单据明细获取失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

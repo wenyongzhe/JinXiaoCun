@@ -27,5 +27,7 @@ public interface IOtherModel {
     void getWarehouseUnfo(String sheetType);
     //业务单据审核
     void sheetCheck(String orderType ,String orderNo );
+    //获取单据明细
+    void getOrderDetail(String orderType ,String orderNo ,String voucher_Type);
 
 }

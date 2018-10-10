@@ -12,7 +12,7 @@ public class WebConfig {
     public static final String GetPLUInfo = "GetPLUInfo";//精确查询商品信息
     public static final String GetPLULikeInfo = "GetPLULikeInfo";//模糊查询商品信息
     public static final String QrySheetHead = "QrySheetHead";//单据主表查询
-    public static final String QrySheetDetail= "QrySheetHead";//单据明细查询;
+    public static final String QrySheetDetail= "QrySheetDetail";//单据明细查询;
     public static final String SaveSheetHead = "SaveSheetHead";//上传单据主表
     public static final String SaveSheetDetail = "SaveSheetDetail";//上传单据明细
     public static final String SheetSave = "SheetSave";//保存业务单据

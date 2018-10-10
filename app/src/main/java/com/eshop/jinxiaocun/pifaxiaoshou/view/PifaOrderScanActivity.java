@@ -24,6 +24,7 @@ import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderScanAdapter;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -61,6 +62,8 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private List<GetClassPluResult> mListDatas=new ArrayList<>();
     private GetClassPluResult mSelectGoodsEntity;
     private String mStr_OrderNo;//批发订单单据号
+    private String mCheckflag = "0";//0未审核，1审核
+    private DanJuMainBeanResultItem mSelectMainBean;
 
     @Override
     protected int getLayoutContentId() {
@@ -80,6 +83,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
             public void onDrawableRightClickListener(View view) {
+                if(mCheckflag.equals("1")){
+                    AlertUtil.showToast("该单据已审核，不能再操作!");
+                    return;
+                }
                 Intent intent = new Intent(PifaOrderScanActivity.this, SelectCustomerListActivity.class);
                 startActivityForResult(intent,2);
             }
@@ -104,6 +111,13 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mOtherApi = new OtherModelImp(this);
         mQueryGoodsApi = new LingShouScanImp(this);
 
+        mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
+        if(mSelectMainBean !=null){
+            mTvUserStore.setText("["+mSelectMainBean.getBranch_No()+"]");
+            mCheckflag = getIntent().getStringExtra("Checkflag");
+            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
+        }
+
     }
 
     //手动输入条码事件
@@ -121,6 +135,11 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     @Override
     protected void onTopBarRightClick() {
         super.onTopBarRightClick();
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return;
+        }
         Intent mIntent = new Intent(this, QreShanpingActivity.class);
         startActivityForResult(mIntent,1);
     }
@@ -212,6 +231,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
+            case Config.MESSAGE_OK:
+
+                break;
+
             //业务单据号
             case Config.MESSAGE_SHEETNO_OK:
                 SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
@@ -250,7 +273,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 setResult(22);
                 finish();
                 break;
-            //上传单据主表或上传单据明细 保存业务单据 失败
+            //上传单据主表或上传单据明细 保存业务单据 单据明细获取 失败
             case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;
@@ -296,6 +319,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected void scanResultData(String barcode) {
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return;
+        }
+
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
             mQueryGoodsApi.getPLUInfo(barcode);
@@ -305,6 +334,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     //保存前
     @Override
     protected boolean addBefore() {
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再操作!");
+            return false;
+        }
         if(mListDatas.size()==0){
             AlertUtil.showToast("请添加商品，再保存!");
             return false;
@@ -331,6 +364,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected boolean deleteBefore() {
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再操作!");
+            return false;
+        }
+
         if(mListDatas ==null || mListDatas.size()==0){
             AlertUtil.showToast("没有批发商品，不能做删除操作!");
             return false;
@@ -358,6 +397,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected boolean modifyCountBefore() {
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再操作!");
+            return false;
+        }
+
         if(mListDatas ==null || mListDatas.size()==0){
             AlertUtil.showToast("没有批发商品，不能做改数操作!");
             return false;

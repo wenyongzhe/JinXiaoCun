@@ -239,12 +239,15 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
 
     @Override
     protected boolean modifyBefore() {
-        return false;
+        return true;
     }
 
     @Override
     protected void modifyAfter() {
-
+        Intent intent = new Intent(this,PifaOrderScanActivity.class);
+        intent.putExtra("Checkflag",mCheckflag);
+        intent.putExtra("MainBean",mSelectMainBean);
+        startActivityForResult(intent,2);
     }
 
     @Override

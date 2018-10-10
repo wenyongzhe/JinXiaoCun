@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.bean;
 
-public class DanJuMainBeanResultItem {
+import java.io.Serializable;
+
+public class DanJuMainBeanResultItem implements Serializable{
 
     public String Flow_ID;    //时间流水ID
     public String SheetType;       //单据类型

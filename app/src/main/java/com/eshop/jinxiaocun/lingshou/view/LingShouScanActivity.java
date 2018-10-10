@@ -567,6 +567,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
                 int int_zhekou = Integer.decode(zhekou);
+                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant().equals("1")){
+                    if((int_zhekou/100)>Integer.decode(mGetOptAuthResult.getSavediscount()) && (int_zhekou/100)<Integer.decode(mGetOptAuthResult.getLimitdiscount())){
+                    }else{
+                        ToastUtils.showShort("折扣必须在"+Integer.decode(mGetOptAuthResult.getSavediscount())*100+"-"+Integer.decode(mGetOptAuthResult.getLimitdiscount())*100);
+                        return;
+                    }
+                }
 //                total = int_zhekou*total;
 //                tv_check_num.setText("总价："+total);
 //                setSaleFlowBean(SELL_ZHENDAN_YIJIA);

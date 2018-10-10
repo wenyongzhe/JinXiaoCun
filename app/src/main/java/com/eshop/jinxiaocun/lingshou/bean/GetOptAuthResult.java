@@ -4,41 +4,41 @@ import com.eshop.jinxiaocun.base.bean.BaseResult;
 
 public class GetOptAuthResult extends BaseResult {
 
-    private String Pay_way;// " :”1001” //支付方式
-    private String Pay_name;//1001” //支付名称
-    private String Rate;//:1 //汇率
-    private String Pay_memo;// " :””//备注
 
-    public String getPay_way() {
-        return Pay_way;
+    private String Isgrant;//" :1// ‘3’密码错误，‘2’没有权限， ‘1’有权限
+    private String operId;//1001” //收款员ID
+    private String limitdiscount;//:80 //折扣最小额度
+    private String Savediscount;// : 60//折扣最大额度
+
+    public String getIsgrant() {
+        return Isgrant;
     }
 
-    public void setPay_way(String pay_way) {
-        Pay_way = pay_way;
+    public void setIsgrant(String isgrant) {
+        Isgrant = isgrant;
     }
 
-    public String getPay_name() {
-        return Pay_name;
+    public String getOperId() {
+        return operId;
     }
 
-    public void setPay_name(String pay_name) {
-        Pay_name = pay_name;
+    public void setOperId(String operId) {
+        this.operId = operId;
     }
 
-    public String getRate() {
-        return Rate;
+    public String getLimitdiscount() {
+        return limitdiscount;
     }
 
-    public void setRate(String rate) {
-        Rate = rate;
+    public void setLimitdiscount(String limitdiscount) {
+        this.limitdiscount = limitdiscount;
     }
 
-    public String getPay_memo() {
-        return Pay_memo;
+    public String getSavediscount() {
+        return Savediscount;
     }
 
-    public void setPay_memo(String pay_memo) {
-        Pay_memo = pay_memo;
+    public void setSavediscount(String savediscount) {
+        Savediscount = savediscount;
     }
-
 }

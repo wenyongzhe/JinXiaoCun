@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.netWork.httpDB.message;
 
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
@@ -42,6 +43,9 @@ public class HandlerMessagePost implements IMessagePost {
             Result mResult = mJsonFormatImp.JsonToBean(info, Result.class);
             o.handleResult(response,info );
             o.handleResultJson(mResult.status,mResult.msg,mResult.jsonData);
+            if(Integer.decode(mResult.status)!=0){
+                ToastUtils.showShort(mResult.msg);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             o.handleResult(response,e.getMessage() );

@@ -13,6 +13,8 @@ import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBean;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBean;
+import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
@@ -48,19 +50,20 @@ public class OtherModelImp implements IOtherModel {
         this.mHandler = handler;
         mINetWork = new NetWorkImp(Application.mContext);
     }
-
+    //获取业务单据号数据
     @Override
     public void getSheetNoData(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new OtherModelImp.SheetNoInterface());
     }
-
+    //获取商品批次信息
     @Override
     public void getGoodsPiciInfo(BaseBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GoodsPiciInterface());
     }
 
+    //获取客户信息
     @Override
     public void getCustomerInfo(String type ,String sheetType ,String zjm,int pageIndex,int pageSize) {
 
@@ -163,6 +166,30 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new OrderDetailInterface());
+    }
+
+    /**
+     * 单据商品取价
+     * @param orderType 单据类型
+     * @param d_branchNo 对方门店或仓库
+     * @param as_itemNo 商品编码
+     * @param supcust_no 供应商或客户编码
+     */
+    @Override
+    public void getOrderGoodsPrice(String orderType, String d_branchNo, String as_itemNo, String supcust_no) {
+
+        OrderGoodsPriceBean bean = new OrderGoodsPriceBean();
+        bean.JsonData.PosId = Config.posid;
+        bean.JsonData.SheetType = orderType;
+        bean.JsonData.branchNo = Config.branch_no;
+        bean.JsonData.d_branchNo = d_branchNo;
+        bean.JsonData.as_itemNo = as_itemNo;
+        bean.JsonData.oper_id = Config.UserId;//操作员
+        bean.JsonData.loginbranch_no = "";//登录机构
+        bean.JsonData.supcust_no = supcust_no;
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new OrderGoodsPriceInterface());
     }
 
 
@@ -438,6 +465,34 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_FAIL,"单据明细获取失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //单据商品取价
+    class OrderGoodsPriceInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    OrderGoodsPriceBeanResult result = mJsonFormatImp.JsonToBean(jsonData,OrderGoodsPriceBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_GET_PRICE_SUCCESS,result);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_GET_PRICE_FAIL,"单据商品取价失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_GET_PRICE_FAIL,"单据商品取价失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

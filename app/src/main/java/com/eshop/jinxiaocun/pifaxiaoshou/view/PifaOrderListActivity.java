@@ -213,6 +213,9 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             setTopToolBarRightTitle("审核单");
             mCheckflag ="0";
             mPageIndex =1;
+            mSelectMainBean =null;
+            mAdapter.setItemClickPosition(-1);
+            mAdapter.notifyDataSetInvalidated();
             getPifaOrderData();
         }
     }
@@ -229,6 +232,22 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
 
     @Override
     protected boolean deleteOrderBefore() {
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
+            return false;
+        }
+
+        if(mListInfo.size()==0){
+            AlertUtil.showToast("没有单据，不能做审核操作!");
+            return false;
+        }
+
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+
         return false;
     }
 
@@ -239,6 +258,12 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
 
     @Override
     protected boolean modifyBefore() {
+
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+
         return true;
     }
 
@@ -258,6 +283,11 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             return false;
         }
 
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
+            return false;
+        }
+
         if(mListInfo.size()==0){
             AlertUtil.showToast("没有单据，不能做审核操作!");
             return false;
@@ -268,10 +298,6 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             return false;
         }
 
-        if(mCheckflag.equals("1")){
-            AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
-            return false;
-        }
         return true;
     }
 

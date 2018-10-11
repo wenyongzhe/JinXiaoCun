@@ -19,7 +19,7 @@ public interface IOtherModel {
     void uploadDanjuMainInfo(BaseBean bean);
     //上传单据明细信息
     void uploadDanjuDetailInfo(BaseBean bean);
-    //SheetSave保存业务单据
+    //保存业务单据
     void sheetSave(String orderType ,String orderNo );
     //供应商获取
     void getProviderInfo(String sheetType,String zjm,int pageIndex,int pageSize);
@@ -29,5 +29,7 @@ public interface IOtherModel {
     void sheetCheck(String orderType ,String orderNo );
     //获取单据明细
     void getOrderDetail(String orderType ,String orderNo ,String voucher_Type);
+    //单据商品取价
+    void getOrderGoodsPrice(String orderType ,String d_branchNo ,String as_itemNo ,String supcust_no );
 
 }

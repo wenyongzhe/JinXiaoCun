@@ -20,7 +20,7 @@ public class UploadDanjuDetailBean extends BaseBean {
     }
 
     public static class UploadDanjuDetail {
-        public String FLowID = "";
+        public String FLow_ID = "";
         public String POSID = "";
         public String BillNo = ""; //单据号
         public String SupplyCode = "";

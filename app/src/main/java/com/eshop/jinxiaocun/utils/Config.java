@@ -72,7 +72,8 @@ public class Config {
     public final static int MESSAGE_GET_OPT_AUTH = 32;
     public final static int MESSAGE_BILL_DISCOUNT = 33;
     public final static int MESSAGE_BILL_DISCOUNT_RETURN = 34;
-
+    public final static int MESSAGE_GET_PRICE_SUCCESS = 35;
+    public final static int MESSAGE_GET_PRICE_FAIL = 36;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

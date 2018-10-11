@@ -192,7 +192,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         for (int i=0;i<mListDatas.size();i++) {
             GetClassPluResult data = mListDatas.get(i);
             UploadDanjuDetailBean.UploadDanjuDetail obj = new UploadDanjuDetailBean.UploadDanjuDetail();
-            obj.FLowID = ""+(i+1) ;//序号从1开始
+            obj.FLow_ID = ""+(i+1) ;//序号从1开始
             obj.POSID = Config.posid;
             obj.BillNo = mStr_OrderNo;//单据号
             obj.BarCode = data.getItem_no();//编码

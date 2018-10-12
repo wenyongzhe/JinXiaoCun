@@ -67,7 +67,7 @@ public class PifaOrderListAdapter extends BaseAdapter {
         tvShopname.setSelected(true);
         tvOrderNo.setText(listInfo.get(position).getSheet_No());
         tvOrderType.setText(listInfo.get(position).getSheetType());
-        tvShopname.setText(listInfo.get(position).getShopName());
+        tvShopname.setText(listInfo.get(position).getSupplyName());
         tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
         tvValidDate.setText(listInfo.get(position).getValid_date());
 

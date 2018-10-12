@@ -72,7 +72,7 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         setHeaderTitle(R.id.tv_0,R.string.list_item_Status,100);//单据状态
         setHeaderTitle(R.id.tv_1,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_2,R.string.list_item_BillType,100);// 单据类型
-        setHeaderTitle(R.id.tv_3,R.string.list_item_ShopName,150); //门店名称
+        setHeaderTitle(R.id.tv_3,R.string.list_item_SupName,150); //供应商名称
         setHeaderTitle(R.id.tv_4,R.string.list_item_AllGoodsCount,100);//总商品数
         setHeaderTitle(R.id.tv_5,R.string.list_item_ValidDate,150);//交货日期
 

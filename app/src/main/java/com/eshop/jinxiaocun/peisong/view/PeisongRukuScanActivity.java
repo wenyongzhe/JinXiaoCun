@@ -123,8 +123,9 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             mT_Branch_No =mSelectMainBean.getT_Branch_No();
-            mTvTiaoChu.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getShopName());
-            mTvTiaoRu.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getYHShopName());
+            //这个单特殊，配入单是配出的出库仓  Branch_No与T_Branch_No互换的  引单也要互换
+            mTvTiaoChu.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getShopName());
+            mTvTiaoRu.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getYHShopName());
             mCheckflag = getIntent().getStringExtra("Checkflag");
             mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
         }

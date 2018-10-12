@@ -31,5 +31,7 @@ public interface IOtherModel {
     void getOrderDetail(String orderType ,String orderNo ,String voucher_Type);
     //单据商品取价
     void getOrderGoodsPrice(String orderType ,String d_branchNo ,String as_itemNo ,String supcust_no );
+    //引用单据查询
+    void getCiteOrderDatas(String sheetType ,String operId,String checkFlag, int pageIndex,int pageSize,String beginTime ,String endTime);
 
 }

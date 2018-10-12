@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
@@ -120,15 +121,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         mOtherApi = new OtherModelImp(this);
         mQueryGoodsApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
-        if(mSelectMainBean !=null){
-            mStr_OrderNo = mSelectMainBean.getSheet_No();
-            mT_Branch_No =mSelectMainBean.getT_Branch_No();
-            //这个单特殊，配入单是配出的出库仓  Branch_No与T_Branch_No互换的  引单也要互换
-            mTvTiaoChu.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getShopName());
-            mTvTiaoRu.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getYHShopName());
-            mCheckflag = getIntent().getStringExtra("Checkflag");
-            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
-        }
+        getOrderDetail(mSelectMainBean);
 
     }
 
@@ -147,6 +140,14 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             return false;
         }
     };
+
+
+    @OnClick(R.id.btn_citeOrder)
+    public void onClickCiteOrder(){
+        Intent intent = new Intent(PeisongRukuScanActivity.this,CiteOrderListActivity.class);
+        intent.putExtra("SheetType",Config.YwType.MI.toString());
+        startActivityForResult(intent,4);
+    }
 
     @Override
     protected void onTopBarRightClick() {
@@ -251,6 +252,19 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData = jsonData;
         mOtherApi.uploadDanjuDetailInfo(bean);
 
+    }
+
+    //从单据列表进入 取此单据明细
+    private void getOrderDetail(DanJuMainBeanResultItem selectMainBean){
+        if(selectMainBean !=null){
+            mStr_OrderNo = selectMainBean.getSheet_No();
+            mT_Branch_No =selectMainBean.getT_Branch_No();
+            //这个单特殊，配入单是配出的出库仓  Branch_No与T_Branch_No互换的  引单也要互换
+            mTvTiaoChu.setText("["+selectMainBean.getBranch_No()+"]"+selectMainBean.getShopName());
+            mTvTiaoRu.setText("["+selectMainBean.getT_Branch_No()+"]"+selectMainBean.getYHShopName());
+            mCheckflag = getIntent().getStringExtra("Checkflag");
+            mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
+        }
     }
 
     @Override
@@ -391,6 +405,11 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
                     break;
                 }
             }
+        }
+
+        //引用单据
+        if(requestCode == 4 && resultCode == RESULT_OK){
+
         }
 
     }

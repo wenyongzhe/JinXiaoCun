@@ -8,6 +8,7 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.othermodel.bean.CiteOrderBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
@@ -22,6 +23,8 @@ import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -190,6 +193,34 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new OrderGoodsPriceInterface());
+    }
+
+    /**
+     * 引用单据查询
+     * @param sheetType 单据类型
+     * @param operId 可以是操作员、单号
+     * @param checkFlag 审核标志
+     * @param pageIndex 页码
+     * @param pageSize 每页数量
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     */
+    @Override
+    public void getCiteOrderDatas(String sheetType, String operId, String checkFlag, int pageIndex, int pageSize, String beginTime, String endTime) {
+
+        CiteOrderBean bean = new CiteOrderBean();
+        bean.JsonData.pos_id = Config.posid;
+        bean.JsonData.branchNo = Config.branch_no;
+        bean.JsonData.sheettype = sheetType;
+        bean.JsonData.begintime = beginTime;
+        bean.JsonData.endtime = endTime;
+        bean.JsonData.checkflag = checkFlag;
+        bean.JsonData.pagenum = pageSize;
+        bean.JsonData.page = pageIndex;
+        bean.JsonData.operid = operId;
+
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new CiteOrderInterface());
     }
 
 
@@ -493,6 +524,34 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_GET_PRICE_FAIL,"单据商品取价失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //引用单据查询
+    class CiteOrderInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<DanJuMainBeanResultItem> resultList = mJsonFormatImp.JsonToList(jsonData,DanJuMainBeanResultItem.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"引用单据查询失败: "+Msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"引用单据查询失败: "+e.getMessage());
                 e.printStackTrace();
             }
         }

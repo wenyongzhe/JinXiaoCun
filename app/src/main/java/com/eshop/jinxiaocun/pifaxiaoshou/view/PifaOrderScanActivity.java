@@ -188,7 +188,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             if(!isSame){//不存在添加 ，已经存在直接刷新
                 mListDatas.add(scanOrSelectGoods);
                 mAddSelectGoodsNo = scanOrSelectGoods.getItem_no();
-                mOtherApi.getOrderGoodsPrice(Config.YwType.SS.toString(),"",scanOrSelectGoods.getItem_no(),mCustomerInfo.getId());
+                mOtherApi.getOrderGoodsPrice(Config.YwType.SS.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
             }
             mAdapter.setListInfo(mListDatas);

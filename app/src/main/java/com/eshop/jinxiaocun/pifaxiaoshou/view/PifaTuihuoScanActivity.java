@@ -262,7 +262,6 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                     obj.setSale_qnty(detailData.getCheckNum()+"");
                     obj.setStock_qty(detailData.getStockNum()+"");
                     obj.setPrice(detailData.getSalePrice()+"");
-                    obj.setSale_price(detailData.getSalePrice()+"");
                     obj.setBase_price(detailData.getSalePrice()+"");//批发价
                     obj.setProduce_date(detailData.getMadeDate());
                     obj.setValid_date(detailData.getVaildDate());

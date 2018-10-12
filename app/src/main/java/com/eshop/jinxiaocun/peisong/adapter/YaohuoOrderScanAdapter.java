@@ -62,10 +62,10 @@ public class YaohuoOrderScanAdapter extends BaseAdapter {
         tv_product_code.setSelected(true);
         tv_product_name.setText(listInfo.get(position).getItem_name());
         tv_product_code.setText(listInfo.get(position).getItem_no());
-        float zje = MyUtils.convertToFloat(listInfo.get(position).getBase_price(),0)
+        float zje = MyUtils.convertToFloat(listInfo.get(position).getSale_price(),0)
                 *MyUtils.convertToFloat(listInfo.get(position).getSale_qnty(),1);
         tv_je.setText(String.format(Locale.CANADA, "%.2f",zje));
-        tv_price.setText(listInfo.get(position).getBase_price());
+        tv_price.setText(listInfo.get(position).getSale_price());
         tv_number.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
 
         if (itemClickPosition == position) {

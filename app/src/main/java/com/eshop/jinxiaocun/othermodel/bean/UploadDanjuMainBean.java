@@ -21,7 +21,7 @@ public class UploadDanjuMainBean extends BaseBean{
         public String Sheet_No = "";   //单据号
         public String db_no = "";        //+或-
         public String Branch_No = ""; //当前门店/仓库
-        public String T_Branch_No = "";   //对方门店/仓库
+        public String Tbranch_no = "";   //对方门店/仓库
         public String SupCust_No = "";  //供应商客户代码
         public String Voucher_No = "";    //引用单据号
         public String Ord_Man_No = "";  //业务员

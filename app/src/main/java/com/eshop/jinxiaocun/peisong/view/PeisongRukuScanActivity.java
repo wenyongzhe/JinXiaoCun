@@ -178,7 +178,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
         bean.JsonData.SheetType = Config.YwType.MI.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
-        bean.JsonData.T_Branch_No = mStoreInfo.getId();//对方门店/仓库
+        bean.JsonData.Tbranch_no = mStoreInfo.getId();//对方门店/仓库
         bean.JsonData.SupCust_No = "";//供应商客户代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
         bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期

@@ -213,7 +213,6 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         bean.JsonData.Sheet_No = mStr_OrderNo;//单据号
         bean.JsonData.SheetType = Config.YwType.PI.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
-        bean.JsonData.T_Branch_No = "";//对方门店/仓库
         bean.JsonData.SupCust_No = SupCust_No;//供应商 客户 代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
         bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期

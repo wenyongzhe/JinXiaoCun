@@ -120,7 +120,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             mT_Branch_No =mSelectMainBean.getT_Branch_No();
-            mTvFhStore.setText(mSelectMainBean.getShopName());
+            mTvFhStore.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getShopName());
             mTvYhStore.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getYHShopName());
             mCheckflag = getIntent().getStringExtra("Checkflag");
             mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
@@ -212,7 +212,6 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData.SheetType = Config.YwType.YH.toString(); //单据类型
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
         bean.JsonData.Tbranch_no = mT_Branch_No;//对方门店/仓库
-        bean.JsonData.SupCust_No = "";//供应商客户代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
         bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期
         mOtherApi.uploadDanjuMainInfo(bean);
@@ -394,15 +393,15 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected boolean scanBefore() {
-        if(mCheckflag.equals("1")){
-            AlertUtil.showToast("该单据已审核，不能再添加商品!");
-            return false;
-        }
         return true;
     }
 
     @Override
     protected void scanResultData(String barcode) {
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return ;
+        }
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
             mQueryGoodsApi.getPLUInfo(barcode);

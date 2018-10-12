@@ -214,6 +214,9 @@ public class PeisongChukuListActivity extends CommonBaseListActivity implements 
             setTopToolBarRightTitle("审核单");
             mCheckflag ="0";
             mPageIndex =1;
+            mSelectMainBean =null;
+            mAdapter.setItemClickPosition(-1);
+            mAdapter.notifyDataSetInvalidated();
             getPeisongChukuData();
         }
     }
@@ -240,12 +243,19 @@ public class PeisongChukuListActivity extends CommonBaseListActivity implements 
 
     @Override
     protected boolean modifyBefore() {
-        return false;
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void modifyAfter() {
-
+        Intent intent = new Intent(this,PeisongChukuScanActivity.class);
+        intent.putExtra("Checkflag",mCheckflag);
+        intent.putExtra("MainBean",mSelectMainBean);
+        startActivityForResult(intent,2);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.peisong.view;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -113,6 +114,12 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         super.onItemClick(parent, view, position, id);
         mAdapter.setItemClickPosition(position-1);
         mAdapter.notifyDataSetInvalidated();
+
+//        Intent intent = new Intent();
+//        intent.putExtra("Checkflag",mCheckflag);
+//        intent.putExtra("SelectOrder",mListInfo.get(position-1));
+//        setResult(RESULT_OK,intent);
+
     }
 
     @OnClick(R.id.dt_startDate)

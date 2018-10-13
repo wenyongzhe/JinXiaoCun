@@ -121,6 +121,9 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         mOtherApi = new OtherModelImp(this);
         mQueryGoodsApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
+        if(mSelectMainBean !=null){
+            mCheckflag = getIntent().getStringExtra("Checkflag");
+        }
         getOrderDetail(mSelectMainBean);
 
     }
@@ -262,7 +265,6 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             //这个单特殊，配入单是配出的出库仓  Branch_No与T_Branch_No互换的  引单也要互换
             mTvTiaoChu.setText("["+selectMainBean.getBranch_No()+"]"+selectMainBean.getShopName());
             mTvTiaoRu.setText("["+selectMainBean.getT_Branch_No()+"]"+selectMainBean.getYHShopName());
-            mCheckflag = getIntent().getStringExtra("Checkflag");
             mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
         }
     }
@@ -409,7 +411,9 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
 
         //引用单据
         if(requestCode == 4 && resultCode == RESULT_OK){
-
+            DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
+            mCheckflag = data.getStringExtra("Checkflag");
+            getOrderDetail(selectMainBean);
         }
 
     }

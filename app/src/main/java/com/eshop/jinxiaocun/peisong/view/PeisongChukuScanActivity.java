@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
@@ -118,14 +119,13 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         mOtherApi = new OtherModelImp(this);
         mQueryGoodsApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
+
         if(mSelectMainBean !=null){
-            mStr_OrderNo = mSelectMainBean.getSheet_No();
-            mT_Branch_No =mSelectMainBean.getT_Branch_No();
-            mTvTiaoRu.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getYHShopName());
-            mTvTiaoChu.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getShopName());
             mCheckflag = getIntent().getStringExtra("Checkflag");
-            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
         }
+        getOrderDetail(mSelectMainBean);
+
+
     }
 
     //手动输入条码事件
@@ -143,6 +143,13 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
             return false;
         }
     };
+
+    @OnClick(R.id.btn_citeOrder)
+    public void onClickCiteOrder(){
+        Intent intent = new Intent(PeisongChukuScanActivity.this,CiteOrderListActivity.class);
+        intent.putExtra("SheetType",Config.YwType.MO.toString());
+        startActivityForResult(intent,4);
+    }
 
     @Override
     protected void onTopBarRightClick() {
@@ -245,6 +252,18 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         UploadDanjuDetailBean bean = new UploadDanjuDetailBean();
         bean.JsonData = jsonData;
         mOtherApi.uploadDanjuDetailInfo(bean);
+
+    }
+
+    //从单据列表进入 取此单据明细
+    private void getOrderDetail(DanJuMainBeanResultItem selectMainBean) {
+        if (selectMainBean != null) {
+            mStr_OrderNo = selectMainBean.getSheet_No();
+            mT_Branch_No =selectMainBean.getT_Branch_No();
+            mTvTiaoRu.setText("["+selectMainBean.getT_Branch_No()+"]"+selectMainBean.getYHShopName());
+            mTvTiaoChu.setText("["+selectMainBean.getBranch_No()+"]"+selectMainBean.getShopName());
+            mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
+        }
 
     }
 
@@ -386,6 +405,13 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
                     break;
                 }
             }
+        }
+
+        //引用单据
+        if(requestCode == 4 && resultCode == RESULT_OK){
+            DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
+            mCheckflag = data.getStringExtra("Checkflag");
+            getOrderDetail(selectMainBean);
         }
 
     }

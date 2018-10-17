@@ -41,7 +41,7 @@ public class HomeFragment extends BaseFragment {
 //            R.drawable.xsdj,
             R.drawable.kcgl,
             R.drawable.kssk,
-            R.drawable.tbgl,
+            //R.drawable.tbgl,
             R.drawable.pdgl,
             R.drawable.spgl,
             R.drawable.spgl
@@ -52,7 +52,7 @@ public class HomeFragment extends BaseFragment {
 //            R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
             R.string.item_message_lingshou,
-            R.string.menu_diaobo_manage,
+            //R.string.menu_diaobo_manage,
             R.string.menu_pandian_manage,
             R.string.menu_pifa_xiaoshou,
             R.string.menu_peisong_manager
@@ -115,16 +115,14 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 4:
-                break;
-            case 5:
                 intent.setClass(Application.mContext, PandianManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 6://批发管理
+            case 5://批发管理
                 intent.setClass(Application.mContext, PifaManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 7://配送管理
+            case 6://配送管理
                 intent.setClass(Application.mContext, PeisongManagerActivity.class);
                 startActivity(intent);
                 break;

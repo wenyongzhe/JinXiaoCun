@@ -1,8 +1,15 @@
 package com.eshop.jinxiaocun.peisong.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.BarcodeScan;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -36,11 +43,14 @@ import butterknife.OnClick;
 
 public class CiteOrderListActivity extends CommonBaseListActivity implements INetWorResult {
 
+    @BindView(R.id.et_barcode)
+    EditText mEtStartDate;
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
+    protected BarcodeScan mBarcodeScan;//扫描控制
     private CiteOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
@@ -64,6 +74,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
 
         mLayoutBottom.setVisibility(View.GONE);
 
+        mEtStartDate.setOnKeyListener(onKey);
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
@@ -99,9 +110,20 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
     @Override
     protected void initData() {
         super.initData();
+
         mSheetType = getIntent().getStringExtra("SheetType");
         mServerApi= new OtherModelImp(this);
         getCiteOrderData();
+
+        IntentFilter scanDataIntentFilter = new IntentFilter();
+        scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
+        registerReceiver(mScanDataReceiver, scanDataIntentFilter);
+        try {
+            mBarcodeScan = new BarcodeScan(this);
+            mBarcodeScan.open();
+        }catch (Exception e){
+
+        }
     }
 
     private void getCiteOrderData() {
@@ -112,13 +134,12 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-        mAdapter.setItemClickPosition(position-1);
-        mAdapter.notifyDataSetInvalidated();
 
-//        Intent intent = new Intent();
-//        intent.putExtra("Checkflag",mCheckflag);
-//        intent.putExtra("SelectOrder",mListInfo.get(position-1));
-//        setResult(RESULT_OK,intent);
+        Intent intent = new Intent();
+        intent.putExtra("Checkflag",mCheckflag);
+        intent.putExtra("SelectOrder",mListInfo.get(position-1));
+        setResult(RESULT_OK,intent);
+        finish();
 
     }
 
@@ -192,7 +213,38 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
 
     }
 
+    //手动输入条码事件
+    View.OnKeyListener onKey= new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_UP){
+                mPageIndex = 1;
+                mOperIdOrOrderNo = mEtStartDate.getText().toString().trim();
+                getCiteOrderData();
+                return true;
+            }
+            return false;
+        }
+    };
 
+    /**
+     * 扫描返回数据
+    */
+    private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            if (action.equals("ACTION_BAR_SCAN")) {
+                String str_OperIdOrOrderNo = intent.getStringExtra("EXTRA_SCAN_DATA");
+                mEtStartDate.setText(str_OperIdOrOrderNo);
+                mPageIndex = 1;
+                mOperIdOrOrderNo = str_OperIdOrOrderNo;
+                getCiteOrderData();
+            }
+        }
+    };
 
     @Override
     protected boolean createOrderBefore() {

@@ -6,6 +6,18 @@
     android:orientation="vertical"
     >
 
+
+    <EditText
+        android:id="@+id/et_barcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionSend"
+        style="@style/EditText_Grey_Border"
+        android:layout_margin="10dp"
+        android:gravity="left|center_vertical"
+        android:hint="请扫描/输入操作员号/单据号"
+        />
+
     <LinearLayout
         android:layout_margin="10dp"
         android:layout_width="match_parent"

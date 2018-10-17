@@ -25,6 +25,7 @@ import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
+import com.eshop.jinxiaocun.peisong.view.CiteOrderListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaTuihuoScanAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
@@ -117,16 +119,24 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
 
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
         if(mSelectMainBean !=null){
-            mStr_OrderNo = mSelectMainBean.getSheet_No();
-            SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvUser.setText(mSelectMainBean.getSupplyName());
-            mTvUserStore.setText("["+mSelectMainBean.getBranch_No()+"]");
             mCheckflag = getIntent().getStringExtra("Checkflag");
-            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
         }
+
+        getOrderDetail(mSelectMainBean);
 
     }
 
+    //从单据列表进入 取此单据明细
+    private void getOrderDetail(DanJuMainBeanResultItem selectMainBean) {
+        if (selectMainBean != null) {
+            mStr_OrderNo = selectMainBean.getSheet_No();
+            SupCust_No =selectMainBean.getSupCust_No();
+            mTvUser.setText(selectMainBean.getSupplyName());
+            mTvUserStore.setText("["+selectMainBean.getBranch_No()+"]");
+            mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
+        }
+
+    }
     //手动输入条码事件
     View.OnKeyListener onKey= new View.OnKeyListener() {
         @Override
@@ -142,6 +152,13 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             return false;
         }
     };
+
+    @OnClick(R.id.btn_citeOrder)
+    public void onClickCiteOrder(){
+        Intent intent = new Intent(PifaTuihuoScanActivity.this,CiteOrderListActivity.class);
+        intent.putExtra("SheetType",Config.YwType.RI.toString());
+        startActivityForResult(intent,4);
+    }
 
     @Override
     protected void onTopBarRightClick() {
@@ -385,6 +402,13 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                     break;
                 }
             }
+        }
+
+        //引用单据
+        if(requestCode == 4 && resultCode == RESULT_OK){
+            DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
+            mCheckflag = data.getStringExtra("Checkflag");
+            getOrderDetail(selectMainBean);
         }
 
     }

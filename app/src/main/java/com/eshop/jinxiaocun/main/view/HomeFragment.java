@@ -36,7 +36,6 @@ public class HomeFragment extends BaseFragment {
 
     private Unbinder unbinder;
     private int[] iconIds = {
-            R.drawable.spgl,
             R.drawable.cgd,
 //            R.drawable.xsdj,
             R.drawable.kcgl,
@@ -47,7 +46,6 @@ public class HomeFragment extends BaseFragment {
             R.drawable.spgl
     };
     private int[] nameIds = {
-            R.string.menu_yaohuo_order,
             R.string.menu_caigoudan,
 //            R.string.menu_xiaoshoudan,
             R.string.menu_kucunchaxun,
@@ -93,40 +91,37 @@ public class HomeFragment extends BaseFragment {
 
         switch (i){
             case 0:
-                intent.setClass(Application.mContext, YaohuoOrderListActivity.class);
-                startActivity(intent);
-                break;
-            case 1:
                 intent.setClass(Application.mContext, CaigouManagerActivity.class);
                 startActivity(intent);
                 break;
-//            case 2:
-//                intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);
-//                intent.putExtra(Config.SHEET_NO,"");
-//                startActivity(intent);
-//                break;
-            case 2:
+            case 1:
                 intent.setClass(Application.mContext, StockCheckActivity.class);
                 startActivity(intent);
                 break;
-            case 3:
+            case 2:
                 intent.setClass(Application.mContext, LingShouScanActivity.class);
                 intent.putExtra(Config.SHEET_NO,"");
                 startActivity(intent);
                 break;
-            case 4:
+            case 3:
                 intent.setClass(Application.mContext, PandianManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 5://批发管理
+            case 4://批发管理
                 intent.setClass(Application.mContext, PifaManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 6://配送管理
+            case 5://配送管理
                 intent.setClass(Application.mContext, PeisongManagerActivity.class);
                 startActivity(intent);
                 break;
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 }

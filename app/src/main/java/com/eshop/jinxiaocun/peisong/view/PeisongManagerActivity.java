@@ -25,6 +25,12 @@ public class PeisongManagerActivity extends CommonBaseActivity {
 
     }
 
+
+    @OnClick(R.id.btn_yaohuo_order)
+    public void onClickYaohuoOrder() {
+        startActivity(new Intent(this,YaohuoOrderListActivity.class));
+    }
+
     @OnClick(R.id.btn_peisong_ruku)
     public void onClickPeisongRuku() {
         startActivity(new Intent(this,PeisongRukuListActivity.class));

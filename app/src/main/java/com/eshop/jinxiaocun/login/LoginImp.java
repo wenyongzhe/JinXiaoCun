@@ -83,12 +83,21 @@ public class LoginImp implements ILogin {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             Log.e("-----",jsonData);
-            LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
-            if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_INTENT,jsonBean);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,jsonBean);
+            try{
+                LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    if(jsonBean.getResult().equals("Y")){
+                        mHandler.handleResule(Config.MESSAGE_INTENT,jsonBean);
+                    }else{
+                        mHandler.handleResule(Config.MESSAGE_ERROR,jsonBean.getMessage());
+                    }
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            }catch (Exception e){
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.toString());
             }
+
         }
     }
 
@@ -105,17 +114,24 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
-            if(jsonBean==null){
-                Config.posid = "1001";
-                Config.branch_no = "0001";
-                Config.soft_name = "123";
-            }else{
-                Config.posid = jsonBean.getPosid();
-                Config.branch_no = jsonBean.getBranch_no();
-                Config.soft_name = jsonBean.getSoft_name();
+
+            try {
+                RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
+                if(!status.equals(Config.MESSAGE_OK+"") && jsonBean==null){
+                    Config.posid = "1001";
+                    Config.branch_no = "0001";
+                    Config.soft_name = "123";
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+Msg);
+                }else{
+                    Config.posid = jsonBean.getPosid();
+                    Config.branch_no = jsonBean.getBranch_no();
+                    Config.soft_name = jsonBean.getSoft_name();
+                    mHandler.handleResule(Config.MESSAGE_OK,jsonBean);
+                }
+            }catch (Exception e){
+                mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+e.getMessage());
             }
-            mHandler.handleResule(Config.MESSAGE_OK,jsonBean);
+
         }
     }
 

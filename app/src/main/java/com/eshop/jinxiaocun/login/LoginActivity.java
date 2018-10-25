@@ -92,37 +92,37 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
         loginAction = new LoginImp(this);
 
-        closeEditTextKeyboard();
+//        closeEditTextKeyboard();
         HomeProhibit();
     }
 
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case Config.MESSAGE_OK:
-                    //ToastUtils.showLong("注册成功！");
-                    OnLogin();
-                    break;
-                case Config.MESSAGE_ERROR:
-                    ToastUtils.showLong("注册失败！");
-                    OnLogin();
-                    break;
-                case Config.MESSAGE_INTENT:
-
-//                    Config.intValue =
-
-                    Config.PassWord = editPassword.getText().toString().trim();
-                    Config.UserName = editUser.getText().toString().trim();
-                    ToastUtils.showLong("登录成功！");
-                    Intent intent = new Intent();
-                    intent.setClass(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    break;
-            }
-        }
-    };
+//    Handler mHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what){
+//                case Config.MESSAGE_OK:
+//                    //ToastUtils.showLong("注册成功！");
+//                    OnLogin();
+//                    break;
+//                case Config.MESSAGE_ERROR:
+//                    ToastUtils.showLong("注册失败！");
+//                    OnLogin();
+//                    break;
+//                case Config.MESSAGE_INTENT:
+//
+////                    Config.intValue =
+//
+//                    Config.PassWord = editPassword.getText().toString().trim();
+//                    Config.UserName = editUser.getText().toString().trim();
+//                    ToastUtils.showLong("登录成功！");
+//                    Intent intent = new Intent();
+//                    intent.setClass(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void loadData() {
@@ -228,7 +228,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 OnLogin();
                 break;
             case Config.MESSAGE_ERROR:
-                ToastUtils.showLong("注册失败！");
+                ToastUtils.showLong(o.toString());
                 OnLogin();
                 break;
             case Config.MESSAGE_INTENT:

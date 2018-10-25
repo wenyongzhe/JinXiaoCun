@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.utils.CommonUtility;
 
 
 public final class MyActionBar extends LinearLayout {
@@ -110,6 +111,7 @@ public final class MyActionBar extends LinearLayout {
         if (!TextUtils.isEmpty(strTitle)) {
             tvRight.setText(strTitle);
             tvRight.setBackgroundResource(drawableId);
+            tvRight.setPadding(10,5,10,5);
             tvRight.setVisibility(View.VISIBLE);
         }else {
             tvRight.setVisibility(View.GONE);

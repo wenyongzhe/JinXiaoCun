@@ -41,7 +41,8 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
     protected void initView() {
         super.initView();
         mLayoutBottom.setVisibility(View.GONE);
-        setTopToolBar("盘点批号列表",R.mipmap.ic_left_light,"",R.mipmap.add,"");
+        setTopToolBar("盘点批号列表",R.mipmap.ic_left_light,"",0,"");
+        setTopToolBarRightTitleAndStyle("创建",R.drawable.border_bg);
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
             public void onRefresh() {

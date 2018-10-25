@@ -52,14 +52,19 @@ public class YaohuoOrderScanAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_list_yaohuo_order_scan,parent,false);
         }
+        TextView tv_xuhao = ViewHolderUtils.get(convertView, R.id.tv_xuhao);
         TextView tv_product_name = ViewHolderUtils.get(convertView, R.id.tv_product_name);
         TextView tv_product_code = ViewHolderUtils.get(convertView, R.id.tv_product_code);
+        TextView tv_zi_code = ViewHolderUtils.get(convertView, R.id.tv_zi_code);
         TextView tv_je = ViewHolderUtils.get(convertView, R.id.tv_je);
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
         TextView tv_number = ViewHolderUtils.get(convertView, R.id.tv_number);
 
         tv_product_name.setSelected(true);
         tv_product_code.setSelected(true);
+        tv_zi_code.setSelected(true);
+        tv_xuhao.setText((position+1)+"");
+        tv_zi_code.setText(listInfo.get(position).getItem_subno());
         tv_product_name.setText(listInfo.get(position).getItem_name());
         tv_product_code.setText(listInfo.get(position).getItem_no());
         float zje = MyUtils.convertToFloat(listInfo.get(position).getSale_price(),0)

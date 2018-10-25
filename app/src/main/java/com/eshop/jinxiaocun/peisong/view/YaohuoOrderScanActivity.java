@@ -78,7 +78,8 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
     protected void initView() {
         super.initView();
 
-        setTopToolBar("要货单生成", R.mipmap.ic_left_light, "", 0, "添加商品");
+        setTopToolBar("要货单生成", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBarRightTitleAndStyle("添加商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
@@ -98,11 +99,13 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
             }
         });
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_ProdName,150);//商品名称
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
-        setHeaderTitle(R.id.tv_2,R.string.list_item_Amount,100);//金额
-        setHeaderTitle(R.id.tv_3,R.string.list_item_Price,100);//价格
-        setHeaderTitle(R.id.tv_4,R.string.list_item_CountN5,100);//数量
+        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,100);//序号
+        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);//商品名称
+        setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);//商品编码
+        setHeaderTitle(R.id.tv_3,R.string.list_item_ZiCode,150);//自编码
+        setHeaderTitle(R.id.tv_4,R.string.list_item_Amount,100);//金额
+        setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
+        setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
 
         mAdapter = new YaohuoOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);

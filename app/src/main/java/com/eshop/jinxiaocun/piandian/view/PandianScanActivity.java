@@ -423,6 +423,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected void scanResultData(String barcode) {
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
+            mEtBarcode.setText(barcode);
             mQueryGoodsApi.getPLUInfo(barcode);
         }
     }
@@ -568,10 +569,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }
                 break;
             case Config.MESSAGE_GOODS_INFOR_FAIL:
-                mEtBarcode.requestFocus();
-                mEtBarcode.setFocusable(true);
-                mEtBarcode.setText("");
-                AlertUtil.showToast("不在盘点范围!");
+                AlertUtil.showToast("不在盘点范围！原因："+o.toString());
                 break;
 
             //业务单据号

@@ -53,4 +53,5 @@ dependencies {
     implementation files('libs/Scanner.jar')
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation files('libs/btsdk.jar')
+    implementation files('libs/decoderhelperapi.jar')
 }

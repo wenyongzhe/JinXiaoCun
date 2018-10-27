@@ -6,12 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.eastaeon.decoderapi.DecoderHelper;
+import com.eastaeon.decoderapi.DecoderHelperListener;
+import com.eastaeon.decoderapi.DecoderHelperResult;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
@@ -27,7 +32,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener {
+public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener ,DecoderHelperListener {
 
     protected UpMainBean mUpMainBean;
     protected List<UpDetailBean> mUpDetailBeanList;
@@ -38,6 +43,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected ListView mListview;
     protected MyBaseAdapter mScanAdapter;
     protected int itemClickPosition;
+
+    public DecoderHelper mDecoderHelper=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,9 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         try {
             mBarcodeScan = new BarcodeScan(this);
             mBarcodeScan.open();
+
+            mDecoderHelper = DecoderHelper.getInstance(this);
+            mDecoderHelper.setDecoderHelperListeners(this);
         }catch (Exception e){
 
         }
@@ -69,8 +79,25 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 
         mUpMainBean = new UpMainBean();
         mUpDetailBeanList = new ArrayList<>();
+
         loadData();
         initView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mDecoderHelper!=null){
+            mDecoderHelper.connect();//开始启动连接操作
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();;
+        if(mDecoderHelper!=null){
+            mDecoderHelper.disconnect();//断开连接
+        }
     }
 
     @Override
@@ -180,4 +207,87 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         }
         unregisterReceiver(mScanDataReceiver);
     }
+
+    /*
+	扫码引擎连接完毕时执行
+	*/
+    @Override
+    public void onDecoderConnected() {
+    }
+    /*
+    开始连接引擎时执行
+    */
+    @Override
+    public void onStartDecoderConnect() {
+    }
+    /*
+    开始断开扫码引擎时执行
+    */
+    @Override
+    public void onStartDecoderDisconnect() {
+
+    }
+    /*
+    扫码引擎断开时执行
+    */
+    @Override
+    public void onDecoderDisconnected() {
+
+    }
+    /*
+    扫码结果返回回调，多个条码同时识别是调用，暂时未实现
+    */
+    @Override
+    public void onDecodeMultiResultCallback() {
+
+    }
+    /*
+    扫码结果返回回调
+    */
+    @Override
+    public void onDecodeTwoResultCallback(final DecoderHelperResult mDecoderHelperResult) {
+        Log.d("", "mDecoderHelperResult.barcodeString="+mDecoderHelperResult.barcodeString);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //m_DecodeResultsView.setText(getString(R.string.result)+mDecoderHelperResult.barcodeString);
+            }
+        });
+    }
+    /*
+    规定时间内DecoderHelper.g_nDecodeTimeout扫码失败回调
+    */
+    @Override
+    public void onDecoderFailed(int failType,String failDetail) {
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log. d("", "onKeyDown" + "keyCode=" + keyCode +")");
+
+//        if(mDecoderHelper!=null){
+//
+//            if(!mDecoderHelper.isScaning()){
+//
+//                mDecoderHelper.startScan();//开始连续扫码
+//            }else{
+//                mDecoderHelper.stopScan();//停止连续扫码
+//            }
+//        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    public void onClickScan(View view) {
+		/*if(mDecoderHelper.isScaning()){
+			mDecoderHelper.stopScan();//停止连续扫码
+		}else{
+			mDecoderHelper.startScan();//开始连续扫码
+		}*/
+        mDecoderHelper.startScanOneTimes();//单次扫码
+    }
+
 }

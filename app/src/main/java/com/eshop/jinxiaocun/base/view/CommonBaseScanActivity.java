@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.BarcodeScan;
 import android.support.annotation.LayoutRes;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.eastaeon.decoderapi.DecoderHelper;
+import com.eastaeon.decoderapi.DecoderHelperListener;
+import com.eastaeon.decoderapi.DecoderHelperResult;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -27,7 +32,7 @@ import butterknife.OnClick;
  * Desc:
  */
 
-public abstract class CommonBaseScanActivity extends CommonBaseActivity implements AdapterView.OnItemClickListener{
+public abstract class CommonBaseScanActivity extends CommonBaseActivity implements AdapterView.OnItemClickListener,DecoderHelperListener {
 
     @BindView(R.id.listview)
     protected ListView mListView;
@@ -58,6 +63,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected abstract boolean modifyCountBefore();//修改数前
     protected abstract void modifyCountAfter();
 
+    public DecoderHelper mDecoderHelper=null;
+
     @Override
     protected int getLayoutId() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -66,6 +73,19 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         return getLayoutContentId();
     }
 
+    @Override
+    protected void initView() {
+        super.initView();
+        try {
+            mBarcodeScan = new BarcodeScan(this);
+            mBarcodeScan.open();
+
+            mDecoderHelper = DecoderHelper.getInstance(this);
+            mDecoderHelper.setDecoderHelperListeners(this);
+        }catch (Exception e){
+
+        }
+    }
 
     @Override
     protected void initData() {
@@ -213,11 +233,112 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mDecoderHelper!=null){
+            mDecoderHelper.connect();//开始启动连接操作
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();;
+        if(mDecoderHelper!=null){
+            mDecoderHelper.disconnect();//断开连接
+        }
+    }
+
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(mBarcodeScan!=null){
             mBarcodeScan.close();
         }
         unregisterReceiver(mScanDataReceiver);
+    }
+
+    //扫描设备
+    /////////////////////////////////////////////////
+    /*
+	扫码引擎连接完毕时执行
+	*/
+    @Override
+    public void onDecoderConnected() {
+    }
+    /*
+    开始连接引擎时执行
+    */
+    @Override
+    public void onStartDecoderConnect() {
+    }
+    /*
+    开始断开扫码引擎时执行
+    */
+    @Override
+    public void onStartDecoderDisconnect() {
+
+    }
+    /*
+    扫码引擎断开时执行
+    */
+    @Override
+    public void onDecoderDisconnected() {
+
+    }
+    /*
+    扫码结果返回回调，多个条码同时识别是调用，暂时未实现
+    */
+    @Override
+    public void onDecodeMultiResultCallback() {
+
+    }
+    /*
+    扫码结果返回回调
+    */
+    @Override
+    public void onDecodeTwoResultCallback(final DecoderHelperResult mDecoderHelperResult) {
+        Log.d("", "mDecoderHelperResult.barcodeString="+mDecoderHelperResult.barcodeString);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //m_DecodeResultsView.setText(getString(R.string.result)+mDecoderHelperResult.barcodeString);
+            }
+        });
+    }
+    /*
+    规定时间内DecoderHelper.g_nDecodeTimeout扫码失败回调
+    */
+    @Override
+    public void onDecoderFailed(int failType,String failDetail) {
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log. d("", "onKeyDown" + "keyCode=" + keyCode +")");
+
+//        if(mDecoderHelper!=null){
+//
+//            if(!mDecoderHelper.isScaning()){
+//
+//                mDecoderHelper.startScan();//开始连续扫码
+//            }else{
+//                mDecoderHelper.stopScan();//停止连续扫码
+//            }
+//        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    public void onClickScan(View view) {
+		/*if(mDecoderHelper.isScaning()){
+			mDecoderHelper.stopScan();//停止连续扫码
+		}else{
+			mDecoderHelper.startScan();//开始连续扫码
+		}*/
+        mDecoderHelper.startScanOneTimes();//单次扫码
     }
 }

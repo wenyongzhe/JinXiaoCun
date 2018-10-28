@@ -119,10 +119,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
         setHeaderTitle(R.id.tv_2,R.string.list_item_Pici_Name,150);//批次
         setHeaderTitle(R.id.tv_3,R.string.list_item_Spec,100);//规格
-        setHeaderTitle(R.id.tv_4,R.string.list_item_Price,100);//价格
-        setHeaderTitle(R.id.tv_5,R.string.list_item_XSPrice,100);//销售价格
-        setHeaderTitle(R.id.tv_6,R.string.list_item_Unit,80);//单位
-        setHeaderTitle(R.id.tv_7,R.string.list_item_CountN4,100);//盘点数量
+        setHeaderTitle(R.id.tv_4,R.string.list_item_XSPrice,100);//销售价格
+        setHeaderTitle(R.id.tv_5,R.string.list_item_Unit,80);//单位
+        setHeaderTitle(R.id.tv_6,R.string.list_item_CountN4,100);//盘点数量
 
         mAdapter = new PandianScanAdapter(this,mAddPandianGoodsDetailData);
         mListView.setOnItemClickListener(this);
@@ -451,8 +450,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                                 AlertUtil.dismissDialog();
                             }
                         });
-                return false;
             }
+            return false;
+
         }
 
         return true;
@@ -461,14 +461,33 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     protected void addAfter() {
 //        在上传盘点单到后台保存前，获取盘点单号
-        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
-            SheetNoBean bean = new SheetNoBean();
-            bean.JsonData.trans_no = Config.YwType.CR.toString();
-            bean.JsonData.branch_no=Config.branch_no;
-            mOtherApi.getSheetNoData(bean);
-        }else{
-            uploadRecordHeadData();
-        }
+//        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
+//            SheetNoBean bean = new SheetNoBean();
+//            bean.JsonData.trans_no = Config.YwType.CR.toString();
+//            bean.JsonData.branch_no=Config.branch_no;
+//            mOtherApi.getSheetNoData(bean);
+//        }else{
+//
+//            if(!isDianpin){
+//                int difNumder = mPandianDetailData.size() - mAddPandianGoodsDetailData.size();
+//                if(difNumder != 0){//没盘完不要上传
+//                    AlertUtil.showAlert(this, R.string.dialog_title,
+//                            "还有"+difNumder+"种商品没有盘完，是否继续保存!", R.string.continue_save, new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    AlertUtil.dismissDialog();
+//                                    uploadRecordHeadData();
+//                                }
+//                            }, R.string.cancel, new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    AlertUtil.dismissDialog();
+//                                }
+//                            });
+//                }
+//            }
+//
+//        }
     }
 
     @Override

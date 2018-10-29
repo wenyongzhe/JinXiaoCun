@@ -73,6 +73,14 @@
                 android:gravity="center"
                 android:maxLines="1" />
 
+            <TextView
+                android:id="@+id/tv_pd_store_number"
+                style="@style/TextView_Grey"
+                android:layout_width="100dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1" />
+
         </LinearLayout>
     </LinearLayout>
 

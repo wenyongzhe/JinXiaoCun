@@ -109,7 +109,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mEtBz.setText(mPandianPihao.getMemo());
         }
 //        CommonUtility.getInstance().closeKeyboard(this,mEtBarcode);
-        CommonUtility.getInstance().closeKeyboard(this,mEtBz);
+//        CommonUtility.getInstance().closeKeyboard(this,mEtBz);
         mEtBarcode.setOnKeyListener(onKey);
         setTopToolBar("盘点明细",R.mipmap.ic_left_light,"",0,"");
         setTopToolBarRightTitleAndStyle("添加商品",R.drawable.border_bg);
@@ -122,6 +122,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_4,R.string.list_item_XSPrice,100);//销售价格
         setHeaderTitle(R.id.tv_5,R.string.list_item_Unit,80);//单位
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN4,100);//盘点数量
+        setHeaderTitle(R.id.tv_7,R.string.list_item_StoreNum,100);//库存数量
 
         mAdapter = new PandianScanAdapter(this,mAddPandianGoodsDetailData);
         mListView.setOnItemClickListener(this);
@@ -460,34 +461,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     @Override
     protected void addAfter() {
-//        在上传盘点单到后台保存前，获取盘点单号
-//        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
-//            SheetNoBean bean = new SheetNoBean();
-//            bean.JsonData.trans_no = Config.YwType.CR.toString();
-//            bean.JsonData.branch_no=Config.branch_no;
-//            mOtherApi.getSheetNoData(bean);
-//        }else{
-//
-//            if(!isDianpin){
-//                int difNumder = mPandianDetailData.size() - mAddPandianGoodsDetailData.size();
-//                if(difNumder != 0){//没盘完不要上传
-//                    AlertUtil.showAlert(this, R.string.dialog_title,
-//                            "还有"+difNumder+"种商品没有盘完，是否继续保存!", R.string.continue_save, new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    AlertUtil.dismissDialog();
-//                                    uploadRecordHeadData();
-//                                }
-//                            }, R.string.cancel, new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    AlertUtil.dismissDialog();
-//                                }
-//                            });
-//                }
-//            }
-//
-//        }
+        //在上传盘点单到后台保存前，获取盘点单号
+        if(TextUtils.isEmpty(mTvOrderNo.getText().toString().trim())){
+            SheetNoBean bean = new SheetNoBean();
+            bean.JsonData.trans_no = Config.YwType.CR.toString();
+            bean.JsonData.branch_no=Config.branch_no;
+            mOtherApi.getSheetNoData(bean);
+        }else{
+            uploadRecordHeadData();
+        }
     }
 
     @Override
@@ -563,6 +545,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mPandianDetailData = (List<PandianDetailBeanResult>) o;
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.showToast("获取盘点明细失败！原因："+o.toString());
                 break;
             //扫描时返回搜索的数据
             case Config.MESSAGE_GOODS_INFOR:

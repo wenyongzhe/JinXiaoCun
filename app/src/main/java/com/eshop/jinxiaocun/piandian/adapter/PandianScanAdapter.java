@@ -59,6 +59,8 @@ public class PandianScanAdapter extends BaseAdapter {
         TextView tv_xsprice = ViewHolderUtils.get(convertView, R.id.tv_xsprice);
         TextView tv_unit = ViewHolderUtils.get(convertView, R.id.tv_unit);
         TextView tv_pd_number = ViewHolderUtils.get(convertView, R.id.tv_pd_number);
+        TextView tv_pd_store_number = ViewHolderUtils.get(convertView, R.id.tv_pd_store_number);
+
 
         tv_product_name.setSelected(true);
         tv_product_code.setSelected(true);
@@ -70,6 +72,7 @@ public class PandianScanAdapter extends BaseAdapter {
         tv_xsprice.setText(obj.getSale_price()+"");
         tv_unit.setText(obj.getUnit_no());
         tv_pd_number.setText(obj.getCheck_qty()+"");
+        tv_pd_store_number.setText(obj.getStock_qty()+"");
 
 
         if (itemClickPosition == position) {

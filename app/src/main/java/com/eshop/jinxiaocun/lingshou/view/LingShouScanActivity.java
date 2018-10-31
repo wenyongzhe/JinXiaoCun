@@ -172,7 +172,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
-                            ToastUtils.showShort("没有连接打印机");
+                            //ToastUtils.showShort("没有连接打印机");
                             break;
                     }
                     break;

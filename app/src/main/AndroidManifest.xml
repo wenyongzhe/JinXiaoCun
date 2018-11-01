@@ -228,6 +228,10 @@
         <activity android:name=".peisong.view.CiteOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".piandian.view.CheckNoPandianGoodsListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

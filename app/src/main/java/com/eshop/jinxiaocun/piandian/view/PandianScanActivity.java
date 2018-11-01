@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -73,6 +74,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     TextView mTvStore;
     @BindView(R.id.et_pd_bz)
     EditText mEtBz;
+
+    @BindView(R.id.tv_pd_nopandian)
+    TextView mTvNoPandian;
+
 
     private IPandian mServerApi;
     private ILingshouScan mQueryGoodsApi;
@@ -349,6 +354,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         mAddPandianGoodsDetailData.add(obj);
                     }
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
+                    //只要添加了盘点单就显示未盘点商品按钮
+                    if(mAddPandianGoodsDetailData.size()>0){
+                        mTvNoPandian.setVisibility(View.VISIBLE);
+                    }else{
+                        mTvNoPandian.setVisibility(View.GONE);
+                    }
                 }
 
             }else{
@@ -408,6 +419,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             }
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
 
+            //只要添加了盘点单就显示未盘点商品按钮
+            if(mAddPandianGoodsDetailData.size()>0){
+                mTvNoPandian.setVisibility(View.VISIBLE);
+            }else{
+                mTvNoPandian.setVisibility(View.GONE);
+            }
 
         }else{
             AlertUtil.showToast("不在盘点范围!");
@@ -520,6 +537,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         intent.putExtra("countN", mSelectPandianDetailEntity.getCheck_qty()+"");
         intent.setClass(this, ModifyCountDialog.class);
         startActivityForResult(intent, 22);
+    }
+
+    @OnClick(R.id.tv_pd_nopandian)
+    public void onClickNoPandian(){
+        Intent intent = new Intent(this,CheckNoPandianGoodsListActivity.class);
+        intent.putExtra("AllDetailListData", (Serializable) mPandianDetailData);
+        intent.putExtra("AddDetailListData", (Serializable) mAddPandianGoodsDetailData);
+        startActivityForResult(intent,55);
     }
 
     @Override
@@ -672,6 +697,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         if(requestCode == 44 && resultCode == RESULT_CANCELED){
             AlertUtil.showToast("放弃盘点该商品!");
         }
+
+        //从未盘点的商品中选择
+        if(requestCode == 55 && resultCode == RESULT_OK){
+            PandianDetailBeanResult result = (PandianDetailBeanResult) data.getSerializableExtra("SelectAddPandianDatas");
+            Log.e("lu","name = "+result.getItem_name());
+        }
+
+
+
 
     }
 

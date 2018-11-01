@@ -1,12 +1,14 @@
 package com.eshop.jinxiaocun.piandian.bean;
 
+import java.io.Serializable;
+
 /**
  * Author: 安仔夏天勤奋
  * Date: 2018/8/29
  * Desc:
  */
 
-public class PandianDetailBeanResult {
+public class PandianDetailBeanResult implements Serializable{
 
     private String branch_no; // 盘点仓库
     private String item_no;//商品编码

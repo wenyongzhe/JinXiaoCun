@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     >
@@ -9,37 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:textSize="@dimen/txt_size16"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:text="条码" />
-
-        <EditText
-            android:id="@+id/et_barcode"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:imeOptions="actionSend"
-            style="@style/EditText_Grey_Border"
-            android:gravity="left|center_vertical"
-            android:hint="请扫描精准条码/输入精准条码"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         >
 
@@ -49,11 +19,66 @@
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="单号:"
+            android:text="商品名称:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_orderNo"
+            android:id="@+id/tv_pd_goodsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            style="@style/AutoScrollTextView"
+            android:gravity="center|left"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="批次号:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_piciNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            style="@style/AutoScrollTextView"
+            android:gravity="center|left"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="规格:"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_spec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="6"
@@ -68,16 +93,15 @@
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="范围:"
+            android:text="销售价格:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_fanwei"
+            android:id="@+id/tv_pd_xsprice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            style="@style/TextView_Grey"
-            android:layout_marginRight="5dp"
+            android:layout_weight="4"
+            style="@style/AutoScrollTextView"
             android:gravity="center|left"
             />
 
@@ -86,9 +110,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         >
 
@@ -98,108 +120,37 @@
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="批号:"
+            android:text="库存数量:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_pihao"
+            android:id="@+id/tv_pd_store_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="1"
             style="@style/AutoScrollTextView"
             android:layout_marginRight="5dp"
             android:gravity="center|left"
             />
 
         <TextView
+            android:id="@+id/tv_pd_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ListView_Header"
-            android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="操作员:"
+            android:text="盘点"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/white"
+            android:background="@drawable/border_bg_primary"
             />
 
-        <TextView
-            android:id="@+id/tv_pd_operId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            style="@style/TextView_Grey"
-            android:layout_marginRight="5dp"
-            android:gravity="center|left"
-            />
+
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ListView_Header"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:text="仓库:"
-            />
-
-        <TextView
-            android:id="@+id/tv_pd_store"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            style="@style/TextView_Grey"
-            android:layout_marginRight="5dp"
-            android:gravity="center|left"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ListView_Header"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:text="备注:"
-            />
-
-        <EditText
-            android:id="@+id/et_pd_bz"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            style="@style/EditText_Black"
-            android:layout_marginRight="5dp"
-            android:maxWidth="80dp"
-            android:gravity="center|left"
-            android:textColor="@color/text_grey1"
-            />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/tv_pd_nopandian"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/ListView_Header"
-        android:gravity="center"
-        android:layout_gravity="right"
-        android:text="未盘商品"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textColor="@color/white"
-        android:background="@drawable/border_bg_primary"
-        />
-
-
 
 
 

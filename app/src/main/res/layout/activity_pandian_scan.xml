@@ -193,6 +193,7 @@
         android:layout_gravity="right"
         android:text="未盘商品"
         android:padding="5dp"
+        android:visibility="gone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textColor="@color/white"

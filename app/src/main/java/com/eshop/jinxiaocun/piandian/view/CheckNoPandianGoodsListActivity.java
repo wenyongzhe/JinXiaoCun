@@ -12,6 +12,8 @@ import com.eshop.jinxiaocun.piandian.adapter.CheckNoPandianGoodsListAdapter;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,10 +84,7 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
             @Override
             public void onClickAddPandian(int position) {
                 Log.e("lu","position_"+position);
-                Intent intent =new Intent();
-                intent.putExtra("SelectAddPandianDatas",mListData.get(position));
-                setResult(RESULT_OK,intent);
-                finish();
+                EventBus.getDefault().post(mListData.get(position));
             }
         });
 

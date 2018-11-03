@@ -44,6 +44,10 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPiciDialog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +103,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected void initView() {
         super.initView();
 
+        EventBus.getDefault().register(this);
         mPandianPihao = (PandianPihaoHuoquBeanResult) getIntent().getSerializableExtra("PandianPihaoEntity");
         if( mPandianPihao !=null && mPandianPihao.getOper_range_name().equals("单品盘点")){
             isDianpin=true;
@@ -544,7 +549,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         Intent intent = new Intent(this,CheckNoPandianGoodsListActivity.class);
         intent.putExtra("AllDetailListData", (Serializable) mPandianDetailData);
         intent.putExtra("AddDetailListData", (Serializable) mAddPandianGoodsDetailData);
-        startActivityForResult(intent,55);
+        startActivity(intent);
     }
 
     @Override
@@ -698,21 +703,21 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             AlertUtil.showToast("放弃盘点该商品!");
         }
 
-        //从未盘点的商品中选择
-        if(requestCode == 55 && resultCode == RESULT_OK){
-            PandianDetailBeanResult result = (PandianDetailBeanResult) data.getSerializableExtra("SelectAddPandianDatas");
-            Log.e("lu","name = "+result.getItem_name());
-        }
-
-
-
-
     }
+
+    //从未盘点的商品中选择
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getNoPandianDatas(PandianDetailBeanResult eventResult){
+        PandianDetailBeanResult result = eventResult;
+        Log.e("lu","name = "+result.getItem_name());
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mAddPandianGoodsDetailData.clear();
         mPandianDetailData.clear();
+        EventBus.getDefault().unregister(this);
     }
 }

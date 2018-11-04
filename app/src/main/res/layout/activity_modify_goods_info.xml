@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品名称:" />
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品编码:" />
+        <TextView
+            android:id="@+id/tv_product_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical|left"
+            style="@style/TextView_Grey"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品价格:" />
+        <EditText
+            android:id="@+id/tv_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:inputType="numberDecimal"
+            android:gravity="center_vertical|left"
+            style="@style/EditText_Grey_Border"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品数量:" />
+        <EditText
+            android:id="@+id/tv_product_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:inputType="number"
+            android:gravity="center_vertical|left"
+            style="@style/EditText_Grey_Border"
+            />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_sure_modify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:background="@color/primary"
+        android:textSize="@dimen/txt_size16"
+        />
+
+
+</LinearLayout>

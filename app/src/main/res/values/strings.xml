@@ -89,6 +89,7 @@
     <string name="billing">开单</string>
     <string name="modify">修改</string>
     <string name="modifycount">改数</string>
+    <string name="modifyprice">改价</string>
     <string name="zhekou">折扣</string>
     <string name="modifytotal">修改价格</string>
     <string name="shenhe">审核</string>

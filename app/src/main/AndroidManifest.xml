@@ -221,15 +221,28 @@
         <activity android:name=".peisong.view.YaohuoOrderScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity android:name="com.eshop.jinxiaocun.zjPrinter.DeviceListActivity"
                   android:label="@string/select_device"
                   android:theme="@android:style/Theme.Dialog"
                   android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name=".peisong.view.CiteOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <activity android:name=".piandian.view.CheckNoPandianGoodsListActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".peisong.view.ModifyGoodsInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".widget.ModifyPriceDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
     </application>

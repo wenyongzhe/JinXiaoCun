@@ -44,6 +44,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected Button mBtnDelete;
     @BindView(R.id.btn_modify_count)
     protected Button mBtnModifyCount;
+    @BindView(R.id.btn_modify_price)
+    protected Button mBtnModifyPrice;
     @BindView(R.id.ll_scan_bottom_zsl_zje)
     protected LinearLayout mLayoutScanBottomZslZje;
     @BindView(R.id.tv_ZSL)
@@ -62,6 +64,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected abstract void deleteAfter();
     protected abstract boolean modifyCountBefore();//修改数前
     protected abstract void modifyCountAfter();
+    protected boolean modifyPriceBefore(){return false;}//修价格前
+    protected void modifyPriceAfter(){}
 
     public DecoderHelper mDecoderHelper=null;
 
@@ -169,6 +173,15 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         }
 
         modifyCountAfter();
+    }
+
+    @OnClick(R.id.btn_modify_price)
+    public void onClickModifyPrice(){
+        if(!modifyPriceBefore()){
+            return;
+        }
+
+        modifyPriceAfter();
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){

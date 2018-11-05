@@ -31,6 +31,7 @@ import com.eshop.jinxiaocun.othermodel.view.SelectPiciInfoActivity;
 import com.eshop.jinxiaocun.piandian.adapter.PandianScanAdapter;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoHuoquBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.UploadPandianDetailDataEntity;
 import com.eshop.jinxiaocun.piandian.bean.UploadRecordHeadDataEntity;
@@ -93,6 +94,11 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private PandianDetailBeanResult mSelectPandianDetailEntity = null;
     private boolean isDianpin=false;//true为单品盘点
+
+    private int mPageSize =2000;
+    private int mPageIndex =1;
+    private int mNowCount;
+    private String mSheetNo;
 
     @Override
     protected int getLayoutContentId() {
@@ -161,7 +167,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mOtherApi = new OtherModelImp(this);
         //如果是单品盘点则不取盘点明细 否则取盘点明细
         if(!isDianpin){
-            getPandianDetailData(mPandianPihao.getSheet_no());
+            AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
+            mSheetNo = mPandianPihao.getSheet_no();
+            getPandianDetailData(mSheetNo);
         }
 
     }
@@ -170,6 +178,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private void getPandianDetailData(String sheet_no){
         PandianDetailBean bean = new PandianDetailBean();
         bean.JsonData.sheet_no=sheet_no;//盘点批号
+        bean.JsonData.pageNum = mPageIndex;
+        bean.JsonData.perNum = mPageSize;
         mServerApi.getPandianDetailData(bean);
     }
 
@@ -567,14 +577,34 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         startActivityForResult(mIntent,1);
     }
 
+    private long time;
+
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
             //获取盘点明细
             case Config.MESSAGE_OK:
-                mPandianDetailData = (List<PandianDetailBeanResult>) o;
+                PandianDetailResult result = (PandianDetailResult) o;
+                mPandianDetailData.addAll(result.getDetailData());
+                mNowCount+=result.getNowCount();
+
+                long lastTime = System.currentTimeMillis();
+                float diffTime = (lastTime-time)/1000f;
+                time = System.currentTimeMillis();
+                Log.e("lu","run time is "+diffTime);
+
+                Log.e("lu","mNowCount = "+mNowCount);
+                if(result.getTotalCount()!=0 && result.getTotalCount()!=mNowCount){
+                    AlertUtil.dismissProgressDialog();
+                    AlertUtil.showNoButtonProgressDialog(this,"正在加载数据 "+mNowCount+"/"+result.getTotalCount());
+                    mPageIndex++;
+                    getPandianDetailData(mSheetNo);
+                }else{
+                    AlertUtil.dismissProgressDialog();
+                }
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast("获取盘点明细失败！原因："+o.toString());
                 break;
             //扫描时返回搜索的数据

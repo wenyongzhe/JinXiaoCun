@@ -9,6 +9,7 @@ import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianFanweiBeanResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.piandian.bean.PandianPihaoCreateBeanResult;
@@ -241,7 +242,7 @@ public class PandianImp implements IPandian {
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    List<PandianDetailBeanResult> resultList  =  mJsonFormatImp.JsonToList(jsonData,PandianDetailBeanResult.class);
+                    PandianDetailResult resultList  =  mJsonFormatImp.JsonToBean(jsonData,PandianDetailResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

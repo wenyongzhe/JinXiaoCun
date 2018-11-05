@@ -20,6 +20,8 @@ public class PandianDetailBean extends BaseBean {
 
     public class PandianDetailJsonData{
         public String sheet_no;//盘点批号
+        public int perNum;//每页取的数量
+        public int pageNum;//页码
     }
 
 

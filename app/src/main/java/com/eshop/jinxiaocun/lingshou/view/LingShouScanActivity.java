@@ -44,6 +44,7 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
+import com.eshop.jinxiaocun.widget.SelectPayDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
@@ -210,7 +211,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
         mLingShouScanImp.getFlowNo();
-        mLingShouScanImp.getPayMode();
         mLingShouScanImp.getOptAuth();
     }
 
@@ -302,9 +302,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     }
                     reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
                 }
-                Intent intent = new Intent(this, MoneyDialog.class);
+                Intent intent = new Intent(this, SelectPayDialog.class);
                 intent.putExtra("total",total);
-                startActivityForResult(intent,100);
+                startActivityForResult(intent,400);
+             /*   Intent intent = new Intent(this, MoneyDialog.class);
+                intent.putExtra("total",total);
+                startActivityForResult(intent,100);*/
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW:
                 mLingShouScanImp.sellSub(FlowNo);

@@ -1,7 +1,10 @@
 package com.eshop.jinxiaocun.widget;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.eshop.jinxiaocun.R;
@@ -46,6 +49,16 @@ public class SelectPayDialog extends Activity implements INetWorResult {
                 mGetPayModeResult = ( List<GetPayModeResult>)o;
                 mSelectPayListAdapter = new SelectPayListAdapter(mGetPayModeResult);
                 mListView.setAdapter(mSelectPayListAdapter);
+                mSelectPayListAdapter.notifyDataSetChanged();
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent mIntent = new Intent();
+
+                        setResult(400,mIntent);
+                        finish();
+                    }
+                });
                 break;
         }
     }

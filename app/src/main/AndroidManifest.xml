@@ -246,8 +246,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity android:name="com.eshop.jinxiaocun.widget.SelectPayDialog"
-                  android:label="@string/select_device"
-                  android:theme="@android:style/Theme.Dialog"
+                  android:theme="@style/MyDialogStyleBottom"
                   android:configChanges="orientation|keyboardHidden" />
 
     </application>

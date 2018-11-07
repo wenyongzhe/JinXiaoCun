@@ -54,8 +54,8 @@ public class SelectPayDialog extends Activity implements INetWorResult {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent mIntent = new Intent();
-
-                        setResult(400,mIntent);
+                        mIntent.putExtra("Pay_way",mGetPayModeResult.get(i).getPay_way());
+                        setResult(Config.MESSAGE_SELECT_PAY_RETURN,mIntent);
                         finish();
                     }
                 });

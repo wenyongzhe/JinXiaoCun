@@ -582,7 +582,25 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 //                setSaleFlowBean(SELL_ZHENDAN_YIJIA);
                 getBillDiscount(int_zhekou*total);
                 break;
-
+            case Config.MESSAGE_SELECT_PAY_RETURN:
+                String payway =  data.getStringExtra("Pay_way");
+                switch (payway){
+                    case "RMB"://人民币现金
+                        break;
+                    case "ZFB"://支付宝
+                        break;
+                    case "WXZ"://微信支付
+                        break;
+                    case "SAV"://储值卡
+                        break;
+                    case "CRD"://人民币信用卡
+                        break;
+                    case "SWX"://思迅Pay_微信
+                        break;
+                    case "SZF"://思迅Pay_支付宝
+                        break;
+                }
+                break;
         }
     }
 

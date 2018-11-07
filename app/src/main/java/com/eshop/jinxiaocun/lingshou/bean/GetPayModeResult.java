@@ -6,41 +6,40 @@ import java.util.List;
 
 public class GetPayModeResult extends BaseResult {
 
-    private String Pay_way;// " :”1001” //支付方式
-    private String Pay_name;//1001” //支付名称
-    private String Rate;//:1 //汇率
-    private String Pay_memo;// " :””//备注
+    private String pay_way;// " :”1001” //支付方式
+    private String pay_name;//1001” //支付名称
+    private String rate;//:1 //汇率
+    private String pay_memo;// " :””//备注
 
     public String getPay_way() {
-        return Pay_way;
+        return pay_way;
     }
 
     public void setPay_way(String pay_way) {
-        Pay_way = pay_way;
+        this.pay_way = pay_way;
     }
 
     public String getPay_name() {
-        return Pay_name;
+        return pay_name;
     }
 
     public void setPay_name(String pay_name) {
-        Pay_name = pay_name;
+        this.pay_name = pay_name;
     }
 
     public String getRate() {
-        return Rate;
+        return rate;
     }
 
     public void setRate(String rate) {
-        Rate = rate;
+        this.rate = rate;
     }
 
     public String getPay_memo() {
-        return Pay_memo;
+        return pay_memo;
     }
 
     public void setPay_memo(String pay_memo) {
-        Pay_memo = pay_memo;
+        this.pay_memo = pay_memo;
     }
-
 }

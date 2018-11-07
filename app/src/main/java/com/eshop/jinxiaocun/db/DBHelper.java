@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 
 import java.lang.reflect.Field;
@@ -45,6 +46,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //创建表结构
         sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id"+" integer primary key autoincrement," + cloumFile(UpDetailBean.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构
+        sql = "create table "+ Config.PANDIAN_DETAIL_GOODS+"("+ "id integer primary key autoincrement,"
+                +"sheet_no varchar(50),"
+                + cloumFile(PandianDetailBeanResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
     }

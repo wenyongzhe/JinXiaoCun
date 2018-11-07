@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
+import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ReflactUtility;
@@ -271,4 +272,108 @@ public class BusinessBLL {
         Config.DBHelper.execSQL(deleteSql);
         return true;
     }
+
+    public boolean isHavePandianGoodsEntity(String where) {
+        String sql = "select * from " + Config.PANDIAN_DETAIL_GOODS;
+        if (!where.equals(""))
+            sql += " where " + where;
+        Cursor cursor = Config.DBHelper.query(sql);
+        if (cursor.moveToFirst()) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public List<PandianDetailBeanResult> getDBPandianGoodsDatas(String where) throws Exception{
+
+        Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
+        String queryFlds = "";
+        int mark = 0;
+        for (Field fld  : flds) {
+            if (mark == 0) {
+                mark++;
+                queryFlds += fld.getName();
+            } else {
+                queryFlds += "," + fld.getName();
+            }
+        }
+        String sql = "select " + queryFlds + " from " + Config.PANDIAN_DETAIL_GOODS;
+        if (!where.equals(""))
+            sql += " where " + where;
+
+        Cursor cursor = Config.DBHelper.getReadableDatabase().rawQuery(sql, null);
+        List<PandianDetailBeanResult> moduleList = new ArrayList<>();
+        int count = cursor.getCount();
+        cursor.moveToFirst();
+
+        // 遍历游标
+        for (int i = 0; i < count; i++) {
+            // 转化为moduleClass类的一个实例
+            PandianDetailBeanResult module = new PandianDetailBeanResult();
+            // 取出所有的列名
+            Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
+            // 遍历有列
+            for (Field field : arrField) {
+                if (field.isSynthetic()) {
+                    continue;
+                }
+                if (field.getName().equals("serialVersionUID")) {
+                    continue;
+                }
+
+                String columnName = field.getName();
+                int columnIdx = cursor.getColumnIndex(columnName);
+                if (columnIdx == -1) {
+                    continue;
+                }
+
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                Class<?> type = field.getType();
+                if (type == String.class)
+                    field.set(module, cursor.getString(columnIdx));
+                else if (type == int.class)
+                    field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
+                else if (type == float.class)
+                    field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
+            }
+            moduleList.add(module);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return moduleList;
+    }
+
+    public boolean insertPandianGoodsEntity(String sheetNo,PandianDetailBeanResult beanResult) throws Exception {
+        StringBuilder insertSqlBuilder = new StringBuilder();
+        insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
+        StringBuilder valuesBuilder = new StringBuilder();
+
+        List<Object> values=new ArrayList<>();
+        Field[] flds = beanResult.getClass().getDeclaredFields();//私有字段
+
+        values.add(sheetNo);
+        insertSqlBuilder.append("sheet_no");//添加真实字段
+        valuesBuilder.append("?");
+
+        for (Field fld : flds) {
+            if(fld.getName().equals("serialVersionUID"))
+                continue;
+            Object value = ReflactUtility.getInstance().getFldValue(beanResult, fld.getName());
+            if (value != null) {
+                values.add(value);
+                insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
+                valuesBuilder.append(",?");
+            }
+        }
+        String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
+        Config.DBHelper.getWritableDatabase().execSQL(insertSql,values.toArray());
+        return true;
+    }
+
+
+
 }

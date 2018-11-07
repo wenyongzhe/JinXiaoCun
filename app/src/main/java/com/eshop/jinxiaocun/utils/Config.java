@@ -90,6 +90,7 @@ public class Config {
     //sql
     public static String UP_MAIN_DANJU = "upMainDanJu";
     public static String UP_DETAIL_DANJU = "upDetailDanJu";
+    public static final String PANDIAN_DETAIL_GOODS = "PANDIANDETAILGOODS";
     //门店组
     public static String ShopGroup = "";
 

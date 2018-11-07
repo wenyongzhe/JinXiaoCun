@@ -17,6 +17,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.IQueryGoods;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -167,9 +168,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mOtherApi = new OtherModelImp(this);
         //如果是单品盘点则不取盘点明细 否则取盘点明细
         if(!isDianpin){
-            AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
             mSheetNo = mPandianPihao.getSheet_no();
-            getPandianDetailData(mSheetNo);
+            if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
+                try{
+                    BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    AlertUtil.showToast("获取本地数据异常："+e.getMessage());
+                }
+            }else{
+                AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
+                getPandianDetailData(mSheetNo);
+            }
+
         }
 
     }
@@ -587,6 +598,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 PandianDetailResult result = (PandianDetailResult) o;
                 mPandianDetailData.addAll(result.getDetailData());
                 mNowCount+=result.getNowCount();
+
+                try {
+                    for (PandianDetailBeanResult beanResult : result.getDetailData()) {
+                        BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,beanResult);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("lu","Exception is "+e.getMessage());
+                }
 
                 long lastTime = System.currentTimeMillis();
                 float diffTime = (lastTime-time)/1000f;

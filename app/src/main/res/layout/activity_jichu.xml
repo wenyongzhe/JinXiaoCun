@@ -8,6 +8,7 @@
     tools:context="com.eshop.jinxiaocun.main.view.MainActivity">
 
     <LinearLayout
+        android:visibility="gone"
         android:padding="10dp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -22,6 +23,18 @@
             android:textSize="@dimen/txt_size16"
             />
     </LinearLayout>
-
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@color/transparent1"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:listSelector="@null"
+        android:numColumns="3"
+        android:verticalSpacing="1px"
+        android:horizontalSpacing="1px">
+    </GridView>
 
 </android.support.constraint.ConstraintLayout>

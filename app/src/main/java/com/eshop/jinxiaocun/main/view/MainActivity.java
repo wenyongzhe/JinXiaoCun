@@ -2,16 +2,13 @@ package com.eshop.jinxiaocun.main.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
-import com.eshop.jinxiaocun.db.DBHelper;
 import com.eshop.jinxiaocun.login.LoginActivity;
-import com.eshop.jinxiaocun.utils.Config;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -34,7 +31,7 @@ public class MainActivity extends BaseActivity {
 //        TabViewChild tabViewChild02=new TabViewChild(R.drawable.kcdj,R.drawable.kc, Application.getInstance().getString(R.string.item_kucun),  KuChunFragment.newInstance());
 //        TabViewChild tabViewChild03=new TabViewChild(R.drawable.xsdj,R.drawable.xs, Application.getInstance().getString(R.string.item_xiaoshou), XiaoShouFragment.newInstance());
 //        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tjdj,R.drawable.tj, Application.getInstance().getString(R.string.item_tongji),  TongJiFragment.newInstance());
-        TabViewChild tabViewChild05=new TabViewChild(R.drawable.jcdj,R.drawable.jc, Application.getInstance().getString(R.string.item_jichu), jichuFragment.newInstance());
+        TabViewChild tabViewChild05=new TabViewChild(R.drawable.jcdj,R.drawable.jc, Application.getInstance().getString(R.string.item_jichu), JichuFragment.newInstance());
         tabViewChildList.add(tabViewChild01);
 //        tabViewChildList.add(tabViewChild02);
 //        tabViewChildList.add(tabViewChild03);

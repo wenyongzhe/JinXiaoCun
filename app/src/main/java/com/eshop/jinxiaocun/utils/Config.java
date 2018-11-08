@@ -32,7 +32,10 @@ public class Config {
     public static String intValue = ""; //收银权限 1:允许
     public static String strgrant = "";//:”100001” //操作权限 1字节表示一种类型
 
-
+    // request参数
+    public static final int REQ_QR_CODE = 11002; // // 打开扫描界面请求码
+    public static final int REQ_PERM_CAMERA = 11003; // 打开摄像头
+    public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
 
     public final static int MESSAGE_OK = 0;
     public final static int MESSAGE_ERROR = -1;
@@ -75,11 +78,11 @@ public class Config {
     public final static int MESSAGE_GET_PRICE_SUCCESS = 35;
     public final static int MESSAGE_GET_PRICE_FAIL = 36;
     public final static int MESSAGE_SELECT_PAY_RETURN = 37;
+    public final static int MESSAGE_CAPTURE_RETURN = 38;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价
     public final static String GRANT_ITEM_DISCOUNT = "3";//单笔折扣
-
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();
 

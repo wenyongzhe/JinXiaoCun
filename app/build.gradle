@@ -55,4 +55,5 @@ dependencies {
     implementation files('libs/btsdk.jar')
     implementation files('libs/decoderhelperapi.jar')
     implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.google.zxing:core:3.3.0'
 }

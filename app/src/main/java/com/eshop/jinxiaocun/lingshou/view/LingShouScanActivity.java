@@ -50,6 +50,7 @@ import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
 import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
+import com.google.zxing.activity.CaptureActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -584,23 +585,41 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELECT_PAY_RETURN:
                 String payway =  data.getStringExtra("Pay_way");
+                Intent intent;
                 switch (payway){
                     case "RMB"://人民币现金
+                        intent = new Intent(this, MoneyDialog.class);
+                        intent.putExtra("total",total);
+                        startActivityForResult(intent,100);
                         break;
                     case "ZFB"://支付宝
+                        intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                        startActivityForResult(intent, Config.REQ_QR_CODE);
                         break;
                     case "WXZ"://微信支付
+                        intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                        startActivityForResult(intent, Config.REQ_QR_CODE);
                         break;
                     case "SAV"://储值卡
                         break;
                     case "CRD"://人民币信用卡
                         break;
                     case "SWX"://思迅Pay_微信
+                        intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                        startActivityForResult(intent, Config.REQ_QR_CODE);
                         break;
                     case "SZF"://思迅Pay_支付宝
+                        intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                        startActivityForResult(intent, Config.REQ_QR_CODE);
                         break;
                 }
                 break;
+            case Config.MESSAGE_CAPTURE_RETURN:
+                String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
+                Log.e("",code);
+                break;
+
+
         }
     }
 

@@ -68,4 +68,12 @@
     <item name="gray_holo_dark" type="color">#ff464646</item>
     <item name="gray_holo_light" type="color">#ffd0d0d0</item>
 
+    <!-- QRCode scanner color begin -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+    <!-- QRCode scanner color end -->
 </resources>

@@ -1,6 +1,9 @@
 package com.eshop.jinxiaocun.piandian.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -94,9 +97,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private List<PandianDetailBeanResult> mAddPandianGoodsDetailData = new ArrayList<>();
     private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private PandianDetailBeanResult mSelectPandianDetailEntity = null;
-    private boolean isDianpin=false;//true为单品盘点
 
-    private int mPageSize =2000;
+    private boolean isDianpin=false;//true为单品盘点
+    private int mPageSize =500;
     private int mPageIndex =1;
     private int mNowCount;
     private String mSheetNo;
@@ -168,16 +171,20 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mOtherApi = new OtherModelImp(this);
         //如果是单品盘点则不取盘点明细 否则取盘点明细
         if(!isDianpin){
+            AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
             mSheetNo = mPandianPihao.getSheet_no();
             if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
                 try{
-                    BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
+                    long time = System.currentTimeMillis();
+                    mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
+                    Log.e("lu","get db data time is "+(System.currentTimeMillis()-time));
                 }catch (Exception e){
                     e.printStackTrace();
+                    AlertUtil.dismissProgressDialog();
                     AlertUtil.showToast("获取本地数据异常："+e.getMessage());
                 }
+                AlertUtil.dismissProgressDialog();
             }else{
-                AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
                 getPandianDetailData(mSheetNo);
             }
 
@@ -615,8 +622,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
                 Log.e("lu","mNowCount = "+mNowCount);
                 if(result.getTotalCount()!=0 && result.getTotalCount()!=mNowCount){
-                    AlertUtil.dismissProgressDialog();
-                    AlertUtil.showNoButtonProgressDialog(this,"正在加载数据 "+mNowCount+"/"+result.getTotalCount());
+                    AlertUtil.setNoButtonMessage("正在加载数据 "+mNowCount+"/"+result.getTotalCount());
                     mPageIndex++;
                     getPandianDetailData(mSheetNo);
                 }else{

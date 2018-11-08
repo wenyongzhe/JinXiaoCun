@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.piandian.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -54,6 +55,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,9 +99,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private List<PandianDetailBeanResult> mAddPandianGoodsDetailData = new ArrayList<>();
     private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private PandianDetailBeanResult mSelectPandianDetailEntity = null;
+    private GetDBDatas mGetDBDatas;
 
     private boolean isDianpin=false;//true为单品盘点
-    private int mPageSize =500;
+    private int mPageSize =2000;
     private int mPageIndex =1;
     private int mNowCount;
     private String mSheetNo;
@@ -174,16 +177,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
             mSheetNo = mPandianPihao.getSheet_no();
             if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
-                try{
-                    long time = System.currentTimeMillis();
-                    mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
-                    Log.e("lu","get db data time is "+(System.currentTimeMillis()-time));
-                }catch (Exception e){
-                    e.printStackTrace();
-                    AlertUtil.dismissProgressDialog();
-                    AlertUtil.showToast("获取本地数据异常："+e.getMessage());
-                }
-                AlertUtil.dismissProgressDialog();
+                mGetDBDatas = new GetDBDatas(this);
+                mGetDBDatas.execute();
             }else{
                 getPandianDetailData(mSheetNo);
             }
@@ -607,12 +602,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mNowCount+=result.getNowCount();
 
                 try {
-                    for (PandianDetailBeanResult beanResult : result.getDetailData()) {
-                        BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,beanResult);
-                    }
+                    BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,result.getDetailData());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("lu","Exception is "+e.getMessage());
+                    Log.e("lu","SQLite Exception is "+e.getMessage());
                 }
 
                 long lastTime = System.currentTimeMillis();
@@ -768,6 +761,50 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         Log.e("lu","name = "+result.getItem_name());
     }
 
+    private class GetDBDatas extends AsyncTask<String,String,String>{
+
+        // 弱引用是允许被gc回收的;
+        private final WeakReference<PandianScanActivity> weakActivity;
+        GetDBDatas(PandianScanActivity activity) {
+            this.weakActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try{
+                long time = System.currentTimeMillis();
+                mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
+                Log.e("lu","get db data time is "+(System.currentTimeMillis()-time)/1000);
+                return "ok";
+            }catch (Exception e){
+                e.printStackTrace();
+                return e.getMessage();
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            PandianScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+
+
+            AlertUtil.dismissProgressDialog();
+            if(s.equals("ok")){
+
+            }else{
+                AlertUtil.showToast("获取本地数据异常："+s);
+            }
+        }
+    }
+
+
 
     @Override
     protected void onDestroy() {
@@ -775,5 +812,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mAddPandianGoodsDetailData.clear();
         mPandianDetailData.clear();
         EventBus.getDefault().unregister(this);
+        if(mGetDBDatas !=null){
+            mGetDBDatas.cancel(true);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.db;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
@@ -302,75 +303,102 @@ public class BusinessBLL {
         if (!where.equals(""))
             sql += " where " + where;
 
-        Cursor cursor = Config.DBHelper.getReadableDatabase().rawQuery(sql, null);
+        SQLiteDatabase db =Config.DBHelper.getWritableDatabase();
+        db.beginTransaction();
+        Cursor cursor = db.rawQuery(sql, null);
         List<PandianDetailBeanResult> moduleList = new ArrayList<>();
         int count = cursor.getCount();
         cursor.moveToFirst();
+        try{
 
-        // 遍历游标
-        for (int i = 0; i < count; i++) {
-            // 转化为moduleClass类的一个实例
-            PandianDetailBeanResult module = new PandianDetailBeanResult();
             // 取出所有的列名
             Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
-            // 遍历有列
-            for (Field field : arrField) {
-                if (field.isSynthetic()) {
-                    continue;
-                }
-                if (field.getName().equals("serialVersionUID")) {
-                    continue;
-                }
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                PandianDetailBeanResult module = new PandianDetailBeanResult();
+                // 遍历有列
+                for (Field field : arrField) {
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
 
-                String columnName = field.getName();
-                int columnIdx = cursor.getColumnIndex(columnName);
-                if (columnIdx == -1) {
-                    continue;
-                }
+                    String columnName = field.getName();
+                    int columnIdx = cursor.getColumnIndex(columnName);
+                    if (columnIdx == -1) {
+                        continue;
+                    }
 
-                if (!field.isAccessible()) {
-                    field.setAccessible(true);
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Class<?> type = field.getType();
+                    if (type == String.class)
+                        field.set(module, cursor.getString(columnIdx));
+                    else if (type == int.class)
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
                 }
-                Class<?> type = field.getType();
-                if (type == String.class)
-                    field.set(module, cursor.getString(columnIdx));
-                else if (type == int.class)
-                    field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
-                else if (type == float.class)
-                    field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
+                moduleList.add(module);
+                cursor.moveToNext();
             }
-            moduleList.add(module);
-            cursor.moveToNext();
+
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+            db.endTransaction();
         }
-        cursor.close();
 
         return moduleList;
     }
 
-    public boolean insertPandianGoodsEntity(String sheetNo,PandianDetailBeanResult beanResult) throws Exception {
-        StringBuilder insertSqlBuilder = new StringBuilder();
-        insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
-        StringBuilder valuesBuilder = new StringBuilder();
+    public boolean insertPandianGoodsEntity(String sheetNo,List<PandianDetailBeanResult> listResult) throws Exception {
 
-        List<Object> values=new ArrayList<>();
-        Field[] flds = beanResult.getClass().getDeclaredFields();//私有字段
+        SQLiteDatabase db =Config.DBHelper.getWritableDatabase();
+        try{
 
-        values.add(sheetNo);
-        insertSqlBuilder.append("sheet_no");//添加真实字段
-        valuesBuilder.append("?");
+            db.beginTransaction();
 
-        for (Field fld : flds) {
-            if(fld.getName().equals("serialVersionUID"))
-                continue;
-            Object value = ReflactUtility.getInstance().getFldValue(beanResult, fld.getName());
-            if (value != null) {
-                values.add(value);
-                insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
-                valuesBuilder.append(",?");
+            for (PandianDetailBeanResult beanResult : listResult) {
+                StringBuilder insertSqlBuilder = new StringBuilder();
+                insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
+                StringBuilder valuesBuilder = new StringBuilder();
+
+                List<Object> values=new ArrayList<>();
+                Field[] flds = beanResult.getClass().getDeclaredFields();//私有字段
+
+                values.add(sheetNo);
+                insertSqlBuilder.append("sheet_no");//添加真实字段
+                valuesBuilder.append("?");
+
+                for (Field fld : flds) {
+                    if(fld.getName().equals("serialVersionUID"))
+                        continue;
+                    Object value = ReflactUtility.getInstance().getFldValue(beanResult, fld.getName());
+                    if (value != null) {
+                        values.add(value);
+                        insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
+                        valuesBuilder.append(",?");
+                    }
+                }
+                String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
+                db.execSQL(insertSql,values.toArray());
             }
+
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            db.endTransaction();
         }
-        String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
-        Config.DBHelper.getWritableDatabase().execSQL(insertSql,values.toArray());
+
         return true;
     }
 

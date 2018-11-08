@@ -348,6 +348,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_BILL_DISCOUNT:
                 mLingShouScanImp.getPluPrice(FlowNo,1);
                 break;
+            case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
+                break;
+
         }
     }
 
@@ -622,8 +625,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_CAPTURE_RETURN:
                 String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
                 mLingShouScanImp.RtWzfPay(code);
-
-
                 Log.e("",code);
                 break;
 

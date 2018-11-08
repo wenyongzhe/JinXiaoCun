@@ -79,6 +79,7 @@ public class Config {
     public final static int MESSAGE_GET_PRICE_FAIL = 36;
     public final static int MESSAGE_SELECT_PAY_RETURN = 37;
     public final static int MESSAGE_CAPTURE_RETURN = 38;
+    public final static int MESSAGE_NET_PAY_RETURN = 39;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

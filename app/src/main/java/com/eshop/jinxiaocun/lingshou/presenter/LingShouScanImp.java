@@ -18,6 +18,8 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPayModeBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPayModeResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBean;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
@@ -180,7 +182,34 @@ public class LingShouScanImp implements ILingshouScan {
     //网络支付扣款（微信 支付宝）
     @Override
     public void RtWzfPay(String payWay) {
+        NetPlayBean mNetPlayBean = new NetPlayBean();
+        mNetPlayBean.getJsonData().setAs_branchNo(Config.branch_no);
+//        mNetPlayBean.getJsonData().setAs_flowno();
+        Map map = ReflectionUtils.obj2Map(mNetPlayBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new NetPayInterface());
+    }
 
+    //网络支付扣款（微信 支付宝）
+    class NetPayInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+            Log.e("error", event.toString());
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            List<NetPlayBeanResult> mNetPlayBeanResult =  mJsonFormatImp.JsonToList(jsonData,NetPlayBeanResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_NET_PAY_RETURN,mNetPlayBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,mNetPlayBeanResult);
+            }
+        }
     }
 
     //付款方式

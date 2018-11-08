@@ -177,6 +177,12 @@ public class LingShouScanImp implements ILingshouScan {
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetPayModeInterface());
     }
 
+    //网络支付扣款（微信 支付宝）
+    @Override
+    public void RtWzfPay(String payWay) {
+
+    }
+
     //付款方式
     class GetPayModeInterface implements IResponseListener {
 

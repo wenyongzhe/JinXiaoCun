@@ -15,6 +15,7 @@ import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.view.SelectPayListAdapter;
 import com.eshop.jinxiaocun.utils.Config;
 
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,6 +48,13 @@ public class SelectPayDialog extends Activity implements INetWorResult {
         switch (flag){
             case Config.MESSAGE_GET_PAY_MODE:
                 mGetPayModeResult = ( List<GetPayModeResult>)o;
+                Iterator<GetPayModeResult> iterator = mGetPayModeResult.iterator();
+                 while(iterator.hasNext()){
+                     GetPayModeResult next = iterator.next();
+                     if(!(next.getPay_way().equals("RMB")||next.getPay_way().equals("ZFB")||next.getPay_way().equals("WXZ"))){
+                         iterator.remove();
+                     }
+                 }
                 mSelectPayListAdapter = new SelectPayListAdapter(mGetPayModeResult);
                 mListView.setAdapter(mSelectPayListAdapter);
                 mSelectPayListAdapter.notifyDataSetChanged();

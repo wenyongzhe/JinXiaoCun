@@ -106,6 +106,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     private BluetoothService mService = null;
     private static boolean is58mm = true;
     private BluetoothAdapter mBluetoothAdapter = null;
+    private String Pay_way = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -585,6 +586,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_SELECT_PAY_RETURN:
                 String payway =  data.getStringExtra("Pay_way");
+                Pay_way = payway;
                 Intent intent;
                 switch (payway){
                     case "RMB"://人民币现金
@@ -612,10 +614,16 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                         intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
                         startActivityForResult(intent, Config.REQ_QR_CODE);
                         break;
+                    default:
+                        Pay_way = "RMB";
+                        break;
                 }
                 break;
             case Config.MESSAGE_CAPTURE_RETURN:
                 String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
+                mLingShouScanImp.RtWzfPay(code);
+
+
                 Log.e("",code);
                 break;
 

@@ -43,7 +43,7 @@ public class WebConfig {
     public static final String SheetCheck= "SheetCheck";//业务单据审核
     public static final String QrySheetPluPrice= "QrySheetPluPrice";//单据商品取价
     public static final String QryVouSheetHead= "QryVouSheetHead";//引用单据查询
-    public static final String RT_WZF_PAY= "RT-WZF-PAY";//打折权限
+    public static final String RT_WZF_PAY= "RT-WZF-PAY";//网络支付扣款（微信 支付宝）
 
 
     public static String getPosLogin() {

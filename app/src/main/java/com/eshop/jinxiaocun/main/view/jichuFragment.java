@@ -8,28 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 
 import com.eshop.jinxiaocun.R;
-import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
-import com.eshop.jinxiaocun.caigou.view.CaigouManagerActivity;
-import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
-import com.eshop.jinxiaocun.peisong.view.PeisongManagerActivity;
-import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
-import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
-import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
-import com.eshop.jinxiaocun.utils.Config;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class JichuFragment extends BaseFragment {
+public class jichuFragment extends BaseFragment {
     @BindView(R.id.gridview)
     GridView gridview;
     private Unbinder unbinder;
@@ -41,7 +32,7 @@ public class JichuFragment extends BaseFragment {
     };
 
     public static Fragment newInstance() {
-        return new JichuFragment();
+        return new jichuFragment();
     }
 
     @Nullable

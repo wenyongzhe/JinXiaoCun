@@ -181,10 +181,17 @@ public class LingShouScanImp implements ILingshouScan {
 
     //网络支付扣款（微信 支付宝）
     @Override
-    public void RtWzfPay(String payWay) {
+    public void RtWzfPay(String payWay,String auth_code,String flowNo,String pay_amount, String total_amount) {
         NetPlayBean mNetPlayBean = new NetPlayBean();
         mNetPlayBean.getJsonData().setAs_branchNo(Config.branch_no);
-//        mNetPlayBean.getJsonData().setAs_flowno();
+        mNetPlayBean.getJsonData().setAs_flowno(flowNo);
+        mNetPlayBean.getJsonData().setAs_posid(Config.posid);
+        mNetPlayBean.getJsonData().setOrder_title("");
+        mNetPlayBean.getJsonData().setPay_amount(pay_amount);
+        mNetPlayBean.getJsonData().setTotal_amount(total_amount);
+        mNetPlayBean.getJsonData().setPay_type(payWay);
+        mNetPlayBean.getJsonData().setAuth_code(auth_code);
+
         Map map = ReflectionUtils.obj2Map(mNetPlayBean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new NetPayInterface());
     }
@@ -203,7 +210,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            List<NetPlayBeanResult> mNetPlayBeanResult =  mJsonFormatImp.JsonToList(jsonData,NetPlayBeanResult.class);
+            NetPlayBeanResult mNetPlayBeanResult =  mJsonFormatImp.JsonToBean(jsonData,NetPlayBeanResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_NET_PAY_RETURN,mNetPlayBeanResult);
             }else{

@@ -29,6 +29,7 @@ import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -349,6 +350,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 mLingShouScanImp.getPluPrice(FlowNo,1);
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
+                NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
+                setPlayFlowBean(total+"",mNetPlayBeanResult.getPayType());
                 break;
 
         }
@@ -563,13 +566,10 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                     String mMoney =  data.getStringExtra("countN");
                     payMoney = Double.parseDouble(mMoney);
                     change = payMoney - total;
-                    setPlayFlowBean(total+"");
-                }else if(requestCode == 200){
+                    setPlayFlowBean(total+"","RMB");
+                }else if(requestCode == 200){ //整单议价、折扣
                     String zhekou =  data.getStringExtra("countN");
-//                    total = Double.parseDouble(zhekou);
-//                    tv_check_num.setText("总价："+total);
                     getBillDiscount(Double.parseDouble(zhekou));
-//                    setSaleFlowBean(SELL_ZHENDAN_YIJIA);
                 }
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
@@ -624,7 +624,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_CAPTURE_RETURN:
                 String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
-                mLingShouScanImp.RtWzfPay(code);
+                mLingShouScanImp.RtWzfPay(Pay_way,code,FlowNo,total.toString(),total.toString());
                 Log.e("",code);
                 break;
 
@@ -708,13 +708,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
     }
 
-    private void setPlayFlowBean(String payAmount){
+    private void setPlayFlowBean(String payAmount,String pay_type){
         PlayFlowBean mPlayFlowBean = new PlayFlowBean();
         mPlayFlowBean.setBranch_no(Config.branch_no);
         mPlayFlowBean.setFlow_no(FlowNo);
         mPlayFlowBean.setFlow_id(1);
         mPlayFlowBean.setSale_amount(Float.parseFloat(payAmount));
-        mPlayFlowBean.setPay_way("RMB");
+        mPlayFlowBean.setPay_way(pay_type);
         mPlayFlowBean.setSell_way("A");
         mPlayFlowBean.setCard_no(1);
         mPlayFlowBean.setVip_no(1);

@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -21,6 +23,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.eastaeon.decoderapi.DecoderHelper;
+import com.eastaeon.decoderapi.DecoderHelperListener;
+import com.eastaeon.decoderapi.DecoderHelperResult;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.UriUtil;
@@ -48,7 +53,7 @@ import java.util.Vector;
  * Initial the camera
  *
  */
-public class CaptureActivity extends AppCompatActivity implements Callback {
+public class CaptureActivity extends AppCompatActivity implements Callback,DecoderHelperListener {
 
     private static final int REQUEST_CODE_SCAN_GALLERY = 100;
 
@@ -69,6 +74,10 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     private ProgressDialog mProgress;
     private String photo_path;
     private Bitmap scanBitmap;
+
+    public DecoderHelper mDecoderHelper=null;
+
+
     //	private Button cancelScanButton;
     /**
      * Called when the activity is first created.
@@ -98,6 +107,9 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 //		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
+
+        mDecoderHelper = DecoderHelper.getInstance(this);
+        mDecoderHelper.setDecoderHelperListeners(this);
 
     }
 
@@ -197,6 +209,8 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     @Override
     protected void onResume() {
         super.onResume();
+        mDecoderHelper.connect();//开始启动连接操作
+
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.scanner_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
@@ -229,6 +243,8 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     @Override
     protected void onPause() {
         super.onPause();
+        mDecoderHelper.disconnect();//断开连接
+
         if (handler != null) {
             handler.quitSynchronously();
             handler = null;
@@ -319,6 +335,34 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 
     }
 
+    public void onClickScan(View view) {
+		/*if(mDecoderHelper.isScaning()){
+			mDecoderHelper.stopScan();//停止连续扫码
+		}else{
+			mDecoderHelper.startScan();//开始连续扫码
+		}*/
+        mDecoderHelper.startScanOneTimes();//单次扫码
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log. d("", "onKeyDown" + "keyCode=" + keyCode +")");
+
+//        if(mDecoderHelper!=null){
+//
+//            if(!mDecoderHelper.isScaning()){
+//
+//                mDecoderHelper.startScan();//开始连续扫码
+//            }else{
+//                mDecoderHelper.stopScan();//停止连续扫码
+//            }
+//        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
     private void initBeepSound() {
         if (playBeep && mediaPlayer == null) {
             // The volume on STREAM_SYSTEM is not adjustable, and users found it
@@ -390,4 +434,59 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
             }
         }
     };
+
+    @Override
+    public void onStartDecoderConnect() {
+
+    }
+
+    @Override
+    public void onDecoderConnected() {
+
+    }
+
+    @Override
+    public void onStartDecoderDisconnect() {
+
+    }
+
+    @Override
+    public void onDecoderDisconnected() {
+
+    }
+
+    @Override
+    public void onDecodeMultiResultCallback() {
+
+    }
+
+    /*
+    扫码结果返回回调
+    */
+    @Override
+    public void onDecodeTwoResultCallback(final DecoderHelperResult mDecoderHelperResult) {
+        Log.d("", "mDecoderHelperResult.barcodeString="+mDecoderHelperResult.barcodeString);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String resultString = mDecoderHelperResult.barcodeString;
+                if (TextUtils.isEmpty(resultString)) {
+                    Toast.makeText(CaptureActivity.this, "Scan failed!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent resultIntent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Config.INTENT_EXTRA_KEY_QR_SCAN, resultString);
+                    resultIntent.putExtra(Config.INTENT_EXTRA_KEY_QR_SCAN,resultString);
+                    resultIntent.putExtras(bundle);
+                    CaptureActivity.this.setResult(Config.MESSAGE_CAPTURE_RETURN, resultIntent);
+                }
+                CaptureActivity.this.finish();
+            }
+        });
+    }
+
+    @Override
+    public void onDecoderFailed(int i, String s) {
+
+    }
 }

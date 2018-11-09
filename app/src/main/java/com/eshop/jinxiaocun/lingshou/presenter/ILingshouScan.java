@@ -14,5 +14,5 @@ public interface ILingshouScan {
     public void getOptAuth();//获取折扣权限
     public void getBillDiscount(Double total,String FlowNo);//整单议价、折扣
     public void getPayMode();//付款方式
-    public void RtWzfPay(String payWay);//网络支付扣款
+    public void RtWzfPay(String payWay,String auth_code,String flowNo,String payAmount,String totalAmount);//网络支付扣款
 }

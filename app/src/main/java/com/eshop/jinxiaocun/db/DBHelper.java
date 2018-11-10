@@ -41,11 +41,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.println("upgrade a database1");
         //创建表结构
-        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id"+" integer primary key autoincrement," + cloumFile(UpMainBean.class) +")";
+        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id integer primary key autoincrement," + cloumFile(UpMainBean.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构
-        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id"+" integer primary key autoincrement," + cloumFile(UpDetailBean.class) +")";
+        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id integer primary key autoincrement," + cloumFile(UpDetailBean.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构
@@ -58,16 +58,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private String cloumFile(Class bean){
         Field[] arrField = bean.getDeclaredFields();
-        String arrayTable = "";
+        StringBuffer arrayTable =new StringBuffer();
         for (int i=0; i<arrField.length; i++) {
             Field field = arrField[i];
+            if (field.getName().equals("$change")) {
+                continue;
+            }
+            if(field.getName().equals("serialVersionUID"))
+                continue;
+
             if(i != (arrField.length-1)){
-                arrayTable += field.getName()+" varchar(20),";
+                arrayTable.append(field.getName()+" varchar(20),");
             }else {
-                arrayTable += field.getName()+" varchar(20)";
+                arrayTable.append(field.getName()+" varchar(20)");
             }
         }
-        return arrayTable;
+        String strArrayTable;
+        if(arrayTable.toString().endsWith(",")){
+            strArrayTable = arrayTable.toString().substring(0,(arrayTable.toString().length()-1));
+        }else{
+            strArrayTable = arrayTable.toString();
+        }
+        return strArrayTable;
     }
 
     @Override

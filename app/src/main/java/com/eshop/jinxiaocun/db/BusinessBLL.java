@@ -274,7 +274,38 @@ public class BusinessBLL {
         return true;
     }
 
+    /**
+     * 判断表是否存在数据库中
+     * @param tableName 表名
+     * @return true表示存在 否则不存在
+     */
+    private boolean tableIsExist(String tableName){
+        boolean result = false;
+        if(tableName == null){
+            return false;
+        }
+        Cursor cursor = null;
+        try {
+            String sql = "select count(*) as c from Sqlite_master  where type ='table' and name ='"+tableName.trim()+"' ";
+            cursor = Config.DBHelper.getReadableDatabase().rawQuery(sql, null);
+            if(cursor.moveToNext()){
+                int count = cursor.getInt(0);
+                if(count>0){
+                    result = true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
     public boolean isHavePandianGoodsEntity(String where) {
+
+        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return false;
+
         String sql = "select * from " + Config.PANDIAN_DETAIL_GOODS;
         if (!where.equals(""))
             sql += " where " + where;
@@ -286,12 +317,21 @@ public class BusinessBLL {
             return false;
     }
 
-    public List<PandianDetailBeanResult> getDBPandianGoodsDatas(String where) throws Exception{
+    public List<PandianDetailBeanResult> getDBPandianGoodsDatas(String where ,DbCallBack callBack) throws Exception{
 
         Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
         String queryFlds = "";
         int mark = 0;
         for (Field fld  : flds) {
+            if (fld.isSynthetic()) {
+                continue;
+            }
+            if (fld.getName().equals("serialVersionUID")) {
+                continue;
+            }
+            if (fld.getName().equals("$change")) {
+                continue;
+            }
             if (mark == 0) {
                 mark++;
                 queryFlds += fld.getName();
@@ -303,7 +343,7 @@ public class BusinessBLL {
         if (!where.equals(""))
             sql += " where " + where;
 
-        SQLiteDatabase db =Config.DBHelper.getWritableDatabase();
+        SQLiteDatabase db =Config.DBHelper.getReadableDatabase();
         db.beginTransaction();
         Cursor cursor = db.rawQuery(sql, null);
         List<PandianDetailBeanResult> moduleList = new ArrayList<>();
@@ -323,6 +363,9 @@ public class BusinessBLL {
                         continue;
                     }
                     if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
+                    if (field.getName().equals("$change")) {
                         continue;
                     }
 
@@ -345,6 +388,9 @@ public class BusinessBLL {
                 }
                 moduleList.add(module);
                 cursor.moveToNext();
+                if(callBack!=null){
+                    callBack.progressUpdate(i+1,count);
+                }
             }
 
             db.setTransactionSuccessful();
@@ -380,6 +426,9 @@ public class BusinessBLL {
                 for (Field fld : flds) {
                     if(fld.getName().equals("serialVersionUID"))
                         continue;
+                    if (fld.getName().equals("$change")) {
+                        continue;
+                    }
                     Object value = ReflactUtility.getInstance().getFldValue(beanResult, fld.getName());
                     if (value != null) {
                         values.add(value);
@@ -402,6 +451,8 @@ public class BusinessBLL {
         return true;
     }
 
-
+    public interface DbCallBack{
+        void progressUpdate(int progress ,int maxProgress);
+    }
 
 }

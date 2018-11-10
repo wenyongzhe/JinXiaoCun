@@ -773,14 +773,32 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         protected String doInBackground(String... strings) {
             try{
                 long time = System.currentTimeMillis();
-                mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='"+mSheetNo+"'");
+                mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='" + mSheetNo + "'", new BusinessBLL.DbCallBack() {
+                    @Override
+                    public void progressUpdate(int progress, int maxProgress) {
+                        publishProgress(progress+"/"+maxProgress);
+                    }
+                });
                 Log.e("lu","get db data time is "+(System.currentTimeMillis()-time)/1000);
                 return "ok";
             }catch (Exception e){
                 e.printStackTrace();
                 return e.getMessage();
             }
+        }
 
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            PandianScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+
+            AlertUtil.setNoButtonMessage("正在加载数据 "+values[0]);
         }
 
         @Override
@@ -793,7 +811,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 // activity没了,就结束可以了
                 return;
             }
-
 
             AlertUtil.dismissProgressDialog();
             if(s.equals("ok")){

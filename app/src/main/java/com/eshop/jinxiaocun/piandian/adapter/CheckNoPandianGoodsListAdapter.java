@@ -55,18 +55,18 @@ public class CheckNoPandianGoodsListAdapter extends BaseAdapter {
         TextView tvGoodsName = ViewHolderUtils.get(convertView, R.id.tv_pd_goodsName);
         TextView tvPiciNo = ViewHolderUtils.get(convertView, R.id.tv_pd_piciNo);
         TextView tvSpec = ViewHolderUtils.get(convertView, R.id.tv_pd_spec);
-        TextView tvXsprice = ViewHolderUtils.get(convertView, R.id.tv_pd_xsprice);
+        TextView tvInprice = ViewHolderUtils.get(convertView, R.id.tv_pd_Inprice);
         TextView tvStore_number = ViewHolderUtils.get(convertView, R.id.tv_pd_store_number);
         TextView tvAdd = ViewHolderUtils.get(convertView, R.id.tv_pd_add);
 
         tvGoodsName.setSelected(true);
         tvPiciNo.setSelected(true);
 
-        tvGoodsName.setText("我是商品名称_"+position);
-        tvPiciNo.setText("PD007008009");
-        tvSpec.setText("11*22");
-        tvXsprice.setText("110元");
-        tvStore_number.setText("999/件");
+        tvGoodsName.setText(listInfo.get(position).getItem_name());
+        tvPiciNo.setText(listInfo.get(position).getItem_barcode());
+        tvSpec.setText(listInfo.get(position).getItem_size());
+        tvInprice.setText(listInfo.get(position).getIn_price()+"");
+        tvStore_number.setText(listInfo.get(position).getStock_qty()+"/"+listInfo.get(position).getUnit_no());
 
         final int pos = position;
         tvAdd.setOnClickListener(new View.OnClickListener() {

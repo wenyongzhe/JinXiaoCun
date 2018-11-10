@@ -389,7 +389,7 @@ public class BusinessBLL {
                 moduleList.add(module);
                 cursor.moveToNext();
                 if(callBack!=null){
-                    callBack.progressUpdate(i+1,count);
+                    callBack.progressUpdate(i+1,count,module);
                 }
             }
 
@@ -452,7 +452,7 @@ public class BusinessBLL {
     }
 
     public interface DbCallBack{
-        void progressUpdate(int progress ,int maxProgress);
+        void progressUpdate(int progress ,int maxProgress,PandianDetailBeanResult module);
     }
 
 }

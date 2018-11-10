@@ -570,7 +570,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @OnClick(R.id.tv_pd_nopandian)
     public void onClickNoPandian(){
         Intent intent = new Intent(this,CheckNoPandianGoodsListActivity.class);
-        intent.putExtra("AllDetailListData", (Serializable) mPandianDetailData);
+        intent.putExtra("SheetNo", mSheetNo);
         intent.putExtra("AddDetailListData", (Serializable) mAddPandianGoodsDetailData);
         startActivity(intent);
     }
@@ -758,7 +758,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNoPandianDatas(PandianDetailBeanResult eventResult){
         PandianDetailBeanResult result = eventResult;
-        Log.e("lu","name = "+result.getItem_name());
+//        Log.e("lu","name = "+result.getItem_name());
+        if(result!=null){
+            mAddPandianGoodsDetailData.add(eventResult);
+            mAdapter.setListInfo(mAddPandianGoodsDetailData);
+        }
+
     }
 
     private class GetDBDatas extends AsyncTask<String,String,String>{
@@ -775,7 +780,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 long time = System.currentTimeMillis();
                 mPandianDetailData=BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='" + mSheetNo + "'", new BusinessBLL.DbCallBack() {
                     @Override
-                    public void progressUpdate(int progress, int maxProgress) {
+                    public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {
                         publishProgress(progress+"/"+maxProgress);
                     }
                 });

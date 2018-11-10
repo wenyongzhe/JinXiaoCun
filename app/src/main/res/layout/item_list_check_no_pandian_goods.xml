@@ -93,11 +93,11 @@
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="销售价格:"
+            android:text="盘点价格:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_xsprice"
+            android:id="@+id/tv_pd_Inprice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="4"

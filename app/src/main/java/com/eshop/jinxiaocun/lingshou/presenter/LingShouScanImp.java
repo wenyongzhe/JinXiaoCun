@@ -201,6 +201,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
+
             Log.e("error", event.toString());
         }
 

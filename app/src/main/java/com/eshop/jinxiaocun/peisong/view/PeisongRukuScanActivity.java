@@ -150,6 +150,12 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
 
     @OnClick(R.id.btn_citeOrder)
     public void onClickCiteOrder(){
+
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return;
+        }
+
         Intent intent = new Intent(PeisongRukuScanActivity.this,CiteOrderListActivity.class);
         intent.putExtra("SheetType",Config.YwType.MI.toString());
         startActivityForResult(intent,4);

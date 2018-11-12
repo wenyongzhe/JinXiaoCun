@@ -57,6 +57,9 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
     private int mPageIndex = 1;
     private int mPageSize = 20;
     private String mCheckflag = "0";//0未审核，1审核
+    //采购入库引采购订单，采购退货引采购入库；
+    // 批发出库引批发订单，批发退货引批发退货；
+    // 配送出库引要货单，配送入库引配送出库单
     private String mSheetType = "";
     private String mOperIdOrOrderNo = Config.UserId;
 

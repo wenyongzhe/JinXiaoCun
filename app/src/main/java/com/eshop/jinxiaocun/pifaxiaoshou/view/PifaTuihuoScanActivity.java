@@ -160,6 +160,10 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
 
     @OnClick(R.id.btn_citeOrder)
     public void onClickCiteOrder(){
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return;
+        }
         Intent intent = new Intent(PifaTuihuoScanActivity.this,CiteOrderListActivity.class);
         intent.putExtra("SheetType",Config.YwType.RI.toString());
         startActivityForResult(intent,4);
@@ -421,7 +425,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             String price = data.getStringExtra("Price");
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
-                    mListDatas.get(i).setSale_price(price);
+                    mListDatas.get(i).setBase_price(price);
                     mAdapter.setListInfo(mListDatas);
                     upDateUI();
                     break;

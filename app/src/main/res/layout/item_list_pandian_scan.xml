@@ -42,7 +42,7 @@
 
             <TextView
                 android:id="@+id/tv_spec"
-                style="@style/TextView_Grey"
+                style="@style/AutoScrollTextView"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
                 android:gravity="center"

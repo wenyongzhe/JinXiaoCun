@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,7 +38,7 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
 
 
     private List<PandianDetailBeanResult> mAddPandianGoodsDetailData = new ArrayList<>();
-    private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
+//    private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private List<PandianDetailBeanResult> mListData = new ArrayList<>();
     private CheckNoPandianGoodsListAdapter mAdapter;
     private String mSheetNo;
@@ -80,8 +81,17 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
         mAdapter.setCallback(new CheckNoPandianGoodsListAdapter.CallbackInterface() {
             @Override
             public void onClickAddPandian(int position) {
-                EventBus.getDefault().post(mListData.get(position));
-                mListData.remove(position);
+                PandianDetailBeanResult selectItem = mListData.get(position);
+                EventBus.getDefault().post(selectItem);
+                Iterator<PandianDetailBeanResult> iter = mListData.iterator();
+                while (iter.hasNext()) {
+                    PandianDetailBeanResult item = iter.next();
+                    if (item.getItem_no().equals(selectItem.getItem_no())) {
+                        iter.remove();
+                        break;
+                    }
+                }
+                setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
                 mAdapter.setListInfo(mListData);
             }
         });
@@ -120,7 +130,7 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
                             }
                         }
                         if(!isSame){
-                            mPandianDetailData.add(module);
+                            mListData.add(module);
                         }
 
                     }
@@ -160,8 +170,8 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
 
             AlertUtil.dismissProgressDialog();
             if(s.equals("ok")){
-                setTopToolBar("未盘点商品"+mPandianDetailData.size()+"种", R.mipmap.ic_left_light,"",0,"");
-                mAdapter.setListInfo(mPandianDetailData);
+                setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
+                mAdapter.setListInfo(mListData);
             }else{
                 AlertUtil.showToast("获取本地数据异常："+s);
             }
@@ -172,7 +182,6 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPandianDetailData.clear();
         mAddPandianGoodsDetailData.clear();
         mListData.clear();
         if(mGetDBDatas !=null){

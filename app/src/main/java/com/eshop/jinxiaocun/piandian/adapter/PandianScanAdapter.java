@@ -65,6 +65,7 @@ public class PandianScanAdapter extends BaseAdapter {
         tv_product_name.setSelected(true);
         tv_product_code.setSelected(true);
         tv_product_pici.setSelected(true);
+        tv_spec.setSelected(true);
         tv_product_name.setText(obj.getItem_name());
         tv_product_code.setText(obj.getItem_no());
         tv_product_pici.setText(obj.getItem_barcode());

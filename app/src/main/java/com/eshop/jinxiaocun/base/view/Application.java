@@ -3,8 +3,7 @@ package com.eshop.jinxiaocun.base.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+import android.os.Build;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
@@ -39,8 +38,12 @@ public class Application extends android.app.Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
 
-        TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        Config.DeviceID = TelephonyMgr.getDeviceId();
+        String serialNo = Build.SERIAL;
+        if(serialNo.length()>7){
+            Config.DeviceID = Build.SERIAL.substring(serialNo.length()-7);
+        }else{
+            Config.DeviceID = serialNo;
+        }
         Config.VersionName = MyUtils.getVerName(this);
         Config.VersionCode = MyUtils.getVersionCode(this);
         Config.DBHelper = DBHelper.getInstance(this);

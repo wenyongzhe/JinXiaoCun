@@ -758,7 +758,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNoPandianDatas(PandianDetailBeanResult eventResult){
         PandianDetailBeanResult result = eventResult;
-//        Log.e("lu","name = "+result.getItem_name());
         if(result!=null){
             mAddPandianGoodsDetailData.add(eventResult);
             mAdapter.setListInfo(mAddPandianGoodsDetailData);

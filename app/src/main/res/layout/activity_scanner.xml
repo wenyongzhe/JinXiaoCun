@@ -15,14 +15,14 @@
             android:id="@+id/scanner_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center" />
+            android:layout_gravity="top" />
 
       <!--  app:label_text="二维码/条形码扫描"-->
         <com.google.zxing.view.ViewfinderView
             android:id="@+id/viewfinder_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
+            app:label_text="二维码/条形码扫描"
             app:corner_color="@color/corner_color"
             app:frame_color="@color/viewfinder_frame"
             app:label_text_color="@color/colorAccent"
@@ -41,6 +41,38 @@
             android:background="?attr/selectableItemBackground"
             android:scaleType="centerInside"
             android:src="@drawable/flash_off" />
+
+        <LinearLayout
+            android:id="@+id/ly_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_control_heigth"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size18"
+                android:gravity="center_vertical"
+                android:typeface="serif"
+                android:text="条码" />
+
+            <EditText
+                android:id="@+id/txtBarcode"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:hint="请输入条码" />
+
+        </LinearLayout>
+
     </FrameLayout>
+
 
 </LinearLayout>

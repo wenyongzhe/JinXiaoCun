@@ -48,7 +48,8 @@ public class TwoListDetailAdapter extends BaseAdapter {
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
         TextView tv_message = ViewHolderUtils.get(convertView, R.id.tv_message);
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
-
+        tvTitle.setSelected(true);
+        tv_message.setSelected(true);
         tvTitle.setText(listInfo.get(position).getItem_name());
         tv_message.setText(listInfo.get(position).getItem_no());
         tv_price.setText(listInfo.get(position).getSale_price()+Application.mContext.getString(R.string.yuan));

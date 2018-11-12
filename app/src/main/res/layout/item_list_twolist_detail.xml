@@ -7,6 +7,8 @@
               android:layout_height="70dp">
 
     <TextView
+        android:ellipsize="marquee"
+        android:singleLine="true"
         android:layout_weight="0.5"
         android:id="@+id/tvTitle"
         android:gravity="center_vertical"
@@ -23,6 +25,8 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp">
             <TextView
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 android:layout_weight="0.5"
                 android:id="@+id/tv_message"
                 android:gravity="center_vertical"

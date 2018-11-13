@@ -186,10 +186,20 @@ public class LingShouScanImp implements ILingshouScan {
         mNetPlayBean.getJsonData().setAs_branchNo(Config.branch_no);
         mNetPlayBean.getJsonData().setAs_flowno(flowNo);
         mNetPlayBean.getJsonData().setAs_posid(Config.posid);
-        mNetPlayBean.getJsonData().setOrder_title("");
-        mNetPlayBean.getJsonData().setPay_amount(pay_amount);
-        mNetPlayBean.getJsonData().setTotal_amount(total_amount);
-        mNetPlayBean.getJsonData().setPay_type(payWay);
+//        mNetPlayBean.getJsonData().setPay_amount(pay_amount);
+//        mNetPlayBean.getJsonData().setTotal_amount(total_amount);
+        mNetPlayBean.getJsonData().setPay_amount("0.01");
+        mNetPlayBean.getJsonData().setTotal_amount("0.01");
+        if(payWay.equals("ZFB")){
+            mNetPlayBean.getJsonData().setPay_type("ALIPAY");
+            mNetPlayBean.getJsonData().setOrder_title("支付宝支付");
+        }else if(payWay.equals("WXZ")){
+            mNetPlayBean.getJsonData().setPay_type("WECHAT");
+            mNetPlayBean.getJsonData().setOrder_title("微信支付");
+        }else {
+            mNetPlayBean.getJsonData().setPay_type(payWay);
+            mNetPlayBean.getJsonData().setOrder_title("网络支付");
+        }
         mNetPlayBean.getJsonData().setAuth_code(auth_code);
 
         Map map = ReflectionUtils.obj2Map(mNetPlayBean);

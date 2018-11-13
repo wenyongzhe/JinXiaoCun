@@ -272,7 +272,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
-                    FlowNo = mGetFlowNoBeanResult.getFlowNo();
+                    FlowNo = (Integer.decode(mGetFlowNoBeanResult.getFlowNo()).intValue()+1)+"";
                     FlowNo = MyUtils.formatFlowNo(FlowNo);
                 }
                 break;

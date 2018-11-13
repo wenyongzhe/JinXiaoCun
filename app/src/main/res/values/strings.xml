@@ -209,4 +209,5 @@
     <string name="ok">确定</string>
     <string name="continue_save">继续保存</string>
     <string name="message_sell_ok">结算完成</string>
+    <string name="message_sell_error">结算失败</string>
 </resources>

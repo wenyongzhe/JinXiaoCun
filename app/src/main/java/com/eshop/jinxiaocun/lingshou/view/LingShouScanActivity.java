@@ -351,7 +351,15 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
                 NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
-                setPlayFlowBean(total+"",mNetPlayBeanResult.getPayType());
+                if(mNetPlayBeanResult==null){
+                    ToastUtils.showShort(R.string.message_sell_error);
+                    return;
+                }
+                if( mNetPlayBeanResult.getReturn_code().equals("000000")){
+                    setPlayFlowBean(total+"",mNetPlayBeanResult.getPayType());
+                }else {
+                    ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
+                }
                 break;
 
         }

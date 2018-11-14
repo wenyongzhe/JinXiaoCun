@@ -19,8 +19,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eastaeon.decoderapi.DecoderHelper;
@@ -74,7 +76,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
     private ProgressDialog mProgress;
     private String photo_path;
     private Bitmap scanBitmap;
-
+    private TextView txtBarcode;
     public DecoderHelper mDecoderHelper=null;
 
 
@@ -91,6 +93,30 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
         back = (ImageButton) findViewById(R.id.btn_back);
+        txtBarcode = (TextView) findViewById(R.id.txtBarcode);
+        txtBarcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //当actionId == XX_SEND 或者 XX_DONE时都触发
+                //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
+                //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
+                if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    if(txtBarcode.getText().toString().trim().length()>0){
+                        String resultString = txtBarcode.getText().toString().trim();
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra(Config.INTENT_EXTRA_KEY_QR_SCAN,resultString);
+                        CaptureActivity.this.setResult(Config.MESSAGE_CAPTURE_RETURN, resultIntent);
+                        CaptureActivity.this.finish();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -348,7 +374,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         Log. d("", "onKeyDown" + "keyCode=" + keyCode +")");
-
 //        if(mDecoderHelper!=null){
 //
 //            if(!mDecoderHelper.isScaning()){

@@ -26,6 +26,7 @@ import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
+import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderScanAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -36,6 +37,7 @@ import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -312,10 +314,19 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 mEtBarcode.requestFocus();
                 mEtBarcode.setFocusable(true);
                 mEtBarcode.setText("");
+                //精准查询接口的  可能有多条数据
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
-                    //第一条数据 （精准查询接口的）
-                    addGoodsData(goodsData.get(0));
+                    if(goodsData.size()==1){
+                        addGoodsData(goodsData.get(0));
+                    }else{
+                        //多条数据 弹出选择其中一条
+                        Intent intent = new Intent(PifaOrderScanActivity.this,SelectPandianGoodsListActivity.class);
+                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
+                        startActivityForResult(intent,44);
+                    }
+                }else{
+                    AlertUtil.showToast("该条码没有对应的商品数据!");
                 }
                 break;
             //上传单据主表 成功
@@ -409,6 +420,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                     break;
                 }
             }
+        }
+
+        //搜索返回多条数据 ，选择其中一条
+        if(requestCode == 44 && resultCode == RESULT_OK){
+            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+            addGoodsData(entity);
         }
 
     }

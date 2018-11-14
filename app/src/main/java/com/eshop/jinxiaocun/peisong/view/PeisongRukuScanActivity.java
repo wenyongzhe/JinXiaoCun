@@ -13,12 +13,10 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
-import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
-import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuDetailBean;
@@ -26,9 +24,9 @@ import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
-import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
 import com.eshop.jinxiaocun.peisong.adapter.PeisongRukuScanAdapter;
+import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
@@ -37,6 +35,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -334,10 +333,19 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
                 mEtBarcode.requestFocus();
                 mEtBarcode.setFocusable(true);
                 mEtBarcode.setText("");
+                //精准查询接口的  可能有多条数据
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
-                    //第一条数据 （精准查询接口的）
-                    addGoodsData(goodsData.get(0));
+                    if(goodsData.size()==1){
+                        addGoodsData(goodsData.get(0));
+                    }else{
+                        //多条数据 弹出选择其中一条
+                        Intent intent = new Intent(PeisongRukuScanActivity.this,SelectPandianGoodsListActivity.class);
+                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
+                        startActivityForResult(intent,44);
+                    }
+                }else{
+                    AlertUtil.showToast("该条码没有对应的商品数据!");
                 }
                 break;
             //上传单据主表 成功
@@ -423,6 +431,12 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
             mCheckflag = data.getStringExtra("Checkflag");
             getOrderDetail(selectMainBean);
+        }
+
+        //搜索返回多条数据 ，选择其中一条
+        if(requestCode == 44 && resultCode == RESULT_OK){
+            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+            addGoodsData(entity);
         }
 
     }

@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -118,6 +121,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             Toast.makeText(this, "Bluetooth is not available",
                     Toast.LENGTH_LONG).show();
         }
+        setScanBroadCast();
     }
 
 
@@ -805,4 +809,22 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         intent.setClass(this, ModifyCountDialog.class);
         startActivityForResult(intent, 1);
     }
+
+    private void setScanBroadCast(){
+        Intent intent = new Intent("com.android.scanner.service_settings");
+        intent.putExtra("action_barcode_broadcast","com.android.server.scannerservice.broadcast");
+        intent.putExtra("key_barcode_broadcast", "scannerdata");
+        sendBroadcast(intent);
+        IntentFilter intentFilter = new IntentFilter("com.android.server.scannerservice.broadcast");
+        registerReceiver(scanReceiver,intentFilter);
+    }
+
+    private BroadcastReceiver scanReceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String barcode = intent.getStringExtra("scannerdata");
+            Log.e("","--"+barcode);
+            et_barcode.setText(barcode);
+        }
+    };
 }

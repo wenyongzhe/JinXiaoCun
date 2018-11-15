@@ -137,24 +137,34 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
 
-//        mDecoderHelper = DecoderHelper.getInstance(this);
-//        mDecoderHelper.setDecoderHelperListeners(this);
         setScanBroadCast();
     }
 
     private void setScanBroadCast(){
-//        Intent intent = new Intent("com.android.scanner.service_settings");
-//        intent.putExtra("action_barcode_broadcast","com.android.server.scannerservice.broadcast");
-//        intent.putExtra("key_barcode_broadcast", "scannerdata");
-//        sendBroadcast(intent);
-//        IntentFilter intentFilter = new IntentFilter("com.android.server.scannerservice.broadcast");
-//        registerReceiver(scanReceiver,intentFilter);
+        Intent intent = new Intent("com.android.scanner.service_settings");
+        intent.putExtra("action_barcode_broadcast","com.android.server.scannerservice.broadcast");
+        intent.putExtra("key_barcode_broadcast", "scannerdata");
+        sendBroadcast(intent);
+        IntentFilter intentFilter = new IntentFilter("com.android.server.scannerservice.broadcast");
+        registerReceiver(scanReceiver,intentFilter);
     }
 
     private BroadcastReceiver scanReceiver  = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("","");
+            String barcode = intent.getStringExtra("scannerdata");
+            Log.e("","--barcode="+barcode);
+            if (TextUtils.isEmpty(barcode)) {
+                    Toast.makeText(CaptureActivity.this, "Scan failed!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent resultIntent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Config.INTENT_EXTRA_KEY_QR_SCAN, barcode);
+                    resultIntent.putExtra(Config.INTENT_EXTRA_KEY_QR_SCAN,barcode);
+                    resultIntent.putExtras(bundle);
+                    CaptureActivity.this.setResult(Config.MESSAGE_CAPTURE_RETURN, resultIntent);
+                }
+                CaptureActivity.this.finish();
         }
     };
 
@@ -254,8 +264,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     @Override
     protected void onResume() {
         super.onResume();
-//        mDecoderHelper.connect();//开始启动连接操作
-
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.scanner_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
@@ -288,8 +296,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     @Override
     protected void onPause() {
         super.onPause();
-//        mDecoderHelper.disconnect();//断开连接
-
         if (handler != null) {
             handler.quitSynchronously();
             handler = null;
@@ -377,33 +383,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 
     public void drawViewfinder() {
         viewfinderView.drawViewfinder();
-
-    }
-
-    public void onClickScan(View view) {
-		/*if(mDecoderHelper.isScaning()){
-			mDecoderHelper.stopScan();//停止连续扫码
-		}else{
-			mDecoderHelper.startScan();//开始连续扫码
-		}*/
-//        mDecoderHelper.startScanOneTimes();//单次扫码
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        Log. d("", "onKeyDown" + "keyCode=" + keyCode +")");
-//        if(mDecoderHelper!=null){
-//
-//            if(!mDecoderHelper.isScaning()){
-//
-//                mDecoderHelper.startScan();//开始连续扫码
-//            }else{
-//                mDecoderHelper.stopScan();//停止连续扫码
-//            }
-//        }
-
-        return super.onKeyDown(keyCode, event);
 
     }
 

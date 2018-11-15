@@ -206,7 +206,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
                 }else{
                     mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 }
-                mAdapter.setListInfo(mListInfo,mCheckflag);
+                mAdapter.setListInfo(mListInfo,mCheckflag,mSheetType);
                 break;
             case Config.MESSAGE_ERROR:
                 AlertUtil.showToast(o.toString());

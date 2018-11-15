@@ -25,6 +25,7 @@ public class CiteOrderListAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
     private String mCheckflag = "0";//0未审核，1审核
+    private String mSheetType="";//单据类型
 
     public CiteOrderListAdapter(List<DanJuMainBeanResultItem> listInfo) {
         this.listInfo = listInfo;
@@ -66,7 +67,7 @@ public class CiteOrderListAdapter extends BaseAdapter {
         tvOrderNo.setSelected(true);
         tvShopname.setSelected(true);
         tvOrderNo.setText(listInfo.get(position).getSheet_No());
-        tvOrderType.setText(listInfo.get(position).getSheetType());
+        tvOrderType.setText(mSheetType);
         tvShopname.setText(listInfo.get(position).getYHShopName());
         tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
         tvValidDate.setText(listInfo.get(position).getValid_date());
@@ -79,9 +80,10 @@ public class CiteOrderListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListInfo(List<DanJuMainBeanResultItem> listInfo,String checkflag) {
+    public void setListInfo(List<DanJuMainBeanResultItem> listInfo,String checkflag,String sheetType) {
         this.listInfo = listInfo;
         this.mCheckflag = checkflag;
+        this.mSheetType = sheetType;
         notifyDataSetChanged();
     }
 

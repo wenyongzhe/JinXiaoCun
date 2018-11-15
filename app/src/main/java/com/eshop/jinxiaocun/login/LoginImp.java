@@ -119,7 +119,7 @@ public class LoginImp implements ILogin {
                 RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
                 if(!status.equals(Config.MESSAGE_OK+"") && jsonBean==null){
                     Config.posid = "1001";
-                    Config.branch_no = "0001";
+                    Config.branch_no = "000101";
                     Config.soft_name = "123";
                     mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+Msg);
                 }else{

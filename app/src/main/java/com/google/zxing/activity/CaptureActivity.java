@@ -1,7 +1,10 @@
 package com.google.zxing.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,7 +58,7 @@ import java.util.Vector;
  * Initial the camera
  *
  */
-public class CaptureActivity extends AppCompatActivity implements Callback,DecoderHelperListener {
+public class CaptureActivity extends AppCompatActivity implements Callback {
 
     private static final int REQUEST_CODE_SCAN_GALLERY = 100;
 
@@ -77,7 +80,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
     private String photo_path;
     private Bitmap scanBitmap;
     private TextView txtBarcode;
-    public DecoderHelper mDecoderHelper=null;
+//    public DecoderHelper mDecoderHelper=null;
 
 
     //	private Button cancelScanButton;
@@ -134,10 +137,26 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
 
-        mDecoderHelper = DecoderHelper.getInstance(this);
-        mDecoderHelper.setDecoderHelperListeners(this);
-
+//        mDecoderHelper = DecoderHelper.getInstance(this);
+//        mDecoderHelper.setDecoderHelperListeners(this);
+        setScanBroadCast();
     }
+
+    private void setScanBroadCast(){
+//        Intent intent = new Intent("com.android.scanner.service_settings");
+//        intent.putExtra("action_barcode_broadcast","com.android.server.scannerservice.broadcast");
+//        intent.putExtra("key_barcode_broadcast", "scannerdata");
+//        sendBroadcast(intent);
+//        IntentFilter intentFilter = new IntentFilter("com.android.server.scannerservice.broadcast");
+//        registerReceiver(scanReceiver,intentFilter);
+    }
+
+    private BroadcastReceiver scanReceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("","");
+        }
+    };
 
     private View.OnClickListener albumOnClick = new View.OnClickListener() {
         @Override
@@ -235,7 +254,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
     @Override
     protected void onResume() {
         super.onResume();
-        mDecoderHelper.connect();//开始启动连接操作
+//        mDecoderHelper.connect();//开始启动连接操作
 
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.scanner_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -269,7 +288,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
     @Override
     protected void onPause() {
         super.onPause();
-        mDecoderHelper.disconnect();//断开连接
+//        mDecoderHelper.disconnect();//断开连接
 
         if (handler != null) {
             handler.quitSynchronously();
@@ -367,7 +386,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
 		}else{
 			mDecoderHelper.startScan();//开始连续扫码
 		}*/
-        mDecoderHelper.startScanOneTimes();//单次扫码
+//        mDecoderHelper.startScanOneTimes();//单次扫码
     }
 
     @Override
@@ -460,58 +479,30 @@ public class CaptureActivity extends AppCompatActivity implements Callback,Decod
         }
     };
 
-    @Override
-    public void onStartDecoderConnect() {
-
-    }
-
-    @Override
-    public void onDecoderConnected() {
-
-    }
-
-    @Override
-    public void onStartDecoderDisconnect() {
-
-    }
-
-    @Override
-    public void onDecoderDisconnected() {
-
-    }
-
-    @Override
-    public void onDecodeMultiResultCallback() {
-
-    }
 
     /*
     扫码结果返回回调
     */
-    @Override
-    public void onDecodeTwoResultCallback(final DecoderHelperResult mDecoderHelperResult) {
-        Log.d("", "mDecoderHelperResult.barcodeString="+mDecoderHelperResult.barcodeString);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String resultString = mDecoderHelperResult.barcodeString;
-                if (TextUtils.isEmpty(resultString)) {
-                    Toast.makeText(CaptureActivity.this, "Scan failed!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent resultIntent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Config.INTENT_EXTRA_KEY_QR_SCAN, resultString);
-                    resultIntent.putExtra(Config.INTENT_EXTRA_KEY_QR_SCAN,resultString);
-                    resultIntent.putExtras(bundle);
-                    CaptureActivity.this.setResult(Config.MESSAGE_CAPTURE_RETURN, resultIntent);
-                }
-                CaptureActivity.this.finish();
-            }
-        });
-    }
+//    @Override
+//    public void onDecodeTwoResultCallback(final DecoderHelperResult mDecoderHelperResult) {
+//        Log.d("", "mDecoderHelperResult.barcodeString="+mDecoderHelperResult.barcodeString);
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String resultString = mDecoderHelperResult.barcodeString;
+//                if (TextUtils.isEmpty(resultString)) {
+//                    Toast.makeText(CaptureActivity.this, "Scan failed!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Intent resultIntent = new Intent();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(Config.INTENT_EXTRA_KEY_QR_SCAN, resultString);
+//                    resultIntent.putExtra(Config.INTENT_EXTRA_KEY_QR_SCAN,resultString);
+//                    resultIntent.putExtras(bundle);
+//                    CaptureActivity.this.setResult(Config.MESSAGE_CAPTURE_RETURN, resultIntent);
+//                }
+//                CaptureActivity.this.finish();
+//            }
+//        });
+//    }
 
-    @Override
-    public void onDecoderFailed(int i, String s) {
-
-    }
 }

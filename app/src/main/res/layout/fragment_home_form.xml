@@ -18,9 +18,9 @@
         android:background="@color/alpha_blue"/>-->
 
     <ImageView
-        android:background="@mipmap/banner"
         android:layout_width="fill_parent"
-        android:layout_height="170dp"/>
+        android:layout_height="170dp"
+        android:background="@drawable/coreai"/>
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"

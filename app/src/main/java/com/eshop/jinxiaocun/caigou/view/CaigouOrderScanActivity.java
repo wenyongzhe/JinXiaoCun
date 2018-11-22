@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
@@ -175,6 +176,11 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mSelectGoodsEntity = mListDatas.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
+    }
+
+    @OnClick(R.id.btn_print)
+    public void onClickPront(){
+        AlertUtil.showToast("好的，我去打印");
     }
 
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){

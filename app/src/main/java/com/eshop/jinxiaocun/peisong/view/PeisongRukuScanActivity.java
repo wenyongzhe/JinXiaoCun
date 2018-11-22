@@ -184,6 +184,11 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         mAdapter.notifyDataSetInvalidated();
     }
 
+    @OnClick(R.id.btn_print)
+    public void onClickPront(){
+        AlertUtil.showToast("好的，我去打印");
+    }
+
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){
         if(scanOrSelectGoods !=null){
 

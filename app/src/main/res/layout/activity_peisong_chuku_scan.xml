@@ -47,42 +47,6 @@
             android:layout_height="match_parent"
             android:paddingRight="10dp"
             android:textSize="16sp"
-            android:text="调出" />
-
-        <TextView
-            android:id="@+id/tv_tiaochu"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            style="@style/TextView_Grey"
-            android:gravity="center_vertical|left"
-            />
-
-        <Button
-            android:id="@+id/btn_citeOrder"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edittext_border_bg"
-            android:textSize="16sp"
-            android:text="引单" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_item_height_30"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextView_Black"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:textSize="16sp"
             android:text="调入" />
 
         <com.eshop.jinxiaocun.widget.DrawableTextView
@@ -96,7 +60,49 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_30"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"
+            android:textSize="16sp"
+            android:text="调出" />
+
+        <TextView
+            android:id="@+id/tv_tiaochu"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            style="@style/TextView_Grey"
+            android:gravity="center_vertical|left"
+            />
+
+        <Button
+            android:id="@+id/btn_citeOrder"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_border_bg"
+            android:textSize="16sp"
+            android:text="引单" />
+
+        <Button
+            android:id="@+id/btn_print"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/edittext_border_bg"
+            android:textSize="16sp"
+            android:text="打印" />
+
+    </LinearLayout>
 
 </LinearLayout>
 

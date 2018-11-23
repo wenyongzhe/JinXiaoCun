@@ -210,4 +210,9 @@
     <string name="continue_save">继续保存</string>
     <string name="message_sell_ok">结算完成</string>
     <string name="message_sell_error">结算失败</string>
+    <string name="item_name">名称:</string>
+    <string name="item_subno">自编码:</string>
+    <string name="item_no">商品编码:</string>
+    <string name="item_rem">助记码:</string>
+
 </resources>

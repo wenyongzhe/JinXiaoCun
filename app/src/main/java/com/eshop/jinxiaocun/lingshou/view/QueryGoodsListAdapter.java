@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,11 @@ import java.util.List;
 public class QueryGoodsListAdapter extends BaseAdapter {
 
     private List<GetClassPluResult> listInfo;
+    Context mContext;
 
-
-    public QueryGoodsListAdapter(List<GetClassPluResult> listInfo) {
+    public QueryGoodsListAdapter(Context mContext,List<GetClassPluResult> listInfo) {
         this.listInfo = listInfo;
+        this.mContext = mContext;
     }
 
     public void setListInfo(List<GetClassPluResult> listInfo) {
@@ -47,14 +49,20 @@ public class QueryGoodsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_twolist_detail,parent,false);
+            convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_query_detail,parent,false);
         }
         TextView tvTitle = ViewHolderUtils.get(convertView, R.id.tvTitle);
-        TextView tv_message = ViewHolderUtils.get(convertView, R.id.tv_message);
+        TextView item_no = ViewHolderUtils.get(convertView, R.id.item_no);
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
+        TextView item_subno = ViewHolderUtils.get(convertView, R.id.item_subno);
+        TextView item_rem = ViewHolderUtils.get(convertView, R.id.item_rem);
+
 
         tvTitle.setText(listInfo.get(position).getItem_name());
-        tv_message.setText(listInfo.get(position).getItem_no());
+        item_no.setText(mContext.getString(R.string.item_no)+listInfo.get(position).getItem_no());
+        item_subno.setText(mContext.getString(R.string.item_subno)+listInfo.get(position).getItem_subno());
+        item_rem.setText(mContext.getString(R.string.item_rem)+listInfo.get(position).getItem_rem());
+
         tv_price.setText(listInfo.get(position).getSale_price()+Application.mContext.getString(R.string.yuan));
         return convertView;
     }

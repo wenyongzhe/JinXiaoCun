@@ -59,7 +59,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mQueryGoods = new QueryGoodsImp(this);
         mDanJuList = new DanJuListImp(this);
-        mDanJuAdapter = new QueryGoodsListAdapter(mListData);
+        mDanJuAdapter = new QueryGoodsListAdapter(getActivity(),mListData);
         View v = inflater.inflate(R.layout.query_fragment, null);
         mListView = (RefreshListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mDanJuAdapter);

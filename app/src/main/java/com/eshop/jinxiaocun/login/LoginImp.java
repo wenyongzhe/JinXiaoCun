@@ -120,7 +120,7 @@ public class LoginImp implements ILogin {
                 if(!status.equals(Config.MESSAGE_OK+"") && jsonBean==null){
                     Config.posid = "1001";
                     Config.branch_no = "000101";
-                    Config.soft_name = "123";
+                    Config.soft_name = "eshop";
                     mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+Msg);
                 }else{
                     Config.posid = jsonBean.getPosid();

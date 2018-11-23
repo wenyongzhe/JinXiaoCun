@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.utils.Config;
 
 
 public final class MyActionBar extends LinearLayout {
@@ -50,6 +51,7 @@ public final class MyActionBar extends LinearLayout {
         tvRight = (TextView) contentView.findViewById(R.id.tv_actionbar_right);
         iconLeft = contentView.findViewById(R.id.iv_actionbar_left);
         iconRight = contentView.findViewById(R.id.v_actionbar_right);
+        tvTitle.setText(Config.soft_name);
     }
 
     /**

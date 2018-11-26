@@ -82,7 +82,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         super.initView();
 
         setTopToolBar("配送入库生成", R.mipmap.ic_left_light, "", 0, "");
-        setTopToolBarRightTitleAndStyle("添加商品",R.drawable.border_bg);
+        setTopToolBarRightTitleAndStyle("查找商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);

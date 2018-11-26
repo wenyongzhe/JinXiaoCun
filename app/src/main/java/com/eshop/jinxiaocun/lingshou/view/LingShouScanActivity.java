@@ -247,7 +247,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
-        setHeaderTitle(R.id.tv_4, R.string.list_item_Price, 100);
+        setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
+        setHeaderTitle(R.id.tv_5, R.string.list_item_beforPrice, 100);
+        setHeaderTitle(R.id.tv_6, R.string.list_item_Pici_Name, 100);
 
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
@@ -267,11 +269,17 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.get(0).getItem_barcode());
                 mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.get(0).getProduce_date());
                 mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
+                reflashList(mListData,true);
                 break;
             case Config.MESSAGE_GOODS_INFOR:
                 mGetClassPluResultList = (List<GetClassPluResult>)o;
-                reflashList(mGetClassPluResultList,true);
-                //getPiCi(mGetClassPluResultList);
+
+                if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                    getPiCi(mGetClassPluResultList);
+                }else{
+                    mGetClassPluResultList.get(0).setItem_barcode("");
+                    reflashList(mGetClassPluResultList,true);
+                }
                 break;
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
@@ -563,8 +571,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 break;
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+                if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                    getPiCi(mGetClassPluResultList);
+                }else{
+                    mGetClassPluResultList.get(0).setItem_barcode("");
+                    reflashList(mGetClassPluResultList,true);
+                }
                 reflashList(mGetClassPluResultList,true);
-                //getPiCi(mGetClassPluResult);
                 break;
             case RESULT_OK:
                 String mCount =  data.getStringExtra("countN");

@@ -57,4 +57,31 @@
         android:layout_height="match_parent"
         android:background="@color/alpha_blue" />
 
+    <!--原价-->
+    <TextView
+        android:id="@+id/sale_beforprice"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        style="@style/TextView_Grey"
+        android:maxLines="1"/>
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+
+    <!--批次号-->
+    <TextView
+        android:id="@+id/list_item_Pici_Name"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        style="@style/TextView_Grey"
+        android:maxLines="1"/>
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_blue" />
+
+
 </LinearLayout>

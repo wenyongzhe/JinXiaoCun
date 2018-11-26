@@ -84,7 +84,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         super.initView();
 
         setTopToolBar("批发订单生成", R.mipmap.ic_left_light, "", 0, "");
-        setTopToolBarRightTitleAndStyle("添加商品",R.drawable.border_bg);
+        setTopToolBarRightTitleAndStyle("查找商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);

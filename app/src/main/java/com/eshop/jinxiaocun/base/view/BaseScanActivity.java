@@ -75,7 +75,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
         mListview = bottomView.findViewById(R.id.listview_data);
-        mMyActionBar.setData("新增单据",R.mipmap.ic_left_light,"",0,"添加商品",this);
+        mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"查询商品",this);
 
         mUpMainBean = new UpMainBean();
         mUpDetailBeanList = new ArrayList<>();

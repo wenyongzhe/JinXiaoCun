@@ -216,5 +216,5 @@
     <string name="item_subno">自编码:</string>
     <string name="item_no">商品编码:</string>
     <string name="item_rem">助记码:</string>
-
+    <string name="mess_back">确定退出？</string>
 </resources>

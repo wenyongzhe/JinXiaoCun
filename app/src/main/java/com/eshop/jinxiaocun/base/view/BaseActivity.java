@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.base.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -12,9 +13,14 @@ import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.MyActionBar;
+import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
+import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 
 import java.util.zip.Inflater;
 
@@ -26,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
 
     protected LinearLayout mLinearLayout;
     public MyActionBar mMyActionBar;
+    public boolean hasBackDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,27 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
-            finish();
+            if(hasBackDialog){
+                AlertUtil.showAlert(BaseActivity.this,
+                        R.string.dialog_title,
+                        R.string.mess_back,
+                        R.string.confirm,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                                finish();
+                            } },
+                        R.string.cancel,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            } }
+                );
+            }else {
+                finish();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);

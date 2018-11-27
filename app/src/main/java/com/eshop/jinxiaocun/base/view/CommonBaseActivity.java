@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.MyActionBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +34,7 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
     @BindView(R.id.actionbar)
     MyActionBar mMyActionBar;
-
+    public boolean hasBackDialog = false;
     protected FrameLayout mView;
     protected LinearLayout mLinearLayout;
 
@@ -94,15 +95,6 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_BACK == keyCode) {
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == android.R.id.home) {
@@ -129,5 +121,33 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if(hasBackDialog){
+                AlertUtil.showAlert(CommonBaseActivity.this,
+                        R.string.dialog_title,
+                        R.string.mess_back,
+                        R.string.confirm,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                                finish();
+                            } },
+                        R.string.cancel,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            } }
+                );
+            }else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

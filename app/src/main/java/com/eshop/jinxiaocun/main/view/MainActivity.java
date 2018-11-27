@@ -24,6 +24,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hasBackDialog = true;
         setContentView(R.layout.activity_main_menu);
         tabView= (TabView) findViewById(R.id.tabView);
         List<TabViewChild> tabViewChildList=new ArrayList<>();

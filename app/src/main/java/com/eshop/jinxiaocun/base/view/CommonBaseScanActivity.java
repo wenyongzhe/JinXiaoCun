@@ -89,6 +89,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void initData() {
         super.initData();
+        hasBackDialog = true;
         /////////////////条码
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");

@@ -89,9 +89,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_weight="1"
                 android:hint="@string/params_hint_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword" />
+
+            <CheckBox
+                android:id="@+id/cb_show_psw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示"
+                />
 
         </LinearLayout>
 

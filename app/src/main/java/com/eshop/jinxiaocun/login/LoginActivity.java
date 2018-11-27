@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -34,6 +38,9 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
     @BindView(R.id.et_pwd)
     EditText editPassword;
+
+    @BindView(R.id.cb_show_psw)
+    CheckBox mCbShowPSW;
 
     @BindView(R.id.tv_vision)
     TextView tv_version;
@@ -90,39 +97,29 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
         editPassword.setText("1001");
         editPassword.setSelection(editPassword.length());
 
+        mCbShowPSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){
+                    //如果选中，显示密码
+                    editPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else{
+                    //否则隐藏密码
+                    editPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                }
+
+            }
+        });
+
         loginAction = new LoginImp(this);
 
 //        closeEditTextKeyboard();
         HomeProhibit();
     }
 
-//    Handler mHandler = new Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what){
-//                case Config.MESSAGE_OK:
-//                    //ToastUtils.showLong("注册成功！");
-//                    OnLogin();
-//                    break;
-//                case Config.MESSAGE_ERROR:
-//                    ToastUtils.showLong("注册失败！");
-//                    OnLogin();
-//                    break;
-//                case Config.MESSAGE_INTENT:
-//
-////                    Config.intValue =
-//
-//                    Config.PassWord = editPassword.getText().toString().trim();
-//                    Config.UserName = editUser.getText().toString().trim();
-//                    ToastUtils.showLong("登录成功！");
-//                    Intent intent = new Intent();
-//                    intent.setClass(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    break;
-//            }
-//        }
-//    };
+
 
     @Override
     protected void loadData() {

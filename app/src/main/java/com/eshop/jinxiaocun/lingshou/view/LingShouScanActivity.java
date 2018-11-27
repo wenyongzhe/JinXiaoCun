@@ -355,7 +355,18 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 startActivityForResult(intent,200);
                 break;
             case SELL_ZHENDAN_ZHEKOU:
+                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant().equals("1")){
+                    if(Double.parseDouble(mGetOptAuthResult.getSavediscount()) <= Double.parseDouble(mGetOptAuthResult.getLimitdiscount())){
+                        ToastUtils.showShort("请先在服务器设置折扣！");
+                        return;
+                    }
+                }else {
+                    ToastUtils.showShort("没有权限！");
+                    return;
+                }
                 intent = new Intent(this, ZheKouDialog.class);
+                intent.putExtra("Savediscount",mGetOptAuthResult.getSavediscount());
+                intent.putExtra("Limitdiscount",mGetOptAuthResult.getLimitdiscount());
                 startActivityForResult(intent,100);
                 break;
             case Config.MESSAGE_BILL_DISCOUNT:

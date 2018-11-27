@@ -90,8 +90,8 @@
     <string name="modify">修改</string>
     <string name="modifycount">改数</string>
     <string name="modifyprice">改价</string>
-    <string name="zhekou">折扣</string>
-    <string name="modifytotal">修改价格</string>
+    <string name="zhekou">整单折扣</string>
+    <string name="modifytotal">整单改价</string>
     <string name="shenhe">审核</string>
     <string name="deleteOrder">删单</string>
 

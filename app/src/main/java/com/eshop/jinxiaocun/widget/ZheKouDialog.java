@@ -26,12 +26,21 @@ public class ZheKouDialog extends Activity {
     @BindView(R.id.txtCountN)
     EditText txtCountN;
 
+    private String mSavediscount = "1";
+    private String mLimitdiscount = "1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zhekou);
-
         ButterKnife.bind(this);
+        try {
+            mSavediscount = getIntent().getStringExtra("Savediscount");
+            mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
+            txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
+            txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
+        }catch (Exception e){
+        }
 
         txtCountN.setFocusable(true);
         txtCountN.setFocusableInTouchMode(true);

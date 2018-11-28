@@ -51,6 +51,7 @@ public class PeisongRukuListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_list_peisong_ruku,parent,false);
         }
+        TextView tv_xuhao = ViewHolderUtils.get(convertView, R.id.tv_xuhao);
         TextView tvOrderStatus = ViewHolderUtils.get(convertView, R.id.tv_order_status);
         TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
         TextView tvOrderType = ViewHolderUtils.get(convertView, R.id.tv_order_type);
@@ -65,6 +66,7 @@ public class PeisongRukuListAdapter extends BaseAdapter {
         }
         tvOrderNo.setSelected(true);
         tvShopname.setSelected(true);
+        tv_xuhao.setText((position+1)+"");
         tvOrderNo.setText(listInfo.get(position).getSheet_No());
         tvOrderType.setText(listInfo.get(position).getSheetType());
         tvShopname.setText(listInfo.get(position).getShopName());

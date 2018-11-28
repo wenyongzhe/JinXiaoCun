@@ -215,10 +215,41 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_bottom_txt"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/activity_list_bottom"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_CurrentPosition"
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前选择是第0条单据"
+            />
+
+        <TextView
+            android:id="@+id/tv_AllCount"
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="总共有0条单据"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="@dimen/activity_list_bottom"
+        android:layout_marginLeft="@dimen/activity_list_bottom"
+        android:layout_marginRight="@dimen/activity_list_bottom"
+        android:layout_marginBottom="@dimen/activity_list_bottom"
         android:background="@color/button_background"
         android:orientation="horizontal">
 

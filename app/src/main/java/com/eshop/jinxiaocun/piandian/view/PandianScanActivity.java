@@ -205,8 +205,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     //上传记录头
     private void uploadRecordHeadData(){
+        AlertUtil.showNoButtonProgressDialog(this,"正在上传数据");
         UploadRecordHeadDataEntity bean = new UploadRecordHeadDataEntity();
-
         bean.JsonData.sheet_no = mTvOrderNo.getText().toString().trim(); //盘点单号 通过getsheetno获取
         bean.JsonData.check_no = mTvPihao.getText().toString().trim();//盘点批次号
         bean.JsonData.trans_no = Config.YwType.CR.toString();//单据类型
@@ -489,6 +489,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                             @Override
                             public void onClick(View v) {
                                 AlertUtil.dismissDialog();
+                                addAfter();
                             }
                         }, R.string.cancel, new View.OnClickListener() {
                             @Override
@@ -675,12 +676,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:
                 AlertUtil.showToast(o.toString());
+                AlertUtil.dismissProgressDialog();
                 setResult(22);
                 finish();
                 break;
             //上传记录头或上传盘点明细  保存业务单据 失败
             case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
+                AlertUtil.dismissProgressDialog();
                 break;
 
         }

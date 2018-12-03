@@ -34,6 +34,7 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
+import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         setTopToolBarRightTitleAndStyle("查找商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
+        mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
         mTvTiaoChu.setText("["+Config.branch_no+"]");
 
@@ -440,6 +442,19 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
             getOrderDetail(selectMainBean);
         }
 
+        //修改价格
+        if(requestCode == 33 && resultCode == RESULT_OK){
+            String price = data.getStringExtra("Price");
+            for (int i = 0; i < mListDatas.size(); i++) {
+                if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+                    mListDatas.get(i).setSale_price(price);
+                    mAdapter.setListInfo(mListDatas);
+                    upDateUI();
+                    break;
+                }
+            }
+        }
+
         //搜索返回多条数据 ，选择其中一条
         if(requestCode == 44 && resultCode == RESULT_OK){
             GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
@@ -551,6 +566,31 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         intent.putExtra("countN", mSelectGoodsEntity.getSale_qnty()+"");
         intent.setClass(this, ModifyCountDialog.class);
         startActivityForResult(intent, 22);
+    }
+
+    @Override
+    protected boolean modifyPriceBefore() {
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再操作!");
+            return false;
+        }
+        if(mListDatas ==null || mListDatas.size()==0){
+            AlertUtil.showToast("没有商品，不能做改数操作!");
+            return false;
+        }
+        if(mSelectGoodsEntity ==null){
+            AlertUtil.showToast("请选择要改数的商品!");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void modifyPriceAfter() {
+        Intent intent = new Intent();
+        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
+        intent.setClass(this, ModifyPriceDialog.class);
+        startActivityForResult(intent, 33);
     }
 
     @Override

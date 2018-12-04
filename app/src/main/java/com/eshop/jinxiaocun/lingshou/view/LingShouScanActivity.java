@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -240,7 +241,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                         || actionId == 0
                 || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
 //                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
-                    mLingShouScanImp.getPLULikeInfo(v.getText().toString().trim());
+                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
+                    /*隐藏软键盘*/
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if(inputMethodManager.isActive()){
+                        inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                    }
                     return true;
                 }
 

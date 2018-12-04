@@ -68,8 +68,11 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         et_query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == 0) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == 0
+                        || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
                     mQueryGoods.getPLULikeInfo(v.getText().toString().trim(),0);
+                    return true;
                 }
                 return false;
             }

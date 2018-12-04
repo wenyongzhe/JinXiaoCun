@@ -236,16 +236,23 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == 0) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == 0
+                || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
 //                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
                     mLingShouScanImp.getPLULikeInfo(v.getText().toString().trim());
+                    return true;
                 }
+
                 return false;
             }
         });
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
         setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
         setHeaderTitle(R.id.tv_5, R.string.list_item_beforPrice, 100);

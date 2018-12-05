@@ -115,7 +115,6 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
         loginAction = new LoginImp(this);
 
-//        closeEditTextKeyboard();
         HomeProhibit();
     }
 

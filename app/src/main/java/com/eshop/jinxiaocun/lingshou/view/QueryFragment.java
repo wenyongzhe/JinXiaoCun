@@ -42,6 +42,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
     private List<GetClassPluResult> selectList = new ArrayList<>();
     private EditText et_query;
     private IQueryGoods mQueryGoods;
+    private String barcode = "";
 
     public static QueryFragment getInstance() {
         QueryFragment sf = new QueryFragment();
@@ -100,6 +101,10 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
             }
         });
         loadData();
+        if(barcode!=null && !barcode.equals("")){
+            et_query.setText(barcode);
+            mQueryGoods.getPLULikeInfo(barcode,0);
+        }
         return v;
     }
 
@@ -136,6 +141,9 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
     @Override
     protected void reflashList() {
         mListView.onRefreshComplete();
+    }
 
+    public void setText(String barcode) {
+        this.barcode = barcode;
     }
 }

@@ -240,7 +240,6 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == 0
                 || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
-//                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
                     mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
                     /*隐藏软键盘*/
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -396,6 +395,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 }else {
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                 }
+                break;
+            case Config.MESSAGE_start_query:
+                Intent mIntent = new Intent(this, QreShanpingActivity.class);
+                mIntent.putExtra("barcode",et_barcode.getText().toString());
+                startActivityForResult(mIntent,100);
                 break;
 
         }

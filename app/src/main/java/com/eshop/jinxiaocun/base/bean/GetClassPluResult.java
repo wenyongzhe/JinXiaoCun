@@ -217,8 +217,13 @@ public class GetClassPluResult extends ListBean implements Serializable{
         if (obj.getClass() != this.getClass())
             return false;
         GetClassPluResult a = (GetClassPluResult) obj;
-        if (this.sale_price.equals(a.sale_price)&&this.sale_qnty.equals(a.sale_qnty))
+        if (this.sale_price!=null&&
+                this.sale_price.equals(a.sale_price)&&this.sale_qnty.equals(a.sale_qnty))
             return true;
+        if (this.base_price!=null&&
+                this.base_price.equals(a.base_price)&&this.sale_qnty.equals(a.sale_qnty))
+            return true;
+
         return false;
     }
 }

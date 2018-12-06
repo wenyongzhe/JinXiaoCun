@@ -73,6 +73,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
     private String SupCust_No ="";
     private DanJuMainBeanResultItem mSelectMainBean;
     private String mAddSelectGoodsNo;//添加的商品编码
+    private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
 
     @Override
     protected int getLayoutContentId() {
@@ -169,6 +170,11 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
         Intent intent = new Intent(PifaTuihuoScanActivity.this,CiteOrderListActivity.class);
         intent.putExtra("SheetType",Config.YwType.RI.toString());
         startActivityForResult(intent,4);
+    }
+
+    @Override
+    protected boolean onTopBarLeftClick() {
+        return onBackFinish();
     }
 
     @Override
@@ -314,8 +320,39 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                     if(!isSave){//不存在则添加
                         mListDatas.add(obj);
                     }
-
                 }
+
+                for (OrderDetailBeanResult detailData : orderDetailDatas) {
+                    GetClassPluResult obj = new GetClassPluResult();
+                    obj.setItem_name(detailData.getName());
+                    obj.setItem_no(detailData.getBarCode());
+                    obj.setItem_barcode(detailData.getPluBatch());//批次
+                    obj.setItem_subno(detailData.getSelfCode());//自编码
+                    obj.setUnit_no(detailData.getUnit());
+                    obj.setSale_qnty(detailData.getCheckNum()+"");
+                    obj.setStock_qty(detailData.getStockNum()+"");
+                    obj.setPrice(detailData.getSalePrice()+"");//进价
+                    obj.setBase_price(detailData.getSalePrice()+"");//批发价
+                    obj.setProduce_date(detailData.getMadeDate());
+                    obj.setValid_date(detailData.getVaildDate());
+                    obj.setEnable_batch(detailData.getEnable_batch());
+
+                    boolean isSave = false;
+                    for ( int i=0; i<mOldListDatas.size();i++) {
+                        GetClassPluResult data = mOldListDatas.get(i);
+                        if(detailData.getBarCode().equals(data.getItem_no())){
+                            isSave = true;
+                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+                            mOldListDatas.get(i).setSale_qnty(number+"");
+                            break;
+                        }
+                    }
+
+                    if(!isSave){//不存在则添加
+                        mOldListDatas.add(obj);
+                    }
+                }
+
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
@@ -386,9 +423,9 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                 upDateUI();
                 break;
             case Config.MESSAGE_GET_PRICE_FAIL:
-                for (GetClassPluResult data : mListDatas) {
-                    if(mAddSelectGoodsNo.equals(data.getItem_no())){
-                        mListDatas.remove(data);
+                for (int i = 0; i < mListDatas.size(); i++) {
+                    if(mListDatas.get(i).getItem_no().equals(mAddSelectGoodsNo)){
+                        mListDatas.remove(i);
                         break;
                     }
                 }
@@ -589,6 +626,66 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
         intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
         intent.setClass(this, ModifyPriceDialog.class);
         startActivityForResult(intent, 33);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if(!onBackFinish()){
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean onBackFinish(){
+        if(mSelectMainBean !=null){//说明是列表那边过来的数据
+            if(mOldListDatas.size()!=0){
+                if(mOldListDatas.size()!=mListDatas.size()){
+                    //数据有变动
+                    showHint();
+                }else{
+                    //价格 和 数量 有改变都提示
+                    if(!MyUtils.isListEqual(mOldListDatas,mListDatas)){
+                        //数据有变动
+                        showHint();
+                    }else{
+                        return false;
+                    }
+                }
+
+            }else{
+                return false;
+            }
+        }else{
+            //新开单的
+            if(mListDatas.size()>0){
+                //数据有变动
+                showHint();
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void showHint(){
+        AlertUtil.showAlert(this,
+                R.string.dialog_title,R.string.change_msg_back,
+                R.string.confirm,new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(addBefore()){
+                            addAfter();
+                        }
+                        AlertUtil.dismissDialog();
+                    } },
+                R.string.cancel,new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                    } }
+        );
     }
 
     @Override

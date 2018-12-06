@@ -41,7 +41,7 @@ public class StockCheckActivity extends CommonBaseScanActivity implements INetWo
     @Override
     protected void initView() {
         super.initView();
-        hasBackDialog = false;
+//        hasBackDialog = false;
         mLayoutScanBottom.setVisibility(View.GONE);
         mEtBarcode.setOnKeyListener(onKey);
         setTopToolBar("库存查询",R.mipmap.ic_left_light,"",0,"");

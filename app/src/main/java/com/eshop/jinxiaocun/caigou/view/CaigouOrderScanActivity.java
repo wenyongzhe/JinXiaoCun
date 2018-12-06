@@ -69,13 +69,14 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private ProviderInfoBeanResult mProviderInfo;//供应商信息
     private CaigouOrderScanAdapter mAdapter;
 
-    private List<GetClassPluResult> mListDatas=new ArrayList<>();
+    private ArrayList<GetClassPluResult> mListDatas=new ArrayList<>();
     private GetClassPluResult mSelectGoodsEntity;
     private String mStr_OrderNo;//采购订单单据号
     private String mCheckflag = "0";//0未审核，1审核
     private String SupCust_No ="";
     private DanJuMainBeanResultItem mSelectMainBean;
     private String mAddSelectGoodsNo;//添加的商品编码
+    private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
 
     @Override
     protected int getLayoutContentId() {
@@ -153,6 +154,11 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             return false;
         }
     };
+
+    @Override
+    protected boolean onTopBarLeftClick() {
+        return onBackFinish();
+    }
 
     @Override
     protected void onTopBarRightClick() {
@@ -297,8 +303,39 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     if(!isSave){//不存在则添加
                         mListDatas.add(obj);
                     }
-
                 }
+
+                for (OrderDetailBeanResult detailData : orderDetailDatas) {
+                    GetClassPluResult obj = new GetClassPluResult();
+                    obj.setItem_name(detailData.getName());
+                    obj.setItem_no(detailData.getBarCode());
+                    obj.setItem_barcode(detailData.getPluBatch());//批次
+                    obj.setItem_subno(detailData.getSelfCode());//自编码
+                    obj.setUnit_no(detailData.getUnit());
+                    obj.setSale_qnty(detailData.getCheckNum()+"");
+                    obj.setStock_qty(detailData.getStockNum()+"");
+                    obj.setPrice(detailData.getBuyPrice()+"");//进价
+                    obj.setSale_price(detailData.getSalePrice()+"");//销价
+                    obj.setProduce_date(detailData.getMadeDate());
+                    obj.setValid_date(detailData.getVaildDate());
+                    obj.setEnable_batch(detailData.getEnable_batch());
+
+                    boolean isSave = false;
+                    for ( int i=0; i<mOldListDatas.size();i++) {
+                        GetClassPluResult data = mOldListDatas.get(i);
+                        if(detailData.getBarCode().equals(data.getItem_no())){
+                            isSave = true;
+                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+                            mOldListDatas.get(i).setSale_qnty(number+"");
+                            break;
+                        }
+                    }
+
+                    if(!isSave){//不存在则添加
+                        mOldListDatas.add(obj);
+                    }
+                }
+
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
@@ -568,6 +605,98 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         intent.setClass(this, ModifyPriceDialog.class);
         startActivityForResult(intent, 33);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if(!onBackFinish()){
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean onBackFinish(){
+        if(mSelectMainBean !=null){//说明是列表那边过来的数据
+            if(mOldListDatas.size()!=0){
+                if(mOldListDatas.size()!=mListDatas.size()){
+                    //数据有变动
+                    showHint();
+                }else{
+                    //价格 和 数量 有改变都提示
+                    if(!isListEqual(mOldListDatas,mListDatas)){
+                        //数据有变动
+                        showHint();
+                    }else{
+                        return false;
+                    }
+                }
+
+            }else{
+                return false;
+            }
+        }else{
+            //新开单的
+            if(mListDatas.size()>0){
+                //数据有变动
+                showHint();
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void showHint(){
+        AlertUtil.showAlert(this,
+                R.string.dialog_title,R.string.change_msg_back,
+                R.string.confirm,new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(addBefore()){
+                            addAfter();
+                        }
+                        AlertUtil.dismissDialog();
+                    } },
+                R.string.cancel,new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                    } }
+        );
+    }
+
+    /**
+     * 首先进行入参检查防止出现空指针异常
+     * 如果两个参数都为空，则返回true
+     * 如果有一项为空，则返回false
+     * 接着对第一个list进行遍历，如果某一项第二个list里面没有，则返回false
+     * 还要再将两个list反过来比较，因为可能一个list是两一个list的子集
+     * 如果成功遍历结束，返回true
+     * @param l0
+     * @param l1
+     * @return
+     */
+    public static boolean isListEqual(List l0, List l1){
+        if (l0 == l1)
+            return true;
+        if (l0 == null && l1 == null)
+            return true;
+        if (l0 == null || l1 == null)
+            return false;
+        if (l0.size() != l1.size())
+            return false;
+        for (Object o : l0) {
+            if (!l1.contains(o))
+                return false;
+        }
+        for (Object o : l1) {
+            if (!l0.contains(o))
+                return false;
+        }
+        return true;
+    }
+
 
     @Override
     protected void onDestroy() {

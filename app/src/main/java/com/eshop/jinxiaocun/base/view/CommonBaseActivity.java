@@ -34,7 +34,7 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
     @BindView(R.id.actionbar)
     MyActionBar mMyActionBar;
-    public boolean hasBackDialog = false;
+//    public boolean hasBackDialog = false;
     protected FrameLayout mView;
     protected LinearLayout mLinearLayout;
 
@@ -121,33 +121,33 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_BACK == keyCode) {
-            if(hasBackDialog){
-                AlertUtil.showAlert(CommonBaseActivity.this,
-                        R.string.dialog_title,
-                        R.string.mess_back,
-                        R.string.confirm,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                AlertUtil.dismissDialog();
-                                finish();
-                            } },
-                        R.string.cancel,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                AlertUtil.dismissDialog();
-                            } }
-                );
-            }else {
-                finish();
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (KeyEvent.KEYCODE_BACK == keyCode) {
+//            if(hasBackDialog){
+//                AlertUtil.showAlert(CommonBaseActivity.this,
+//                        R.string.dialog_title,
+//                        R.string.mess_back,
+//                        R.string.confirm,
+//                        new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                AlertUtil.dismissDialog();
+//                                finish();
+//                            } },
+//                        R.string.cancel,
+//                        new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                AlertUtil.dismissDialog();
+//                            } }
+//                );
+//            }else {
+//                finish();
+//            }
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
 }

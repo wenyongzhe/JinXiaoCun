@@ -1,5 +1,8 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
@@ -8,6 +11,7 @@ import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
@@ -47,7 +51,7 @@ public class LingShouScanImp implements ILingshouScan {
     private INetWork mINetWork;
     IJsonFormat mJsonFormatImp = new JsonFormatImp();
 
-    public LingShouScanImp(INetWorResult mHandler) {
+    public LingShouScanImp(  INetWorResult mHandler) {
         this.mHandler = mHandler;
         mINetWork = new NetWorkImp(Application.mContext);
     }
@@ -358,7 +362,11 @@ public class LingShouScanImp implements ILingshouScan {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
                     List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
-                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+                    if(mGoodGetBeanResult.size()>1){
+                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
+                    }else {
+                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+                    }
                 }else{
                     mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,Msg);
                 }

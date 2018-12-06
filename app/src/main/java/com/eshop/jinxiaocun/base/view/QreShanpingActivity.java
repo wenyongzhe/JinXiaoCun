@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.base.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -29,6 +30,7 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 //    private int[] mIconSelectIds = { R.mipmap.img_diaobo_geli, R.mipmap.img_diaobo_geli};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private View mDecorView;
+    private String barcodeQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,8 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
     protected void initView() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_chaxun_shanping),0,params);
-
+        Intent mIntent = getIntent();
+        barcodeQuery = mIntent.getStringExtra("barcode");
         mDecorView = getWindow().getDecorView();
         SegmentTabLayout tabLayout_4 = ViewFindUtils.find(mDecorView, R.id.tl_1);
 
@@ -52,9 +55,15 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 //            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
 //        }
 
-        mFragments.add(SelectGoodsFragment.getInstance());
-        mFragments.add(QueryFragment.getInstance());
+        SelectGoodsFragment mSelectGoodsFragment = SelectGoodsFragment.getInstance();
+        QueryFragment mQueryFragment = QueryFragment.getInstance();
+        if(barcodeQuery!=null){
+            mQueryFragment.setText(barcodeQuery);
+        }
+        mFragments.add(mSelectGoodsFragment);
+        mFragments.add(mQueryFragment);
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
+        tabLayout_4.setCurrentTab(1);
 
         mMyActionBar.setData("商品列表",R.mipmap.ic_left_light,"",0,"",this);
     }

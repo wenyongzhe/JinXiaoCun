@@ -28,6 +28,12 @@ public abstract class CommonBaseListActivity extends CommonBaseActivity implemen
 
     @BindView(R.id.rfListview)
     protected RefreshListView mListView;
+    @BindView(R.id.ll_bottom_txt)
+    protected LinearLayout mLayoutBottomTxt;
+    @BindView(R.id.tv_CurrentPosition)
+    protected TextView mTvCurrentPosition;//当前选择第几条
+    @BindView(R.id.tv_AllCount)
+    protected TextView mTvAllCount;//总条数
     @BindView(R.id.ll_bottom)
     protected LinearLayout mLayoutBottom;
     @BindView(R.id.bottom_btn_create)

@@ -205,4 +205,20 @@ public class GetClassPluResult extends ListBean implements Serializable{
     public void setValid_date(String valid_date) {
         this.valid_date = valid_date;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == null && obj == null)
+            return false;
+        if (this == null || obj == null)
+            return false;
+        if (obj.getClass() != this.getClass())
+            return false;
+        GetClassPluResult a = (GetClassPluResult) obj;
+        if (this.sale_price.equals(a.sale_price)&&this.sale_qnty.equals(a.sale_qnty))
+            return true;
+        return false;
+    }
 }

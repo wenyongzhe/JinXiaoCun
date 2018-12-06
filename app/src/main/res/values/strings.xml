@@ -1,5 +1,5 @@
 ﻿<resources>
-    <string name="app_name">进销存</string>
+    <string name="app_name">智能移动POS</string>
 
     <string name="title">标题</string>
     <string name="cancel">取消</string>
@@ -217,4 +217,5 @@
     <string name="item_no">商品编码:</string>
     <string name="item_rem">助记码:</string>
     <string name="mess_back">确定退出？</string>
+    <string name="change_msg_back">有数据变动,是否保存退出？</string>
 </resources>

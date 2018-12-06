@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -236,16 +237,27 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == 0) {
-//                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
-                    mLingShouScanImp.getPLULikeInfo(v.getText().toString().trim());
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == 0
+                || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
+                    mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
+                    /*隐藏软键盘*/
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if(inputMethodManager.isActive()){
+                        inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                    }
+                    return true;
                 }
+
                 return false;
             }
         });
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
         setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
         setHeaderTitle(R.id.tv_5, R.string.list_item_beforPrice, 100);
@@ -383,6 +395,11 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 }else {
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                 }
+                break;
+            case Config.MESSAGE_start_query:
+                Intent mIntent = new Intent(this, QreShanpingActivity.class);
+                mIntent.putExtra("barcode",et_barcode.getText().toString());
+                startActivityForResult(mIntent,100);
                 break;
 
         }

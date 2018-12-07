@@ -19,6 +19,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,8 +94,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     TextView tv_total_num;//商品数
     @BindView(R.id.tv_order_num)
     TextView tv_order_num;//记录数
-
-
+    @BindView(R.id.ib_seach)
+    ImageButton ib_seach;
 
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
@@ -245,6 +247,9 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(event !=null  && event.getAction() != KeyEvent.ACTION_DOWN){
+                    return false;
+                }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == 0
                 || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
@@ -258,6 +263,17 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
                 }
 
                 return false;
+            }
+        });
+        ib_seach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLingShouScanImp.getPLUInfo(et_barcode.getText().toString().trim());
+                /*隐藏软键盘*/
+                InputMethodManager inputMethodManager = (InputMethodManager) LingShouScanActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if(inputMethodManager.isActive()){
+                    inputMethodManager.hideSoftInputFromWindow(et_barcode.getApplicationWindowToken(), 0);
+                }
             }
         });
 

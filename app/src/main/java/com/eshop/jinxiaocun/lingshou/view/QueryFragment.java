@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -43,6 +44,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
     private EditText et_query;
     private IQueryGoods mQueryGoods;
     private String barcode = "";
+    private ImageButton ib_seach;
 
     public static QueryFragment getInstance() {
         QueryFragment sf = new QueryFragment();
@@ -65,9 +67,21 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         mDanJuAdapter = new QueryGoodsListAdapter(getActivity(),mListData);
         View v = inflater.inflate(R.layout.query_fragment, null);
         mListView = (RefreshListView) v.findViewById(R.id.list_view);
+        ib_seach = v.findViewById(R.id.ib_seach);
         mListView.setAdapter(mDanJuAdapter);
 
         et_query = (EditText) v.findViewById(R.id.et_query);
+        ib_seach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mQueryGoods.getPLULikeInfo(et_query.getText().toString().trim(),0);
+                /*隐藏软键盘*/
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if(inputMethodManager.isActive()){
+                    inputMethodManager.hideSoftInputFromWindow(et_query.getApplicationWindowToken(), 0);
+                }
+            }
+        });
         et_query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -85,21 +99,21 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
                 return false;
             }
         });
-        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                loadData();
-            }
-        });
-
-        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page ++;
-                loadData();
-            }
-        });
+//        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                loadData();
+//            }
+//        });
+//
+//        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                page ++;
+//                loadData();
+//            }
+//        });
         loadData();
         if(barcode!=null && !barcode.equals("")){
             et_query.setText(barcode);

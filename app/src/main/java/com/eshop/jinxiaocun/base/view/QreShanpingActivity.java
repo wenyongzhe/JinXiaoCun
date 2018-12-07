@@ -63,7 +63,9 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
         mFragments.add(mSelectGoodsFragment);
         mFragments.add(mQueryFragment);
         tabLayout_4.setTabData(mTitles, this, R.id.fl_change, mFragments);
-        tabLayout_4.setCurrentTab(1);
+        if(barcodeQuery!=null){
+            tabLayout_4.setCurrentTab(1);
+        }
 
         mMyActionBar.setData("商品列表",R.mipmap.ic_left_light,"",0,"",this);
     }

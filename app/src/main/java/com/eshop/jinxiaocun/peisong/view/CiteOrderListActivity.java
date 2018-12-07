@@ -56,7 +56,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
     private IOtherModel mServerApi;
     private int mPageIndex = 1;
     private int mPageSize = 20;
-    private String mCheckflag = "0";//0未审核，1审核
+    private String mCheckflag = "1";//需要时审核过的//0未审核，1审核
     //采购入库引采购订单，采购退货引采购入库；
     // 批发出库引批发订单，批发退货引批发退货；
     // 配送出库引要货单，配送入库引配送出库单
@@ -73,7 +73,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         super.initView();
 
         setTopToolBar("引用单据列表", R.mipmap.ic_left_light, "", 0, "");
-        setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
+//        setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
 
         mLayoutBottom.setVisibility(View.GONE);
 
@@ -139,7 +139,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         super.onItemClick(parent, view, position, id);
 
         Intent intent = new Intent();
-        intent.putExtra("Checkflag",mCheckflag);
+//        intent.putExtra("Checkflag",mCheckflag);
         intent.putExtra("SelectOrder",mListInfo.get(position-1));
         setResult(RESULT_OK,intent);
         finish();

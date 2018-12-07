@@ -472,7 +472,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         //引用单据
         if(requestCode == 4 && resultCode == RESULT_OK){
             DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
-            mCheckflag = data.getStringExtra("Checkflag");
+//            mCheckflag = data.getStringExtra("Checkflag");
             // 单据类型，入库方法需要自己填 入库方式，加库存的填“+”，减库存的填"-" 订单不产生库存变化的可以填空
             selectMainBean.setSheetType(Config.YwType.MO.toString());
             selectMainBean.setVoucher_Type("-");

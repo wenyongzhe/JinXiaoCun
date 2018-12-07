@@ -232,7 +232,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 Config.intValue = mGetFlowNoBeanResult.getIntValue();
                 Config.strgrant = mGetFlowNoBeanResult.getStrgrant();
 
-                ToastUtils.showLong("登录成功！");
+                //ToastUtils.showLong("登录成功！");
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 startActivity(intent);

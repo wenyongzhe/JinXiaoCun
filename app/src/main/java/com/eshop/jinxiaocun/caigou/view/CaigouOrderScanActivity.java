@@ -205,6 +205,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             if(!isSame){//不存在则添加 ，已经存则直接刷新
                 mListDatas.add(scanOrSelectGoods);
                 mAddSelectGoodsNo = scanOrSelectGoods.getItem_no();
+                //单据商品取价
                 mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
             }
@@ -600,6 +601,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected void modifyPriceAfter() {
+        //采购可以允许自行改价，目前没有权限控制
         Intent intent = new Intent();
         intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
         intent.setClass(this, ModifyPriceDialog.class);

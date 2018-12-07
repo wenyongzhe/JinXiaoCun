@@ -598,6 +598,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
 
     @Override
     protected void modifyPriceAfter() {
+        //采购可以允许自行改价，目前没有权限控制
         Intent intent = new Intent();
         intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
         intent.setClass(this, ModifyPriceDialog.class);

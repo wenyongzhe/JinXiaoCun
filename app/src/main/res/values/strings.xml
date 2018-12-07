@@ -118,6 +118,7 @@
     <string name="list_item_Price">价格</string>
     <string name="list_item_salePrice">售价</string>
     <string name="list_item_beforPrice">原价</string>
+    <string name="list_item_VipPrice">VIP价</string>
     <string name="list_item_quantity">要货数量</string>
     <string name="list_item_Amount">金额</string>
     <string name="list_item_XSDate">销售日期</string>

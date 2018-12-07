@@ -58,8 +58,12 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         sale_price.setText(listInfo.get(position).getSale_price());
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
-        sale_beforprice.setText(listInfo.get(position).getSale_price());
-        list_item_Pici_Name.setText(listInfo.get(position).getItem_barcode());
+        sale_beforprice.setText(listInfo.get(position).getVip_price());
+        if(Integer.decode(listInfo.get(position).getEnable_batch()) != 1){
+            list_item_Pici_Name.setText("非批次商品");
+        }else{
+            list_item_Pici_Name.setText(listInfo.get(position).getItem_barcode());
+        }
         item_subno.setText(listInfo.get(position).getItem_subno());
         return super.getView(position,convertView,parent);
     }

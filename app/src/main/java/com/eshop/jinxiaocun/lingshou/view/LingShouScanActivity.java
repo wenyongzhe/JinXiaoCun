@@ -284,7 +284,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
         setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
-        setHeaderTitle(R.id.tv_5, R.string.list_item_beforPrice, 100);
+        setHeaderTitle(R.id.tv_5, R.string.list_item_VipPrice, 100);
         setHeaderTitle(R.id.tv_6, R.string.list_item_Pici_Name, 100);
 
         mScanAdapter = new LingShouScanAdapter(mListData);

@@ -85,6 +85,8 @@ public class Config {
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价
     public final static String GRANT_ITEM_DISCOUNT = "3";//单笔折扣
+    public final static String GRANT_ITEM_JINE= "-1";//取整笔议价最高折让金额 和 单笔议价最高折让金额
+
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();
 

@@ -219,7 +219,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
         mLingShouScanImp.getFlowNo();
-        mLingShouScanImp.getOptAuth();
+        mLingShouScanImp.getOptAuth(Config.GRANT_BILLDIS_COUNT);
     }
 
     @SuppressLint("WrongViewCast")

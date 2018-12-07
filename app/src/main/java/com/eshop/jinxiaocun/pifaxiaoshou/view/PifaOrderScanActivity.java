@@ -14,6 +14,7 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
@@ -61,7 +62,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     TextView mTvUserStore;
 
     private IOtherModel mOtherApi;
-    private ILingshouScan mQueryGoodsApi;
+    private ILingshouScan mLingshouApi;
 
     private CustomerInfoBeanResult mCustomerInfo;
     private PifaOrderScanAdapter mAdapter;
@@ -74,6 +75,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private DanJuMainBeanResultItem mSelectMainBean;
     private String mAddSelectGoodsNo;//添加的商品编码
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
+    private int mModifyPricePermission;//改价权限   1为有权限
 
     @Override
     protected int getLayoutContentId() {
@@ -123,7 +125,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         super.initData();
 
         mOtherApi = new OtherModelImp(this);
-        mQueryGoodsApi = new LingShouScanImp(this);
+        mLingshouApi = new LingShouScanImp(this);
 
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
         if(mSelectMainBean !=null){
@@ -226,6 +228,11 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
+    }
+
+    //取改价权限
+    private void getPricePermission(){
+        mLingshouApi.getOptAuth(Config.GRANT_ITEM_JINE);
     }
 
     //上传记录头数据（即上传主表信息）
@@ -390,7 +397,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             case Config.MESSAGE_FAIL:
                 AlertUtil.showToast(o.toString());
                 break;
-
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
                 OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
@@ -417,7 +423,31 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 }
                 AlertUtil.showToast(o.toString());
                 break;
-
+            case Config.MESSAGE_GET_OPT_AUTH:
+                GetOptAuthResult getOptAuthResult = (GetOptAuthResult) o;
+                //3’密码错误，‘2’没有权限， ‘1’有权限
+                if(getOptAuthResult!=null){
+                    if("1".equals(getOptAuthResult.getIsgrant())){
+                        mModifyPricePermission = 1;
+                        Intent intent = new Intent();
+                        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
+                        intent.setClass(this, ModifyPriceDialog.class);
+                        startActivityForResult(intent, 33);
+                    }else if("2".equals(getOptAuthResult.getIsgrant())){
+                        AlertUtil.showToast("没有改价权限");
+                    }else if("3".equals(getOptAuthResult.getIsgrant())){
+                        AlertUtil.showToast("密码错误,请查看接口");
+                    }else{
+                        AlertUtil.showToast("没有改价权限");
+                    }
+                }else{
+                    AlertUtil.showToast("返回NULL，请查看接口");
+                }
+                break;
+            //取改价权限失败
+            case Config.MESSAGE_ERROR:
+                AlertUtil.showToast(o.toString());
+                break;
         }
     }
 
@@ -488,7 +518,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
-            mQueryGoodsApi.getPLUInfo(barcode);
+            mLingshouApi.getPLUInfo(barcode);
         }
     }
 
@@ -602,10 +632,15 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected void modifyPriceAfter() {
-        Intent intent = new Intent();
-        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
-        intent.setClass(this, ModifyPriceDialog.class);
-        startActivityForResult(intent, 33);
+        //取到过改价权限就不再访问接口了
+        if(mModifyPricePermission==1){
+            Intent intent = new Intent();
+            intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
+            intent.setClass(this, ModifyPriceDialog.class);
+            startActivityForResult(intent, 33);
+        }else{
+            getPricePermission();
+        }
     }
 
     @Override

@@ -127,12 +127,12 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
-    public void getOptAuth() {
+    public void getOptAuth(String ai_grant) {
         GetOptAuthBean mGetOptAuthBean = new GetOptAuthBean();
         mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGetOptAuthBean.getJsonData().setAs_operId(Config.UserId);
         mGetOptAuthBean.getJsonData().setAs_passwd(Config.PassWord);
-        mGetOptAuthBean.getJsonData().setAi_grant(Config.GRANT_BILLDIS_COUNT);
+        mGetOptAuthBean.getJsonData().setAi_grant(ai_grant);
         Map map = ReflectionUtils.obj2Map(mGetOptAuthBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetOptAuthInterface());
     }
@@ -151,12 +151,18 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
-            if(status.equals(Config.MESSAGE_OK+"")){
-                mHandler.handleResule(Config.MESSAGE_GET_OPT_AUTH,mGetOptAuthResult);
-            }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mGetOptAuthResult);
+            try{
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
+                    mHandler.handleResule(Config.MESSAGE_GET_OPT_AUTH,mGetOptAuthResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
             }
+
         }
     }
 

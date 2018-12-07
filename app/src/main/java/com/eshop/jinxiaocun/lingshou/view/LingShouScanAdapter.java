@@ -48,6 +48,7 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         }
         TextView item_name = ViewHolderUtils.get(convertView, R.id.item_name);
         TextView item_no = ViewHolderUtils.get(convertView, R.id.item_no);
+        TextView item_subno = ViewHolderUtils.get(convertView, R.id.item_subno);
         TextView sale_price = ViewHolderUtils.get(convertView, R.id.sale_price);
         TextView sale_qnty = ViewHolderUtils.get(convertView, R.id.sale_qnty);
         TextView sale_beforprice = ViewHolderUtils.get(convertView, R.id.sale_beforprice);
@@ -59,7 +60,7 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         item_name.setText(listInfo.get(position).getItem_name());
         sale_beforprice.setText(listInfo.get(position).getSale_price());
         list_item_Pici_Name.setText(listInfo.get(position).getItem_barcode());
-
+        item_subno.setText(listInfo.get(position).getItem_subno());
         return super.getView(position,convertView,parent);
     }
 

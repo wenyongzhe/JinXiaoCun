@@ -88,6 +88,12 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
     Button btn_yijia;//议价
     @BindView(R.id.btn_zhekou)
     Button btn_zhekou;//折扣
+    @BindView(R.id.tv_total_num)
+    TextView tv_total_num;//商品数
+    @BindView(R.id.tv_order_num)
+    TextView tv_order_num;//记录数
+
+
 
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
@@ -232,6 +238,8 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         ButterKnife.bind(this);
         btSell.setText(R.string.bt_sell);
         tv_check_num.setText("总价：");
+        tv_total_num.setText("商品数：");
+        tv_order_num.setText("记录数：");
         ly_buttom1.setVisibility(View.VISIBLE);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -255,7 +263,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
-//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
+        setHeaderTitle(R.id.tv_2, R.string.list_item_subNo, 180);
 //        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
 
         setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
@@ -704,11 +712,15 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         }
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
+        int goodTotal = 0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
+            goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
         tv_check_num.setText("总价："+total);
+        tv_total_num.setText("商品数："+goodTotal);
+        tv_order_num.setText("记录数："+mListData.size());
     }
 
     private void setSaleFlowBean(int flag){

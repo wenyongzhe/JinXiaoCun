@@ -101,6 +101,7 @@
     <string name="list_item_Searchstr">查询关键词、编码、助词码、附加码</string>
     <string name="list_item_ProdName">商品名称</string>
     <string name="list_item_BarCode">商品条码</string>
+    <string name="list_item_subNo">自编码</string>
     <string name="list_item_ProdStock">商品库存</string>
     <string name="list_item_Spec">规格</string>
     <string name="list_item_Unit">单位</string>

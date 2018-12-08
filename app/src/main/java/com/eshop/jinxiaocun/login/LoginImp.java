@@ -82,7 +82,7 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            Log.e("-----",jsonData);
+            //Log.e("-----",jsonData);
             try{
                 LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){

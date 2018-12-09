@@ -72,7 +72,7 @@ import butterknife.OnClick;
 import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
 
-public class LingShouScanActivity extends BaseScanActivity implements INetWorResult {
+public class LingShouScanActivity extends BaseLinShouScanActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText et_barcode;
@@ -126,13 +126,13 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
         super.onCreate(savedInstanceState);
         mService = new BluetoothService(this, mHandler);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mLinearLayout.setBackgroundColor(getResources().getColor(R.color.item_gray_line));
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available",
                     Toast.LENGTH_LONG).show();
         }
         setScanBroadCast();
     }
-
 
     @Override
     public void onStart() {
@@ -734,7 +734,7 @@ public class LingShouScanActivity extends BaseScanActivity implements INetWorRes
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
-        tv_check_num.setText("总价："+total);
+        tv_check_num.setText("应收金额："+total);
         tv_total_num.setText("商品数："+goodTotal);
         tv_order_num.setText("记录数："+mListData.size());
     }

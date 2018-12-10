@@ -17,11 +17,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,11 +47,14 @@ import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
+import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
+import com.eshop.jinxiaocun.peisong.view.YaohuoOrderScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.SelectPayDialog;
@@ -96,11 +102,18 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     TextView tv_order_num;//记录数
     @BindView(R.id.ib_seach)
     ImageButton ib_seach;
+    @BindView(R.id.et_zhifu_jine)
+    EditText et_zhifu_jine;
+    @BindView(R.id.tv_zhifu_type)
+    Spinner tv_zhifu_type;
+    @BindView(R.id.btn_vip)
+    Button btn_vip;
 
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
     public final static int SELL_ZHENDAN_YIJIA = 112;
     public final static int SELL_ZHENDAN_ZHEKOU = 113;
+    public String Play_type = "RMB";
 
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
@@ -277,6 +290,45 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             }
         });
 
+        //数据源
+        ArrayList<String> spinners = new ArrayList<>();
+        spinners.add("现金");
+        spinners.add("支付宝");
+        spinners.add("微信");
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        tv_zhifu_type.setAdapter(adapter);
+        tv_zhifu_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        Pay_way = "RMB";
+                        break;
+                    case 1:
+                        Pay_way = "ZFB";
+                        break;
+                    case 2:
+                        Pay_way = "WXZ";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        tv_zhifu_type.setSelection(0);
+
+        btn_vip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(total!=null && total!=0.00 & total!=0.0){
+                    Intent mIntent = new Intent(LingShouScanActivity.this,VipPayActivity.class);
+                    mIntent.putExtra("money",total);
+                    startActivityForResult(mIntent,100);
+                }
+            }
+        });
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
         setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
         setHeaderTitle(R.id.tv_2, R.string.list_item_subNo, 180);
@@ -425,7 +477,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 mIntent.putExtra("barcode",et_barcode.getText().toString());
                 startActivityForResult(mIntent,100);
                 break;
-
+            case Config.MESSAGE_VIP_PAY_RESULT:
+                setSaleFlowBean(SELL);
+                break;
         }
     }
 

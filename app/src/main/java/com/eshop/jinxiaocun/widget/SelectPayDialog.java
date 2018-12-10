@@ -55,6 +55,10 @@ public class SelectPayDialog extends Activity implements INetWorResult {
                          iterator.remove();
                      }
                  }
+                GetPayModeResult mGetPayModeResultBean = new GetPayModeResult();
+                mGetPayModeResultBean.setPay_way("VIP");
+                mGetPayModeResultBean.setPay_name("会员卡");
+                mGetPayModeResult.add(mGetPayModeResultBean);
                 mSelectPayListAdapter = new SelectPayListAdapter(mGetPayModeResult);
                 mListView.setAdapter(mSelectPayListAdapter);
                 mSelectPayListAdapter.notifyDataSetChanged();

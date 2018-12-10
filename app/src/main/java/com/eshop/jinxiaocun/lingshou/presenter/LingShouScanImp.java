@@ -28,6 +28,8 @@ import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.UpPalyFlowBean;
 import com.eshop.jinxiaocun.lingshou.bean.UpSallFlowBean;
+import com.eshop.jinxiaocun.lingshou.bean.VipPayBean;
+import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
@@ -491,6 +493,42 @@ public class LingShouScanImp implements ILingshouScan {
                 mHandler.handleResule(Config.MESSAGE_UP_PLAY_FLOW,null);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,null);
+            }
+        }
+    }
+
+    @Override
+    public void sellVipPay(String name,String pass,Double money) {
+        VipPayBean mVipPayBean = new VipPayBean();
+        VipPayBean.VipPayJsonData mVipPayJsonData = mVipPayBean.getJsonData();
+        mVipPayJsonData.setAs_vipNo(name);
+        mVipPayJsonData.setAs_card_pass(pass);
+        mVipPayJsonData.setOper_id(Config.UserName);
+        mVipPayJsonData.setAdec_consume_num(money+"");
+        mVipPayJsonData.setAdec_consume_amt(money+"");
+        mVipPayJsonData.setAdec_sav_amt(money+"");
+        Map map = ReflectionUtils.obj2Map(mVipPayBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new VipPayInterface());
+    }
+
+    //会员卡付款
+    class VipPayInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            VipPayBeanResult.VipPayJson mVipPayJson =  mJsonFormatImp.JsonToBean(jsonData,VipPayBeanResult.VipPayJson.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_VIP_PAY_RESULT,mVipPayJson);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }
         }
     }

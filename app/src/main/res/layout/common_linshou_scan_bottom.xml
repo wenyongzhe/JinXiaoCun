@@ -223,35 +223,8 @@
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:padding="10dp"
+            android:padding="15dp"
             android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="@dimen/txt_size16"
-                    android:textColor="@color/black"
-                    android:paddingRight="10dp"
-                    android:gravity="center_vertical"
-                    android:text="条码" />
-
-                <EditText
-                    android:id="@+id/et_barcode"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:imeOptions="actionSend"
-                    style="@style/EditText_Grey_Border"
-                    android:gravity="left|center_vertical"
-                    android:hint="请扫描/输入精准条码添加商品"
-                    />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -264,18 +237,43 @@
                     android:layout_height="match_parent"
                     android:paddingRight="10dp"
                     android:textSize="16sp"
-                    android:text="客户" />
+                    android:text="支付方式" />
 
-                <com.eshop.jinxiaocun.widget.DrawableTextView
-                    android:id="@+id/tv_pf_user"
+                <Spinner
+                    android:id="@+id/tv_zhifu_type"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    style="@style/TextView_Select"
-                    android:gravity="center_vertical|left"
+                    android:gravity="center_vertical|left"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/txt_size16"
+                    android:textColor="@color/black"
+                    android:paddingRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="支付金额" />
+
+                <EditText
+                    android:id="@+id/et_zhifu_jine"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:imeOptions="actionSend"
+                    style="@style/EditText_Grey_Border"
+                    android:gravity="left|center_vertical"
                     />
 
             </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -350,6 +348,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/zhekou" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider" />
+
+            <Button
+                android:id="@+id/btn_vip"
+                style="@style/Button_blue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/fukuan_vip" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

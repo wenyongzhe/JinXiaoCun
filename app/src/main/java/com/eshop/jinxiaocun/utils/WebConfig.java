@@ -44,7 +44,7 @@ public class WebConfig {
     public static final String QrySheetPluPrice= "QrySheetPluPrice";//单据商品取价
     public static final String QryVouSheetHead= "QryVouSheetHead";//引用单据查询
     public static final String RT_WZF_PAY= "RT-WZF-PAY";//网络支付扣款（微信 支付宝）
-
+    public static final String SellVipPay= "SellVipPay";//会员支付
 
     public static String getPosLogin() {
         return POS_LOGIN;

@@ -133,6 +133,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private static boolean is58mm = true;
     private BluetoothAdapter mBluetoothAdapter = null;
     private String Pay_way = "";
+    private boolean isVipPay = false;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -323,9 +325,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             @Override
             public void onClick(View view) {
                 if(total!=null && total!=0.00 & total!=0.0){
-                    Intent mIntent = new Intent(LingShouScanActivity.this,VipPayActivity.class);
-                    mIntent.putExtra("money",total);
-                    startActivityForResult(mIntent,100);
+                     isVipPay = true;
+                    btSell.performClick();
                 }
             }
         });
@@ -346,6 +347,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     @Override
     public void handleResule(int flag,Object o) {
+        Intent intent;
         switch (flag){
             case Config.MESSAGE_OK:
                 break;
@@ -405,9 +407,15 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     }
                     reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
                 }
-                Intent intent = new Intent(this, SelectPayDialog.class);
-                intent.putExtra("total",total);
-                startActivityForResult(intent,400);
+                if(isVipPay){
+                    Intent mIntent = new Intent(LingShouScanActivity.this,VipPayActivity.class);
+                    mIntent.putExtra("money",total);
+                    startActivityForResult(mIntent,100);
+                }else{
+                    intent = new Intent(this, SelectPayDialog.class);
+                    intent.putExtra("total",total);
+                    startActivityForResult(intent,400);
+                }
              /*   Intent intent = new Intent(this, MoneyDialog.class);
                 intent.putExtra("total",total);
                 startActivityForResult(intent,100);*/
@@ -473,12 +481,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }
                 break;
             case Config.MESSAGE_start_query:
-                Intent mIntent = new Intent(this, QreShanpingActivity.class);
-                mIntent.putExtra("barcode",et_barcode.getText().toString());
-                startActivityForResult(mIntent,100);
+                intent = new Intent(this, QreShanpingActivity.class);
+                intent.putExtra("barcode",et_barcode.getText().toString());
+                startActivityForResult(intent,100);
                 break;
             case Config.MESSAGE_VIP_PAY_RESULT:
-                setSaleFlowBean(SELL);
+                setPlayFlowBean(total+"","VIP");
                 break;
         }
     }

@@ -41,7 +41,8 @@ public class VipPayActivity extends BaseActivity implements ActionBarClickListen
         money = getIntent().getDoubleExtra("money",0.00);
         vip_name = findViewById(R.id.vip_name);
         vip_password = findViewById(R.id.vip_password);
-        vip_money = findViewById(R.id.vip_password);
+        vip_money = findViewById(R.id.vip_money);
+        vip_money.setText(money+"");
         btn_ok = findViewById(R.id.btn_ok);
         mLingShouScanImp = new LingShouScanImp(this);
         btn_ok.setOnClickListener(new View.OnClickListener() {

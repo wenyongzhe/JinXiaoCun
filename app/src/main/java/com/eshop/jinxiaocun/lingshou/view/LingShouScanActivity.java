@@ -20,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -106,8 +108,17 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     EditText et_zhifu_jine;
     @BindView(R.id.tv_zhifu_type)
     Spinner tv_zhifu_type;
+    @BindView(R.id.et_zhifu_jine2)
+    EditText et_zhifu_jine2;
+    @BindView(R.id.tv_zhifu_type2)
+    Spinner tv_zhifu_type2;
     @BindView(R.id.btn_vip)
     Button btn_vip;
+    @BindView(R.id.cb_double_pay)
+    CheckBox cb_double_pay;
+    @BindView(R.id.ly_pay2)
+    LinearLayout ly_pay2;
+
 
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
@@ -133,6 +144,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private static boolean is58mm = true;
     private BluetoothAdapter mBluetoothAdapter = null;
     private String Pay_way = "";
+    private String Pay_way2 = "";
     private boolean isVipPay = false;
 
 
@@ -292,13 +304,24 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             }
         });
 
+        ly_pay2.setVisibility(View.GONE);
+        cb_double_pay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    ly_pay2.setVisibility(View.VISIBLE);
+                }else
+                    ly_pay2.setVisibility(View.GONE);
+            }
+        });
+        cb_double_pay.setChecked(false);
         //数据源
         ArrayList<String> spinners = new ArrayList<>();
         spinners.add("现金");
         spinners.add("支付宝");
         spinners.add("微信");
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tv_zhifu_type.setAdapter(adapter);
         tv_zhifu_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -320,6 +343,35 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             }
         });
         tv_zhifu_type.setSelection(0);
+
+        ArrayList<String> spinners2 = new ArrayList<>();
+        spinners2.add("现金");
+        spinners2.add("支付宝");
+        spinners2.add("微信");
+        final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners2);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tv_zhifu_type2.setAdapter(adapter2);
+        tv_zhifu_type2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        Pay_way2 = "RMB";
+                        break;
+                    case 1:
+                        Pay_way2 = "ZFB";
+                        break;
+                    case 2:
+                        Pay_way2 = "WXZ";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        tv_zhifu_type2.setSelection(0);
+
 
         btn_vip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -797,6 +849,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
         tv_check_num.setText("应收金额："+total);
+        et_zhifu_jine.setText(total+"");
         tv_total_num.setText("商品数："+goodTotal);
         tv_order_num.setText("记录数："+mListData.size());
     }

@@ -64,7 +64,7 @@
                 android:layout_weight="5"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:hint="请输入条码" />
+                android:hint="请扫描授权码" />
 
         </LinearLayout>
 

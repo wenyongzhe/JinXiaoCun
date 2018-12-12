@@ -125,7 +125,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     public final static int SELL_ZHENDAN_YIJIA = 112;
     public final static int SELL_ZHENDAN_ZHEKOU = 113;
     public String Play_type = "RMB";
-
+    public boolean isOk = false;
     private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     private IOtherModel mIOtherModel;
@@ -258,6 +258,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     }
 
     @SuppressLint("WrongViewCast")
+    ArrayList<String> spinners2 = new ArrayList<>();
     @Override
     protected void initView() {
         super.initView();
@@ -305,13 +306,18 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         });
 
         ly_pay2.setVisibility(View.GONE);
+        spinners2.add("现金");
+        spinners2.add("支付宝");
+        spinners2.add("微信");
         cb_double_pay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     ly_pay2.setVisibility(View.VISIBLE);
-                }else
+                }else {
                     ly_pay2.setVisibility(View.GONE);
+                    Pay_way2 = "";
+                }
             }
         });
         cb_double_pay.setChecked(false);
@@ -331,9 +337,19 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                         Pay_way = "RMB";
                         break;
                     case 1:
+                        if(Pay_way2.equals("ZFB") || Pay_way2.equals("WXZ")){
+                            AlertUtil.showAlert(LingShouScanActivity.this,"提示","网络支付只能选择一次。");
+                            tv_zhifu_type.setSelection(0);
+                            return;
+                        }
                         Pay_way = "ZFB";
                         break;
                     case 2:
+                        if(Pay_way2.equals("ZFB") || Pay_way2.equals("WXZ")){
+                            AlertUtil.showAlert(LingShouScanActivity.this,"提示","网络支付只能选择一次。");
+                            tv_zhifu_type.setSelection(0);
+                            return;
+                        }
                         Pay_way = "WXZ";
                         break;
                 }
@@ -344,12 +360,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         });
         tv_zhifu_type.setSelection(0);
 
-        ArrayList<String> spinners2 = new ArrayList<>();
-        spinners2.add("现金");
-        spinners2.add("支付宝");
-        spinners2.add("微信");
         final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners2);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tv_zhifu_type2.setAdapter(adapter2);
         tv_zhifu_type2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -359,9 +371,19 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                         Pay_way2 = "RMB";
                         break;
                     case 1:
+                        if(Pay_way.equals("ZFB") || Pay_way.equals("WXZ")){
+                            AlertUtil.showAlert(LingShouScanActivity.this,"提示","网络支付只能选择一次。");
+                            tv_zhifu_type2.setSelection(0);
+                            return;
+                        }
                         Pay_way2 = "ZFB";
                         break;
                     case 2:
+                        if(Pay_way.equals("ZFB") || Pay_way.equals("WXZ")){
+                            AlertUtil.showAlert(LingShouScanActivity.this,"提示","网络支付只能选择一次。");
+                            tv_zhifu_type2.setSelection(0);
+                            return;
+                        }
                         Pay_way2 = "WXZ";
                         break;
                 }
@@ -370,7 +392,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        tv_zhifu_type2.setSelection(0);
 
 
         btn_vip.setOnClickListener(new View.OnClickListener() {
@@ -464,30 +485,72 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     mIntent.putExtra("money",total);
                     startActivityForResult(mIntent,100);
                 }else{
-                    intent = new Intent(this, SelectPayDialog.class);
-                    intent.putExtra("total",total);
-                    startActivityForResult(intent,400);
+
+                    if(!Pay_way.equals("") && et_zhifu_jine.getText().equals("")){
+                        AlertUtil.showAlert(LingShouScanActivity.this, "提示", "请填写支付金额");
+                    }
+                    if(!Pay_way2.equals("") && et_zhifu_jine2.getText().equals("")){
+                        AlertUtil.showAlert(LingShouScanActivity.this, "提示", "请填写支付金额");
+                    }
+                    Double temTotal = 0.0;
+                    if(Pay_way.equals("RMB") || Pay_way2.equals("RMB")){
+                        if(Pay_way.equals("RMB")){
+                            temTotal = Double.parseDouble(et_zhifu_jine.getText().toString());
+                        }
+                        if(Pay_way2.equals("RMB")){
+                            temTotal += Double.parseDouble(et_zhifu_jine2.getText().toString());
+                        }
+                        change = temTotal - total;
+                        if(!Pay_way2.equals("RMB") || !Pay_way.equals("RMB")){
+                            isOk = false;
+                        }
+                        setPlayFlowBean(temTotal+"","RMB");
+                    }else{
+                        if(!Pay_way2.equals("RMB") || !Pay_way.equals("RMB")){
+                            intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                            startActivityForResult(intent, Config.REQ_QR_CODE);
+                        }
+                    }
+//                    intent = new Intent(this, SelectPayDialog.class);
+//                    intent.putExtra("total",total);
+//                    startActivityForResult(intent,400);
                 }
              /*   Intent intent = new Intent(this, MoneyDialog.class);
                 intent.putExtra("total",total);
                 startActivityForResult(intent,100);*/
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW:
-                mLingShouScanImp.sellSub(FlowNo);
+                if(!Pay_way2.equals("")&&!Pay_way2.equals("RMB") || !Pay_way.equals("")&&!Pay_way.equals("RMB")){
+                    intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);
+                }else{
+                    mLingShouScanImp.sellSub(FlowNo);
+                }
                 break;
             case Config.MESSAGE_SELL_SUB:
-                ToastUtils.showShort(R.string.message_sell_ok);
-                AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change, "确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        AlertUtil.dismissDialog();
-                        if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
-                            Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
-                            startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
-                        }
+                if(isOk){
+                    ToastUtils.showShort(R.string.message_sell_ok);
+                    change = 0.0;
+                    Double temTemPay  = 0.0;
+                    if(!et_zhifu_jine.getText().toString().equals("")){
+                        temTemPay = Double.parseDouble(et_zhifu_jine.getText().toString());
                     }
-                });
+                    if(!et_zhifu_jine2.getText().toString().equals("")){
+                        temTemPay += Double.parseDouble(et_zhifu_jine2.getText().toString());
+                    }
+                    change = temTemPay - total;
+                    AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change, "确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AlertUtil.dismissDialog();
+                            if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+                                Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
+                                startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
+                            }
+                        }
+                    });
 //                printMs();
+                }
                 break;
             case Config.MESSAGE_GET_PAY_MODE:
 
@@ -527,7 +590,15 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     return;
                 }
                 if( mNetPlayBeanResult.getReturn_code().equals("000000")){
-                    setPlayFlowBean(total+"",mNetPlayBeanResult.getPayType());
+                    Double temTotal = 0.0;
+                    if(!Pay_way.equals("") && !Pay_way.equals("RMB")){
+                        temTotal = Double.parseDouble(et_zhifu_jine.getText().toString());
+                    }
+                    if(!Pay_way2.equals("") && !Pay_way2.equals("RMB")){
+                        temTotal += Double.parseDouble(et_zhifu_jine2.getText().toString());
+                    }
+                    setPlayFlowBean(temTotal+"",mNetPlayBeanResult.getPayType());
+                    isOk = true;
                 }else {
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                 }
@@ -815,7 +886,16 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.MESSAGE_CAPTURE_RETURN:
                 String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
-                mLingShouScanImp.RtWzfPay(Pay_way,code,FlowNo,total.toString(),total.toString());
+                String tempayway = "";
+                String temMoney = "0";
+                if(!Pay_way.equals("") && !Pay_way.equals("RMB")){
+                    tempayway = Pay_way;
+                    temMoney = et_zhifu_jine.getText().toString();
+                }else   if(!Pay_way2.equals("") && !Pay_way2.equals("RMB")){
+                    tempayway = Pay_way2;
+                    temMoney = et_zhifu_jine2.getText().toString();
+                }
+                mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);
                 break;
 

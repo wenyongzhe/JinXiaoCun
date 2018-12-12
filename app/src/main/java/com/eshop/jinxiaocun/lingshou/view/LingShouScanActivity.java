@@ -425,6 +425,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_OK:
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.showAlert(LingShouScanActivity.this,"提示","请求失败");
                 break;
             case Config.MESSAGE_PICI:
                 List<GoodsPiciInfoBeanResult> mGoodsPiciInfoBeanResult = (List<GoodsPiciInfoBeanResult>)o;
@@ -501,12 +502,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             temTotal += Double.parseDouble(et_zhifu_jine2.getText().toString());
                         }
                         change = temTotal - total;
-                        if(!Pay_way2.equals("RMB") || !Pay_way.equals("RMB")){
+                        if(!Pay_way2.equals("RMB")&&!Pay_way2.equals("") || !Pay_way.equals("RMB")&& !Pay_way.equals("")){
                             isOk = false;
+                        }else{
+                            isOk = true;
                         }
                         setPlayFlowBean(temTotal+"","RMB");
                     }else{
-                        if(!Pay_way2.equals("RMB") || !Pay_way.equals("RMB")){
+                        if(!Pay_way2.equals("RMB")&&Pay_way2.equals("") || !Pay_way.equals("RMB")&& !Pay_way.equals("")){
                             intent = new Intent(LingShouScanActivity.this, CaptureActivity.class);
                             startActivityForResult(intent, Config.REQ_QR_CODE);
                         }
@@ -1013,6 +1016,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     @OnClick(R.id.btn_add)
     void sell() {
+        isOk = true;
         setSaleFlowBean(SELL);
     }
 

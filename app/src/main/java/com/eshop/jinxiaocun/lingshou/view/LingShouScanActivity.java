@@ -487,11 +487,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     startActivityForResult(mIntent,100);
                 }else{
 
-                    if(!Pay_way.equals("") && et_zhifu_jine.getText().equals("")){
+                    if(!Pay_way.equals("") && et_zhifu_jine.getText().toString().equals("")){
                         AlertUtil.showAlert(LingShouScanActivity.this, "提示", "请填写支付金额");
+                        return;
                     }
-                    if(!Pay_way2.equals("") && et_zhifu_jine2.getText().equals("")){
+                    if(!Pay_way2.equals("") && et_zhifu_jine2.getText().toString().equals("")){
                         AlertUtil.showAlert(LingShouScanActivity.this, "提示", "请填写支付金额");
+                        return;
                     }
                     Double temTotal = 0.0;
                     if(Pay_way.equals("RMB") || Pay_way2.equals("RMB")){

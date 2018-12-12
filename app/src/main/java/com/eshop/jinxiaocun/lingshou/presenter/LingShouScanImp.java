@@ -450,10 +450,12 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
+            int isisBillDiscount = 0;
         }
 
         @Override
         public void handleResult(Response event,String result) {
+            int isisBillDiscount = 0;
         }
 
         @Override

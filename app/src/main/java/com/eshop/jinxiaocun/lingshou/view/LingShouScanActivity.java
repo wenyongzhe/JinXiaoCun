@@ -544,16 +544,23 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                         temTemPay += Double.parseDouble(et_zhifu_jine2.getText().toString());
                     }
                     change = temTemPay - total;
-                    AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change, "确定", new View.OnClickListener() {
+
+                    AlertUtil.showAlert(LingShouScanActivity.this, "找零", "找零"+ change,
+                            "确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             AlertUtil.dismissDialog();
-                            if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
-                                Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
-                                startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
-                            }
                         }
-                    });
+                    },R.string.txt_print, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+                                        Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
+                                        startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
+                                    }
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
 //                printMs();
                 }
                 break;
@@ -626,7 +633,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         }
         Print_Ex();
         finish();
-//        mSaleFlowBeanList
     }
 
     /**

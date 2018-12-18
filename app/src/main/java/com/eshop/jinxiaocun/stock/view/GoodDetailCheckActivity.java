@@ -9,12 +9,11 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
-import com.eshop.jinxiaocun.stock.adapter.StockCheckAdapter;
+import com.eshop.jinxiaocun.stock.adapter.GoodCheckAdapter;
 import com.eshop.jinxiaocun.stock.bean.StockCheckBean;
 import com.eshop.jinxiaocun.stock.bean.StockCheckBeanResult;
 import com.eshop.jinxiaocun.stock.presenter.IStock;
 import com.eshop.jinxiaocun.stock.presenter.IStockImp;
-import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
@@ -23,13 +22,13 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class StockCheckActivity extends CommonBaseScanActivity implements INetWorResult {
+public class GoodDetailCheckActivity extends CommonBaseScanActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
 
     private IStock mServerApi;
-    private StockCheckAdapter mAdapter;
+    private GoodCheckAdapter mAdapter;
 
     private List<StockCheckBeanResult> mListData = new ArrayList<>();
 
@@ -57,7 +56,7 @@ public class StockCheckActivity extends CommonBaseScanActivity implements INetWo
         setHeaderTitle(R.id.tv_8,R.string.list_item_EndDate,100);//结束时间
 
 
-        mAdapter = new StockCheckAdapter(this,mListData);
+        mAdapter = new GoodCheckAdapter(this,mListData);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 

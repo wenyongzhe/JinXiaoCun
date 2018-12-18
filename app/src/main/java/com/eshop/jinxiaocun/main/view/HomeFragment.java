@@ -22,6 +22,7 @@ import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaOrderListActivity;
+import com.eshop.jinxiaocun.stock.view.GoodDetailCheckActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 
@@ -95,7 +96,7 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 1:
-                intent.setClass(Application.mContext, StockCheckActivity.class);
+                intent.setClass(Application.mContext, GoodDetailCheckActivity.class);
                 startActivity(intent);
                 break;
             case 2:

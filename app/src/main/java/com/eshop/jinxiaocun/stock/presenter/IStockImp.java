@@ -1,5 +1,7 @@
 package com.eshop.jinxiaocun.stock.presenter;
 
+import android.util.Log;
+
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
@@ -47,17 +49,19 @@ public class IStockImp implements IStock {
 
         @Override
         public void handleError(Object event) {
+            Log.e("","");
         }
 
         @Override
         public void handleResult(Response event, String result) {
+            Log.e("","");
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    List<StockCheckBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,StockCheckBeanResult.class);
+                    StockCheckBeanResult resultList = mJsonFormatImp.JsonToBean(jsonData,StockCheckBeanResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

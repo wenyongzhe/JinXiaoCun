@@ -49,7 +49,7 @@ public class HomeFragment extends BaseFragment {
     private int[] nameIds = {
             R.string.menu_caigoudan,
 //            R.string.menu_xiaoshoudan,
-            R.string.menu_kucunchaxun,
+            R.string.menu_shanpingchaxun,
             R.string.item_message_lingshou,
             //R.string.menu_diaobo_manage,
             R.string.menu_pandian_manage,

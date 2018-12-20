@@ -1,9 +1,15 @@
 package com.eshop.jinxiaocun.stock.view;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -26,15 +32,19 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
+    @BindView(value = R.id.sp_type)
+    Spinner sp_type;
+    @BindView(R.id.ib_seach)
+    ImageButton ib_seach;
 
     private IStock mServerApi;
     private GoodCheckAdapter mAdapter;
-
+    List<String> listType = new ArrayList<>();
     private List<StockCheckBeanResult> mListData = new ArrayList<>();
 
     @Override
     protected int getLayoutContentId() {
-        return R.layout.activity_stock_check;
+        return R.layout.activity_good_detail_check;
     }
 
     @Override
@@ -43,22 +53,28 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
 //        hasBackDialog = false;
         mLayoutScanBottom.setVisibility(View.GONE);
         mEtBarcode.setOnKeyListener(onKey);
-        setTopToolBar("库存查询",R.mipmap.ic_left_light,"",0,"");
+        setTopToolBar("商品信息查询",R.mipmap.ic_left_light,"",0,"");
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_ProdName,150);//商品名称
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
-        setHeaderTitle(R.id.tv_2,R.string.list_item_Shopinfo,150);//门店信息
-        setHeaderTitle(R.id.tv_3,R.string.list_item_Spec,100);//规格
-        setHeaderTitle(R.id.tv_4,R.string.list_item_Unit,80);//单位
-        setHeaderTitle(R.id.tv_5,R.string.item_kucun,100);//库存
-        setHeaderTitle(R.id.tv_6,R.string.list_item_Pihao,150);//批号
-        setHeaderTitle(R.id.tv_7,R.string.list_item_BeginDate,100);//起始时间
-        setHeaderTitle(R.id.tv_8,R.string.list_item_EndDate,100);//结束时间
-
+        listType.add("精确查询");
+        listType.add("模糊查询");
+        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
+        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
+        sp_type.setAdapter(adapterBCType);
 
         mAdapter = new GoodCheckAdapter(this,mListData);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
+        ib_seach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanResultData(mEtBarcode.getText().toString().trim());
+                /*隐藏软键盘*/
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if(inputMethodManager.isActive()){
+                    inputMethodManager.hideSoftInputFromWindow(ib_seach.getApplicationWindowToken(), 0);
+                }
+            }
+        });
 
     }
 
@@ -66,7 +82,9 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     View.OnKeyListener onKey= new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_UP){
+            if (keyCode == EditorInfo.IME_ACTION_SEARCH
+                    || keyCode == 0
+                    || keyCode == EditorInfo.IME_ACTION_GO || keyCode == 6) { /*判断是否是“GO”键*/
                 scanResultData(mEtBarcode.getText().toString().trim());
                 return true;
             }

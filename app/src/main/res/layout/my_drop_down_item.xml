@@ -8,4 +8,4 @@
           android:textSize="@dimen/txt_size16"
           android:textColor="#666666"
           android:textStyle="bold"
-          android:padding="10dp"/>
+          android:padding="20dp"/>

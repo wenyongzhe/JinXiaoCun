@@ -49,7 +49,7 @@ public class GoodCheckAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_list_stock_check,parent,false);
+            convertView = inflater.inflate(R.layout.item_list_good_check,parent,false);
         }
 
         StockCheckBeanResult obj = listInfo.get(position);

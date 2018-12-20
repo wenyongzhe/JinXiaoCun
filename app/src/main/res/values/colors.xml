@@ -20,7 +20,7 @@
     <color name="black_theme">#333333</color>
     <color name="transparent1">#ffffff</color>
     <color name="whitegray">#aededf</color>
-
+    <color name="bg_spinner">#ccb6bec9</color>
     <!-- comm -->
     <color name="activity_background">#ffffff</color>
     <color name="fragment_background">#ffffff</color>

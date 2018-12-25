@@ -10,11 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.stock.adapter.GoodCheckAdapter;
 import com.eshop.jinxiaocun.stock.bean.StockCheckBean;
 import com.eshop.jinxiaocun.stock.bean.StockCheckBeanResult;
@@ -37,7 +42,33 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     @BindView(R.id.ib_seach)
     ImageButton ib_seach;
 
+    @BindView(R.id.tv_good_name)
+    TextView tv_good_name;
+    @BindView(R.id.tv_good_code)
+    TextView tv_good_code;
+    @BindView(R.id.tv_good_subcode)
+    TextView tv_good_subcode;
+    @BindView(R.id.tv_type)
+    TextView tv_type;
+    @BindView(R.id.tv_unit)
+    TextView tv_unit;
+    @BindView(R.id.tv_product)
+    TextView tv_product;
+    @BindView(R.id.tv_main_provider)
+    TextView tv_main_provider;
+    @BindView(R.id.tv_buy_price)
+    TextView tv_buy_price;
+    @BindView(R.id.tv_sale_price)
+    TextView tv_sale_price;
+    @BindView(R.id.tv_vip_price1)
+    TextView tv_vip_price1;
+    @BindView(R.id.tv_wholesale1)
+    TextView tv_pifajia1;
+    @BindView(R.id.tv_kuchun)
+    TextView tv_kuchun;
+
     private IStock mServerApi;
+    private ILingshouScan mLingShouScanImp;
     private GoodCheckAdapter mAdapter;
     List<String> listType = new ArrayList<>();
     private List<StockCheckBeanResult> mListData = new ArrayList<>();
@@ -96,10 +127,10 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     protected void initData() {
         super.initData();
         mServerApi = new IStockImp(this);
-        getStockCheckData("000008");
+        mLingShouScanImp = new LingShouScanImp(this);
     }
 
-    //库存查询
+    //查询
     private void getStockCheckData(String barCode){
 
         //userIDt先填posid  userid根据注册返回取值
@@ -122,7 +153,16 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("条码不能为空！",Application.mContext);
             return;
         }
-        getStockCheckData(barcode);
+        getGood(barcode);
+        //getStockCheckData(barcode);
+    }
+
+    private void getGood(String barcode){
+        if(sp_type.getSelectedItemPosition()==0){
+            mLingShouScanImp.getPLUInfo(barcode);
+        }else {
+            mLingShouScanImp.getPLULikeInfo(barcode);
+        }
     }
 
     @Override
@@ -157,16 +197,36 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
 
     @Override
     public void handleResule(int flag, Object o) {
+        List<StockCheckBeanResult> mStockCheckBeanResultList = new ArrayList<>();
+        List<GetClassPluResult> mGetClassPluResultList = new ArrayList<>();
+
         switch (flag){
             case Config.MESSAGE_OK:
-                List<StockCheckBeanResult> mStockCheckBeanResultList = new ArrayList<>();
                 mStockCheckBeanResultList.add((StockCheckBeanResult)o);
                 mAdapter.setListInfo(mStockCheckBeanResultList);
                 break;
             case Config.MESSAGE_ERROR:
-                mListData.clear();
-                mAdapter.setListInfo(mListData);
+            case Config.MESSAGE_GOODS_INFOR_FAIL:
                 AlertUtil.showToast(o.toString(), Application.mContext);
+                break;
+            case Config.MESSAGE_start_query://一条数据
+                mGetClassPluResultList = (List<GetClassPluResult>)o;
+                mGetClassPluResultList.addAll(mGetClassPluResultList);
+                GetClassPluResult mGetClassPluResult = mGetClassPluResultList.get(0);
+                tv_good_name.setText(mGetClassPluResult.getItem_name());
+                tv_good_code.setText(mGetClassPluResult.getItem_no());
+                tv_good_subcode.setText(mGetClassPluResult.getItem_subno());
+                tv_type.setText(mGetClassPluResult.getItem_clsno());
+                tv_unit.setText(mGetClassPluResult.getUnit_no());
+                //tv_product.setText(mGetClassPluResult.getItemName());
+                tv_main_provider.setText(mGetClassPluResult.getMain_supcust());
+                tv_buy_price.setText(mGetClassPluResult.getPrice());
+                tv_sale_price.setText(mGetClassPluResult.getSale_price());
+                tv_vip_price1.setText(mGetClassPluResult.getVip_price());
+                tv_pifajia1.setText(mGetClassPluResult.getBase_price());
+                tv_kuchun.setText(mGetClassPluResult.getStock_qty());
+                break;
+            case Config.MESSAGE_GOODS_INFOR://多条数据
                 break;
         }
     }

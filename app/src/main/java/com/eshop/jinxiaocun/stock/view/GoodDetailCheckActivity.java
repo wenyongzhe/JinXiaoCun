@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.stock.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.eshop.jinxiaocun.stock.presenter.IStock;
 import com.eshop.jinxiaocun.stock.presenter.IStockImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.ListviewDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,7 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     private GoodCheckAdapter mAdapter;
     List<String> listType = new ArrayList<>();
     private List<StockCheckBeanResult> mListData = new ArrayList<>();
+    List<GetClassPluResult> mGetClassPluResultList = new ArrayList<>();
 
     @Override
     protected int getLayoutContentId() {
@@ -92,9 +95,6 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
         adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
         sp_type.setAdapter(adapterBCType);
 
-        mAdapter = new GoodCheckAdapter(this,mListData);
-        mListView.setOnItemClickListener(this);
-        mListView.setAdapter(mAdapter);
         ib_seach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,7 +198,6 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     @Override
     public void handleResule(int flag, Object o) {
         List<StockCheckBeanResult> mStockCheckBeanResultList = new ArrayList<>();
-        List<GetClassPluResult> mGetClassPluResultList = new ArrayList<>();
 
         switch (flag){
             case Config.MESSAGE_OK:
@@ -209,25 +208,59 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
             case Config.MESSAGE_GOODS_INFOR_FAIL:
                 AlertUtil.showToast(o.toString(), Application.mContext);
                 break;
-            case Config.MESSAGE_start_query://一条数据
+            case Config.MESSAGE_GOODS_INFOR://一条数据
                 mGetClassPluResultList = (List<GetClassPluResult>)o;
+                if(mGetClassPluResultList!=null && mGetClassPluResultList.size()==0){
+                    AlertUtil.showAlert(GoodDetailCheckActivity.this,"提示","没有数据！");
+                    return;
+                }
                 mGetClassPluResultList.addAll(mGetClassPluResultList);
                 GetClassPluResult mGetClassPluResult = mGetClassPluResultList.get(0);
-                tv_good_name.setText(mGetClassPluResult.getItem_name());
-                tv_good_code.setText(mGetClassPluResult.getItem_no());
-                tv_good_subcode.setText(mGetClassPluResult.getItem_subno());
-                tv_type.setText(mGetClassPluResult.getItem_clsno());
-                tv_unit.setText(mGetClassPluResult.getUnit_no());
-                //tv_product.setText(mGetClassPluResult.getItemName());
-                tv_main_provider.setText(mGetClassPluResult.getMain_supcust());
-                tv_buy_price.setText(mGetClassPluResult.getPrice());
-                tv_sale_price.setText(mGetClassPluResult.getSale_price());
-                tv_vip_price1.setText(mGetClassPluResult.getVip_price());
-                tv_pifajia1.setText(mGetClassPluResult.getBase_price());
-                tv_kuchun.setText(mGetClassPluResult.getStock_qty());
+                reflashView(mGetClassPluResult);
                 break;
-            case Config.MESSAGE_GOODS_INFOR://多条数据
+            case Config.MESSAGE_start_query://多条数据
+                mGetClassPluResultList = (List<GetClassPluResult>)o;
+                ArrayList<String> mString = new ArrayList<>();
+                for(int i=0; i<mGetClassPluResultList.size(); i++){
+                    mString.add(mGetClassPluResultList.get(i).getItem_no());
+                }
+                Intent mIntent = new Intent();
+                mIntent.setClass(GoodDetailCheckActivity.this,ListviewDialog.class);
+                mIntent.putStringArrayListExtra("String",mString);
+                startActivityForResult(mIntent,100);
+
                 break;
+        }
+    }
+
+    private void reflashView(GetClassPluResult mGetClassPluResult){
+        tv_good_name.setText(mGetClassPluResult.getItem_name());
+        tv_good_code.setText(mGetClassPluResult.getItem_no());
+        tv_good_subcode.setText(mGetClassPluResult.getItem_subno());
+        tv_type.setText(mGetClassPluResult.getItem_clsno());
+        tv_unit.setText(mGetClassPluResult.getUnit_no());
+        //tv_product.setText(mGetClassPluResult.getItemName());
+        tv_main_provider.setText(mGetClassPluResult.getMain_supcust());
+        tv_buy_price.setText(mGetClassPluResult.getPrice());
+        tv_sale_price.setText(mGetClassPluResult.getSale_price());
+        tv_vip_price1.setText(mGetClassPluResult.getVip_price());
+        tv_pifajia1.setText(mGetClassPluResult.getBase_price());
+        tv_kuchun.setText(mGetClassPluResult.getStock_qty());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Config.MESSAGE_SELECT_RETURN){
+            String mString = data.getStringExtra("String");
+            GetClassPluResult mGetClassPluResult = new GetClassPluResult();
+            for(int i=0; i<mGetClassPluResultList.size(); i++){
+                if(mGetClassPluResultList.get(i).getItem_no().equals(mString)){
+                    mGetClassPluResult = mGetClassPluResultList.get(i);
+                    break;
+                }
+            }
+            reflashView(mGetClassPluResult);
         }
     }
 }

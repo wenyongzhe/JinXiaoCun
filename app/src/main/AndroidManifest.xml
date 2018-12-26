@@ -258,6 +258,9 @@
         <activity android:name="com.eshop.jinxiaocun.widget.SelectPayDialog"
                   android:theme="@style/MyDialogStyleBottom"
                   android:configChanges="orientation|keyboardHidden" />
+        <activity android:name="com.eshop.jinxiaocun.widget.ListviewDialog"
+                  android:theme="@style/MyDialogStyleBottom"
+                  android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name="com.google.zxing.activity.CaptureActivity"/>
         <activity

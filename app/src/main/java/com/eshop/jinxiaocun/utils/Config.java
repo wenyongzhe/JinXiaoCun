@@ -82,6 +82,8 @@ public class Config {
     public final static int MESSAGE_NET_PAY_RETURN = 39;
     public final static int MESSAGE_start_query = 40;
     public final static int MESSAGE_VIP_PAY_RESULT = 41;
+    public final static int MESSAGE_SELECT_RETURN = 42;
+
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

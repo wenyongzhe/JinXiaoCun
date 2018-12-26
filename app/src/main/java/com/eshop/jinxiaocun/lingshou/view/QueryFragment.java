@@ -85,9 +85,14 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         et_query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP){
+                    return false;
+                }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == 0
-                        || actionId == EditorInfo.IME_ACTION_GO || actionId == 6) { /*判断是否是“GO”键*/
+                        || actionId == EditorInfo.IME_ACTION_GO
+                        || actionId == 6
+                        || actionId == 66) { /*判断是否是“GO”键*/
                     mQueryGoods.getPLULikeInfo(v.getText().toString().trim(),0);
                     /*隐藏软键盘*/
                     InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

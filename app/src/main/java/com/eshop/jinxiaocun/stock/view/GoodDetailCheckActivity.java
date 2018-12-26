@@ -113,9 +113,14 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
     View.OnKeyListener onKey= new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if(event.getAction() == KeyEvent.ACTION_UP){
+                return false;
+            }
             if (keyCode == EditorInfo.IME_ACTION_SEARCH
                     || keyCode == 0
-                    || keyCode == EditorInfo.IME_ACTION_GO || keyCode == 6) { /*判断是否是“GO”键*/
+                    || keyCode == EditorInfo.IME_ACTION_GO
+                    || keyCode == 6
+                    || keyCode == 66) { /*判断是否是“GO”键*/
                 scanResultData(mEtBarcode.getText().toString().trim());
                 return true;
             }
@@ -128,18 +133,6 @@ public class GoodDetailCheckActivity extends CommonBaseScanActivity implements I
         super.initData();
         mServerApi = new IStockImp(this);
         mLingShouScanImp = new LingShouScanImp(this);
-    }
-
-    //查询
-    private void getStockCheckData(String barCode){
-
-        //userIDt先填posid  userid根据注册返回取值
-        StockCheckBean bean = new StockCheckBean();
-        bean.JsonData.UserId = Config.posid;//操作员ID
-        bean.JsonData.BranchNo =Config.branch_no;//机构号
-        bean.JsonData.BarCode = barCode;//编码
-        mServerApi.seachGoodsStockData(bean);
-
     }
 
     @Override

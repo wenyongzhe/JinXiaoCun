@@ -345,16 +345,16 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.get(0).getItem_barcode());
                 mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.get(0).getProduce_date());
                 mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
-                reflashList(mListData,true);
+                reflashList();
                 break;
             case Config.MESSAGE_GOODS_INFOR:
                 mGetClassPluResultList = (List<GetClassPluResult>)o;
-
                 if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
                     getPiCi(mGetClassPluResultList);
                 }else{
-                    mGetClassPluResultList.get(0).setItem_barcode("");
-                    reflashList(mGetClassPluResultList,true);
+                    mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
+                    addListData();
+                    reflashList();
                 }
                 break;
             case Config.MESSAGE_FLOW_NO:
@@ -376,7 +376,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             }
                         }
                     }
-                    reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
+                    reflashList();//更新取价后的价格显示
                 }
                 break;
             case Config.MESSAGE_GETPLU_PRICE:
@@ -391,7 +391,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             }
                         }
                     }
-                    reflashList(mGetClassPluResultList,false);//更新取价后的价格显示
+                    reflashList();//更新取价后的价格显示
                 }
                 if(isVipPay){
                     Intent mIntent = new Intent(LingShouScanActivity.this,VipPayActivity.class);
@@ -510,6 +510,18 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 setPlayFlowBean(total+"","VIP");
                 break;
         }
+    }
+
+    private void addListData(){
+        for (int i=0; i<mListData.size(); i++){
+            for(int j=0; j<mGetClassPluResultList.size(); j++){
+                if(mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())){
+                    mGetClassPluResultList.remove(j);
+                    break;
+                }
+            }
+        }
+        mListData.addAll(mGetClassPluResultList);
     }
 
     //打印小票
@@ -709,16 +721,16 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     getPiCi(mGetClassPluResultList);
                 }else{
                     mGetClassPluResultList.get(0).setItem_barcode("");
-                    reflashList(mGetClassPluResultList,true);
+                    addListData();
+                    reflashList();
                 }
-                reflashList(mGetClassPluResultList,true);
                 break;
             case RESULT_OK:
                 String mCount =  data.getStringExtra("countN");
                 int itemClickPosition = mScanAdapter.getItemClickPosition();
                 GetClassPluResult item = mListData.get(itemClickPosition);
                 item.setSale_qnty(mCount);
-                reflashList(mListData,false);
+                reflashList();
                 break;
             case Config.MESSAGE_MONEY:
                 if(requestCode == 100){
@@ -798,18 +810,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mLingShouScanImp.getBillDiscount(total,FlowNo);
     }
 
-    private void reflashList(List<GetClassPluResult> mGetClassPluResultlist,boolean flag){
-        if(flag){
-            for (int i=0; i<mListData.size(); i++){
-                for(int j=0; j<mGetClassPluResultlist.size(); j++){
-                    if(mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultlist.get(j).getItem_no().trim())){
-                        mGetClassPluResultlist.remove(j);
-                        break;
-                    }
-                }
-            }
-            mListData.addAll(mGetClassPluResultlist);
-        }
+    private void reflashList(){
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
         int goodTotal = 0;
@@ -823,7 +824,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         tv_order_num.setText("记录数："+mListData.size());
     }
 
-    private void setSaleFlowBean(int flag){
+    private void setSaleFlowBean(){
         for(int i=0; i<mListData.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
             GetClassPluResult mGetClassPluResult = mListData.get(i);
@@ -859,17 +860,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
-        switch (flag){
-            case SELL:
-                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL);
-                break;
-            case SELL_ZHENDAN_YIJIA:
-                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL_ZHENDAN_YIJIA);
-                break;
-            case SELL_ZHENDAN_ZHEKOU:
-                mLingShouScanImp.upSallFlow(mSaleFlowBeanList,SELL_ZHENDAN_ZHEKOU);
-                break;
-        }
+        mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
 
     }
 
@@ -903,7 +894,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @OnClick(R.id.btn_add)
     void sell() {
         isOk = true;
-        setSaleFlowBean(SELL);
+        setSaleFlowBean();
     }
 
     @OnClick(R.id.btn_delete)
@@ -914,7 +905,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 return;
             }
             mListData.remove(itemClickPosition);
-            reflashList(mListData,false);
+            reflashList();
         }catch (Exception e){
 
         }
@@ -927,7 +918,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             if(total==null ||total == 0){
                 return;
             }
-            setSaleFlowBean(SELL_ZHENDAN_ZHEKOU);
+            setSaleFlowBean();
 //            Intent intent = new Intent(this, ZheKouDialog.class);
 //            startActivityForResult(intent,100);
         }catch (Exception e){
@@ -942,7 +933,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             if(total==null ||total == 0){
                 return;
             }
-            setSaleFlowBean(SELL_ZHENDAN_YIJIA);
+            setSaleFlowBean();
 //            Intent intent = new Intent(this, MoneyDialog.class);
 //            startActivityForResult(intent,200);
         }catch (Exception e){

@@ -9,7 +9,7 @@ public interface ILingshouScan {
     public void getPLULikeInfo(String barCode);//销售商品模糊查询
     public void getPluPrice(String flow_no,int isBillDiscount);//销售商品取价
     public void sellSub(String flowno);//结算
-    public void upSallFlow(List list,int isBillDiscount);//上传销售流水
+    public void upSallFlow(List list);//上传销售流水
     public void upPlayFlow(List list);//上传付款流水
     public void getOptAuth(String ai_grant);//获取折扣权限
     public void getBillDiscount(Double total,String FlowNo);//整单议价、折扣

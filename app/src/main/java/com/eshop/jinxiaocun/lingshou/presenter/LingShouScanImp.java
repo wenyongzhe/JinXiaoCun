@@ -112,11 +112,11 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
-    public void upSallFlow(List listdata,int isBillDiscount) {
+    public void upSallFlow(List listdata) {
         UpSallFlowBean mUpSallFlowBean = new UpSallFlowBean();
         mUpSallFlowBean.setJsonData(listdata);
         Map map = ReflectionUtils.obj2Map(mUpSallFlowBean);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface(isBillDiscount));
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new UpSallFlowInterface());
 
     }
 
@@ -442,12 +442,6 @@ public class LingShouScanImp implements ILingshouScan {
     //上传销售流水
     class UpSallFlowInterface implements IResponseListener {
 
-        int isisBillDiscount = 0;
-
-        public UpSallFlowInterface(int isisBillDiscount) {
-            this.isisBillDiscount = isisBillDiscount;
-        }
-
         @Override
         public void handleError(Object event) {
             int isisBillDiscount = 0;
@@ -461,17 +455,17 @@ public class LingShouScanImp implements ILingshouScan {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             if(status.equals(Config.MESSAGE_OK+"")){
-                switch (isisBillDiscount){
-                    case  LingShouScanActivity.SELL:
+//                switch (isisBillDiscount){
+//                    case  LingShouScanActivity.SELL:
                         mHandler.handleResule(LingShouScanActivity.SELL,null);
-                        break;
-                    case  LingShouScanActivity.SELL_ZHENDAN_YIJIA:
-                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_YIJIA,null);
-                        break;
-                    case  LingShouScanActivity.SELL_ZHENDAN_ZHEKOU:
-                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_ZHEKOU,null);
-                        break;
-                }
+//                        break;
+//                    case  LingShouScanActivity.SELL_ZHENDAN_YIJIA:
+//                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_YIJIA,null);
+//                        break;
+//                    case  LingShouScanActivity.SELL_ZHENDAN_ZHEKOU:
+//                        mHandler.handleResule(LingShouScanActivity.SELL_ZHENDAN_ZHEKOU,null);
+//                        break;
+//                }
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,null);
             }

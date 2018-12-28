@@ -93,6 +93,7 @@
     <string name="modifycount">改数</string>
     <string name="modifyprice">改价</string>
     <string name="zhekou">整单折扣</string>
+    <string name="zhekou_danbi">折扣</string>
     <string name="fukuan_vip">整单会员卡支付</string>
     <string name="modifytotal">整单改价</string>
     <string name="shenhe">审核</string>

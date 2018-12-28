@@ -26,12 +26,29 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String item_barcode;// 批次号
     private String produce_date; //生产日期
     private String valid_date;//有效日期
-
+    private String source_price;//原价
 
     private String sale_qnty;//:1 //数量
+    private String hasYiJia;//是否已经议价
+
+    public String getHasYiJia() {
+        return hasYiJia;
+    }
+
+    public void setHasYiJia(String hasYiJia) {
+        this.hasYiJia = hasYiJia;
+    }
 
     public String getItem_no() {
         return item_no;
+    }
+
+    public String getSource_price() {
+        return source_price;
+    }
+
+    public void setSource_price(String source_price) {
+        this.source_price = source_price;
     }
 
     public void setItem_no(String item_no) {

@@ -422,7 +422,7 @@
                 android:layout_height="match_parent"
                 style="@style/Button_blue"
                 android:layout_weight="1"
-                android:text="@string/modifytotal" />
+                android:text="@string/modifyprice" />
 
             <View
                 android:layout_width="1dp"
@@ -435,7 +435,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/zhekou" />
+                android:text="@string/zhekou_danbi" />
 
             <View
                 android:layout_width="1dp"

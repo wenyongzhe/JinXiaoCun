@@ -241,7 +241,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
         mLingShouScanImp.getFlowNo();
-        mLingShouScanImp.getOptAuth(Config.GRANT_BILLDIS_COUNT);
+        mLingShouScanImp.getOptAuth(Config.GRANT_ITEM_JINE);
     }
 
     @SuppressLint("WrongViewCast")
@@ -354,8 +354,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }else{
                     mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
                     addListData();
-                    reflashList();
+//                    reflashList();
                 }
+                setSaleFlowBean();
                 break;
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
@@ -376,8 +377,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             }
                         }
                     }
-                    reflashList();//更新取价后的价格显示
                 }
+                reflashList();//更新取价后的价格显示
                 break;
             case Config.MESSAGE_GETPLU_PRICE:
                 mGetPluPriceBeanResult = (List<GetPluPriceBeanResult>)o;
@@ -463,7 +464,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 mGetOptAuthResult = (GetOptAuthResult)o;
                 break;
             case SELL:
-                mLingShouScanImp.getPluPrice(FlowNo,0);
+                mLingShouScanImp.getPluPrice(FlowNo);
                 break;
             case SELL_ZHENDAN_YIJIA:
                 intent = new Intent(this, MoneyDialog.class);
@@ -485,7 +486,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 startActivityForResult(intent,100);
                 break;
             case Config.MESSAGE_BILL_DISCOUNT:
-                mLingShouScanImp.getPluPrice(FlowNo,1);
+                mLingShouScanImp.getPluPrice(FlowNo);
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
                 NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
@@ -825,6 +826,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     }
 
     private void setSaleFlowBean(){
+        mSaleFlowBeanList.clear();
         for(int i=0; i<mListData.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
             GetClassPluResult mGetClassPluResult = mListData.get(i);
@@ -833,7 +835,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             mSaleFlowBean.setFlow_no(FlowNo);
             mSaleFlowBean.setFlow_id((i+1)+"");
             mSaleFlowBean.setItem_no(mGetClassPluResult.getItem_no());
-            mSaleFlowBean.setSource_price(mGetClassPluResult.getSale_price());
+            mSaleFlowBean.setSource_price(mGetClassPluResult.getSource_price());
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
 

@@ -92,13 +92,13 @@ public class LingShouScanImp implements ILingshouScan {
 
     //销售商品取价
     @Override
-    public void getPluPrice(String flow_no,int isBillDiscount) {
+    public void getPluPrice(String flow_no) {
         GetPluPriceBean mGetPluPrice = new GetPluPriceBean();
         mGetPluPrice.getJsonData().setAs_branchNo(Config.branch_no);
         mGetPluPrice.getJsonData().setAs_flowno(flow_no);
         mGetPluPrice.getJsonData().setAs_cardno("");
         Map map = ReflectionUtils.obj2Map(mGetPluPrice);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface(isBillDiscount));
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodPriceInterface());
     }
 
     //结算
@@ -370,6 +370,9 @@ public class LingShouScanImp implements ILingshouScan {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
                     List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
+                    for(int i=0; i<mGoodGetBeanResult.size(); i++){
+                        mGoodGetBeanResult.get(i).setSource_price(mGoodGetBeanResult.get(i).getSale_price());
+                    }
                     if(mGoodGetBeanResult.size()>1){
                         mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
                     }else {
@@ -388,12 +391,6 @@ public class LingShouScanImp implements ILingshouScan {
     //获取商品价格
     class GetGoodPriceInterface implements IResponseListener {
 
-        int isBillDiscount = 0;
-
-        public GetGoodPriceInterface(int isBillDiscount) {
-            this.isBillDiscount = isBillDiscount;
-        }
-
         @Override
         public void handleError(Object event) {
         }
@@ -406,11 +403,8 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             List<GetPluPriceBeanResult> mGetPluPriceBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetPluPriceBeanResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
-                if(isBillDiscount == 0){
-                    mHandler.handleResule(Config.MESSAGE_GETPLU_PRICE,mGetPluPriceBeanResult);
-                }else{
-                    mHandler.handleResule(Config.MESSAGE_BILL_DISCOUNT_RETURN,mGetPluPriceBeanResult);
-                }
+                //mHandler.handleResule(Config.MESSAGE_GETPLU_PRICE,mGetPluPriceBeanResult);
+                mHandler.handleResule(Config.MESSAGE_BILL_DISCOUNT_RETURN,mGetPluPriceBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,mGetPluPriceBeanResult);
             }

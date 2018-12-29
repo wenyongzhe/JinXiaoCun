@@ -90,6 +90,11 @@ public class Config {
     public final static String GRANT_ITEM_DISCOUNT = "3";//单笔折扣
     public final static String GRANT_ITEM_JINE= "-1";//取整笔议价最高折让金额 和 单笔议价最高折让金额
 
+    public static double zhendanYiJialimit = 0.000;//整笔议价最高金额
+    public static double danbiYiJialimit = 0.000;// 单笔议价最高金额
+    public static double zhendanZheKoulimit = 0.000;//整笔折扣最高金额
+    public static double danbiZheKoulimit = 0.000;// 单笔折扣最高金额
+
     //流水号
     public static String FlowNo = branch_no + DeviceID + MyUtils.getTimeYYMMDD();
 

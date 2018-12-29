@@ -21,38 +21,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ZheKouDialog extends Activity {
+public class DanPinGaiJiaDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
-
-    private String mSavediscount = "1";
-    private String mLimitdiscount = "1";
+    Double total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zhekou);
+        setContentView(R.layout.activity_money_count);
+        total = getIntent().getDoubleExtra("total",0.0);
+
         ButterKnife.bind(this);
-        try {
-            mSavediscount = getIntent().getStringExtra("Savediscount");
-            mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
-            txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
-            txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
-        }catch (Exception e){
-        }
 
         txtCountN.setFocusable(true);
         txtCountN.setFocusableInTouchMode(true);
         txtCountN.requestFocus();
 
         Intent intent = getIntent();
-        double limit = intent.getDoubleExtra("limit",0.000);
-        if(limit !=0.000){
-            txtCountN.setHint("最低折扣："+limit);
-        }
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
+        txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
+        double limit = intent.getDoubleExtra("limit",0.000);
+        if(limit !=0.000){
+            txtCountN.setHint("最高折让金额："+limit);
+        }
 
         closeEditTextKeyboard();
 
@@ -70,42 +64,6 @@ public class ZheKouDialog extends Activity {
         mH.sendEmptyMessageDelayed(2,300);
     }
 
-    private void closeEditTextKeyboard() {
-        MyUtils.closeKeyboard(this, txtCountN);
-    }
-
-    @OnClick(R.id.btn_ok)
-    void OnOk()
-    {
-        if (txtCountN.getText().toString().trim().equals("")) {
-            MyUtils.showToast("请输入折扣！", this);
-            return;
-        }
-
-        if (txtCountN.getText().toString().trim().equals("0")) {
-            MyUtils.showToast("请输入大于0的折扣！", this);
-            return;
-        }
-
-        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>100) {
-            MyUtils.showToast("请输入大于0小于等于100的折扣！", this);
-            return;
-        }
-
-        String countN = txtCountN.getText().toString().trim();
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(ZheKouDialog.this.getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-        if(!TextUtils.isEmpty(countN)){
-            Intent intent = new Intent();
-            intent.putExtra("countN",countN);
-            setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
-            finish();
-        }else {
-            MyUtils.showToast("折扣不能为空。",ZheKouDialog.this);
-        }
-    }
-
     Handler mH = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -119,11 +77,46 @@ public class ZheKouDialog extends Activity {
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    private void closeEditTextKeyboard() {
+        MyUtils.closeKeyboard(this, txtCountN);
+    }
+
+    @OnClick(R.id.btn_ok)
+    void OnOk()
+    {
+        if (txtCountN.getText().toString().trim().equals("")) {
+            MyUtils.showToast("请输入数量！", this);
+            return;
+        }
+
+        if (txtCountN.getText().toString().trim().equals("0")) {
+            MyUtils.showToast("请输入大于0的数量！", this);
+            return;
+        }
+
+        String countN = txtCountN.getText().toString().trim();
+        if(total>0.0 && Double.parseDouble(countN)<total){
+            MyUtils.showToast("请输入大于等于"+total+"的数！", this);
+            return;
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(DanPinGaiJiaDialog.this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+        if(!TextUtils.isEmpty(countN)){
+            Intent intent = new Intent();
+            intent.putExtra("countN",countN);
+            setResult(Config.MESSAGE_MONEY, intent);
+            finish();
+        }else {
+            MyUtils.showToast("数量不能为空。",DanPinGaiJiaDialog.this);
+        }
+    }
+
     @OnClick(R.id.btn_cancel)
     void OnCancel()
     {
         InputMethodManager inputMethodManager2 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager2.hideSoftInputFromWindow(ZheKouDialog.this.getCurrentFocus().getWindowToken(),
+        inputMethodManager2.hideSoftInputFromWindow(DanPinGaiJiaDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         Intent intent = new Intent();
         setResult(RESULT_CANCELED, intent);

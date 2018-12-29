@@ -3,24 +3,36 @@ package com.eshop.jinxiaocun.base.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
+import com.eshop.jinxiaocun.base.IJsonFormat;
+import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.db.DBHelper;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.CrashHandler;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.Stack;
 
-public class Application extends android.app.Application {
+import okhttp3.Response;
+
+public class Application extends android.app.Application implements INetWorResult {
 
     private static Stack<Activity> activityStack;
     private static Application singleton;
     public static String IMEI;
     public static Context mContext;
+    private ILingshouScan mLingShouScanImp;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -54,6 +66,7 @@ public class Application extends android.app.Application {
         FileUtils.createOrExistsDir(Config.logPath);
         FileUtils.createOrExistsFile(Config.logFilePath);
 
+        getLimit();
     }
 
     public static String getIMEI() {
@@ -147,4 +160,71 @@ public class Application extends android.app.Application {
         }
     }
 
+    @Override
+    public void handleResule(int flag, Object o) {
+        Intent intent;
+        switch (flag) {
+            case Config.MESSAGE_OK:
+                break;
+            case Config.MESSAGE_ERROR:
+
+                break;
+            case Config.MESSAGE_GET_OPT_AUTH:
+
+                break;
+        }
+    }
+
+    IJsonFormat mJsonFormatImp = new JsonFormatImp();
+    private void getLimit(){
+        mLingShouScanImp = new LingShouScanImp(this);
+        //-1：取整笔议价最高折让金额 和 单笔议价最高折让金额
+        mLingShouScanImp.getOptAuth(Config.GRANT_ITEM_JINE,new IResponseListener(){
+            @Override
+            public void handleError(Object event) {
+            }
+            @Override
+            public void handleResult(Response event, String result) {
+            }
+            @Override
+            public void handleResultJson(String status, String msg, String jsonData) {
+                try{
+                    if(status.equals(Config.MESSAGE_OK+"")){
+                        GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
+                        Config.zhendanYiJialimit = mGetOptAuthResult.getLimitdiscount();
+                        Config.danbiYiJialimit = mGetOptAuthResult.getSavediscount();
+                    }else{
+                        AlertUtil.showAlert(mContext, "提示", "请求失败");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    AlertUtil.showAlert(mContext, "提示", "请求失败");
+                }
+            }
+        });
+        //单笔折扣
+        mLingShouScanImp.getOptAuth(Config.GRANT_ITEM_DISCOUNT,new IResponseListener(){
+            @Override
+            public void handleError(Object event) {
+            }
+            @Override
+            public void handleResult(Response event, String result) {
+            }
+            @Override
+            public void handleResultJson(String status, String msg, String jsonData) {
+                try{
+                    if(status.equals(Config.MESSAGE_OK+"")){
+                        GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
+                        Config.zhendanZheKoulimit = mGetOptAuthResult.getLimitdiscount();
+                        Config.danbiZheKoulimit = mGetOptAuthResult.getSavediscount();
+                    }else{
+                        AlertUtil.showAlert(mContext, "提示", "请求失败");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    AlertUtil.showAlert(mContext, "提示", "请求失败");
+                }
+            }
+        });
+    }
 }

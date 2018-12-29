@@ -56,6 +56,8 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
+import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
@@ -471,8 +473,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 startActivityForResult(intent,200);
                 break;
             case SELL_ZHENDAN_ZHEKOU:
-                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant().equals("1")){
-                    if(Double.parseDouble(mGetOptAuthResult.getSavediscount()) <= Double.parseDouble(mGetOptAuthResult.getLimitdiscount())){
+                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant() == 1){
+                    if(mGetOptAuthResult.getSavediscount() <= mGetOptAuthResult.getLimitdiscount()){
                         ToastUtils.showShort("请先在服务器设置折扣！");
                         return;
                     }
@@ -747,10 +749,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
                 Double int_zhekou = Double.parseDouble(zhekou);
-                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant().equals("1")){
-                    if((int_zhekou/100)>=Double.parseDouble(mGetOptAuthResult.getSavediscount()) && (int_zhekou/100)<=Double.parseDouble(mGetOptAuthResult.getLimitdiscount())){
+                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant() == 1){
+                    if((int_zhekou/100)>=mGetOptAuthResult.getSavediscount() && (int_zhekou/100)<=mGetOptAuthResult.getLimitdiscount()){
                     }else{
-                        ToastUtils.showShort("折扣必须在"+Double.parseDouble(mGetOptAuthResult.getSavediscount())*100+"-"+Double.parseDouble(mGetOptAuthResult.getLimitdiscount())*100);
+                        ToastUtils.showShort("折扣必须在"+mGetOptAuthResult.getSavediscount()*100+"-"+mGetOptAuthResult.getLimitdiscount()*100);
                         return;
                     }
                 }
@@ -759,6 +761,32 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 //                setSaleFlowBean(SELL_ZHENDAN_YIJIA);
                 getBillDiscount(int_zhekou*total);
                 break;
+//            case Config.MESSAGE_MONEY:
+//                if(requestCode == 100){
+//                    String mMoney =  data.getStringExtra("countN");
+//                    payMoney = Double.parseDouble(mMoney);
+//                    change = payMoney - total;
+//                    setPlayFlowBean(total+"","RMB");
+//                }else if(requestCode == 200){ //整单议价、折扣
+//                    String zhekou =  data.getStringExtra("countN");
+//                    getBillDiscount(Double.parseDouble(zhekou));
+//                }
+//                break;
+//            case Config.MESSAGE_INTENT_ZHEKOU:
+//                String zhekou =  data.getStringExtra("countN");
+//                Double int_zhekou = Double.parseDouble(zhekou);
+//                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant() == 1){
+//                    if((int_zhekou/100)>=mGetOptAuthResult.getSavediscount() && (int_zhekou/100)<=mGetOptAuthResult.getLimitdiscount()){
+//                    }else{
+//                        ToastUtils.showShort("折扣必须在"+mGetOptAuthResult.getSavediscount()*100+"-"+mGetOptAuthResult.getLimitdiscount()*100);
+//                        return;
+//                    }
+//                }
+////                total = int_zhekou*total;
+////                tv_check_num.setText("总价："+total);
+////                setSaleFlowBean(SELL_ZHENDAN_YIJIA);
+//                getBillDiscount(int_zhekou*total);
+//                break;
             case Config.MESSAGE_SELECT_PAY_RETURN:
                 String payway =  data.getStringExtra("Pay_way");
                 Pay_way = payway;
@@ -917,12 +945,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @OnClick(R.id.btn_zhekou)
     void btn_zhekou() {
         try {
-            if(total==null ||total == 0){
+            if(mScanAdapter.getItemClickPosition() == -1){
+                ToastUtils.showShort("请选择商品");
                 return;
             }
-            setSaleFlowBean();
-//            Intent intent = new Intent(this, ZheKouDialog.class);
-//            startActivityForResult(intent,100);
+            Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            intent.putExtra("limit",Config.danbiZheKoulimit);
+            startActivityForResult(intent,100);
         }catch (Exception e){
 
         }
@@ -932,12 +961,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @OnClick(R.id.btn_yijia)
     void btn_yijia() {
         try {
-            if(total==null ||total == 0){
+            if(mScanAdapter.getItemClickPosition() == -1){
+                ToastUtils.showShort("请选择商品");
                 return;
             }
-            setSaleFlowBean();
-//            Intent intent = new Intent(this, MoneyDialog.class);
-//            startActivityForResult(intent,200);
+            Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
+            intent.putExtra("limit",Config.danbiYiJialimit);
+            startActivityForResult(intent,200);
         }catch (Exception e){
 
         }

@@ -1,5 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
+import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
+
 import java.util.List;
 
 public interface ILingshouScan {
@@ -12,6 +14,7 @@ public interface ILingshouScan {
     public void upSallFlow(List list);//上传销售流水
     public void upPlayFlow(List list);//上传付款流水
     public void getOptAuth(String ai_grant);//获取折扣权限
+    public void getOptAuth(String ai_grant,IResponseListener mIResponseListener);//获取折扣权限
     public void getBillDiscount(Double total,String FlowNo);//整单议价、折扣
     public void getPayMode();//付款方式
     public void RtWzfPay(String payWay,String auth_code,String flowNo,String payAmount,String totalAmount);//网络支付扣款

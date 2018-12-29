@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ZheKouDialog extends Activity {
+public class DanPinZheKouDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
@@ -94,7 +94,7 @@ public class ZheKouDialog extends Activity {
 
         String countN = txtCountN.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(ZheKouDialog.this.getCurrentFocus().getWindowToken(),
+        inputMethodManager.hideSoftInputFromWindow(DanPinZheKouDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         if(!TextUtils.isEmpty(countN)){
             Intent intent = new Intent();
@@ -102,7 +102,7 @@ public class ZheKouDialog extends Activity {
             setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
             finish();
         }else {
-            MyUtils.showToast("折扣不能为空。",ZheKouDialog.this);
+            MyUtils.showToast("折扣不能为空。",DanPinZheKouDialog.this);
         }
     }
 
@@ -123,7 +123,7 @@ public class ZheKouDialog extends Activity {
     void OnCancel()
     {
         InputMethodManager inputMethodManager2 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager2.hideSoftInputFromWindow(ZheKouDialog.this.getCurrentFocus().getWindowToken(),
+        inputMethodManager2.hideSoftInputFromWindow(DanPinZheKouDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         Intent intent = new Intent();
         setResult(RESULT_CANCELED, intent);

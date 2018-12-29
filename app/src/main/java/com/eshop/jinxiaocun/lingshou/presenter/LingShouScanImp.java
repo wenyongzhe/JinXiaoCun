@@ -129,6 +129,17 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
+    public void getOptAuth(String ai_grant,IResponseListener mIResponseListener) {
+        GetOptAuthBean mGetOptAuthBean = new GetOptAuthBean();
+        mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mGetOptAuthBean.getJsonData().setAs_operId(Config.UserId);
+        mGetOptAuthBean.getJsonData().setAs_passwd(Config.PassWord);
+        mGetOptAuthBean.getJsonData().setAi_grant(ai_grant);
+        Map map = ReflectionUtils.obj2Map(mGetOptAuthBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,mIResponseListener);
+    }
+
+    @Override
     public void getOptAuth(String ai_grant) {
         GetOptAuthBean mGetOptAuthBean = new GetOptAuthBean();
         mGetOptAuthBean.getJsonData().setAs_branchNo(Config.branch_no);

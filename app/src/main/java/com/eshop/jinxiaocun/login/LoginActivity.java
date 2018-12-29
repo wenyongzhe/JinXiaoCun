@@ -135,9 +135,6 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
         CommonUtility.getInstance().closeKeyboard(this, editPassword);
     }
 
-
-
-    @OnClick(R.id.btn_login)
     public void OnLogin() {
         try {
             if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this)) {
@@ -231,7 +228,9 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 LoginBeanResult mGetFlowNoBeanResult = (LoginBeanResult)o;
                 Config.intValue = mGetFlowNoBeanResult.getIntValue();
                 Config.strgrant = mGetFlowNoBeanResult.getStrgrant();
-
+                Config.UserName = editUser.getText().toString().trim();
+                Config.UserId = editUser.getText().toString().trim();
+                Config.PassWord = editPassword.getText().toString().trim();
                 //ToastUtils.showLong("登录成功！");
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);

@@ -42,6 +42,11 @@ public class MoneyDialog extends Activity {
         Intent intent = getIntent();
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
+        txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
+        double limit = intent.getDoubleExtra("limit",0.000);
+        if(limit !=0.000){
+            txtCountN.setHint("最高折让金额："+limit);
+        }
 
         closeEditTextKeyboard();
 

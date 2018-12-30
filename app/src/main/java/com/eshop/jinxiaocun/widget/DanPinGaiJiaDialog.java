@@ -26,6 +26,7 @@ public class DanPinGaiJiaDialog extends Activity {
     @BindView(R.id.txtCountN)
     EditText txtCountN;
     Double total;
+    double limit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class DanPinGaiJiaDialog extends Activity {
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
         txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
-        double limit = intent.getDoubleExtra("limit",0.000);
+        limit = intent.getDoubleExtra("limit",0.000);
         if(limit !=0.000){
             txtCountN.setHint("最高折让金额："+limit);
         }
@@ -85,7 +86,7 @@ public class DanPinGaiJiaDialog extends Activity {
     void OnOk()
     {
         if (txtCountN.getText().toString().trim().equals("")) {
-            MyUtils.showToast("请输入数量！", this);
+            MyUtils.showToast("请输入金额！", this);
             return;
         }
 
@@ -94,11 +95,8 @@ public class DanPinGaiJiaDialog extends Activity {
             return;
         }
 
+
         String countN = txtCountN.getText().toString().trim();
-        if(total>0.0 && Double.parseDouble(countN)<total){
-            MyUtils.showToast("请输入大于等于"+total+"的数！", this);
-            return;
-        }
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(DanPinGaiJiaDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);

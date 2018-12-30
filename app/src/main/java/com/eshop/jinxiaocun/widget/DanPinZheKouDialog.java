@@ -25,14 +25,14 @@ public class DanPinZheKouDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
-
+    double limit;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zhekou);
+        setContentView(R.layout.activity_danping_zhekou);
         ButterKnife.bind(this);
         try {
             mSavediscount = getIntent().getStringExtra("Savediscount");
@@ -47,7 +47,7 @@ public class DanPinZheKouDialog extends Activity {
         txtCountN.requestFocus();
 
         Intent intent = getIntent();
-        double limit = intent.getDoubleExtra("limit",0.000);
+        limit = intent.getDoubleExtra("limit",0.000);
         if(limit !=0.000){
             txtCountN.setHint("最低折扣："+limit);
         }
@@ -87,8 +87,8 @@ public class DanPinZheKouDialog extends Activity {
             return;
         }
 
-        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>100) {
-            MyUtils.showToast("请输入大于0小于等于100的折扣！", this);
+        if (Double.valueOf(txtCountN.getText().toString().trim())<limit) {
+            MyUtils.showToast("请输入大于"+limit+"的折扣！", this);
             return;
         }
 

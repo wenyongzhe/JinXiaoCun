@@ -31,7 +31,7 @@ public class DanPinGaiJiaDialog extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_money_count);
+        setContentView(R.layout.activity_danpin_gaijia);
         total = getIntent().getDoubleExtra("total",0.0);
 
         ButterKnife.bind(this);
@@ -94,7 +94,10 @@ public class DanPinGaiJiaDialog extends Activity {
             MyUtils.showToast("请输入大于0的数量！", this);
             return;
         }
-
+        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>limit) {
+            MyUtils.showToast("请输入大于0小于等于"+limit+"的金额！", this);
+            return;
+        }
 
         String countN = txtCountN.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -106,7 +109,7 @@ public class DanPinGaiJiaDialog extends Activity {
             setResult(Config.MESSAGE_MONEY, intent);
             finish();
         }else {
-            MyUtils.showToast("数量不能为空。",DanPinGaiJiaDialog.this);
+            MyUtils.showToast("金额不能为空。",DanPinGaiJiaDialog.this);
         }
     }
 

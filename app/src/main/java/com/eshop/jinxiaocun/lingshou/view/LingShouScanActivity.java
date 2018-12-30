@@ -704,6 +704,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        double temprice;
         switch (resultCode){
             case SystemSettingActivity.REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
@@ -730,36 +731,25 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case RESULT_OK:
                 String mCount =  data.getStringExtra("countN");
-                int itemClickPosition = mScanAdapter.getItemClickPosition();
-                GetClassPluResult item = mListData.get(itemClickPosition);
+                GetClassPluResult item = getSelectObject();
                 item.setSale_qnty(mCount);
                 reflashList();
                 break;
             case Config.MESSAGE_MONEY:
-                if(requestCode == 100){
-                    String mMoney =  data.getStringExtra("countN");
-                    payMoney = Double.parseDouble(mMoney);
-                    change = payMoney - total;
-                    setPlayFlowBean(total+"","RMB");
-                }else if(requestCode == 200){ //整单议价、折扣
-                    String zhekou =  data.getStringExtra("countN");
-                    getBillDiscount(Double.parseDouble(zhekou));
-                }
+                String gaijia =  data.getStringExtra("countN");
+                GetClassPluResult mGetClassPluResult = getSelectObject();
+                temprice = Double.valueOf(mGetClassPluResult.getSale_price()) - Double.valueOf(gaijia);
+                mGetClassPluResult.setSale_price(temprice+"");
+                mGetClassPluResult.setHasYiJia(true);
+                reflashList();
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
-                Double int_zhekou = Double.parseDouble(zhekou);
-                if(mGetOptAuthResult!=null && mGetOptAuthResult.getIsgrant() == 1){
-                    if((int_zhekou/100)>=mGetOptAuthResult.getSavediscount() && (int_zhekou/100)<=mGetOptAuthResult.getLimitdiscount()){
-                    }else{
-                        ToastUtils.showShort("折扣必须在"+mGetOptAuthResult.getSavediscount()*100+"-"+mGetOptAuthResult.getLimitdiscount()*100);
-                        return;
-                    }
-                }
-//                total = int_zhekou*total;
-//                tv_check_num.setText("总价："+total);
-//                setSaleFlowBean(SELL_ZHENDAN_YIJIA);
-                getBillDiscount(int_zhekou*total);
+                GetClassPluResult mClass = getSelectObject();
+                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
+                mClass.setSale_price(temprice+"");
+                mClass.setHasYiJia(true);
+                reflashList();
                 break;
 //            case Config.MESSAGE_MONEY:
 //                if(requestCode == 100){
@@ -837,6 +827,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     //整单议价、折扣
     private void getBillDiscount(Double total){
         mLingShouScanImp.getBillDiscount(total,FlowNo);
+    }
+
+    private GetClassPluResult getSelectObject(){
+        int itemClickPosition = mScanAdapter.getItemClickPosition();
+        GetClassPluResult item = mListData.get(itemClickPosition);
+        return item;
     }
 
     private void reflashList(){
@@ -942,6 +938,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     }
 
+    private boolean canModifyPrice(GetClassPluResult mGetClassPluResult){
+        if(mGetClassPluResult.isHasYiJia()){
+            ToastUtils.showShort("已做议价或折扣处理。");
+            return false;
+        }
+        return true;
+    }
+
     @OnClick(R.id.btn_zhekou)
     void btn_zhekou() {
         try {
@@ -949,10 +953,16 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("请选择商品");
                 return;
             }
+            GetClassPluResult item = getSelectObject();
+            if( !canModifyPrice(item))return;
+            if(!item.getEnable_discount().equals("1")){
+                ToastUtils.showShort("此商品不允许打折。");
+            }
             Intent intent = new Intent(this, DanPinZheKouDialog.class);
             intent.putExtra("limit",Config.danbiZheKoulimit);
             startActivityForResult(intent,100);
         }catch (Exception e){
+            Log.e("","");
 
         }
 
@@ -964,6 +974,11 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             if(mScanAdapter.getItemClickPosition() == -1){
                 ToastUtils.showShort("请选择商品");
                 return;
+            }
+            GetClassPluResult item = getSelectObject();
+            if( !canModifyPrice(item))return;
+            if(!item.getChange_price().equals("1")){
+                ToastUtils.showShort("此商品不允许议价。");
             }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
             intent.putExtra("limit",Config.danbiYiJialimit);

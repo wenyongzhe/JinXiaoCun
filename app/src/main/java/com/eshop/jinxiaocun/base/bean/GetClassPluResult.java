@@ -29,13 +29,13 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String source_price;//原价
 
     private String sale_qnty;//:1 //数量
-    private String hasYiJia;//是否已经议价
+    private boolean hasYiJia = false;//是否已经议价
 
-    public String getHasYiJia() {
+    public boolean isHasYiJia() {
         return hasYiJia;
     }
 
-    public void setHasYiJia(String hasYiJia) {
+    public void setHasYiJia(boolean hasYiJia) {
         this.hasYiJia = hasYiJia;
     }
 

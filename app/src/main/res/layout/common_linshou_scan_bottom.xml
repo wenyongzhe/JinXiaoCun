@@ -444,6 +444,7 @@
 
             <Button
                 android:id="@+id/btn_vip"
+                android:visibility="gone"
                 style="@style/Button_blue"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

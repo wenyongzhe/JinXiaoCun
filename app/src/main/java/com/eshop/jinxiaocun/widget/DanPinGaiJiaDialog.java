@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.Config;
@@ -25,16 +29,22 @@ public class DanPinGaiJiaDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
-    Double total;
+    @BindView(R.id.tv_oldprice)
+    TextView tv_oldprice;
+    @BindView(R.id.tv_newprice)
+    TextView tv_newprice;
+
+    double oldPrice;
     double limit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danpin_gaijia);
-        total = getIntent().getDoubleExtra("total",0.0);
-
         ButterKnife.bind(this);
+
+        oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
+        tv_oldprice.setText("￥"+oldPrice);
 
         txtCountN.setFocusable(true);
         txtCountN.setFocusableInTouchMode(true);
@@ -48,6 +58,25 @@ public class DanPinGaiJiaDialog extends Activity {
         if(limit !=0.000){
             txtCountN.setHint("最高折让金额："+limit);
         }
+
+        txtCountN.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    double price = Double.parseDouble(charSequence.toString().trim());
+                    if(price>0){
+                        tv_newprice.setText("￥"+(oldPrice-price));
+                    }
+                }catch (Exception e){
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         closeEditTextKeyboard();
 

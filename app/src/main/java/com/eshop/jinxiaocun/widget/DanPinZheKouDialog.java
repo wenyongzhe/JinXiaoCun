@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.Config;
@@ -25,7 +28,12 @@ public class DanPinZheKouDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
+    @BindView(R.id.tv_oldprice)
+    TextView tv_oldprice;
+    @BindView(R.id.tv_newprice)
+    TextView tv_newprice;
     double limit;
+    double oldPrice;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
 
@@ -53,6 +61,28 @@ public class DanPinZheKouDialog extends Activity {
         }
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
+
+        oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
+        tv_oldprice.setText("￥"+oldPrice);
+
+        txtCountN.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    double price = Double.parseDouble(charSequence.toString().trim());
+                    if(price>0){
+                        tv_newprice.setText("￥"+(oldPrice*price));
+                    }
+                }catch (Exception e){
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         closeEditTextKeyboard();
 

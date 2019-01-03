@@ -49,8 +49,6 @@ import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
-import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
-import com.eshop.jinxiaocun.peisong.view.YaohuoOrderScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
@@ -58,10 +56,8 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
-import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
-import com.eshop.jinxiaocun.widget.SelectPayDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
@@ -962,6 +958,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("此商品不允许打折。");
             }
             Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
             intent.putExtra("limit",Config.danbiZheKoulimit);
             startActivityForResult(intent,100);
         }catch (Exception e){
@@ -984,6 +981,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("此商品不允许议价。");
             }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
+            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
             intent.putExtra("limit",Config.danbiYiJialimit);
             startActivityForResult(intent,200);
         }catch (Exception e){

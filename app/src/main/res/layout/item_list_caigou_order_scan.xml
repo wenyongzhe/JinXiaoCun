@@ -19,15 +19,7 @@
             <TextView
                 android:id="@+id/tv_xuhao"
                 style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_product_name"
-                style="@style/AutoScrollTextView"
-                android:layout_width="150dip"
+                android:layout_width="50dip"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:maxLines="1" />
@@ -42,6 +34,14 @@
 
             <TextView
                 android:id="@+id/tv_zi_code"
+                style="@style/AutoScrollTextView"
+                android:layout_width="150dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_product_name"
                 style="@style/AutoScrollTextView"
                 android:layout_width="150dip"
                 android:layout_height="match_parent"
@@ -72,7 +72,13 @@
                 android:gravity="center"
                 android:maxLines="1" />
 
-
+            <TextView
+                android:id="@+id/tv_giveaway_number"
+                style="@style/TextView_Grey"
+                android:layout_width="100dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1" />
 
         </LinearLayout>
     </LinearLayout>

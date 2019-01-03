@@ -37,6 +37,7 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
+import com.eshop.jinxiaocun.widget.InputRemarksDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
@@ -65,7 +66,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     private IOtherModel mOtherApi;
     private ILingshouScan mQueryGoodsApi;
-
     private ProviderInfoBeanResult mProviderInfo;//供应商信息
     private CaigouOrderScanAdapter mAdapter;
 
@@ -74,8 +74,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private String mStr_OrderNo;//采购订单单据号
     private String mCheckflag = "0";//0未审核，1审核
     private String SupCust_No ="";
+    // 用来计算点击间隔时间
+    private long clickTime = 0;
     private DanJuMainBeanResultItem mSelectMainBean;
-    private String mAddSelectGoodsNo;//添加的商品编码
+    private GetClassPluResult mAddSelectGoods;//添加的新商品
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
 
     @Override
@@ -91,6 +93,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         setTopToolBarRightTitleAndStyle("查找商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
+        mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
         mTvReceivingWarehouse.setText(Config.branch_no);
@@ -108,13 +111,14 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             }
         });
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,100);//序号
-        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdName,150);//商品名称
-        setHeaderTitle(R.id.tv_2,R.string.list_item_ProdCode,150);//商品编码
-        setHeaderTitle(R.id.tv_3,R.string.list_item_ZiCode,150);//自编码
-        setHeaderTitle(R.id.tv_4,R.string.list_item_Amount,100);//金额
+        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
+        setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
+        setHeaderTitle(R.id.tv_2,R.string.list_item_ZiCode,150);//自编码
+        setHeaderTitle(R.id.tv_3,R.string.list_item_ProdName,150);//商品名称
+        setHeaderTitle(R.id.tv_4,R.string.list_item_AllAmount,100);//金额
         setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
+        setHeaderTitle(R.id.tv_7,R.string.list_item_giveAway_Number,100);//赠送数量
 
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
@@ -182,6 +186,15 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mSelectGoodsEntity = mListDatas.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
+        if ((System.currentTimeMillis() - clickTime) > 500) {
+            clickTime= System.currentTimeMillis();
+        }else{
+            AlertUtil.showToast("快速点击两次了，可以去修改备注");
+            Intent intent = new Intent(this,InputRemarksDialog.class);
+            intent.putExtra("Remarks","快速点击两次了，可以去修改备注");
+            startActivityForResult(intent,55);
+
+        }
     }
 
     @OnClick(R.id.btn_print)
@@ -202,12 +215,15 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     break;
                 }
             }
-            if(!isSame){//不存在则添加 ，已经存则直接刷新
-                mListDatas.add(scanOrSelectGoods);
-                mAddSelectGoodsNo = scanOrSelectGoods.getItem_no();
+            if(!isSame){//不存在则取商品价格后添加 ，已经存则直接刷新
+                mAddSelectGoods = scanOrSelectGoods;
                 //单据商品取价
                 mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
+            }
+            if(mListDatas.size()>0){//默认选中最后一条
+                mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                mAdapter.setItemClickPosition(mListDatas.size()-1);
             }
             mAdapter.setListInfo(mListDatas);
             upDateUI();
@@ -222,7 +238,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             zje += MyUtils.convertToFloat(data.getSale_qnty(),0)*
                     MyUtils.convertToFloat(data.getSale_price(),0);
         }
-
+        mTvAllRowNumber.setText(""+mListDatas.size());
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
     }
@@ -272,7 +288,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
-            // 单据明细获取
+            // 从列表进入 获取单据明细
             case Config.MESSAGE_OK:
                 List<OrderDetailBeanResult> orderDetailDatas = (List<OrderDetailBeanResult>) o;
                 for (OrderDetailBeanResult detailData : orderDetailDatas) {
@@ -337,6 +353,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     }
                 }
 
+                if(mListDatas.size()>0){//默认选中和第一条
+                    mSelectGoodsEntity = mListDatas.get(0);
+                    mAdapter.setItemClickPosition(0);
+                }
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
@@ -391,6 +411,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 break;
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
+                mListDatas.add(mAddSelectGoods);
                 OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
                 for (int i=0 ; i<mListDatas.size();i++) {
                     GetClassPluResult bean = mListDatas.get(i);
@@ -402,17 +423,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                         break;
                     }
                 }
-                mAddSelectGoodsNo = null;
+                if(mListDatas.size()>0){//默认选中最后一条
+                    mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                    mAdapter.setItemClickPosition(mListDatas.size()-1);
+                }
+                mAddSelectGoods = null;
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
             case Config.MESSAGE_GET_PRICE_FAIL:
-                for (int i = 0; i < mListDatas.size(); i++) {
-                    if(mListDatas.get(i).getItem_no().equals(mAddSelectGoodsNo)){
-                        mListDatas.remove(i);
-                        break;
-                    }
-                }
+                mAddSelectGoods = null;
                 AlertUtil.showToast(o.toString());
                 break;
 
@@ -467,6 +487,11 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 44 && resultCode == RESULT_OK){
             GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
             addGoodsData(entity);
+        }
+
+        if(requestCode == 55 && resultCode == RESULT_OK){
+            String remarks = data.getStringExtra("Remarks");
+            AlertUtil.showToast("修改好了 "+remarks);
         }
 
     }
@@ -671,7 +696,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mListDatas.clear();
+        if(mListDatas!=null){
+            mListDatas.clear();
+            mListDatas=null;
+        }
     }
 
 }

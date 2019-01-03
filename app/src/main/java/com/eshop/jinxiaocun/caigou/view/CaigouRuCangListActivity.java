@@ -62,13 +62,13 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
     @Override
     protected void initView() {
         super.initView();
-
-        setTopToolBar("采购入仓列表", R.mipmap.ic_left_light, "", 0, "");
+        //采购入仓 改为 采购收货
+        setTopToolBar("采购收货列表", R.mipmap.ic_left_light, "", 0, "");
         setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,100);//序号
+        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
         setHeaderTitle(R.id.tv_1,R.string.list_item_Status,100);//单据状态
         setHeaderTitle(R.id.tv_2,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_3,R.string.list_item_BillType,100);// 单据类型

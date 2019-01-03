@@ -246,7 +246,7 @@
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/layout_heigth40"
         android:layout_marginLeft="@dimen/activity_list_bottom"
         android:layout_marginRight="@dimen/activity_list_bottom"
         android:layout_marginBottom="@dimen/activity_list_bottom"

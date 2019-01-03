@@ -59,6 +59,7 @@ public class CaigouRucangScanAdapter extends BaseAdapter {
         TextView tv_je = ViewHolderUtils.get(convertView, R.id.tv_je);
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
         TextView tv_number = ViewHolderUtils.get(convertView, R.id.tv_number);
+        TextView tv_giveaway_number = ViewHolderUtils.get(convertView, R.id.tv_giveaway_number);
 
         tv_product_name.setSelected(true);
         tv_product_code.setSelected(true);
@@ -72,6 +73,7 @@ public class CaigouRucangScanAdapter extends BaseAdapter {
         tv_je.setText(String.format(Locale.CANADA, "%.2f",zje));
         tv_price.setText(listInfo.get(position).getSale_price());
         tv_number.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
+        tv_giveaway_number.setText(0+listInfo.get(position).getUnit_no());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);

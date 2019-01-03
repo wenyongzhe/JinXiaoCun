@@ -69,7 +69,7 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
 
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,100);//序号
+        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
         setHeaderTitle(R.id.tv_1,R.string.list_item_Status,100);//单据状态
         setHeaderTitle(R.id.tv_2,R.string.list_item_FormIndex,150);//单据号
         setHeaderTitle(R.id.tv_3,R.string.list_item_BillType,100);// 单据类型

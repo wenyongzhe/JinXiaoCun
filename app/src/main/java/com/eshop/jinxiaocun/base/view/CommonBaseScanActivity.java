@@ -48,6 +48,10 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected Button mBtnModifyPrice;
     @BindView(R.id.ll_scan_bottom_zsl_zje)
     protected LinearLayout mLayoutScanBottomZslZje;
+    @BindView(R.id.ll_allRowNumber)
+    protected LinearLayout mLayoutAllRowNumber;
+    @BindView(R.id.tv_allRowNumber)
+    protected TextView mTvAllRowNumber;//总行数
     @BindView(R.id.tv_ZSL)
     protected TextView mTvZsl;//总数量
     @BindView(R.id.tv_ZJE)

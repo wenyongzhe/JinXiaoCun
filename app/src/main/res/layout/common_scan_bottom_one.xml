@@ -243,13 +243,43 @@
     <LinearLayout
         android:id="@+id/ll_scan_bottom_zsl_zje"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:visibility="gone"
         android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_allRowNumber"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="总行数："
+                android:textSize="@dimen/text_14"
+                />
+
+            <TextView
+                android:id="@+id/tv_allRowNumber"
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="@dimen/text_14"
+                android:textColor="@color/red"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_ZSL"
@@ -265,6 +295,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="总数量："
+                android:textSize="@dimen/text_14"
                 />
 
             <TextView
@@ -273,6 +304,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textSize="@dimen/text_14"
                 android:textColor="@color/red"
                 />
 
@@ -292,6 +324,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="总金额："
+                android:textSize="@dimen/text_14"
                 />
 
             <TextView
@@ -300,6 +333,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textSize="@dimen/text_14"
                 android:textColor="@color/red"
                 />
 
@@ -311,7 +345,7 @@
     <LinearLayout
         android:id="@+id/ll_scan_bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/layout_heigth40"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"

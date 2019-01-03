@@ -118,6 +118,7 @@
     <string name="list_item_CountN2">实际数量</string>
     <string name="list_item_CountN3">实收数量</string>
     <string name="list_item_CountN5">数量</string>
+    <string name="list_item_giveAway_Number">赠送数量</string>
     <string name="list_item_CountN6">验收数</string>
     <string name="list_item_Price">价格</string>
     <string name="list_item_salePrice">售价</string>

@@ -76,6 +76,7 @@
                 android:id="@+id/tv_giveaway_number"
                 style="@style/TextView_Grey"
                 android:layout_width="100dip"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:maxLines="1" />

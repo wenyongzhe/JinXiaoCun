@@ -118,7 +118,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         setHeaderTitle(R.id.tv_4,R.string.list_item_AllAmount,100);//总金额
         setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
-        setHeaderTitle(R.id.tv_7,R.string.list_item_giveAway_Number,100);//赠送数量
+//        setHeaderTitle(R.id.tv_7,R.string.list_item_giveAway_Number,100);//赠送数量
 
         mAdapter = new CaigouRucangScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
@@ -187,15 +187,15 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         mSelectGoodsEntity = mListDatas.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
-        if ((System.currentTimeMillis() - clickTime) > 500) {
-            clickTime= System.currentTimeMillis();
-        }else{
-            AlertUtil.showToast("快速点击两次了，可以去修改备注");
-            Intent intent = new Intent(this,InputRemarksDialog.class);
-            intent.putExtra("Remarks","快速点击两次了，可以去修改备注");
-            startActivityForResult(intent,55);
-
-        }
+        //TODO 备注先不做
+//        if ((System.currentTimeMillis() - clickTime) > 500) {
+//            clickTime= System.currentTimeMillis();
+//        }else{
+//            Intent intent = new Intent(this,InputRemarksDialog.class);
+//            intent.putExtra("Remarks","快速点击两次了，可以去修改备注");
+//            startActivityForResult(intent,55);
+//
+//        }
     }
 
     @OnClick(R.id.btn_print)

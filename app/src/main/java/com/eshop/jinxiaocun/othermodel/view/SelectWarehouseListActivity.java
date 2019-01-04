@@ -79,20 +79,6 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
 
         setHeaderTitle(R.id.tv_2,R.string.list_item_Customer_zjm,150);
 
-        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getWarehouseInfo();
-            }
-        });
-
-        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getWarehouseInfo();
-            }
-        });
-
         mAdapter = new WarehouseInfoListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
@@ -161,7 +147,6 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
 
     @Override
     public void handleResule(int flag, Object o) {
-        mListView.onRefreshComplete();
         switch (flag){
             case Config.MESSAGE_OK:
                 mListInfo = (List<WarehouseInfoBeanResult>) o;

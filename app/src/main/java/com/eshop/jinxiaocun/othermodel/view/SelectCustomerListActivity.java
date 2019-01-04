@@ -150,6 +150,7 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
                         mListInfo.addAll((List<CustomerInfoBeanResult>) o);
                     }
                 }
+
                 mAdapter.setListInfo(mListInfo);
                 break;
             case Config.MESSAGE_ERROR:

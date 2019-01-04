@@ -325,36 +325,36 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
                     }
                 }
 
-                for (OrderDetailBeanResult detailData : orderDetailDatas) {
-                    GetClassPluResult obj = new GetClassPluResult();
-                    obj.setItem_name(detailData.getName());
-                    obj.setItem_no(detailData.getBarCode());
-                    obj.setItem_barcode(detailData.getPluBatch());//批次
-                    obj.setItem_subno(detailData.getSelfCode());//自编码
-                    obj.setUnit_no(detailData.getUnit());
-                    obj.setSale_qnty(detailData.getCheckNum()+"");
-                    obj.setStock_qty(detailData.getStockNum()+"");
-                    obj.setPrice(detailData.getBuyPrice()+"");//进价
-                    obj.setSale_price(detailData.getSalePrice()+"");//销价
-                    obj.setProduce_date(detailData.getMadeDate());
-                    obj.setValid_date(detailData.getVaildDate());
-                    obj.setEnable_batch(detailData.getEnable_batch());
-
-                    boolean isSave = false;
-                    for ( int i=0; i<mOldListDatas.size();i++) {
-                        GetClassPluResult data = mOldListDatas.get(i);
-                        if(detailData.getBarCode().equals(data.getItem_no())){
-                            isSave = true;
-                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
-                            mOldListDatas.get(i).setSale_qnty(number+"");
-                            break;
-                        }
-                    }
-
-                    if(!isSave){//不存在则添加
-                        mOldListDatas.add(obj);
-                    }
-                }
+//                for (OrderDetailBeanResult detailData : orderDetailDatas) {
+//                    GetClassPluResult obj = new GetClassPluResult();
+//                    obj.setItem_name(detailData.getName());
+//                    obj.setItem_no(detailData.getBarCode());
+//                    obj.setItem_barcode(detailData.getPluBatch());//批次
+//                    obj.setItem_subno(detailData.getSelfCode());//自编码
+//                    obj.setUnit_no(detailData.getUnit());
+//                    obj.setSale_qnty(detailData.getCheckNum()+"");
+//                    obj.setStock_qty(detailData.getStockNum()+"");
+//                    obj.setPrice(detailData.getBuyPrice()+"");//进价
+//                    obj.setSale_price(detailData.getSalePrice()+"");//销价
+//                    obj.setProduce_date(detailData.getMadeDate());
+//                    obj.setValid_date(detailData.getVaildDate());
+//                    obj.setEnable_batch(detailData.getEnable_batch());
+//
+//                    boolean isSave = false;
+//                    for ( int i=0; i<mOldListDatas.size();i++) {
+//                        GetClassPluResult data = mOldListDatas.get(i);
+//                        if(detailData.getBarCode().equals(data.getItem_no())){
+//                            isSave = true;
+//                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+//                            mOldListDatas.get(i).setSale_qnty(number+"");
+//                            break;
+//                        }
+//                    }
+//
+//                    if(!isSave){//不存在则添加
+//                        mOldListDatas.add(obj);
+//                    }
+//                }
 
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();

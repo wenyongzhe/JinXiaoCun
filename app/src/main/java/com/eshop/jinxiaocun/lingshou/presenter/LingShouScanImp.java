@@ -22,6 +22,8 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPayModeBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPayModeResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemInfoBean;
 import com.eshop.jinxiaocun.lingshou.bean.NetPlayBean;
 import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.SellSubBean;
@@ -528,6 +530,38 @@ public class LingShouScanImp implements ILingshouScan {
             VipPayBeanResult.VipPayJson mVipPayJson =  mJsonFormatImp.JsonToBean(jsonData,VipPayBeanResult.VipPayJson.class);
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_VIP_PAY_RESULT,mVipPayJson);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+            }
+        }
+    }
+
+    @Override
+    public void getSystemInfo() {
+        GetSystemInfoBean mGetSystemInfoBean = new GetSystemInfoBean();
+        mGetSystemInfoBean.getJsonData().setBranchNo(Config.branch_no);
+        mGetSystemInfoBean.getJsonData().setPOSId("");
+        mGetSystemInfoBean.getJsonData().setUserId(Config.UserId);
+        Map map = ReflectionUtils.obj2Map(mGetSystemInfoBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetSystemInfoInterface());
+    }
+
+    //抹零、四舍五入
+    class GetSystemInfoInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            GetSystemBeanResult.SystemJson mSystemJson =  mJsonFormatImp.JsonToBean(jsonData,GetSystemBeanResult.SystemJson.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_GET_SYSTEM_INFO_RETURN,mSystemJson);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }

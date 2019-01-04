@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -8,20 +9,25 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PayActivity extends BaseActivity implements ActionBarClickListener, INetWorResult {
 
@@ -40,6 +46,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private Button btn_ok;
     private Spinner sp_payway;
     private Double money = 0.00;
+    GetSystemBeanResult.SystemJson mSystemJson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +76,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
-
+        mLingShouScanImp.getSystemInfo();
     }
 
     VipPayBeanResult mVipPayBeanResult;
@@ -85,6 +92,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 mVipPayBeanResult = (VipPayBeanResult)o;
                 setResult(Config.MESSAGE_VIP_PAY_RESULT);
                 finish();
+                break;
+            case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
+                mSystemJson = (GetSystemBeanResult.SystemJson)o;
                 break;
         }
     }
@@ -109,5 +119,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     }
 
+    @OnClick(R.id.btn_moling)
+    void btn_moling() {
+        try {
+
+        }catch (Exception e){
+
+        }
+
+    }
 
 }

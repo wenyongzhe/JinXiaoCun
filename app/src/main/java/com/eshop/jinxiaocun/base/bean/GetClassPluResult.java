@@ -30,6 +30,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
 
     private String sale_qnty;//:1 //数量
     private boolean hasYiJia = false;//是否已经议价
+    private String orderType;//保存本地时与单据类型绑定
 
     public boolean isHasYiJia() {
         return hasYiJia;
@@ -223,6 +224,13 @@ public class GetClassPluResult extends ListBean implements Serializable{
         this.valid_date = valid_date;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
 
     @Override
     public boolean equals(Object obj) {

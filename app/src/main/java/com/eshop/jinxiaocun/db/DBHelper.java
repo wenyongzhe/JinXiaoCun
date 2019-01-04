@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 
 import java.lang.reflect.Field;
@@ -54,6 +56,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 + cloumFile(PandianDetailBeanResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
+        //创建表结构  商品信息
+        sql = "create table "+ Config.GETCLASSPLURESULT+"("+ "id integer primary key autoincrement," + cloumFile(GetClassPluResult.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构  单据主体信息
+        sql = "create table "+ Config.DANJUMAINBEANRESULTITEM+"("+ "id integer primary key autoincrement," + cloumFile(DanJuMainBeanResultItem.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
     }
 
     private String cloumFile(Class bean){
@@ -94,10 +104,47 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(table, null, values);
     }
 
-    public void execSQL(String sql)
-    {
+    public void execSQL(String sql) {
         db = getWritableDatabase();
         db.execSQL(sql);
+    }
+
+    /**执行Sql语句
+     * @strSql
+     * @values
+     * @withTrans
+     */
+    public void exeSql(String strSql, String[] values) {
+        exeSql(strSql, values, false);
+    }
+
+    /**执行Sql语句
+     * @strSql
+     * @values
+     * @withTrans
+     */
+    public void exeSql(String strSql, String[] values, boolean withTrans) {
+        if (withTrans){
+            db.beginTransaction();
+            try {
+                db.execSQL(strSql, values);
+                db.setTransactionSuccessful();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+                db.endTransaction();
+            }
+        }
+        else {
+            try {
+                db.execSQL(strSql, values);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+            }
+        }
     }
 
     //查询方法

@@ -107,6 +107,9 @@ public class Config {
     public static String UP_MAIN_DANJU = "upMainDanJu";
     public static String UP_DETAIL_DANJU = "upDetailDanJu";
     public static final String PANDIAN_DETAIL_GOODS = "PANDIANDETAILGOODS";
+    public static final String GETCLASSPLURESULT ="GetClassPluResult";
+    public static final String DANJUMAINBEANRESULTITEM ="DanJuMainBeanResultItem";
+
     //门店组
     public static String ShopGroup = "";
 

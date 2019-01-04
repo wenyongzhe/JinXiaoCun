@@ -93,7 +93,7 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvUserStore.setText("[1001]总仓库");
+        mTvUserStore.setText("["+Config.branch_no+"]");
 
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override

@@ -20,7 +20,21 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PayActivity extends BaseActivity implements ActionBarClickListener, INetWorResult {
+
+    @BindView(R.id.btn_moling)
+    Button btn_moling;//抹零
+    @BindView(R.id.btn_zhengdanzhekou)
+    Button btn_zhengdanzhekou;//整单折扣
+    @BindView(R.id.btn_zhengdanyijia)
+    Button btn_zhengdanyijia;//整单议价
+    @BindView(R.id.btn_zhengdanquxiao)
+    Button btn_zhengdanquxiao;//整单取消
+    @BindView(R.id.btn_yingyeyuan)
+    Button btn_yingyeyuan;//营业员
 
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
@@ -33,6 +47,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.activity_pay, null);
         mLinearLayout.addView(bottomView,-1,params);
+        ButterKnife.bind(this);
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
         money = getIntent().getDoubleExtra("money",0.00);
         btn_ok = findViewById(R.id.btn_ok);
@@ -50,6 +65,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         spinners.add("现金");
         spinners.add("支付宝");
         spinners.add("微信");
+        spinners.add("会员卡");
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);

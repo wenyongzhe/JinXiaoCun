@@ -98,6 +98,11 @@
     <string name="modifytotal">整单改价</string>
     <string name="shenhe">审核</string>
     <string name="deleteOrder">删单</string>
+    <string name="moling">抹零</string>
+    <string name="zhengdanzhekou">整单折扣</string>
+    <string name="zhengdanyijia">整单议价</string>
+    <string name="zhengdanquxiao">整单取消</string>
+    <string name="yingyeyuan">营业员</string>
 
     <string name="list_item_ProdStore">所在库位</string>
     <string name="list_item_ProdCode">商品编码</string>

@@ -3,125 +3,154 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="@color/white"
-    android:padding="20dp">
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
+    android:paddingBottom="5dp">
 
 
-<LinearLayout android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:padding="20dp"
-              android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:textSize="@dimen/txt_size22"
-            android:textColor="@color/black"
-            android:paddingRight="10dp"
-            android:gravity="center"
-            android:text="应收金额" />
-
-        <TextView
-            android:id="@+id/et_price"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:imeOptions="actionSend"
-            style="@style/EditText_Grey_Border"
-            android:textSize="@dimen/txt_size22"
-            android:text="￥50"
-            android:gravity="center"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="30dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="@dimen/txt_size16"
-            android:textColor="@color/black"
-            android:paddingRight="10dp"
-            android:gravity="center_vertical"
-            android:text="支付方式" />
-        <Spinner
-            android:id="@+id/sp_payway"
-            android:gravity="center"
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
-
-    </LinearLayout>
-
-
-    <Button
-        android:layout_marginTop="50dp"
-        android:id="@+id/btn_ok"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        style="@style/Button_blue"
-        android:text="@string/ok" />
-</LinearLayout>
-
-<LinearLayout
-android:background="@color/white"
-android:orientation="vertical"
-android:layout_width="fill_parent"
-android:layout_gravity="bottom"
-android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/button_background"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            style="@style/Button_blue"
-            android:layout_weight="1"
-            android:text="@string/add" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:text="应收金额"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size22"/>
 
-        <Button
-            android:id="@+id/btn_delete"
-            style="@style/Button_blue"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/delete" />
+            <TextView
+                android:id="@+id/et_price"
+                style="@style/EditText_Grey_Border"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:imeOptions="actionSend"
+                android:text="￥50"
+                android:textSize="@dimen/txt_size22"
+                />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_modify_count"
-            style="@style/Button_blue"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/modifycount" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:text="支付方式"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size16"/>
+
+            <Spinner
+                android:id="@+id/sp_payway"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+
     </LinearLayout>
-</LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ly_buttom"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_above="@id/btn_ok"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/button_background"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_moling"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                style="@style/Button_blue"
+                android:layout_weight="1"
+                android:text="@string/moling" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider" />
+
+            <Button
+                android:id="@+id/btn_zhengdanzhekou"
+                style="@style/Button_blue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/zhengdanzhekou" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider" />
+
+            <Button
+                android:id="@+id/btn_zhengdanyijia"
+                style="@style/Button_blue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/zhengdanyijia" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider" />
+
+            <Button
+                android:id="@+id/btn_zhengdanquxiao"
+                style="@style/Button_blue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/zhengdanquxiao" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider" />
+
+            <Button
+                android:id="@+id/btn_yingyeyuan"
+                style="@style/Button_blue"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/yingyeyuan" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        style="@style/Button_blue"
+        android:text="@string/ok" />
 </RelativeLayout>

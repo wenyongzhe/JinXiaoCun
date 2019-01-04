@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     >
 
         <LinearLayout
             android:layout_marginTop="5dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:orientation="vertical">
 
            <!-- <LinearLayout
@@ -162,11 +163,11 @@
             android:background="@color/white"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="fill_parent"
                 android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical" >
 
@@ -357,7 +358,7 @@
                     android:layout_marginEnd="5dp"
                     android:listSelector="#00000000"
                     android:divider="@null"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     />
 
             </LinearLayout>
@@ -367,67 +368,72 @@
 
 
     <LinearLayout
-        android:background="@color/white"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
+        android:layout_height="115dp"
         android:layout_gravity="bottom"
-        android:layout_height="wrap_content">
+        android:background="@color/white"
+        android:orientation="vertical">
+
         <LinearLayout
+            android:id="@+id/li"
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:id="@+id/li"
-            android:orientation="horizontal">
+            android:paddingRight="5dp">
+
             <TextView
                 android:id="@+id/tv_check_num"
                 android:layout_width="match_parent"
-                android:textSize="15dp"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/gray"
-                android:layout_height="match_parent" />
+                android:textSize="15dp"/>
+
             <TextView
                 android:id="@+id/tv_total_num"
                 android:layout_width="match_parent"
-                android:textSize="15dp"
+                android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:textColor="@color/gray"
                 android:gravity="left|center_vertical"
-                android:layout_height="match_parent" />
+                android:textColor="@color/gray"
+                android:textSize="15dp"/>
+
             <TextView
                 android:id="@+id/tv_order_num"
                 android:layout_width="match_parent"
-                android:textSize="15dp"
+                android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:textColor="@color/gray"
                 android:gravity="left|center_vertical"
-                android:layout_height="match_parent" />
+                android:textColor="@color/gray"
+                android:textSize="15dp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ly_buttom1"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@color/button_background"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btn_yijia"
+                style="@style/Button_blue"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                style="@style/Button_blue"
                 android:layout_weight="1"
-                android:text="@string/modifyprice" />
+                android:text="@string/modifyprice"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <Button
                 android:id="@+id/btn_zhekou"
@@ -435,44 +441,45 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/zhekou_danbi" />
+                android:text="@string/zhekou_danbi"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <Button
                 android:id="@+id/btn_vip"
-                android:visibility="gone"
                 style="@style/Button_blue"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:text="@string/fukuan_vip"
                 android:textSize="@dimen/text_14"
-                android:text="@string/fukuan_vip" />
+                android:visibility="gone"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@color/button_background"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_add"
+                style="@style/Button_blue"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                style="@style/Button_blue"
                 android:layout_weight="1"
-                android:text="@string/add" />
+                android:text="@string/add"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <Button
                 android:id="@+id/btn_delete"
@@ -480,12 +487,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/delete" />
+                android:text="@string/delete"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <Button
                 android:id="@+id/btn_modify_count"
@@ -493,7 +500,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/modifycount" />
+                android:text="@string/modifycount"/>
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

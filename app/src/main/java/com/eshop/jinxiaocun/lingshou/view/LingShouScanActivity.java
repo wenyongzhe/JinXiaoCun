@@ -922,6 +922,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         isOk = true;
         //setSaleFlowBean();
         Intent mIntent = new Intent(this,PayActivity.class);
+        mIntent.putExtra("money",total);
         startActivity(mIntent);
 
     }

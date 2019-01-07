@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
@@ -41,6 +42,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     Button btn_zhengdanquxiao;//整单取消
     @BindView(R.id.btn_yingyeyuan)
     Button btn_yingyeyuan;//营业员
+    @BindView(R.id.et_price)
+    TextView et_price;
+
 
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
@@ -56,7 +60,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
+
         money = getIntent().getDoubleExtra("money",0.00);
+        String totalStr = money+"";
+        if((totalStr.length()-totalStr.indexOf("."))>3){
+            totalStr = totalStr.substring(0,totalStr.indexOf(".")+4);
+        }
+        et_price.setText("￥"+totalStr);
+
         btn_ok = findViewById(R.id.btn_ok);
         sp_payway = findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
@@ -122,11 +133,53 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_moling)
     void btn_moling() {
         try {
+            if(mSystemJson==null){
+                return;
+            }
 
+            //0-实收，1- 抹去分 3- 抹去角分，3-元以后的四舍五入，4角以下四舍五入
+            switch (mSystemJson.getValue()){
+                case "0":
+                    break;
+                case "1":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+            }
         }catch (Exception e){
-
         }
+    }
 
+    @OnClick(R.id.btn_zhengdanzhekou)
+    void btn_zhengdanzhekou() {
+        try {
+        }catch (Exception e){
+        }
+    }
+
+
+    @OnClick(R.id.btn_zhengdanyijia)
+    void btn_zhengdanyijia() {
+        try {
+        }catch (Exception e){
+        }
+    }
+
+
+    @OnClick(R.id.btn_zhengdanquxiao)
+    void btn_zhengdanquxiao() {
+        try {
+        }catch (Exception e){
+        }
+    }
+
+    @OnClick(R.id.btn_yingyeyuan)
+    void btn_yingyeyuan() {
+        try {
+        }catch (Exception e){
+        }
     }
 
 }

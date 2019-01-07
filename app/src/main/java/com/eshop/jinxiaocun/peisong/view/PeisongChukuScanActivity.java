@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.peisong.view;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +14,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
@@ -32,6 +34,8 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
+import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
@@ -60,7 +64,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
     DrawableTextView mTvTiaoRu;//调入
 
     private IOtherModel mOtherApi;
-    private ILingshouScan mQueryGoodsApi;
+    private ILingshouScan mLingshouApi;
 
     private WarehouseInfoBeanResult mStoreInfo;//门店、仓库、机构、分部
     private PeisongChukuScanAdapter mAdapter;
@@ -73,6 +77,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
     private DanJuMainBeanResultItem mSelectMainBean;
     private String mAddSelectGoodsNo;//添加的商品编码
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
+    private int mModifyPricePermission;//改价权限   1为有权限
 
     @Override
     protected int getLayoutContentId() {
@@ -124,7 +129,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         super.initData();
 
         mOtherApi = new OtherModelImp(this);
-        mQueryGoodsApi = new LingShouScanImp(this);
+        mLingshouApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
 
         if(mSelectMainBean !=null){
@@ -231,6 +236,11 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
 
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
+    }
+
+    //取改价权限
+    private void getPricePermission(){
+        mLingshouApi.getOptAuth(Config.GRANT_ITEM_JINE);
     }
 
     //上传记录头数据（即上传主表信息）
@@ -435,6 +445,31 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
                 }
                 AlertUtil.showToast(o.toString());
                 break;
+            case Config.MESSAGE_GET_OPT_AUTH:
+                GetOptAuthResult getOptAuthResult = (GetOptAuthResult) o;
+                //3’密码错误，‘2’没有权限， ‘1’有权限
+                if(getOptAuthResult!=null){
+                    if("1".equals(getOptAuthResult.getIsgrant())){
+                        mModifyPricePermission = 1;
+                        Intent intent = new Intent();
+                        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
+                        intent.setClass(this, ModifyPriceDialog.class);
+                        startActivityForResult(intent, 33);
+                    }else if("2".equals(getOptAuthResult.getIsgrant())){
+                        AlertUtil.showToast("没有改价权限");
+                    }else if("3".equals(getOptAuthResult.getIsgrant())){
+                        AlertUtil.showToast("密码错误,请查看接口");
+                    }else{
+                        AlertUtil.showToast("没有改价权限");
+                    }
+                }else{
+                    AlertUtil.showToast("返回NULL，请查看接口");
+                }
+                break;
+            //取改价权限失败
+            case Config.MESSAGE_ERROR:
+                AlertUtil.showToast(o.toString());
+                break;
         }
     }
 
@@ -498,6 +533,15 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
             addGoodsData(entity);
         }
 
+        if(requestCode == 200 && resultCode==Config.MESSAGE_MONEY){
+            String gaijia =  data.getStringExtra("countN");
+
+            Log.e("lu" , "改价 = " + gaijia);
+
+
+        }
+
+
     }
 
     @Override
@@ -513,7 +557,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
         }
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
-            mQueryGoodsApi.getPLUInfo(barcode);
+            mLingshouApi.getPLUInfo(barcode);
         }
     }
 
@@ -619,15 +663,39 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
             AlertUtil.showToast("请选择要改数的商品!");
             return false;
         }
+
+        //1允许0不允许
+        if(!"1".equals(mSelectGoodsEntity.getChange_price())){
+            AlertUtil.showToast("此商品不允许议价!");
+            return false;
+        }
+        if(mSelectGoodsEntity.isHasYiJia()){
+            AlertUtil.showToast("此商品已改个价，不能再改价!");
+            return false;
+        }
+
         return true;
     }
 
     @Override
     protected void modifyPriceAfter() {
-        Intent intent = new Intent();
-        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
-        intent.setClass(this, ModifyPriceDialog.class);
-        startActivityForResult(intent, 33);
+
+
+        Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
+        intent.putExtra("limit",Config.danbiYiJialimit);
+        startActivityForResult(intent,200);
+
+
+
+//        //取到过改价权限就不再访问接口了
+//        if(mModifyPricePermission==1){
+//            Intent intent = new Intent();
+//            intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
+//            intent.setClass(this, ModifyPriceDialog.class);
+//            startActivityForResult(intent, 33);
+//        }else{
+//            getPricePermission();
+//        }
     }
 
     @Override

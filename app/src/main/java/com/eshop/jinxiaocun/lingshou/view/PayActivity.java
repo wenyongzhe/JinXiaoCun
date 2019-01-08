@@ -49,8 +49,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
     private Spinner sp_payway;
-    private Double money = 0.00;
+    private double money = 0.00;
     GetSystemBeanResult.SystemJson mSystemJson;
+    private int jiaoRmb = 0;
+    private int fenRmb = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
 
         money = getIntent().getDoubleExtra("money",0.00);
+        money = 1111.12345;
+        int moneyTemp = (int)(money*100);
+        fenRmb = moneyTemp%10;
+        moneyTemp = (int)(money*10);
+        jiaoRmb = moneyTemp%10;
+
         String totalStr = money+"";
         if((totalStr.length()-totalStr.indexOf("."))>3){
             totalStr = totalStr.substring(0,totalStr.indexOf(".")+4);

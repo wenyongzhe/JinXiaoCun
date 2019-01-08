@@ -47,9 +47,10 @@ public class HandlerMessagePost implements IMessagePost {
 //                ToastUtils.showShort(mResult.msg);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            o.handleResult(response,e.getMessage() );
-            o.handleResultJson("-1",e.getMessage(),"");
+            //e.printStackTrace();
+            //o.handleResult(response,e.getMessage() );
+            //o.handleResultJson("-1",e.getMessage(),"");
+            o.handleError(e.getMessage());
         }
     }
 

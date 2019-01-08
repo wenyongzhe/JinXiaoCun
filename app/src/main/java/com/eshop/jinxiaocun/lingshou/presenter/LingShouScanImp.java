@@ -540,7 +540,7 @@ public class LingShouScanImp implements ILingshouScan {
     public void getSystemInfo() {
         GetSystemInfoBean mGetSystemInfoBean = new GetSystemInfoBean();
         mGetSystemInfoBean.getJsonData().setBranchNo(Config.branch_no);
-        mGetSystemInfoBean.getJsonData().setPOSId("");
+        mGetSystemInfoBean.getJsonData().setPOSId(Config.posid);
         mGetSystemInfoBean.getJsonData().setUserId(Config.UserId);
         Map map = ReflectionUtils.obj2Map(mGetSystemInfoBean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetSystemInfoInterface());
@@ -559,7 +559,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            GetSystemBeanResult.SystemJson mSystemJson =  mJsonFormatImp.JsonToBean(jsonData,GetSystemBeanResult.SystemJson.class);
+            List<GetSystemBeanResult.SystemJson> mSystemJson =  mJsonFormatImp.JsonToList(jsonData,GetSystemBeanResult.SystemJson.class);
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_GET_SYSTEM_INFO_RETURN,mSystemJson);
             }else{

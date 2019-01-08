@@ -65,6 +65,7 @@ import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
 import com.google.zxing.activity.CaptureActivity;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -922,6 +923,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         isOk = true;
         //setSaleFlowBean();
         Intent mIntent = new Intent(this,PayActivity.class);
+        Bundle bundle = new Bundle();
+        mIntent.putExtra("mListData", (Serializable) mListData);
         mIntent.putExtra("money",total);
         startActivity(mIntent);
 

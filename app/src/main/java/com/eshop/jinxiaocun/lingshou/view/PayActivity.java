@@ -25,6 +25,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,14 +46,16 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @BindView(R.id.et_price)
     TextView et_price;
 
-
+    private boolean hasMoling = false;
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
     private Spinner sp_payway;
     private double money = 0.00;
-    GetSystemBeanResult.SystemJson mSystemJson;
+    List<GetSystemBeanResult.SystemJson> mSystemJson;
     private int jiaoRmb = 0;
     private int fenRmb = 0;
+    private double molingMoney = 0;
+    private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +67,18 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
 
         money = getIntent().getDoubleExtra("money",0.00);
-        money = 1111.12345;
-        int moneyTemp = (int)(money*100);
+        mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
+
+        money = initDouble(3,money);
+        money = addDouble(money);
+        double moneyTemp0 = money*100.000;
+        int moneyTemp = (int)moneyTemp0;
         fenRmb = moneyTemp%10;
         moneyTemp = (int)(money*10);
         jiaoRmb = moneyTemp%10;
 
-        String totalStr = money+"";
-        if((totalStr.length()-totalStr.indexOf("."))>3){
-            totalStr = totalStr.substring(0,totalStr.indexOf(".")+4);
-        }
-        et_price.setText("￥"+totalStr);
-
+        money = initDouble(3,money);
+        et_price.setText("￥"+money);
         btn_ok = findViewById(R.id.btn_ok);
         sp_payway = findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
@@ -113,7 +116,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 finish();
                 break;
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
-                mSystemJson = (GetSystemBeanResult.SystemJson)o;
+                mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
                 break;
         }
     }
@@ -144,20 +147,96 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             if(mSystemJson==null){
                 return;
             }
+            if(hasMoling==true){
+                AlertUtil.showAlert(this,"提示","已抹零！");
+                return;
+            }
 
-            //0-实收，1- 抹去分 3- 抹去角分，3-元以后的四舍五入，4角以下四舍五入
-            switch (mSystemJson.getValue()){
+            //0-实收，1- 抹去分 2- 抹去角分，3-元以后的四舍五入，4角以下四舍五入  PosAmtEndDec
+            String value = "0";
+            for(int i=0; i<mSystemJson.size(); i++){
+                if(mSystemJson.get(i).getName().equals("PosAmtEndDec")){
+                    value = mSystemJson.get(i).getValue();
+                }
+            }
+            switch (value){
                 case "0":
                     break;
                 case "1":
+                    if(fenRmb != 0){
+                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        money -= molingMoney;
+                        hasMoling = true;
+                    }
                     break;
                 case "2":
+                    if(jiaoRmb != 0){
+                        molingMoney = Double.parseDouble("0."+jiaoRmb);
+                        hasMoling = true;
+                    }
+                    if(fenRmb != 0){
+                        molingMoney += Double.parseDouble("0.0"+fenRmb);
+                        hasMoling = true;
+                    }
+                    money -= molingMoney;
                     break;
                 case "3":
+                    if(jiaoRmb != 0 || fenRmb != 0){
+                        molingMoney = Double.parseDouble("0."+jiaoRmb+fenRmb);
+                        if(jiaoRmb>=5){
+                            money = money-molingMoney+1;
+                        }else {
+                            money -= molingMoney;
+                            molingMoney = -molingMoney;
+                        }
+                        hasMoling = true;
+                    }
                     break;
+                case "4":
+                    if(fenRmb != 0){
+                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        if(fenRmb>=5){
+                            money = money-molingMoney+0.100;
+                        }else {
+                            money -= molingMoney;
+                            molingMoney = -molingMoney;
+                        }
+                        hasMoling = true;
+                    }
+                    break;
+            }
+            money = initDouble(3,money);
+            et_price.setText("￥"+money);
+
+            if(hasMoling==false){
+                AlertUtil.showAlert(this,"提示","不需要抹零！");
+                return;
             }
         }catch (Exception e){
         }
+    }
+
+    private double initDouble(int leng, double moneyTem){
+        String totalStr = moneyTem+"";
+        if((totalStr.length()-totalStr.indexOf("."))>leng){
+            totalStr = totalStr.substring(0,totalStr.indexOf(".")+(leng));
+            moneyTem = Double.parseDouble(totalStr);
+        }
+        return moneyTem;
+    }
+
+    private double addDouble(double moneyTem){
+        String totalStr = moneyTem+"";
+        int dd= totalStr.length()-totalStr.indexOf(".");
+        if((totalStr.length()-totalStr.indexOf("."))==2){
+            totalStr = totalStr+"0001";
+            moneyTem = Double.parseDouble(totalStr);
+        }
+        if((totalStr.length()-totalStr.indexOf("."))==3){
+            totalStr = totalStr+"0001";
+            moneyTem = Double.parseDouble(totalStr);
+        }
+        return moneyTem;
     }
 
     @OnClick(R.id.btn_zhengdanzhekou)

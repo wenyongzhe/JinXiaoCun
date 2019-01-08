@@ -816,6 +816,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);
                 break;
+            case Config.RESULT_PAY_CANCLE:
+                finish();
+                break;
+
 
 
         }
@@ -926,7 +930,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         Bundle bundle = new Bundle();
         mIntent.putExtra("mListData", (Serializable) mListData);
         mIntent.putExtra("money",total);
-        startActivity(mIntent);
+        startActivityForResult(mIntent,300);
 
     }
 

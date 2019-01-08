@@ -35,7 +35,7 @@ public class DanPinGaiJiaDialog extends Activity {
     TextView tv_newprice;
 
     double oldPrice;
-    double limit;
+    double limit = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class DanPinGaiJiaDialog extends Activity {
         txtCountN.selectAll();
         txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
         limit = intent.getDoubleExtra("limit",0.000);
-        if(limit !=0.000){
+        if(limit !=-1){
             txtCountN.setHint("最高折让金额："+limit);
         }
 

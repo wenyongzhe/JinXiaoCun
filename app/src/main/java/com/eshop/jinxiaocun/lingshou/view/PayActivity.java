@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,10 +20,13 @@ import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
+import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
+import com.eshop.jinxiaocun.widget.SaleManDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +59,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private int jiaoRmb = 0;
     private int fenRmb = 0;
     private double molingMoney = 0;
+    private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
 
     @Override
@@ -242,7 +247,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_zhengdanzhekou)
     void btn_zhengdanzhekou() {
         try {
+            Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            intent.putExtra("oldPrice",money);
+            intent.putExtra("limit",Config.zhendanZheKoulimit);
+            startActivityForResult(intent,100);
         }catch (Exception e){
+            Log.e("","");
+
         }
     }
 
@@ -250,7 +261,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_zhengdanyijia)
     void btn_zhengdanyijia() {
         try {
+            Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
+            intent.putExtra("oldPrice",money);
+            intent.putExtra("limit",Config.zhendanYiJialimit);
+            startActivityForResult(intent,200);
         }catch (Exception e){
+
         }
     }
 
@@ -258,6 +274,22 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_zhengdanquxiao)
     void btn_zhengdanquxiao() {
         try {
+            AlertUtil.showAlert(this, R.string.dialog_title,
+                    R.string.pay_cancle, R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertUtil.dismissDialog();
+                    setResult(Config.RESULT_PAY_CANCLE);
+                    finish();
+                }
+            },R.string.cancel, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AlertUtil.dismissDialog();
+                        }
+                    }
+                    );
+
         }catch (Exception e){
         }
     }
@@ -265,8 +297,17 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_yingyeyuan)
     void btn_yingyeyuan() {
         try {
+            Intent intent = new Intent(this, SaleManDialog.class);
+            startActivityForResult(intent,200);
         }catch (Exception e){
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Config.MESSAGE_PAY_MAN){
+            saleMan = data.getStringExtra("PayMan");
+        }
+    }
 }

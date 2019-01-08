@@ -32,7 +32,7 @@ public class DanPinZheKouDialog extends Activity {
     TextView tv_oldprice;
     @BindView(R.id.tv_newprice)
     TextView tv_newprice;
-    double limit;
+    double limit = -1;
     double oldPrice;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
@@ -56,7 +56,7 @@ public class DanPinZheKouDialog extends Activity {
 
         Intent intent = getIntent();
         limit = intent.getDoubleExtra("limit",0.000);
-        if(limit !=0.000){
+        if(limit !=-1){
             txtCountN.setHint("最低折扣："+limit);
         }
         txtCountN.setText(intent.getStringExtra("countN"));

@@ -120,7 +120,7 @@ public class DanPinGaiJiaDialog extends Activity {
         }
 
         if (txtCountN.getText().toString().trim().equals("0")) {
-            MyUtils.showToast("请输入大于0的数量！", this);
+            MyUtils.showToast("请输入大于0的金额！", this);
             return;
         }
         if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>limit) {

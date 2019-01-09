@@ -51,6 +51,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     TextView et_price;
 
     private boolean hasMoling = false;
+    private boolean hasGaiJia = false;
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
     private Spinner sp_payway;
@@ -247,6 +248,16 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_zhengdanzhekou)
     void btn_zhengdanzhekou() {
         try {
+            if(hasGaiJia == true || hasDanPingGaiJia()){
+                AlertUtil.showAlert(this, "提示",
+                        "已经修改过价格。", "确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            }
+                        });
+                return;
+            }
             Intent intent = new Intent(this, DanPinZheKouDialog.class);
             intent.putExtra("oldPrice",money);
             intent.putExtra("limit",Config.zhendanZheKoulimit);
@@ -261,6 +272,16 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_zhengdanyijia)
     void btn_zhengdanyijia() {
         try {
+            if(hasGaiJia == true || hasDanPingGaiJia()){
+                AlertUtil.showAlert(this, "提示",
+                        "已经修改过价格。", "确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            }
+                        });
+                return;
+            }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
             intent.putExtra("oldPrice",money);
             intent.putExtra("limit",Config.zhendanYiJialimit);
@@ -303,11 +324,35 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         }
     }
 
+    private boolean hasDanPingGaiJia(){
+        for(int i=0; i<mListData.size(); i++){
+            if(mListData.get(i).isHasYiJia()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Config.MESSAGE_PAY_MAN){
-            saleMan = data.getStringExtra("PayMan");
+        double temprice;
+        switch (resultCode){
+            case Config.MESSAGE_PAY_MAN:
+                saleMan = data.getStringExtra("PayMan");
+                break;
+            case Config.MESSAGE_INTENT_ZHEKOU:
+                String zhekou =  data.getStringExtra("countN");
+                temprice = Double.valueOf(money * Double.valueOf(zhekou));
+                hasGaiJia = true;
+                //reflashList();
+                break;
+            case Config.MESSAGE_MONEY:
+                String gaijia =  data.getStringExtra("countN");
+                temprice = Double.valueOf(money - Double.valueOf(gaijia));
+                hasGaiJia = true;
+                //reflashList();
+                break;
         }
     }
 }

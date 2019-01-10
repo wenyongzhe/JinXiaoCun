@@ -123,10 +123,10 @@ public class DanPinGaiJiaDialog extends Activity {
             MyUtils.showToast("请输入大于0的金额！", this);
             return;
         }
-        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>limit) {
-            MyUtils.showToast("请输入大于0小于等于"+limit+"的金额！", this);
-            return;
-        }
+//        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>limit) {
+//            MyUtils.showToast("请输入大于0小于等于"+limit+"的金额！", this);
+//            return;
+//        }
 
         String countN = txtCountN.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

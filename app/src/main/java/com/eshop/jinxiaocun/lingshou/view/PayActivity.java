@@ -62,6 +62,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private double molingMoney = 0;
     private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
+    private double gaiJiaMoney = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -343,16 +344,29 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
-                temprice = Double.valueOf(money * Double.valueOf(zhekou));
+                gaiJiaMoney = (1-Double.valueOf(zhekou))*money;
                 hasGaiJia = true;
-                //reflashList();
+                reflashItemPrice();
                 break;
             case Config.MESSAGE_MONEY:
                 String gaijia =  data.getStringExtra("countN");
-                temprice = Double.valueOf(money - Double.valueOf(gaijia));
+                gaiJiaMoney = Double.valueOf(gaijia);
                 hasGaiJia = true;
-                //reflashList();
+                reflashItemPrice();
                 break;
         }
+    }
+
+    private void reflashItemPrice(){
+        double tempmoney = 0;
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            double itemPrice = Double.valueOf(mGetClassPluResult.getSale_price());
+            itemPrice = itemPrice-((itemPrice/money) * gaiJiaMoney);
+            itemPrice =  initDouble(4,itemPrice);
+            mGetClassPluResult.setSale_price(itemPrice+"");
+            tempmoney += itemPrice;
+        }
+        et_price.setText("￥"+tempmoney);
     }
 }

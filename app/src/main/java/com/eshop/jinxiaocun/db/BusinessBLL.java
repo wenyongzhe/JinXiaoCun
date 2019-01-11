@@ -72,7 +72,8 @@ public class BusinessBLL {
         else
             return false;
     }
-    public List<PandianDetailBeanResult> getDBPandianGoodsDatas(String where ,DbCallBack callBack) throws Exception{
+    //根据条件获取盘点商品数据集合
+    public List<PandianDetailBeanResult> getDBStocktakeGoodsDatas(String where) throws Exception{
 
         Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
         String queryFlds = "";
@@ -143,11 +144,7 @@ public class BusinessBLL {
                 }
                 moduleList.add(module);
                 cursor.moveToNext();
-                if(callBack!=null){
-                    callBack.progressUpdate(i+1,count,module);
-                }
             }
-
             db.setTransactionSuccessful();
         }catch (Exception e){
             e.printStackTrace();
@@ -157,6 +154,89 @@ public class BusinessBLL {
         }
 
         return moduleList;
+    }
+    //获取盘点商品数据  有进度条显示
+    public void getDBStocktakeGoodsDatas(String where ,DbCallBack callBack) throws Exception{
+
+        Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
+        String queryFlds = "";
+        int mark = 0;
+        for (Field fld  : flds) {
+            if (fld.isSynthetic()) {
+                continue;
+            }
+            if (fld.getName().equals("serialVersionUID")) {
+                continue;
+            }
+            if (fld.getName().equals("$change")) {
+                continue;
+            }
+            if (mark == 0) {
+                mark++;
+                queryFlds += fld.getName();
+            } else {
+                queryFlds += "," + fld.getName();
+            }
+        }
+        String sql = "select " + queryFlds + " from " + Config.PANDIAN_DETAIL_GOODS;
+        if (!where.equals(""))
+            sql += " where " + where;
+
+        SQLiteDatabase db =Config.DBHelper.getReadableDatabase();
+        db.beginTransaction();
+        Cursor cursor = db.rawQuery(sql, null);
+        int count = cursor.getCount();
+        cursor.moveToFirst();
+        try{
+
+            // 取出所有的列名
+            Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                PandianDetailBeanResult module = new PandianDetailBeanResult();
+                // 遍历有列
+                for (Field field : arrField) {
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
+                    if (field.getName().equals("$change")) {
+                        continue;
+                    }
+
+                    String columnName = field.getName();
+                    int columnIdx = cursor.getColumnIndex(columnName);
+                    if (columnIdx == -1) {
+                        continue;
+                    }
+
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Class<?> type = field.getType();
+                    if (type == String.class)
+                        field.set(module, cursor.getString(columnIdx));
+                    else if (type == int.class)
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
+                }
+                if(callBack!=null){
+                    callBack.progressUpdate(i+1,count,module);
+                }
+                cursor.moveToNext();
+            }
+
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+            db.endTransaction();
+        }
     }
     public boolean insertPandianGoodsEntity(String sheetNo,List<PandianDetailBeanResult> listResult) throws Exception {
 
@@ -203,6 +283,21 @@ public class BusinessBLL {
         }
 
         return true;
+    }
+    //添加或删除盘点商品时，修改盘点状态 has_stocktake 0未盘点 1已盘点
+    public void updateStocktakeGoodsStatus(String status,String item_no)throws SQLException {
+        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
+        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set has_stocktake=? where item_no=?";
+        Config.DBHelper.exeSql(sql, new String[]{status,item_no});
+    }
+    //更改上传的商品盘点状态更改为已盘点   has_stocktake 0未盘点 1已盘点
+    public void updateStocktakeGoodsStatus(List<PandianDetailBeanResult> list)throws SQLException{
+        if(list==null || list.size()==0)return;
+        Config.DBHelper.beginTrans();
+        for (PandianDetailBeanResult info : list) {
+            updateStocktakeGoodsStatus("1",info.getItem_no());
+        }
+        Config.DBHelper.commitTrans();
     }
 
     private void insertEntity(Class bean ,String tableName) throws SQLException{

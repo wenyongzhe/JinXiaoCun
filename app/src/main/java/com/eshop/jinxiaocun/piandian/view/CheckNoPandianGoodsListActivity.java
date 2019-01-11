@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.piandian.view;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -10,9 +11,9 @@ import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.piandian.adapter.CheckNoPandianGoodsListAdapter;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
-import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,14 +36,11 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
 
     @BindView(R.id.rfListview)
     protected RefreshListView mListView;
-
-
-    private List<PandianDetailBeanResult> mAddPandianGoodsDetailData = new ArrayList<>();
-//    private List<PandianDetailBeanResult> mPandianDetailData = new ArrayList<>();
     private List<PandianDetailBeanResult> mListData = new ArrayList<>();
     private CheckNoPandianGoodsListAdapter mAdapter;
     private String mSheetNo;
     private GetDBDatas mGetDBDatas;
+    private PandianDetailBeanResult mSelectItem;
 
     @Override
     protected int getLayoutId() {
@@ -54,7 +52,6 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
         super.initView();
 
         mSheetNo = getIntent().getStringExtra("SheetNo");
-        mAddPandianGoodsDetailData = (List<PandianDetailBeanResult>) getIntent().getSerializableExtra("AddDetailListData");
         setTopToolBar("未盘点商品", R.mipmap.ic_left_light,"",0,"");
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -81,18 +78,13 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
         mAdapter.setCallback(new CheckNoPandianGoodsListAdapter.CallbackInterface() {
             @Override
             public void onClickAddPandian(int position) {
-                PandianDetailBeanResult selectItem = mListData.get(position);
-                EventBus.getDefault().post(selectItem);
-                Iterator<PandianDetailBeanResult> iter = mListData.iterator();
-                while (iter.hasNext()) {
-                    PandianDetailBeanResult item = iter.next();
-                    if (item.getItem_no().equals(selectItem.getItem_no())) {
-                        iter.remove();
-                        break;
-                    }
-                }
-                setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
-                mAdapter.setListInfo(mListData);
+
+                //点击盘点 先修改盘点数量
+                mSelectItem = mListData.get(position);
+                Intent intent = new Intent(CheckNoPandianGoodsListActivity.this, ModifyCountDialog.class);
+                intent.putExtra("countN",mSelectItem.getCheck_qty()+"");
+                startActivityForResult(intent,1);
+
             }
         });
 
@@ -101,10 +93,31 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
             mGetDBDatas= new GetDBDatas(this);
             mGetDBDatas.execute();
         }
-
-
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //点击盘点 先修改盘点数量
+        if(requestCode==1 && resultCode==RESULT_OK){
+            int checkQty = MyUtils.convertToInt(data.getStringExtra("countN"),1);
+            mSelectItem.setCheck_qty(checkQty);//重新修改盘点数量
+            EventBus.getDefault().post(mSelectItem);
+            Iterator<PandianDetailBeanResult> iter = mListData.iterator();
+            while (iter.hasNext()) {
+                PandianDetailBeanResult item = iter.next();
+                if (item.getItem_no().equals(mSelectItem.getItem_no())) {
+                    iter.remove();
+                    break;
+                }
+            }
+            setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
+            mAdapter.setListInfo(mListData);
+        }
+
+    }
 
     private class GetDBDatas extends AsyncTask<String,String,String> {
 
@@ -118,20 +131,15 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
         protected String doInBackground(String... strings) {
             try{
                 long time = System.currentTimeMillis();
-                BusinessBLL.getInstance().getDBPandianGoodsDatas("sheet_no='" + mSheetNo + "'", new BusinessBLL.DbCallBack() {
+                StringBuffer where = new StringBuffer();
+                where.append("sheet_no='");
+                where.append(mSheetNo);
+                where.append("' and has_stocktake=0");//has_stocktake 0未盘点 1已盘点
+                BusinessBLL.getInstance().getDBStocktakeGoodsDatas(where.toString(), new BusinessBLL.DbCallBack() {
                     @Override
                     public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {
                         publishProgress(progress+"/"+maxProgress);
-                        boolean isSame = false;
-                        for (PandianDetailBeanResult beanResult : mAddPandianGoodsDetailData) {
-                            if(module.getItem_no().equals(beanResult.getItem_no())){
-                                isSame = true;
-                                break;
-                            }
-                        }
-                        if(!isSame){
-                            mListData.add(module);
-                        }
+                        mListData.add(module);
 
                     }
                 });
@@ -177,13 +185,13 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
             }
         }
     }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mAddPandianGoodsDetailData.clear();
-        mListData.clear();
+        if(mListData!=null){
+            mListData.clear();
+            mListData=null;
+        }
         if(mGetDBDatas !=null){
             mGetDBDatas.cancel(true);
         }

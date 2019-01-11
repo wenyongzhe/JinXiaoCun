@@ -23,6 +23,7 @@ public class PandianDetailBeanResult implements Serializable{
     private String item_barcode;//批次号
     private String produce_date; //生产日期
     private String valid_date;//有效日期
+    private int has_stocktake;//是否盘点过  0未盘点 1已盘点
 
     public String getBranch_no() {
         return branch_no;
@@ -126,5 +127,13 @@ public class PandianDetailBeanResult implements Serializable{
 
     public void setValid_date(String valid_date) {
         this.valid_date = valid_date;
+    }
+
+    public int getHas_stocktake() {
+        return has_stocktake;
+    }
+
+    public void setHas_stocktake(int has_stocktake) {
+        this.has_stocktake = has_stocktake;
     }
 }

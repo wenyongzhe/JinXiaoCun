@@ -97,18 +97,25 @@ public class DBHelper extends SQLiteOpenHelper {
         System.out.println("upgrade a database");
     }
 
-    public long insert(String table, ContentValues values){
-        //获取SQLiteDatabase实例
-        db = getWritableDatabase();
-        //插入数据库中
-        return db.insert(table, null, values);
+//    public long insert(String table, ContentValues values){
+//        //获取SQLiteDatabase实例
+//        db = getWritableDatabase();
+//        //插入数据库中
+//        return db.insert(table, null, values);
+//    }
+//
+//    public void execSQL(String sql) {
+//        db = getWritableDatabase();
+//        db.execSQL(sql);
+//    }
+    public void beginTrans(){
+        db.beginTransaction();
     }
 
-    public void execSQL(String sql) {
-        db = getWritableDatabase();
-        db.execSQL(sql);
+    public void commitTrans(){
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
-
     /**执行Sql语句
      * @strSql
      * @values
@@ -146,6 +153,32 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
     }
+
+
+    public Cursor exeRawQuery(String strSql) {
+        Cursor cursor = null;
+        try {
+            String []selectionArgs = new String[0];
+            cursor = db.rawQuery(strSql, selectionArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return cursor;
+    }
+
+    public Cursor exeRawQuery(String strSql, String[] selectionArgs) {
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(strSql, selectionArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return cursor;
+    }
+
+
 
     //查询方法
     public Cursor query(String sql){

@@ -414,4 +414,20 @@ public class MyUtils {
         return true;
     }
 
+    private static long lastClickTime = 0;
+    //防止重复点击 事件间隔，在这里我定义的是1000毫秒
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if (timeD >= 100 && timeD <= 1250) {
+            lastClickTime=0;
+            return true;
+        } else {
+            lastClickTime = time;
+            return false;
+
+        }
+
+    }
+
 }

@@ -9,7 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -35,11 +38,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_content1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         >
 
@@ -68,16 +72,15 @@
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="范围:"
+            android:text="操作员:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_fanwei"
+            android:id="@+id/tv_pd_operId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             style="@style/TextView_Grey"
-            android:layout_marginRight="5dp"
             android:gravity="center|left"
             />
 
@@ -88,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         >
 
@@ -110,34 +113,32 @@
             android:layout_marginRight="5dp"
             android:gravity="center|left"
             />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ListView_Header"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="操作员:"
+            android:text="范围:"
             />
 
         <TextView
-            android:id="@+id/tv_pd_operId"
+            android:id="@+id/tv_pd_fanwei"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             style="@style/TextView_Grey"
-            android:layout_marginRight="5dp"
             android:gravity="center|left"
             />
-
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_content2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         >
 
@@ -175,7 +176,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             style="@style/EditText_Black"
-            android:layout_marginRight="5dp"
             android:maxWidth="80dp"
             android:gravity="center|left"
             android:textColor="@color/text_grey1"
@@ -199,9 +199,5 @@
         android:textColor="@color/white"
         android:background="@drawable/border_bg_primary"
         />
-
-
-
-
 
 </LinearLayout>

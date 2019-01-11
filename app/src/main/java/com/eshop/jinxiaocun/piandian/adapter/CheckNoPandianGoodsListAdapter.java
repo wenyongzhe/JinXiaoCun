@@ -66,7 +66,9 @@ public class CheckNoPandianGoodsListAdapter extends BaseAdapter {
         tvPiciNo.setText(listInfo.get(position).getItem_barcode());
         tvSpec.setText(listInfo.get(position).getItem_size());
         tvInprice.setText(listInfo.get(position).getIn_price()+"");
-        tvStore_number.setText(listInfo.get(position).getStock_qty()+"/"+listInfo.get(position).getUnit_no());
+//        tvStore_number.setText(listInfo.get(position).getStock_qty()+"/"+listInfo.get(position).getUnit_no());
+        //库存数量显示需要权限 后期修改
+        tvStore_number.setText("***/"+listInfo.get(position).getUnit_no());
 
         final int pos = position;
         tvAdd.setOnClickListener(new View.OnClickListener() {

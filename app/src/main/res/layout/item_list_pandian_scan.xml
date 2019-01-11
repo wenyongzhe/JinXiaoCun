@@ -33,21 +33,12 @@
                 android:maxLines="1" />
 
             <TextView
-                android:id="@+id/tv_product_pici"
-                style="@style/AutoScrollTextView"
-                android:layout_width="150dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_spec"
-                style="@style/AutoScrollTextView"
+                android:id="@+id/tv_pd_number"
+                style="@style/TextView_Grey"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:maxLines="1" />
-
 
             <TextView
                 android:id="@+id/tv_xsprice"
@@ -66,8 +57,16 @@
                 android:maxLines="1" />
 
             <TextView
-                android:id="@+id/tv_pd_number"
-                style="@style/TextView_Grey"
+                android:id="@+id/tv_product_pici"
+                style="@style/AutoScrollTextView"
+                android:layout_width="150dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_spec"
+                style="@style/AutoScrollTextView"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
                 android:gravity="center"

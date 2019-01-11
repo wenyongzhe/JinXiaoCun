@@ -285,20 +285,35 @@ public class BusinessBLL {
         return true;
     }
     //添加或删除盘点商品时，修改盘点状态 has_stocktake 0未盘点 1已盘点
-    public void updateStocktakeGoodsStatus(String status,String item_no)throws SQLException {
+    public void updateStocktakeGoodsStatus(String has_stocktake,String item_no,String sheet_no)throws SQLException {
         if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
-        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set has_stocktake=? where item_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{status,item_no});
+        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set has_stocktake=? where item_no=? and sheet_no=?";
+        Config.DBHelper.exeSql(sql, new String[]{has_stocktake,item_no,sheet_no});
     }
-    //更改上传的商品盘点状态更改为已盘点   has_stocktake 0未盘点 1已盘点
-    public void updateStocktakeGoodsStatus(List<PandianDetailBeanResult> list)throws SQLException{
+    //上传成功后修改盘点状态  status 0未上传 1已上传 / has_stocktake 0未盘点 1已盘点
+    public void updateStocktakeGoodsStatus(String status,String has_stocktake,String item_no,String sheet_no)throws SQLException {
+        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
+        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set status=?,has_stocktake=? where item_no=? and sheet_no=?";
+        Config.DBHelper.exeSql(sql, new String[]{status,has_stocktake,item_no,sheet_no});
+    }
+    //更改上传的商品盘点状态更改为已上传、已盘点
+    public void updateStocktakeGoodsStatus(List<PandianDetailBeanResult> list,String sheet_no)throws SQLException{
         if(list==null || list.size()==0)return;
         Config.DBHelper.beginTrans();
         for (PandianDetailBeanResult info : list) {
-            updateStocktakeGoodsStatus("1",info.getItem_no());
+            updateStocktakeGoodsStatus("1","1",info.getItem_no(),sheet_no);
         }
         Config.DBHelper.commitTrans();
     }
+
+    //添加或删除盘点商品时，修改盘点状态和盘点数量 has_stocktake 0未盘点 1已盘点
+    public void updateStocktakeGoodsStatusAndCheckQty(int check_qty ,String has_stocktake,String item_no,String sheet_no)throws SQLException {
+        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
+        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=?,has_stocktake=? where item_no=? and sheet_no=?";
+        Config.DBHelper.exeSql(sql, new String[]{check_qty+"",has_stocktake,item_no,sheet_no});
+    }
+
+
 
     private void insertEntity(Class bean ,String tableName) throws SQLException{
         StringBuilder insertSqlBuilder = new StringBuilder();

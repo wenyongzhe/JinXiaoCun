@@ -134,7 +134,7 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
                 StringBuffer where = new StringBuffer();
                 where.append("sheet_no='");
                 where.append(mSheetNo);
-                where.append("' and has_stocktake=0");//has_stocktake 0未盘点 1已盘点
+                where.append("' and has_stocktake=0 and status=0");//has_stocktake 0未盘点 1已盘点
                 BusinessBLL.getInstance().getDBStocktakeGoodsDatas(where.toString(), new BusinessBLL.DbCallBack() {
                     @Override
                     public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {

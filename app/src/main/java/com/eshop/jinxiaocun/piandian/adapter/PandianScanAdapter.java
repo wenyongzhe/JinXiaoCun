@@ -72,10 +72,10 @@ public class PandianScanAdapter extends BaseAdapter {
         tv_spec.setText(obj.getItem_size());
         tv_xsprice.setText(obj.getSale_price()+"");
         tv_unit.setText(obj.getUnit_no());
-        tv_pd_number.setText(obj.getCheck_qty()+"****");
+        tv_pd_number.setText(obj.getCheck_qty()+"");
         //有权限时才显示出来 反之用***显示
 //        tv_pd_store_number.setText(obj.getStock_qty()+"");
-        tv_pd_store_number.setText("");
+        tv_pd_store_number.setText("****");
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);

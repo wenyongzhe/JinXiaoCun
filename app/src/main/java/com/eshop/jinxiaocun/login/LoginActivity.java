@@ -148,6 +148,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
             }
             if (TextUtils.isEmpty(Config.branch_no)) {
                 MyUtils.showToast("请先绑定设备", this);
+                return;
                /* Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, SystemSettingActivity.class);
                 startActivity(intent);*/

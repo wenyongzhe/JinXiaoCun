@@ -21,6 +21,7 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -34,6 +35,7 @@ import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,6 +78,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
     protected List<SaleFlowBean> mSaleFlowBeanList;
+    protected List<PlayFlowBean> mPlayFlowBeanList;
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
 
@@ -388,8 +391,19 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @OnClick(R.id.btn_ok)
     void btn_ok() {
         try {
-            Intent intent = new Intent(this, SaleManDialog.class);
-            startActivityForResult(intent,200);
+            HashMap<String,String> hashMap = new HashMap<>();
+            switch (sp_payway.getSelectedItemPosition()){
+                case 0:
+//                    hashMap
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+            setPlayFlowBean(hashMap);
         }catch (Exception e){
         }
     }
@@ -478,6 +492,38 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
         mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+    }
 
+    private void setPlayFlowBean(HashMap<String,String> hashMap){
+        for(int i=0; i<hashMap.size(); i++){
+            PlayFlowBean mPlayFlowBean = new PlayFlowBean();
+            mPlayFlowBean.setBranch_no(Config.branch_no);
+            mPlayFlowBean.setFlow_no(FlowNo);
+            mPlayFlowBean.setFlow_id(1);
+            mPlayFlowBean.setSale_amount(Float.parseFloat("pay_type"));
+            mPlayFlowBean.setPay_way(hashMap.get("pay_type"));
+            mPlayFlowBean.setSell_way("A");
+            mPlayFlowBean.setCard_no(1);
+            mPlayFlowBean.setVip_no(1);
+            mPlayFlowBean.setCoin_no("RMB");
+            mPlayFlowBean.setCoin_rate(1);
+            mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get("payAmount")));//付款金额
+            mPlayFlowBean.setVoucher_no("");
+            mPlayFlowBean.setPosid(Config.posid);
+            mPlayFlowBean.setCounter_no("");
+            mPlayFlowBean.setOper_id(Config.UserName);
+            mPlayFlowBean.setSale_man(Config.UserName);
+            mPlayFlowBean.setShift_no("");
+            mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
+            mPlayFlowBean.setMemo("");
+            mPlayFlowBean.setWorderno("");
+            if((i+1) == hashMap.size()){
+                mPlayFlowBean.setbDealFlag("1");
+            }else {
+                mPlayFlowBean.setbDealFlag("0");
+            }
+            mPlayFlowBeanList.add(mPlayFlowBean);
+        }
+        mLingShouScanImp.upPlayFlow(mPlayFlowBeanList);
     }
 }

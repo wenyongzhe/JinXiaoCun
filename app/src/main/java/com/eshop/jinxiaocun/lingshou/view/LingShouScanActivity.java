@@ -930,6 +930,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         Bundle bundle = new Bundle();
         mIntent.putExtra("mListData", (Serializable) mListData);
         mIntent.putExtra("money",total);
+        mIntent.putExtra("FlowNo",FlowNo);
         startActivityForResult(mIntent,300);
 
     }

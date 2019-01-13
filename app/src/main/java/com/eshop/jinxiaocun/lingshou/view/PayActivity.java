@@ -2,8 +2,11 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
+import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
@@ -22,6 +26,7 @@ import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
@@ -49,6 +54,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     Button btn_yingyeyuan;//营业员
     @BindView(R.id.et_price)
     TextView et_price;
+    @BindView(R.id.et_pay_money)
+    EditText et_pay_money;
+    @BindView(R.id.tv_pay_return)
+    TextView tv_pay_return;
+    @BindView(R.id.ly_fukuan_jinge)
+    LinearLayout ly_fukuan_jinge;
+    @BindView(R.id.ly_fukuan_zhaoling)
+    LinearLayout ly_fukuan_zhaoling;
 
     private boolean hasMoling = false;
     private boolean hasGaiJia = false;
@@ -62,7 +75,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private double molingMoney = 0;
     private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
+    protected List<SaleFlowBean> mSaleFlowBeanList;
     private double gaiJiaMoney = 0;
+    private String FlowNo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +89,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
 
         money = getIntent().getDoubleExtra("money",0.00);
+        FlowNo = getIntent().getStringExtra("FlowNo");
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
 
         money = initDouble(3,money);
@@ -105,7 +121,51 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
+        sp_payway.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        displayLayout(true);
+                        break;
+                    case 1:
+                        displayLayout(false);
+                        break;
+                    case 2:
+                        displayLayout(false);
+                        break;
+                    case 3:
+                        displayLayout(false);
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        et_pay_money.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                tv_pay_return.setText((money-Double.valueOf(charSequence.toString()))+"");
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         mLingShouScanImp.getSystemInfo();
+    }
+
+    private void displayLayout(boolean display){
+        if(display){
+            ly_fukuan_jinge.setVisibility(View.VISIBLE);
+            ly_fukuan_zhaoling.setVisibility(View.VISIBLE);
+        }else {
+            ly_fukuan_jinge.setVisibility(View.GONE);
+            ly_fukuan_zhaoling.setVisibility(View.GONE);
+        }
     }
 
     VipPayBeanResult mVipPayBeanResult;
@@ -325,6 +385,15 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         }
     }
 
+    @OnClick(R.id.btn_ok)
+    void btn_ok() {
+        try {
+            Intent intent = new Intent(this, SaleManDialog.class);
+            startActivityForResult(intent,200);
+        }catch (Exception e){
+        }
+    }
+
     private boolean hasDanPingGaiJia(){
         for(int i=0; i<mListData.size(); i++){
             if(mListData.get(i).isHasYiJia()){
@@ -346,18 +415,18 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 String zhekou =  data.getStringExtra("countN");
                 gaiJiaMoney = (1-Double.valueOf(zhekou))*money;
                 hasGaiJia = true;
-                reflashItemPrice();
+                reflashGaiJiaItemPrice();
                 break;
             case Config.MESSAGE_MONEY:
                 String gaijia =  data.getStringExtra("countN");
                 gaiJiaMoney = Double.valueOf(gaijia);
                 hasGaiJia = true;
-                reflashItemPrice();
+                reflashGaiJiaItemPrice();
                 break;
         }
     }
 
-    private void reflashItemPrice(){
+    private void reflashGaiJiaItemPrice(){
         double tempmoney = 0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
@@ -367,6 +436,48 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mGetClassPluResult.setSale_price(itemPrice+"");
             tempmoney += itemPrice;
         }
+        setSaleFlowBean();//销售流水
         et_price.setText("￥"+tempmoney);
+    }
+
+    private void setSaleFlowBean(){
+        mSaleFlowBeanList.clear();
+        for(int i=0; i<mListData.size(); i++){
+            SaleFlowBean mSaleFlowBean = new SaleFlowBean();
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+
+            mSaleFlowBean.setBranch_no(Config.branch_no);
+            mSaleFlowBean.setFlow_no(FlowNo);
+            mSaleFlowBean.setFlow_id((i+1)+"");
+            mSaleFlowBean.setItem_no(mGetClassPluResult.getItem_no());
+            mSaleFlowBean.setSource_price(mGetClassPluResult.getSource_price());
+            mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
+            mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
+
+            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            mSaleFlowBean.setSale_money(money);
+            mSaleFlowBean.setSell_way("A");
+            mSaleFlowBean.setSale_man(Config.UserName);
+            mSaleFlowBean.setSpec_flag("");
+            mSaleFlowBean.setSpec_sheet_no("");
+            mSaleFlowBean.setPosid(Config.posid);
+            mSaleFlowBean.setVoucher_no("");
+            mSaleFlowBean.setCounter_no("");
+            mSaleFlowBean.setOper_id(Config.UserName);
+            mSaleFlowBean.setOper_date(DateUtility.getCurrentTime());
+            mSaleFlowBean.setIsfreshcodefrag("");
+            mSaleFlowBean.setBatch_code(mGetClassPluResult.getItem_barcode());
+            mSaleFlowBean.setBatch_made_date(mGetClassPluResult.getProduce_date()==null?DateUtility.getCurrentTime():mGetClassPluResult.getProduce_date());
+            mSaleFlowBean.setBatch_valid_date(mGetClassPluResult.getValid_date()==null?DateUtility.getCurrentTime():mGetClassPluResult.getValid_date());
+            if(i == (mListData.size()-1)){
+                mSaleFlowBean.setbDealFlag("1");
+            }else{
+                mSaleFlowBean.setbDealFlag("0");
+            }
+
+            mSaleFlowBeanList.add(mSaleFlowBean);
+        }
+        mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
+
     }
 }

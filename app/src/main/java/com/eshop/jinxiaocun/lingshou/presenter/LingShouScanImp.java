@@ -75,7 +75,7 @@ public class LingShouScanImp implements ILingshouScan {
         GoodGetBean mGoodGetBean = new GoodGetBean();
         mGoodGetBean.getJsonData().setAs_branchNo(Config.branch_no);
         mGoodGetBean.getJsonData().setAs_item_no(barCode);
-        mGoodGetBean.getJsonData().setOper_id(Config.posid);
+        mGoodGetBean.getJsonData().setOper_id(Config.UserId);
         mGoodGetBean.getJsonData().setPerNum(Config.PerNum);
         mGoodGetBean.getJsonData().setPageNum("1");
 
@@ -89,7 +89,7 @@ public class LingShouScanImp implements ILingshouScan {
         mPluLikeBean.getJsonData().setAs_branchNo(Config.branch_no);
         mPluLikeBean.getJsonData().setAs_searchstr(barCode);
         Map map = ReflectionUtils.obj2Map(mPluLikeBean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodInforInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new GetGoodInforLikeInterface());
     }
 
     //销售商品取价
@@ -367,7 +367,41 @@ public class LingShouScanImp implements ILingshouScan {
         }
     }
 
-    //查询商品信息
+    //模糊查询商品信息
+    class GetGoodInforLikeInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<GetClassPluResult> mGoodGetBeanResult =  mJsonFormatImp.JsonToList(jsonData,GetClassPluResult.class);
+                    for(int i=0; i<mGoodGetBeanResult.size(); i++){
+                        mGoodGetBeanResult.get(i).setSource_price(mGoodGetBeanResult.get(i).getSale_price());
+                    }
+                    if(mGoodGetBeanResult.size()>1){
+                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
+                    }else {
+                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+                    }
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,Msg);
+                }
+            }catch (Exception e){
+                mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,e.getMessage());
+            }
+
+        }
+    }
+
+    //精确查询商品信息
     class GetGoodInforInterface implements IResponseListener {
 
         @Override

@@ -335,6 +335,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         switch (flag){
             case Config.MESSAGE_OK:
                 break;
+            case Config.MESSAGE_GOODS_INFOR_FAIL:
+                AlertUtil.showAlert(LingShouScanActivity.this,"提示", (String) o);
+                break;
             case Config.MESSAGE_ERROR:
                 AlertUtil.showAlert(LingShouScanActivity.this,"提示","请求失败");
                 break;

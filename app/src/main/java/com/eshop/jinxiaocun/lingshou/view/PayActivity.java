@@ -588,8 +588,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     hashMapList.add(hashMap);
                     if( !tv_pay_return.getText().toString().equals("") ){
                         HashMap<String,String> hashMap1 = new HashMap<>();
-                        hashMap1.put("payAmount","-"+tv_pay_return.getText().toString());
+                        hashMap1.put("payAmount",tv_pay_return.getText().toString());
                         hashMap1.put("pay_type","RMB");
+                        hashMap1.put("pay_way","D");
                         hashMapList.add(hashMap1);
                     }
                     break;
@@ -730,7 +731,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mPlayFlowBean.setFlow_id(1);
             mPlayFlowBean.setSale_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));
             mPlayFlowBean.setPay_way(hashMap.get(i).get("pay_type"));
-            mPlayFlowBean.setSell_way("A");
+            if(hashMap.get(i).get("Sell_way")==null || hashMap.get(i).get("Sell_way").equals("")){
+                mPlayFlowBean.setSell_way("A");
+            }else{
+                mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
+            }
             mPlayFlowBean.setCard_no(1);
             mPlayFlowBean.setVip_no(1);
             mPlayFlowBean.setCoin_no("RMB");

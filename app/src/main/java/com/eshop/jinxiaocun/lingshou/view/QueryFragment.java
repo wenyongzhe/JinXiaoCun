@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
@@ -85,9 +86,6 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         et_query.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_UP){
-                    return false;
-                }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == 0
                         || actionId == EditorInfo.IME_ACTION_GO
@@ -134,6 +132,9 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
             case Config.MESSAGE_GETCLASSPLUINFO:
                 mListData.clear();
                 mListData = (List<GetClassPluResult>) o;
+                if(mListData==null || mListData.size()==0 ){
+                    ToastUtils.showLong("没有数据");
+                }
                 ((QueryGoodsListAdapter)mDanJuAdapter).setListInfo(mListData);
                 mHandle.sendEmptyMessage(Config.MESSAGE_REFLASH);
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

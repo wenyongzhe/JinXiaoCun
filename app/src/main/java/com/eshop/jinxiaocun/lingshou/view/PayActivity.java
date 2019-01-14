@@ -1,7 +1,11 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
@@ -21,10 +26,12 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
@@ -33,14 +40,24 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
+import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
+import com.eshop.jinxiaocun.zjPrinter.Command;
+import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
+import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
+import com.google.zxing.activity.CaptureActivity;
 
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
 public class PayActivity extends BaseActivity implements ActionBarClickListener, INetWorResult {
 
@@ -65,6 +82,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @BindView(R.id.ly_fukuan_zhaoling)
     LinearLayout ly_fukuan_zhaoling;
 
+    Button btn_jiesuan;//
+
+    private BluetoothAdapter mBluetoothAdapter = null;
+    private static boolean is58mm = true;
+    public boolean isOk = false;
     private boolean hasMoling = false;
     private boolean hasGaiJia = false;
     private ILingshouScan mLingShouScanImp;
@@ -77,10 +99,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private double molingMoney = 0;
     private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
-    protected List<SaleFlowBean> mSaleFlowBeanList;
-    protected List<PlayFlowBean> mPlayFlowBeanList;
+    protected List<SaleFlowBean> mSaleFlowBeanList = new ArrayList<>();
+    protected List<PlayFlowBean> mPlayFlowBeanList = new ArrayList<>();
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
+    private BluetoothService mService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +113,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
-
+        btn_jiesuan = findViewById(R.id.btn_jiesuan);
+        btn_jiesuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btn_jiesuan();
+            }
+        });
         money = getIntent().getDoubleExtra("money",0.00);
         FlowNo = getIntent().getStringExtra("FlowNo");
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
@@ -105,15 +134,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
         money = initDouble(3,money);
         et_price.setText("￥"+money);
-        btn_ok = findViewById(R.id.btn_ok);
         sp_payway = findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //mLingShouScanImp.sellVipPay(vip_name.getText().toString(),vip_password.getText().toString(),money);
-            }
-        });
 
         //数据源
         ArrayList<String> spinners = new ArrayList<>();
@@ -152,13 +174,23 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                tv_pay_return.setText((money-Double.valueOf(charSequence.toString()))+"");
+                if(charSequence.toString().equals("")){
+                    tv_pay_return.setText(money+"");
+                }else {
+                    tv_pay_return.setText((Double.valueOf(charSequence.toString())-money)+"");
+                }
             }
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
         mLingShouScanImp.getSystemInfo();
+        mService = new BluetoothService(this, mHandler);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private void displayLayout(boolean display){
@@ -170,6 +202,92 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             ly_fukuan_zhaoling.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
+        } else {
+            if (mService == null)
+                mService = new BluetoothService(this, mHandler);
+        }
+    }
+
+
+    //打印小票
+    private void printMs() {
+        if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            return;
+        }
+        Print_Ex();
+        finish();
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothService.STATE_CONNECTED:
+                            ToastUtils.showShort("连接成功");
+                            printMs();
+                            break;
+                        case BluetoothService.STATE_CONNECTING:
+                            ToastUtils.showShort("连接中");
+                            break;
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            //ToastUtils.showShort("没有连接打印机");
+                            break;
+                    }
+                    break;
+                case SystemSettingActivity.MESSAGE_WRITE:
+
+                    break;
+                case SystemSettingActivity.MESSAGE_READ:
+
+                    break;
+                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
+                    break;
+                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
+                    Toast.makeText(getApplicationContext(), "无法连接设备",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
+                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
+                            Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the Bluetooth services
+        if (mService != null)
+            mService.stop();
+        if (DEBUG)
+            Log.e("", "--- ON DESTROY ---");
+    }
+
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
+
+        if (mService != null) {
+
+            if (mService.getState() == BluetoothService.STATE_NONE) {
+                // Start the Bluetooth services
+                mService.start();
+            }
+        }
+    }
+
 
     VipPayBeanResult mVipPayBeanResult;
     @Override
@@ -188,8 +306,75 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
                 break;
+            case Config.MESSAGE_UP_PLAY_FLOW:
+                mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
+                switch (sp_payway.getSelectedItemPosition()){
+                    case 0:
+                        mHan.sendEmptyMessage(0);
+                        break;
+                    case 1:
+                    case 2:
+                        mHan.sendEmptyMessage(1);
+                        break;
+                    case 3:
+                        break;
+
+                }
+
+                break;
+            case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
+                NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
+                if(mNetPlayBeanResult==null){
+                    ToastUtils.showShort(R.string.message_sell_error);
+                    return;
+                }
+                if( mNetPlayBeanResult.getReturn_code().equals("000000")){
+                    mHan.sendEmptyMessage(0);
+                }else {
+                    ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
+                }
+                break;
+            case Config.MESSAGE_SELL_SUB:
+                if(isOk){
+                    ToastUtils.showShort(R.string.message_sell_ok);
+
+                    AlertUtil.showAlert(PayActivity.this, "提示", "结算完成",
+                            "确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                }
+                            },R.string.txt_print, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+                                        Intent serverIntent = new Intent(PayActivity.this, DeviceListActivity.class);
+                                        startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
+                                    }
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
+//                printMs();
+                }
+                break;
         }
     }
+
+    Handler mHan = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    mLingShouScanImp.sellSub(FlowNo);
+                    break;
+                case 1:
+                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void loadData() {
@@ -388,22 +573,52 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         }
     }
 
-    @OnClick(R.id.btn_ok)
-    void btn_ok() {
+    void btn_jiesuan() {
         try {
-            HashMap<String,String> hashMap = new HashMap<>();
+            List<HashMap<String,String>> hashMapList = new ArrayList<>();
             switch (sp_payway.getSelectedItemPosition()){
                 case 0:
-//                    hashMap
+                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
+                        ToastUtils.showShort("填写付款金额有误。");
+                        return;
+                    }
+                    HashMap<String,String> hashMap = new HashMap<>();
+                    hashMap.put("payAmount",et_pay_money.getText().toString());
+                    hashMap.put("pay_type","RMB");
+                    hashMapList.add(hashMap);
+                    if( !tv_pay_return.getText().toString().equals("") ){
+                        HashMap<String,String> hashMap1 = new HashMap<>();
+                        hashMap1.put("payAmount","-"+tv_pay_return.getText().toString());
+                        hashMap1.put("pay_type","RMB");
+                        hashMapList.add(hashMap1);
+                    }
                     break;
                 case 1:
+                    HashMap<String,String> hashMapZFB = new HashMap<>();
+                    hashMapZFB.put("payAmount",money+"");
+                    hashMapZFB.put("pay_type","ZFB");
+                    hashMapList.add(hashMapZFB);
                     break;
                 case 2:
+                    HashMap<String,String> hashMapWX = new HashMap<>();
+                    hashMapWX.put("payAmount",money+"");
+                    hashMapWX.put("pay_type","WXZ");
+                    hashMapList.add(hashMapWX);
                     break;
                 case 3:
+                    HashMap<String,String> hashMapVIP = new HashMap<>();
+                    hashMapVIP.put("payAmount",money+"");
+                    hashMapVIP.put("pay_type","VIP");
+                    hashMapList.add(hashMapVIP);
                     break;
             }
-            setPlayFlowBean(hashMap);
+            if( hasMoling ){
+                HashMap<String,String> hashMap2 = new HashMap<>();
+                hashMap2.put("payAmount",molingMoney+"");
+                hashMap2.put("pay_type","CHG");
+                hashMapList.add(hashMap2);
+            }
+            setPlayFlowBean(hashMapList);
         }catch (Exception e){
         }
     }
@@ -437,6 +652,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 hasGaiJia = true;
                 reflashGaiJiaItemPrice();
                 break;
+            case Config.MESSAGE_CAPTURE_RETURN:
+                String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
+                String tempayway = "";
+                String temMoney = "0";
+                mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
+                Log.e("",code);
+                break;
         }
     }
 
@@ -451,10 +673,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             tempmoney += itemPrice;
         }
         setSaleFlowBean();//销售流水
-        et_price.setText("￥"+tempmoney);
+        et_price.setText("￥"+(money-gaiJiaMoney));
     }
 
     private void setSaleFlowBean(){
+        if(saleMan == null || saleMan.equals("")){
+            saleMan = "9999";
+        }
         mSaleFlowBeanList.clear();
         for(int i=0; i<mListData.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
@@ -471,7 +696,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
             mSaleFlowBean.setSale_money(money);
             mSaleFlowBean.setSell_way("A");
-            mSaleFlowBean.setSale_man(Config.UserName);
+            mSaleFlowBean.setSale_man(saleMan);
             mSaleFlowBean.setSpec_flag("");
             mSaleFlowBean.setSpec_sheet_no("");
             mSaleFlowBean.setPosid(Config.posid);
@@ -494,25 +719,28 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
     }
 
-    private void setPlayFlowBean(HashMap<String,String> hashMap){
+    private void setPlayFlowBean(List<HashMap<String,String>> hashMap){
+        if(saleMan == null || saleMan.equals("")){
+            saleMan = "9999";
+        }
         for(int i=0; i<hashMap.size(); i++){
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(FlowNo);
             mPlayFlowBean.setFlow_id(1);
-            mPlayFlowBean.setSale_amount(Float.parseFloat("pay_type"));
-            mPlayFlowBean.setPay_way(hashMap.get("pay_type"));
+            mPlayFlowBean.setSale_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));
+            mPlayFlowBean.setPay_way(hashMap.get(i).get("pay_type"));
             mPlayFlowBean.setSell_way("A");
             mPlayFlowBean.setCard_no(1);
             mPlayFlowBean.setVip_no(1);
             mPlayFlowBean.setCoin_no("RMB");
             mPlayFlowBean.setCoin_rate(1);
-            mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get("payAmount")));//付款金额
+            mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("");
             mPlayFlowBean.setOper_id(Config.UserName);
-            mPlayFlowBean.setSale_man(Config.UserName);
+            mPlayFlowBean.setSale_man(saleMan);
             mPlayFlowBean.setShift_no("");
             mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
             mPlayFlowBean.setMemo("");
@@ -526,4 +754,145 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         }
         mLingShouScanImp.upPlayFlow(mPlayFlowBeanList);
     }
+
+    /**
+     * 打印自定义小票
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex() {
+
+        String lang = getString(R.string.strLang);
+        if ((lang.compareTo("cn")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
+            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+            String str = formatter.format(curDate);
+            String date = str + "\n\n\n";
+            if (is58mm) {
+
+                try {
+//                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 6);//
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+//                    SendDataByte(qrcode);
+
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("专卖店\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    String mes = "";
+                    int shuliang = 0;
+                    mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "品名       数量    单价    金额\n";
+                    for(int i=0; i<mListData.size(); i++){
+                        GetClassPluResult mGetClassPluResult = mListData.get(i);
+                        Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
+                        shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                        mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
+                    }
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "数量：                "+shuliang+"\n总计：                "+money+"\n付款：                "+et_pay_money.getText().toString()+"\n找零：                "+et_pay_money.getText().toString()+"\n";
+                    SendDataByte(mes.getBytes("GBK"));
+                    mes = "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
+                    SendDataByte(mes.getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+
+//                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x02;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataString(date);
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
+                    SendDataByte(Command.GS_V_m_n);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 8);
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(qrcode);
+
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("NIKE专卖店\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("门店号: 888888\n单据  S00003333\n收银员：1001\n单据日期：xxxx-xx-xx\n打印时间：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
+                    SendDataByte("品名            数量    单价    金额\nNIKE跑鞋        10.00   899     8990\nNIKE篮球鞋      10.00   1599    15990\n".getBytes("GBK"));
+                    SendDataByte("数量：                20.00\n总计：                16889.00\n付款：                17000.00\n找零：                111.00\n".getBytes("GBK"));
+                    SendDataByte("公司名称：NIKE\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-11111111\n服务专线：400-xxx-xxxx\n===========================================\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x02;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataString(date);
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
+                    SendDataByte(Command.GS_V_m_n);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     *SendDataByte
+     */
+    private void SendDataByte(byte[] data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        mService.write(data);
+    }
+
+    /*
+     * SendDataString
+     */
+    private void SendDataString(String data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (data.length() > 0) {
+            try {
+                mService.write(data.getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

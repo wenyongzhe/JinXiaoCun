@@ -230,5 +230,5 @@
     <string name="item_rem">助记码:</string>
     <string name="mess_back">确定退出？</string>
     <string name="change_msg_back">有数据变动,是否保存退出？</string>
-    <string name="pay_cancle">？整单取消</string>
+    <string name="pay_cancle">整单取消？</string>
 </resources>

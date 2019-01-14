@@ -441,7 +441,7 @@ public class LingShouScanImp implements ILingshouScan {
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_SELL_SUB,mSellSubBeanResult);
             }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mSellSubBeanResult);
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }
         }
     }

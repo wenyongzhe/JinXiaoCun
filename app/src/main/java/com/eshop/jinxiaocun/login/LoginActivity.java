@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 break;
             case Config.MESSAGE_ERROR:
                 ToastUtils.showLong(o.toString());
-                OnLogin();
+                //OnLogin();
                 break;
             case Config.MESSAGE_INTENT:
                 LoginBeanResult mGetFlowNoBeanResult = (LoginBeanResult)o;

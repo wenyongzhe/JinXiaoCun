@@ -134,7 +134,8 @@ public class NetWorkImp implements INetWork {
 
     @Override
     public void doGet(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
-        String md5 = MD5Util.string2MD5(paramsMap.get("JsonData")==null?paramsMap.get("jsonData"):paramsMap.get("JsonData"));
+        String md5Tem = paramsMap.get("jsonData")+"C41Ore7aL5n8E";
+        String md5 = MD5Util.string2MD5(md5Tem);
         paramsMap.put("Sign",md5.toUpperCase());
         doGet(url,paramsMap,null,iResponseListener);
     }

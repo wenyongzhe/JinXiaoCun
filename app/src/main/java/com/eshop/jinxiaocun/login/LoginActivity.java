@@ -222,7 +222,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 OnLogin();
                 break;
             case Config.MESSAGE_ERROR:
-                //ToastUtils.showLong(o.toString());
+                ToastUtils.showLong(o.toString());
                 OnLogin();
                 break;
             case Config.MESSAGE_INTENT:

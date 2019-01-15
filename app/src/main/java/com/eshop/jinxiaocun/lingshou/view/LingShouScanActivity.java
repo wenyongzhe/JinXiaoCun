@@ -928,7 +928,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @OnClick(R.id.btn_add)
     void sell() {
         isOk = true;
-        //setSaleFlowBean();
+        setSaleFlowBean();
         Intent mIntent = new Intent(this,PayActivity.class);
         Bundle bundle = new Bundle();
         mIntent.putExtra("mListData", (Serializable) mListData);

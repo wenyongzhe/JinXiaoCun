@@ -335,27 +335,23 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 }
                 break;
             case Config.MESSAGE_SELL_SUB:
-                if(isOk){
-                    ToastUtils.showShort(R.string.message_sell_ok);
-
-                    AlertUtil.showAlert(PayActivity.this, "提示", "结算完成",
-                            "确定", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlertUtil.dismissDialog();
+                AlertUtil.showAlert(PayActivity.this, "提示", "结算处理完成",
+                        "确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            }
+                        },R.string.txt_print, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+                                    Intent serverIntent = new Intent(PayActivity.this, DeviceListActivity.class);
+                                    startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
                                 }
-                            },R.string.txt_print, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
-                                        Intent serverIntent = new Intent(PayActivity.this, DeviceListActivity.class);
-                                        startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
-                                    }
-                                    AlertUtil.dismissDialog();
-                                }
-                            });
+                                AlertUtil.dismissDialog();
+                            }
+                });
 //                printMs();
-                }
                 break;
         }
     }

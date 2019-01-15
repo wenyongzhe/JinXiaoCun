@@ -652,7 +652,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             case Config.MESSAGE_CAPTURE_RETURN:
                 String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
                 String tempayway = "";
-                String temMoney = "0";
+                if(sp_payway.getSelectedItemPosition()==1){
+                    tempayway = "ZFB";
+                }else if(sp_payway.getSelectedItemPosition()==2){
+                    tempayway = "WXZ";
+                }
+                String temMoney = money+"";
                 mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);
                 break;

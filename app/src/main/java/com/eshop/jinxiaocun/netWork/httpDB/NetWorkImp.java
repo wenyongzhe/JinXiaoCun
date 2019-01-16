@@ -84,11 +84,11 @@ public class NetWorkImp implements INetWork {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
-            myOkHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.MINUTES)
+            myOkHttpClient = new OkHttpClient.Builder().connectTimeout(2, TimeUnit.MINUTES)
                     //添加OkHttp3的拦截器
                     .addInterceptor(httpLoggingInterceptor)
                     .addNetworkInterceptor(new CacheInterceptor())
-                    .writeTimeout(20, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(2, TimeUnit.MINUTES).readTimeout(2, TimeUnit.MINUTES)
                     //.cache(new Cache(sdcache.getAbsoluteFile(), cacheSize))
                     .build();
         }
@@ -134,10 +134,10 @@ public class NetWorkImp implements INetWork {
 
     @Override
     public void doGet(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
+        //数据加密
         String md5Tem = paramsMap.get("JsonData")+"C41Ore7aL5n8E";
-        String md5 = MD5Util.string2MD5(md5Tem);
+        String md5 = MD5Util.string2MD5(md5Tem).toUpperCase();
         paramsMap.put("Sign",md5);
-        paramsMap.put("sign",md5);
         doGet(url,paramsMap,null,iResponseListener);
     }
 
@@ -170,8 +170,6 @@ public class NetWorkImp implements INetWork {
         });
     }
 
-
-
     private Request.Builder configHeaders(Request.Builder builder, NetworkOption option) {
         Map<String, String> headers = option.mHeaders;
         if(headers==null || headers.size()==0){
@@ -190,10 +188,11 @@ public class NetWorkImp implements INetWork {
 
     @Override
     public void doPost(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
-        String md5 = MD5Util.string2MD5(paramsMap.get("JsonData")==null?paramsMap.get("jsonData"):paramsMap.get("JsonData"));
-        paramsMap.put(paramsMap.get("Sign")==null?"sign":"Sign",md5.toUpperCase());
+        //数据加密
+        String md5Tem = paramsMap.get("JsonData")+"C41Ore7aL5n8E";
+        String md5 = MD5Util.string2MD5(md5Tem).toUpperCase();
+        paramsMap.put("Sign",md5);
         doPost(url,paramsMap,null,iResponseListener);
-
     }
 
     @Override

@@ -127,6 +127,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             isDianpin=true;
         }
         if( mPandianPihao !=null){
+            mSheetNo = mPandianPihao.getSheet_no();
             mTvOrderNo.setText("");
             mTvOrderNo.setSelected(true);
             mTvFanwei.setText(mPandianPihao.getOper_range_name());
@@ -180,7 +181,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         //如果是单品盘点则不取盘点明细 否则取盘点明细
         if(!isDianpin){
             AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
-            mSheetNo = mPandianPihao.getSheet_no();
             if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
                 mGetDBDatas = new GetDBDatas(this);
                 mGetDBDatas.execute();
@@ -188,6 +188,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 getPandianDetailData(mSheetNo);
             }
 
+        }else {
+            mGetDBDatas = new GetDBDatas(this);
+            mGetDBDatas.execute();
         }
 
     }
@@ -266,6 +269,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 obj.setProduce_date("");
                 obj.setValid_date("");
                 obj.setItem_barcode("");//批次号
+                obj.setHas_stocktake(1);//已盘点
+                obj.setStatus(0);//未上传
 
                 boolean isSame = false;
                 for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
@@ -275,12 +280,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         //已经存在自动+1
                         int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
                         mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
+                        //同时更新表中单品盘点盘点数量
+                        BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
                         isSame = true;
                         break;
                     }
                 }
                 if(!isSame){//不存在列表中 添加到列表里
                     mAddPandianGoodsDetailData.add(obj);
+                    BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
                 }
                 mAdapter.setListInfo(mAddPandianGoodsDetailData);
                 upDateShowView();
@@ -312,7 +320,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             obj.setProduce_date(piciInfo.getProduce_date());
             obj.setValid_date(piciInfo.getValid_date());
             obj.setItem_barcode(piciInfo.getItem_barcode());//批次号
-
+            obj.setHas_stocktake(1);//已盘点
+            obj.setStatus(0);//未上传
 
             boolean isSame = false;
             for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
@@ -322,12 +331,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     //已经存在自动+1
                     int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
                     mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
+                    //同时更新表中单品盘点盘点数量
+                    BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
                     isSame = true;
                     break;
                 }
             }
             if(!isSame){//不存在列表中 添加到列表里
                 mAddPandianGoodsDetailData.add(obj);
+                BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
             }
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
             upDateShowView();
@@ -545,8 +557,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mAddPandianGoodsDetailData.remove(i);
                 mAdapter.setItemClickPosition(-1);
                 mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                //同时更新表中盘点状态和修改盘点数量 标记为未盘点
-                BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(0,"0",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                if(isDianpin){
+                    //删除单品盘点的记录
+                    BusinessBLL.getInstance().deleteStocktakeGoods(mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                }else{
+                    //同时更新表中盘点状态和修改盘点数量 标记为未盘点
+                    BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(0,"0",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                }
                 break;
             }
         }
@@ -614,17 +631,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             //获取盘点明细
             case Config.MESSAGE_OK:
                 PandianDetailResult result = (PandianDetailResult) o;
-
                 if(result==null || result.getDetailData()==null){
                     AlertUtil.showToast("获取盘点明细数据为空!");
                     return;
                 }
-
                 mPandianDetailData.addAll(result.getDetailData());
                 mNowCount+=result.getNowCount();
-
                 try {
-                    BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,result.getDetailData());
+                    BusinessBLL.getInstance().insertPandianGoodsEntitys(mSheetNo,result.getDetailData());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("lu","SQLite Exception is "+e.getMessage());
@@ -634,7 +648,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 float diffTime = (lastTime-time)/1000f;
                 time = System.currentTimeMillis();
                 Log.e("lu","run time is "+diffTime);
-
                 Log.e("lu","mNowCount = "+mNowCount);
                 //总条数相等不再取盘点明细
                 if(result.getTotalCount()!=0 && result.getTotalCount()!=mNowCount){
@@ -675,7 +688,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.MESSAGE_GOODS_INFOR_FAIL:
                 AlertUtil.showToast("不在盘点范围！原因："+o.toString());
                 break;
-
             //业务单据号
             case Config.MESSAGE_SHEETNO_OK:
                 SheetNoBeanResult sheetNoBeanResult = (SheetNoBeanResult) o;
@@ -697,8 +709,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 break;
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:
-                //同时更新表中盘点状态 标记为已盘点
-                BusinessBLL.getInstance().updateStocktakeGoodsStatus(mAddPandianGoodsDetailData,mSheetNo);
+                if(isDianpin){
+                    //上传完了单品盘点 删除本地记录的单品盘点记录
+                    BusinessBLL.getInstance().deleteStocktakeGoods(mSheetNo);
+                }else {
+                    //同时更新表中盘点状态 标记为已盘点
+                    BusinessBLL.getInstance().updateStocktakeGoodsStatus(mAddPandianGoodsDetailData,mSheetNo);
+                }
                 AlertUtil.showToast(o.toString());
                 AlertUtil.dismissProgressDialog();
                 setResult(22);
@@ -709,7 +726,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 AlertUtil.showToast(o.toString());
                 AlertUtil.dismissProgressDialog();
                 break;
-
         }
     }
 
@@ -730,11 +746,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     intent.putExtra("GoodsInfoList", (Serializable) selectGoodsList);
                     startActivityForResult(intent,44);
                 }
-
             }else{
                 AlertUtil.showToast("该条码没有对应的商品数据!");
             }
-
         }
 
         //选择批次信息
@@ -760,9 +774,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(mSelectPandianDetailEntity.getItem_no())){
                     mAddPandianGoodsDetailData.get(i).setCheck_qty(MyUtils.convertToInt(countN,0));
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                    //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                    BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(MyUtils.convertToInt(countN,0),
-                            "1",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                    if(!isDianpin){
+                        //同时更新表中盘点状态和更改盘点数量 标记为已盘点
+                        BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(MyUtils.convertToInt(countN,0),
+                                "1",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                    }else{
+                        BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(MyUtils.convertToInt(countN,0),
+                                mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                    }
                     break;
                 }
             }
@@ -785,7 +804,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     }
 
-    //从未盘点的商品中选择
+    //非单品   从未盘点的商品中选择
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNoPandianDatas(PandianDetailBeanResult eventResult){
         PandianDetailBeanResult result = eventResult;
@@ -805,7 +824,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         GetDBDatas(PandianScanActivity activity) {
             this.weakActivity = new WeakReference<>(activity);
         }
-
         @Override
         protected String doInBackground(String... strings) {
             try{
@@ -819,7 +837,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     @Override
                     public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {
                         publishProgress(progress+"/"+maxProgress);
-                        mPandianDetailData.add(module);
+                        if(!isDianpin){
+                            mPandianDetailData.add(module);
+                        }
                         //0未盘点 1已盘点
                         if(module.getHas_stocktake()==1){
                             mAddPandianGoodsDetailData.add(module);
@@ -833,7 +853,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 return e.getMessage();
             }
         }
-
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
@@ -844,13 +863,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 // activity没了,就结束可以了
                 return;
             }
-
             AlertUtil.setNoButtonMessage("正在加载数据 "+values[0]);
         }
-
         @Override
         protected void onPostExecute(String s) {
-
             PandianScanActivity activity = weakActivity.get();
             if (activity == null
                     || activity.isFinishing()
@@ -858,11 +874,12 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 // activity没了,就结束可以了
                 return;
             }
-
             AlertUtil.dismissProgressDialog();
             if(s.equals("ok")){
                 if(mAddPandianGoodsDetailData.size()>0){
-                    mTvNoPandian.setVisibility(View.VISIBLE);
+                    if(!isDianpin){
+                        mTvNoPandian.setVisibility(View.VISIBLE);
+                    }
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
                     upDateShowView();
                 }

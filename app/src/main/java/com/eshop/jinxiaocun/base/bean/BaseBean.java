@@ -7,15 +7,6 @@ public class BaseBean {
     private String DevID = Config.DeviceID;
     private int SoftVer = Config.VersionCode;
     private String strCmd;
-    private String Sign;
-
-    public String getSign() {
-        return Sign;
-    }
-
-    public void setSign(String sign) {
-        Sign = sign;
-    }
 
     public String getDevID() {
         return DevID;

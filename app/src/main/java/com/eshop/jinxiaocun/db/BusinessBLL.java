@@ -238,57 +238,59 @@ public class BusinessBLL {
             db.endTransaction();
         }
     }
-    public boolean insertPandianGoodsEntity(String sheetNo,List<PandianDetailBeanResult> listResult) throws Exception {
-
-        SQLiteDatabase db =Config.DBHelper.getWritableDatabase();
+    public boolean insertPandianGoodsEntity(String sheetNo,PandianDetailBeanResult data) throws SQLException {
         try{
-
-            db.beginTransaction();
-
-            for (PandianDetailBeanResult beanResult : listResult) {
-                StringBuilder insertSqlBuilder = new StringBuilder();
-                insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
-                StringBuilder valuesBuilder = new StringBuilder();
-
-                List<Object> values=new ArrayList<>();
-                Field[] flds = beanResult.getClass().getDeclaredFields();//私有字段
-
-                values.add(sheetNo);
-                insertSqlBuilder.append("sheet_no");//添加真实字段
-                valuesBuilder.append("?");
-
-                for (Field fld : flds) {
-                    if(fld.getName().equals("serialVersionUID"))
-                        continue;
-                    if (fld.getName().equals("$change")) {
-                        continue;
-                    }
-                    Object value = ReflactUtility.getInstance().getFldValue(beanResult, fld.getName());
-                    if (value != null) {
-                        values.add(value);
-                        insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
-                        valuesBuilder.append(",?");
-                    }
+            StringBuilder insertSqlBuilder = new StringBuilder();
+            insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
+            StringBuilder valuesBuilder = new StringBuilder();
+            List<Object> values=new ArrayList<>();
+            Field[] flds = data.getClass().getDeclaredFields();//私有字段
+            values.add(sheetNo);
+            insertSqlBuilder.append("sheet_no");//添加真实字段
+            valuesBuilder.append("?");
+            for (Field fld : flds) {
+                if(fld.getName().equals("serialVersionUID"))
+                    continue;
+                if (fld.getName().equals("$change")) {
+                    continue;
                 }
-                String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
-                db.execSQL(insertSql,values.toArray());
+                Object value = ReflactUtility.getInstance().getFldValue(data, fld.getName());
+                if (value != null) {
+                    values.add(value);
+                    insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
+                    valuesBuilder.append(",?");
+                }
             }
-
-            db.setTransactionSuccessful();
+            String[] strValues = new String[values.size()];
+            for (int i = 0; i < values.size(); i++) {
+                strValues[i] = values.get(i).toString();
+            }
+            String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
+            Config.DBHelper.exeSql(insertSql,strValues);
         }catch (Exception e){
             e.printStackTrace();
             return false;
-        }finally {
-            db.endTransaction();
         }
-
+        return true;
+    }
+    public boolean insertPandianGoodsEntitys(String sheetNo,List<PandianDetailBeanResult> listResult) throws SQLException {
+        try{
+            Config.DBHelper.beginTrans();
+            for (PandianDetailBeanResult beanResult : listResult) {
+                insertPandianGoodsEntity(sheetNo,beanResult);
+            }
+            Config.DBHelper.commitTrans();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
     //添加或删除盘点商品时，修改盘点状态 has_stocktake 0未盘点 1已盘点
-    public void updateStocktakeGoodsStatus(String has_stocktake,String item_no,String sheet_no)throws SQLException {
+    public void updateStocktakeGoodsCheckQty(int check_qty ,String item_no,String sheet_no)throws SQLException {
         if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
-        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set has_stocktake=? where item_no=? and sheet_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{has_stocktake,item_no,sheet_no});
+        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=? where item_no=? and sheet_no=?";
+        Config.DBHelper.exeSql(sql, new String[]{check_qty+"",item_no,sheet_no});
     }
     //上传成功后修改盘点状态  status 0未上传 1已上传 / has_stocktake 0未盘点 1已盘点
     public void updateStocktakeGoodsStatus(String status,String has_stocktake,String item_no,String sheet_no)throws SQLException {
@@ -313,7 +315,30 @@ public class BusinessBLL {
         Config.DBHelper.exeSql(sql, new String[]{check_qty+"",has_stocktake,item_no,sheet_no});
     }
 
-
+    //根本商品号和盘点批号 删除对应的单品盘点记录
+    public int deleteStocktakeGoods(String item_no,String sheet_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return 0;
+            String sql = "DELETE FROM "+Config.PANDIAN_DETAIL_GOODS+" where item_no=? and sheet_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{item_no,sheet_no});
+            return 1;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    //根本盘点批号 删除对应的单品盘点记录
+    public int deleteStocktakeGoods(String sheet_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return 0;
+            String sql = "DELETE FROM "+Config.PANDIAN_DETAIL_GOODS+" where sheet_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{sheet_no});
+            return 1;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
     private void insertEntity(Class bean ,String tableName) throws SQLException{
         StringBuilder insertSqlBuilder = new StringBuilder();

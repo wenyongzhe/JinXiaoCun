@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.piandian.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class PandianScanAdapter extends BaseAdapter {
     private List<PandianDetailBeanResult> listInfo;
-    private LayoutInflater inflater = null;
+    private LayoutInflater inflater ;
     private int itemClickPosition = -1;
 
     public PandianScanAdapter(Context context, List<PandianDetailBeanResult> listInfo){
@@ -68,7 +69,7 @@ public class PandianScanAdapter extends BaseAdapter {
         tv_spec.setSelected(true);
         tv_product_name.setText(obj.getItem_name());
         tv_product_code.setText(obj.getItem_no());
-        tv_product_pici.setText(obj.getItem_barcode());
+        tv_product_pici.setText(TextUtils.isEmpty(obj.getItem_barcode())?"无":obj.getItem_barcode());
         tv_spec.setText(obj.getItem_size());
         tv_xsprice.setText(obj.getSale_price()+"");
         tv_unit.setText(obj.getUnit_no());

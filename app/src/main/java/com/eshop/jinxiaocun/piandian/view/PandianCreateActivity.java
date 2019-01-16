@@ -98,7 +98,11 @@ public class PandianCreateActivity extends CommonBaseActivity implements INetWor
                 mTvPandianpihao.setText(mPandianPihao.getSheet_no());
                 mTvStoreNo.setText(mPandianPihao.getBranch_name());
                 mTvFanwei.setText(mPandianPihao.getOper_range_name());
-                mTvType.setText(mPandianPihao.getCheck_cls());
+                if( mPandianPihao !=null && mPandianPihao.getOper_range_name().equals("单品盘点")){
+                    mTvType.setText("无类别");
+                }else{
+                    mTvType.setText(mPandianPihao.getCheck_cls());
+                }
                 mTvOperId.setText(mPandianPihao.getOper_id());
                 mTvDate.setText(mPandianPihao.getOper_date());
                 mEtBz.setText(mPandianPihao.getMemo());

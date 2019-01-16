@@ -148,7 +148,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
         setHeaderTitle(R.id.tv_2,R.string.list_item_CountN4,100);//盘点数量
         setHeaderTitle(R.id.tv_3,R.string.list_item_XSPrice,100);//销售价格
-        setHeaderTitle(R.id.tv_4,R.string.list_item_Unit,80);//单位
+        setHeaderTitle(R.id.tv_4,R.string.list_item_Unit,60);//单位
         setHeaderTitle(R.id.tv_5,R.string.list_item_Pici_Name,150);//批次
         setHeaderTitle(R.id.tv_6,R.string.list_item_Spec,100);//规格
         setHeaderTitle(R.id.tv_7,R.string.list_item_StoreNum,100);//库存数量
@@ -187,7 +187,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             }else{
                 getPandianDetailData(mSheetNo);
             }
-
         }else {
             mGetDBDatas = new GetDBDatas(this);
             mGetDBDatas.execute();
@@ -281,14 +280,20 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
                         mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
                         //同时更新表中单品盘点盘点数量
-                        BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
+                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
+                        if(isSuccess==0){
+                            AlertUtil.showToast("更新本地数据失败！");
+                        }
                         isSame = true;
                         break;
                     }
                 }
                 if(!isSame){//不存在列表中 添加到列表里
                     mAddPandianGoodsDetailData.add(obj);
-                    BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
+                    boolean isSuccess = BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
+                    if(!isSuccess){
+                        AlertUtil.showToast("保存本地单品盘点数据失败！");
+                    }
                 }
                 mAdapter.setListInfo(mAddPandianGoodsDetailData);
                 upDateShowView();
@@ -332,14 +337,20 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
                     mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
                     //同时更新表中单品盘点盘点数量
-                    BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("更新本地数据失败！");
+                    }
                     isSame = true;
                     break;
                 }
             }
             if(!isSame){//不存在列表中 添加到列表里
                 mAddPandianGoodsDetailData.add(obj);
-                BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
+                boolean isSuccess = BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
+                if(!isSuccess){
+                    AlertUtil.showToast("保存本地单品盘点数据失败！");
+                }
             }
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
             upDateShowView();
@@ -395,7 +406,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                             int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty() + 1;
                             mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
                             //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                            BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
+                            int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
+                            if(isSuccess==0){
+                                AlertUtil.showToast("更新本地数据失败！");
+                            }
                             isSame = true;
                             break;
                         }
@@ -403,7 +417,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     if (!isSame) {//不存在列表中 添加到列表里
                         mAddPandianGoodsDetailData.add(obj);
                         //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                        BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
+                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
+                        if(isSuccess==0){
+                            AlertUtil.showToast("更新本地数据失败！");
+                        }
                     }
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
                     //只要添加了盘点单就显示未盘点商品按钮
@@ -453,7 +470,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
                     mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
                     //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                    BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("更新本地数据失败！");
+                    }
                     isSame = true;
                     break;
                 }
@@ -461,7 +481,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             if(!isSame){//不存在列表中 添加到列表里
                 mAddPandianGoodsDetailData.add(obj);
                 //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
+                int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
+                if(isSuccess==0){
+                    AlertUtil.showToast("更新本地数据失败！");
+                }
             }
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
             //只要添加了盘点单就显示未盘点商品按钮
@@ -553,17 +576,23 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected void deleteAfter() {
         for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
             if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(mSelectPandianDetailEntity.getItem_no())){
+                if(isDianpin){
+                    //删除单品盘点的记录
+                    int isSuccess = BusinessBLL.getInstance().deleteStocktakeGoods(mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("删除本地单品盘点数据失败！");
+                    }
+                }else{
+                    //同时更新表中盘点状态和修改盘点数量 标记为未盘点
+                    int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(0,"0",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("更新本地数据失败！");
+                    }
+                }
                 mSelectPandianDetailEntity = null;
                 mAddPandianGoodsDetailData.remove(i);
                 mAdapter.setItemClickPosition(-1);
                 mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                if(isDianpin){
-                    //删除单品盘点的记录
-                    BusinessBLL.getInstance().deleteStocktakeGoods(mSelectPandianDetailEntity.getItem_no(),mSheetNo);
-                }else{
-                    //同时更新表中盘点状态和修改盘点数量 标记为未盘点
-                    BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(0,"0",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
-                }
                 break;
             }
         }
@@ -638,7 +667,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 mPandianDetailData.addAll(result.getDetailData());
                 mNowCount+=result.getNowCount();
                 try {
-                    BusinessBLL.getInstance().insertPandianGoodsEntitys(mSheetNo,result.getDetailData());
+                    boolean isSuccess = BusinessBLL.getInstance().insertPandianGoodsEntitys(mSheetNo,result.getDetailData());
+                    if(!isSuccess){
+                        AlertUtil.showToast("保存本地盘点数据失败!");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("lu","SQLite Exception is "+e.getMessage());
@@ -711,10 +743,16 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             case Config.RESULT_SUCCESS:
                 if(isDianpin){
                     //上传完了单品盘点 删除本地记录的单品盘点记录
-                    BusinessBLL.getInstance().deleteStocktakeGoods(mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().deleteStocktakeGoods(mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("删除本地数据单品盘点失败！");
+                    }
                 }else {
                     //同时更新表中盘点状态 标记为已盘点
-                    BusinessBLL.getInstance().updateStocktakeGoodsStatus(mAddPandianGoodsDetailData,mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatus(mAddPandianGoodsDetailData,mSheetNo);
+                    if(isSuccess==0){
+                        AlertUtil.showToast("更新本地数据失败！");
+                    }
                 }
                 AlertUtil.showToast(o.toString());
                 AlertUtil.dismissProgressDialog();
@@ -776,11 +814,17 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
                     if(!isDianpin){
                         //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                        BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(MyUtils.convertToInt(countN,0),
+                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(MyUtils.convertToInt(countN,0),
                                 "1",mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                        if(isSuccess==0){
+                            AlertUtil.showToast("更新本地数据失败！");
+                        }
                     }else{
-                        BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(MyUtils.convertToInt(countN,0),
+                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(MyUtils.convertToInt(countN,0),
                                 mSelectPandianDetailEntity.getItem_no(),mSheetNo);
+                        if(isSuccess==0){
+                            AlertUtil.showToast("更新本地数据失败！");
+                        }
                     }
                     break;
                 }
@@ -813,7 +857,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
             upDateShowView();
             //同时更新表中盘点状态 标记为已盘点
-            BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(result.getCheck_qty(),"1",result.getItem_no(),mSheetNo);
+            int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(result.getCheck_qty(),"1",result.getItem_no(),mSheetNo);
+            if(isSuccess==0){
+                AlertUtil.showToast("更新本地数据失败！");
+            }
         }
     }
 

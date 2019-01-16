@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.db;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -73,7 +74,7 @@ public class BusinessBLL {
             return false;
     }
     //根据条件获取盘点商品数据集合
-    public List<PandianDetailBeanResult> getDBStocktakeGoodsDatas(String where) throws Exception{
+    public List<PandianDetailBeanResult> getDBStocktakeGoodsDatas(String where) throws SQLException{
 
         Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
         String queryFlds = "";
@@ -106,7 +107,6 @@ public class BusinessBLL {
         int count = cursor.getCount();
         cursor.moveToFirst();
         try{
-
             // 取出所有的列名
             Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
             // 遍历游标
@@ -124,13 +124,11 @@ public class BusinessBLL {
                     if (field.getName().equals("$change")) {
                         continue;
                     }
-
                     String columnName = field.getName();
                     int columnIdx = cursor.getColumnIndex(columnName);
                     if (columnIdx == -1) {
                         continue;
                     }
-
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
@@ -156,39 +154,16 @@ public class BusinessBLL {
         return moduleList;
     }
     //获取盘点商品数据  有进度条显示
-    public void getDBStocktakeGoodsDatas(String where ,DbCallBack callBack) throws Exception{
-
-        Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
-        String queryFlds = "";
-        int mark = 0;
-        for (Field fld  : flds) {
-            if (fld.isSynthetic()) {
-                continue;
-            }
-            if (fld.getName().equals("serialVersionUID")) {
-                continue;
-            }
-            if (fld.getName().equals("$change")) {
-                continue;
-            }
-            if (mark == 0) {
-                mark++;
-                queryFlds += fld.getName();
-            } else {
-                queryFlds += "," + fld.getName();
-            }
-        }
-        String sql = "select " + queryFlds + " from " + Config.PANDIAN_DETAIL_GOODS;
-        if (!where.equals(""))
-            sql += " where " + where;
-
-        SQLiteDatabase db =Config.DBHelper.getReadableDatabase();
-        db.beginTransaction();
-        Cursor cursor = db.rawQuery(sql, null);
-        int count = cursor.getCount();
-        cursor.moveToFirst();
+    public void getDBStocktakeGoodsDatas(String where ,DbCallBack callBack) throws SQLException{
+        Cursor cursor = null;
         try{
+            String sql = "select * from " + Config.PANDIAN_DETAIL_GOODS;
+            if (!where.equals(""))
+                sql += " where " + where;
 
+            cursor = Config.DBHelper.query(sql);
+            int count = cursor.getCount();
+            cursor.moveToFirst();
             // 取出所有的列名
             Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
             // 遍历游标
@@ -206,13 +181,11 @@ public class BusinessBLL {
                     if (field.getName().equals("$change")) {
                         continue;
                     }
-
                     String columnName = field.getName();
                     int columnIdx = cursor.getColumnIndex(columnName);
                     if (columnIdx == -1) {
                         continue;
                     }
-
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
@@ -220,34 +193,27 @@ public class BusinessBLL {
                     if (type == String.class)
                         field.set(module, cursor.getString(columnIdx));
                     else if (type == int.class)
-                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx), 0));
                     else if (type == float.class)
-                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx), 0f));
                 }
-                if(callBack!=null){
-                    callBack.progressUpdate(i+1,count,module);
+                if (callBack != null) {
+                    callBack.progressUpdate(i + 1, count, module);
                 }
                 cursor.moveToNext();
             }
 
-            db.setTransactionSuccessful();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
             cursor.close();
-            db.endTransaction();
         }
     }
     public boolean insertPandianGoodsEntity(String sheetNo,PandianDetailBeanResult data) throws SQLException {
         try{
-            StringBuilder insertSqlBuilder = new StringBuilder();
-            insertSqlBuilder.append("insert into ").append(Config.PANDIAN_DETAIL_GOODS).append("(");
-            StringBuilder valuesBuilder = new StringBuilder();
-            List<Object> values=new ArrayList<>();
+            ContentValues values = new ContentValues();
+            values.put("sheet_no",sheetNo);
             Field[] flds = data.getClass().getDeclaredFields();//私有字段
-            values.add(sheetNo);
-            insertSqlBuilder.append("sheet_no");//添加真实字段
-            valuesBuilder.append("?");
             for (Field fld : flds) {
                 if(fld.getName().equals("serialVersionUID"))
                     continue;
@@ -256,17 +222,18 @@ public class BusinessBLL {
                 }
                 Object value = ReflactUtility.getInstance().getFldValue(data, fld.getName());
                 if (value != null) {
-                    values.add(value);
-                    insertSqlBuilder.append(",").append(fld.getName());//添加真实字段
-                    valuesBuilder.append(",?");
+                    if(value instanceof String){
+                        values.put(fld.getName(),value.toString());
+                    }else if(value instanceof Integer){
+                        values.put(fld.getName(),MyUtils.convertToInt(value,0));
+                    }else if(value instanceof Float){
+                        values.put(fld.getName(),MyUtils.convertToFloat(value,0f));
+                    }else if(value instanceof Double){
+                        values.put(fld.getName(),MyUtils.convertToDouble(value,0d));
+                    }
                 }
             }
-            String[] strValues = new String[values.size()];
-            for (int i = 0; i < values.size(); i++) {
-                strValues[i] = values.get(i).toString();
-            }
-            String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
-            Config.DBHelper.exeSql(insertSql,strValues);
+            Config.DBHelper.insert(Config.PANDIAN_DETAIL_GOODS,values);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -287,10 +254,16 @@ public class BusinessBLL {
         return true;
     }
     //添加或删除盘点商品时，修改盘点状态 has_stocktake 0未盘点 1已盘点
-    public void updateStocktakeGoodsCheckQty(int check_qty ,String item_no,String sheet_no)throws SQLException {
-        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
-        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=? where item_no=? and sheet_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{check_qty+"",item_no,sheet_no});
+    public int updateStocktakeGoodsCheckQty(int check_qty ,String item_no,String sheet_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return 0;
+            String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=? where item_no=? and sheet_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{check_qty+"",item_no,sheet_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
     //上传成功后修改盘点状态  status 0未上传 1已上传 / has_stocktake 0未盘点 1已盘点
     public void updateStocktakeGoodsStatus(String status,String has_stocktake,String item_no,String sheet_no)throws SQLException {
@@ -299,20 +272,32 @@ public class BusinessBLL {
         Config.DBHelper.exeSql(sql, new String[]{status,has_stocktake,item_no,sheet_no});
     }
     //更改上传的商品盘点状态更改为已上传、已盘点
-    public void updateStocktakeGoodsStatus(List<PandianDetailBeanResult> list,String sheet_no)throws SQLException{
-        if(list==null || list.size()==0)return;
-        Config.DBHelper.beginTrans();
-        for (PandianDetailBeanResult info : list) {
-            updateStocktakeGoodsStatus("1","1",info.getItem_no(),sheet_no);
+    public int updateStocktakeGoodsStatus(List<PandianDetailBeanResult> list,String sheet_no)throws SQLException{
+        try{
+            if(list==null || list.size()==0)return 0;
+            Config.DBHelper.beginTrans();
+            for (PandianDetailBeanResult info : list) {
+                updateStocktakeGoodsStatus("1","1",info.getItem_no(),sheet_no);
+            }
+            Config.DBHelper.commitTrans();
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        Config.DBHelper.commitTrans();
+        return 0;
     }
 
     //添加或删除盘点商品时，修改盘点状态和盘点数量 has_stocktake 0未盘点 1已盘点
-    public void updateStocktakeGoodsStatusAndCheckQty(int check_qty ,String has_stocktake,String item_no,String sheet_no)throws SQLException {
-        if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return ;
-        String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=?,has_stocktake=? where item_no=? and sheet_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{check_qty+"",has_stocktake,item_no,sheet_no});
+    public int updateStocktakeGoodsStatusAndCheckQty(int check_qty ,String has_stocktake,String item_no,String sheet_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return 0;
+            String sql = "update "+Config.PANDIAN_DETAIL_GOODS+" set check_qty=?,has_stocktake=? where item_no=? and sheet_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{check_qty+"",has_stocktake,item_no,sheet_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       return 0;
     }
 
     //根本商品号和盘点批号 删除对应的单品盘点记录

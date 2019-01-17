@@ -81,6 +81,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     LinearLayout ly_fukuan_jinge;
     @BindView(R.id.ly_fukuan_zhaoling)
     LinearLayout ly_fukuan_zhaoling;
+    @BindView(R.id.btn_print)
+    Button btn_print;
 
     Button btn_jiesuan;//
 
@@ -223,7 +225,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             return;
         }
         Print_Ex();
-        finish();
     }
 
     private final Handler mHandler = new Handler() {
@@ -296,7 +297,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             case Config.MESSAGE_OK:
                 break;
             case Config.MESSAGE_ERROR:
-                AlertUtil.showAlert(PayActivity.this,"提示",(String)o);
+                AlertUtil.showAlert(PayActivity.this, "提示", (String)o,
+                        "确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            }
+                        });
+                //AlertUtil.showAlert(PayActivity.this,"提示",(String)o);
                 break;
             case Config.MESSAGE_VIP_PAY_RESULT:
                 mVipPayBeanResult = (VipPayBeanResult)o;
@@ -558,6 +566,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
         }catch (Exception e){
         }
+    }
+
+    @OnClick(R.id.btn_print)
+    void btn_print() {
+        printMs();
     }
 
     @OnClick(R.id.btn_yingyeyuan)

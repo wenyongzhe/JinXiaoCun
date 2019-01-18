@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.eshop.jinxiaocun.base.bean.BillGlideNo;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
@@ -42,26 +43,35 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.println("upgrade a database1");
-        //创建表结构
-        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id integer primary key autoincrement," + cloumFile(UpMainBean.class) +")";
-        sqLiteDatabase.execSQL(sql);//执行sql语句
+//        //创建表结构
+//        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id integer primary key autoincrement,"
+//                + cloumFile(UpMainBean.class) +")";
+//        sqLiteDatabase.execSQL(sql);//执行sql语句
+//
+//        //创建表结构
+//        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id integer primary key autoincrement,"
+//                + cloumFile(UpDetailBean.class) +")";
+//        sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构
-        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id integer primary key autoincrement," + cloumFile(UpDetailBean.class) +")";
-        sqLiteDatabase.execSQL(sql);//执行sql语句
-
-        //创建表结构
-        sql = "create table "+ Config.PANDIAN_DETAIL_GOODS+"("+ "id integer primary key autoincrement,"
+        String sql = "create table "+ Config.PANDIAN_DETAIL_GOODS+"("+ "id integer primary key autoincrement,"
                 +"sheet_no varchar(50),"
                 + cloumFile(PandianDetailBeanResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构  商品信息
-        sql = "create table "+ Config.GETCLASSPLURESULT+"("+ "id integer primary key autoincrement," + cloumFile(GetClassPluResult.class) +")";
+        sql = "create table "+ Config.GETCLASSPLURESULT+"("+ "id integer primary key autoincrement,"
+                + cloumFile(GetClassPluResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构  单据主体信息
-        sql = "create table "+ Config.DANJUMAINBEANRESULTITEM+"("+ "id integer primary key autoincrement," + cloumFile(DanJuMainBeanResultItem.class) +")";
+        sql = "create table "+ Config.DANJUMAINBEANRESULTITEM+"("+ "id integer primary key autoincrement,"
+                + cloumFile(DanJuMainBeanResultItem.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构  保存生成的临时编号
+        sql = "create table "+ Config.BILLGLIDENO+"("+ "idno integer primary key autoincrement,"
+                + cloumFile(BillGlideNo.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
     }

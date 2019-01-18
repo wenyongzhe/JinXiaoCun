@@ -111,7 +111,7 @@ public class Config {
     public static final String PANDIAN_DETAIL_GOODS = "PANDIANDETAILGOODS";
     public static final String GETCLASSPLURESULT ="GetClassPluResult";
     public static final String DANJUMAINBEANRESULTITEM ="DanJuMainBeanResultItem";
-
+    public static final String BILLGLIDENO ="billGlideNO";
     //门店组
     public static String ShopGroup = "";
 

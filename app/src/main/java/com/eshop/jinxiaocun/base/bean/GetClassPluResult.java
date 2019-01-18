@@ -31,6 +31,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String sale_qnty;//:1 //数量
     private boolean hasYiJia = false;//是否已经议价
     private String orderType;//保存本地时与单据类型绑定
+    public String Sheet_No;//保存本地时与单据号绑定
 
     public boolean isHasYiJia() {
         return hasYiJia;
@@ -232,6 +233,14 @@ public class GetClassPluResult extends ListBean implements Serializable{
         this.orderType = orderType;
     }
 
+    public String getSheet_No() {
+        return Sheet_No;
+    }
+
+    public void setSheet_No(String sheet_No) {
+        Sheet_No = sheet_No;
+    }
+
     @Override
     public boolean equals(Object obj) {
 
@@ -243,10 +252,10 @@ public class GetClassPluResult extends ListBean implements Serializable{
             return false;
         GetClassPluResult a = (GetClassPluResult) obj;
         if (this.sale_price!=null&&
-                this.sale_price.equals(a.sale_price)&&this.sale_qnty.equals(a.sale_qnty))
+                this.sale_price.equals(a.sale_price)&&this.sale_qnty!=null&&this.sale_qnty.equals(a.sale_qnty))
             return true;
         if (this.base_price!=null&&
-                this.base_price.equals(a.base_price)&&this.sale_qnty.equals(a.sale_qnty))
+                this.base_price.equals(a.base_price)&&this.sale_qnty!=null&&this.sale_qnty.equals(a.sale_qnty))
             return true;
 
         return false;

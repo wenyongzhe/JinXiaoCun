@@ -1,14 +1,18 @@
 package com.eshop.jinxiaocun.caigou.view;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderListAdapter;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
@@ -23,6 +27,7 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +58,7 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
     private int mPageIndex = 1;
     private int mPageSize = 20;
     private String mCheckflag = "0";//0未审核，1审核
-
+    private final String mSheetType = "本地_"+Config.YwType.PO.toString();
     @Override
     protected int getLayoutContentId() {
         return R.layout.activity_caigou_order_list;
@@ -104,11 +109,21 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         super.initData();
         mDanJuList = new DanJuListImp(this);
         mServerApi = new OtherModelImp(this);
+        getCaigouOrderData_DB();
         getCaigouOrderData();
     }
-
+    //取本地的单据数据
+    private void getCaigouOrderData_DB() {
+        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
+        if(datas.size()>0){
+            mListInfo.clear();
+            mListInfo.addAll(datas);
+            mLayoutBottomTxt.setVisibility(View.VISIBLE);
+            mTvAllCount.setText("总共有"+mListInfo.size()+"条单据");
+            mAdapter.setListInfo(mListInfo,mCheckflag);
+        }
+    }
     private void getCaigouOrderData() {
-
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
@@ -186,13 +201,11 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         mListView.onRefreshComplete();
         switch (flag) {
             case Config.MESSAGE_OK:
+                mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 if(mPageIndex==1){
-                    mListInfo = (List<DanJuMainBeanResultItem>)o;
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
                     }
-                }else{
-                    mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 }
                 if(mListInfo.size()>0){
                     mTvAllCount.setText("总共有"+mListInfo.size()+"条单据");
@@ -225,6 +238,7 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
             mSelectMainBean =null;
             mAdapter.setItemClickPosition(-1);
             mAdapter.notifyDataSetInvalidated();
+            getCaigouOrderData_DB();
             getCaigouOrderData();
         }
     }
@@ -241,14 +255,34 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
 
     @Override
     protected boolean deleteOrderBefore() {
-        return false;
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+        return true;
     }
-
     @Override
     protected void deleteOrderAfter() {
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            int isSuccess = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+            if(isSuccess ==0){
+                AlertUtil.showToast("删除本地数据失败");
+                return;
+            }
+            for (DanJuMainBeanResultItem item : mListInfo) {
+                if(item.getSheet_No().equals(mSelectMainBean.getSheet_No())){
+                    mListInfo.remove(item);
+                    break;
+                }
+            }
 
+            mSelectMainBean =null;
+            mAdapter.setItemClickPosition(-1);
+            mAdapter.notifyDataSetInvalidated();
+        }else{
+            AlertUtil.showToast("删除还没有接口!");
+        }
     }
-
     @Override
     protected boolean modifyBefore() {
         if(mSelectMainBean==null){
@@ -257,7 +291,6 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         }
         return true;
     }
-
     @Override
     protected void modifyAfter() {
         Intent intent = new Intent(this,CaigouOrderScanActivity.class);
@@ -265,7 +298,6 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         intent.putExtra("MainBean",mSelectMainBean);
         startActivityForResult(intent,2);
     }
-
     @Override
     protected boolean checkBefore() {
 
@@ -273,29 +305,28 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
             AlertUtil.showToast("没有权限，不能做审核操作，请联系管理员!");
             return false;
         }
-
         if(mListInfo.size()==0){
             AlertUtil.showToast("没有单据，不能做审核操作!");
             return false;
         }
-
         if(mSelectMainBean==null){
             AlertUtil.showToast("请选择单据，再做审核操作!");
             return false;
         }
-
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            AlertUtil.showToast("本地数据只能做修改操作!");
+            return false;
+        }
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
             return false;
         }
         return true;
     }
-
     @Override
     protected void checkAfter() {
         mServerApi.sheetCheck(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No());
     }
-
     @Override
     protected void onTopBarRightClick() {
         super.onTopBarRightClick();
@@ -311,6 +342,14 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         mAdapter.setItemClickPosition(-1);
         mSelectMainBean = null;
         getCaigouOrderData();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mListInfo!=null){
+            mListInfo.clear();
+            mListInfo=null;
+        }
     }
 
 }

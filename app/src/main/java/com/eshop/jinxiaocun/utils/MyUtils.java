@@ -419,6 +419,13 @@ public class MyUtils {
         return true;
     }
 
+    public static String getNewOrderNO(){
+
+        java.util.Date now_date = new java.util.Date();
+        String curDate = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(now_date);  //.SSS
+        return curDate;
+    }
+
     private static long lastClickTime = 0;
     //防止重复点击 事件间隔，在这里我定义的是1000毫秒
     public static boolean isFastDoubleClick() {

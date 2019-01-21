@@ -105,19 +105,7 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
         super.initData();
         mDanJuList = new DanJuListImp(this);
         mServerApi= new OtherModelImp(this);
-        getCaigouOrderData_DB();
         getPifaOrderData();
-    }
-    //取本地的单据数据
-    private void getCaigouOrderData_DB() {
-        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
-        if(datas.size()>0){
-            mListInfo.clear();
-            mListInfo.addAll(datas);
-            mLayoutBottomTxt.setVisibility(View.VISIBLE);
-            mTvAllCount.setText("总共有"+mListInfo.size()+"条单据");
-            mAdapter.setListInfo(mListInfo,mCheckflag);
-        }
     }
     private void getPifaOrderData() {
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
@@ -198,7 +186,14 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
         switch (flag) {
             case Config.MESSAGE_OK:
                 if(mPageIndex==1){
-                    mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    if("0".equals(mCheckflag)){//未审核
+                        //取缓存本地的主表信息
+                        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
+                        datas.addAll((List<DanJuMainBeanResultItem>)o);
+                        mListInfo=datas;
+                    }else{
+                        mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    }
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
                     }
@@ -236,7 +231,6 @@ public class PifaOrderListActivity extends CommonBaseListActivity implements INe
             mSelectMainBean =null;
             mAdapter.setItemClickPosition(-1);
             mAdapter.notifyDataSetInvalidated();
-            getCaigouOrderData_DB();
             getPifaOrderData();
         }
     }

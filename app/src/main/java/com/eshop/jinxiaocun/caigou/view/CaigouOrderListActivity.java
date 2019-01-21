@@ -109,20 +109,9 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         super.initData();
         mDanJuList = new DanJuListImp(this);
         mServerApi = new OtherModelImp(this);
-        getCaigouOrderData_DB();
         getCaigouOrderData();
     }
-    //取本地的单据数据
-    private void getCaigouOrderData_DB() {
-        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
-        if(datas.size()>0){
-            mListInfo.clear();
-            mListInfo.addAll(datas);
-            mLayoutBottomTxt.setVisibility(View.VISIBLE);
-            mTvAllCount.setText("总共有"+mListInfo.size()+"条单据");
-            mAdapter.setListInfo(mListInfo,mCheckflag);
-        }
-    }
+
     private void getCaigouOrderData() {
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
@@ -136,7 +125,6 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         mDanJuMainBean.JsonData.page = mPageIndex;
         mDanJuList.getDanJuList(mDanJuMainBean);
     }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
@@ -201,11 +189,20 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
         mListView.onRefreshComplete();
         switch (flag) {
             case Config.MESSAGE_OK:
-                mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 if(mPageIndex==1){
+                    if("0".equals(mCheckflag)){//未审核
+                        //取缓存本地的主表信息
+                        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
+                        datas.addAll((List<DanJuMainBeanResultItem>)o);
+                        mListInfo=datas;
+                    }else{
+                        mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    }
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
                     }
+                }else{
+                    mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
                 }
                 if(mListInfo.size()>0){
                     mTvAllCount.setText("总共有"+mListInfo.size()+"条单据");
@@ -238,7 +235,6 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
             mSelectMainBean =null;
             mAdapter.setItemClickPosition(-1);
             mAdapter.notifyDataSetInvalidated();
-            getCaigouOrderData_DB();
             getCaigouOrderData();
         }
     }

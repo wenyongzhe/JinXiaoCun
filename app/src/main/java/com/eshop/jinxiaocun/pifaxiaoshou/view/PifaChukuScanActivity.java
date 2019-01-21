@@ -138,27 +138,20 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
         if(mSelectMainBean !=null){
             mCheckflag = getIntent().getStringExtra("Checkflag");
         }
-        getOrderDetail(mSelectMainBean,false);
+        getOrderDetail(mSelectMainBean);
     }
     //从单据列表进入 取此单据明细
-    private void getOrderDetail(DanJuMainBeanResultItem selectMainBean,boolean citeOrder) {
+    private void getOrderDetail(DanJuMainBeanResultItem selectMainBean) {
         if (selectMainBean != null) {
-            if(!citeOrder){
-                isCiteOrder = false;
-                mStr_OrderNo = selectMainBean.getSheet_No();
-                SupCust_No =selectMainBean.getSupCust_No();
-                mTvUser.setText(selectMainBean.getSupplyName());
-                mTvUserStore.setText("["+selectMainBean.getBranch_No()+"]");
-                if(mSheetType.equals(selectMainBean.getSheetType())){
-                    mSheetNo=selectMainBean.getSheet_No();
-                    mGetDBDatas= new GetDBDatas(this);
-                    mGetDBDatas.execute();
-                }else{
-                    mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
-                }
+            mStr_OrderNo = selectMainBean.getSheet_No();
+            SupCust_No =selectMainBean.getSupCust_No();
+            mTvUser.setText(selectMainBean.getSupplyName());
+            mTvUserStore.setText("["+selectMainBean.getBranch_No()+"]");
+            if(mSheetType.equals(selectMainBean.getSheetType())){
+                mSheetNo=selectMainBean.getSheet_No();
+                mGetDBDatas= new GetDBDatas(this);
+                mGetDBDatas.execute();
             }else{
-                //引单  根据主表取引单明细
-                isCiteOrder = true;
                 mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
             }
         }else{
@@ -188,6 +181,10 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核，不能再添加商品!");
             return;
+        }
+        if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
+            AlertUtil.showToast("请选择客户，再引单!");
+            return ;
         }
         Intent intent = new Intent(PifaChukuScanActivity.this,CiteOrderListActivity.class);
         intent.putExtra("SheetType",Config.YwType.SO.toString());
@@ -440,8 +437,8 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
                             mOldListDatas.add(old_obj);
                         }
                     }
-
                 }
+
                 if(isCiteOrder)isCiteOrder = false;
                 if(mListDatas.size()>0){//默认选中和第一条
                     mSelectGoodsEntity = mListDatas.get(0);
@@ -630,7 +627,9 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
             // 单据类型，入库方法需要自己填 入库方式，加库存的填“+”，减库存的填"-" 订单不产生库存变化的可以填空
             selectMainBean.setSheetType(Config.YwType.SO.toString());
             selectMainBean.setVoucher_Type("-");
-            getOrderDetail(selectMainBean,true);
+            //引单  根据主表取引单明细
+            isCiteOrder = true;
+            mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
         }
 
         //修改价格

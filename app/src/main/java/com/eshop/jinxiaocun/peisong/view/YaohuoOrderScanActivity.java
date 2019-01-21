@@ -474,7 +474,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
                     mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
                     mAdapter.setItemClickPosition(mListDatas.size()-1);
                 }
-                //如果是新开单或之前保存本地的单据 更新数量
+                //如果是新开单或之前保存本地的单据 插入商品信息和更新数量
                 if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
                     int zsl = 0;
                     for (GetClassPluResult info : mListDatas) {
@@ -669,8 +669,9 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected void deleteAfter() {
+        String itemNo = mSelectGoodsEntity.getItem_no();
         for (int i = 0; i < mListDatas.size(); i++) {
-            if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+            if(mListDatas.get(i).getItem_no().equals(itemNo)){
                 mSelectGoodsEntity = null;
                 mListDatas.remove(i);
                 mAdapter.setItemClickPosition(-1);
@@ -679,8 +680,19 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
                 break;
             }
         }
+        //如果是新开单或之前保存本地的单据 删除商品并更新数量
+        if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+            int zsl = 0;
+            for (GetClassPluResult info : mListDatas) {
+                zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+            }
+            int isSuccess = BusinessBLL.getInstance().deleteGoodsInfoAndUpdateOrderQty(mSheetNo,
+                    itemNo,zsl+"");
+            if(isSuccess==0){
+                AlertUtil.showToast("本地商品更改数量失败！");
+            }
+        }
     }
-
     @Override
     protected boolean modifyCountBefore() {
         if(mCheckflag.equals("1")){

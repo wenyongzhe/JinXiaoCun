@@ -1,9 +1,9 @@
 package com.eshop.jinxiaocun.caigou.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +15,9 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothDeviceInfo;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothService;
+import com.eshop.jinxiaocun.bluetoothprinter.view.SettingBluetoothActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
@@ -54,7 +57,7 @@ import butterknife.OnClick;
  * Desc: 采购订单扫描
  */
 
-public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
+public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult, BluetoothService.BluetoothResultListerner {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
@@ -79,6 +82,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private String mSheetNo;//标记本地数据的单据号
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.PO.toString();
+    //打印
+    private BluetoothService bluetoothService;
+    private boolean isPrinter = true;//正在打印
+    private ProgressDialog progressDialog;
 
     @Override
     protected int getLayoutContentId() {
@@ -212,7 +219,29 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @OnClick(R.id.btn_print)
     public void onClickPront(){
-        AlertUtil.showToast("好的，我去打印");
+        if (mListDatas == null || mListDatas.size()==0){
+            AlertUtil.showToast("没有商品信息,不能进行打印！", this);
+            return ;
+        }
+
+        AlertUtil.showAlert(this, R.string.dialog_title, "您确定要打印吗？", R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    gotoPrinter();
+                }catch (Exception ex){
+                    AlertUtil.showToast("打印失败！原因："+ex.getMessage(),CaigouOrderScanActivity.this);
+                }
+                AlertUtil.dismissDialog();
+            }
+        }, R.string.cancel, new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertUtil.dismissDialog();
+            }
+        });
+
     }
 
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){
@@ -857,5 +886,120 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             mGetDBDatas.cancel(true);
         }
     }
+
+    //打印
+    private void gotoPrinter(){
+        if(isPrinter){
+            isPrinter = false;
+            //判断是否有蓝牙地址
+            if (Config.BluetoothAddress.equals("")) {
+                isPrinter = true;
+                Intent i = new Intent(this, SettingBluetoothActivity.class);
+                startActivity(i);
+            }else{
+                if(mListDatas.size()>0){
+                    AlertUtil.showToast("正在打印...", this);
+                    bluetoothService.connectBluetooth();
+                }else{
+                    isPrinter = true;
+                    AlertUtil.showToast("没有数据，不能打印!", this);
+                }
+            }
+        }else{
+            AlertUtil.showToast("正在打印，请稍后..", this);
+        }
+    }
+    //打印机是否连接了
+    @Override
+    public void IsConnect(boolean isConnect) {
+        isPrinter = true;
+        try {
+            if (isConnect) {
+                printHeader();
+                printContent();
+                bluetoothService.disConnectBluetooth();
+                finish();
+            } else {
+                AlertUtil.showToast("连接打印机失败！可能要重新配置蓝牙打印机！", this);
+            }
+        } catch (Exception ex) {
+            AlertUtil.showToast("打印小票失败，原因：" + ex.getMessage(), this);
+        }
+    }
+    @Override
+    public void SearchDevices(List<BluetoothDeviceInfo> mDevices) { }
+    @Override
+    public void IsPair(boolean isPair) {}
+
+    private void printHeader() {
+        bluetoothService.setMargin(0);
+        bluetoothService.setFont(1, true, false);
+
+        //居中
+        StringBuilder buf = new StringBuilder();
+        buf.append("\r\n"+ MyUtils.rpad((25 - MyUtils.length("库存"))/2," "));
+        buf.append("库存");
+        buf.append("\r\n");
+        bluetoothService.printText(buf.toString());
+        bluetoothService.setFont(0, false, false);
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("\r\n");
+        buffer.append("操作人：");
+        buffer.append(Config.UserName);
+        buffer.append(MyUtils.rpad(46 - MyUtils.length("操作人："
+                +Config.UserName+"打印日期："+DateUtility.getCurrentTime())," "));
+        buffer.append("打印日期：");
+        buffer.append(DateUtility.getCurrentTime());
+        buffer.append("\r\n");
+        buffer.append("------------------------------------------------");
+        buffer.append("\r\n");
+        bluetoothService.printText(buffer.toString());
+    }
+
+    private void printContent() {
+
+        StringBuilder buffer = new StringBuilder();
+        //左对齐
+        buffer.append("商品");
+        buffer.append(MyUtils.rpad(26 - MyUtils.length("商品")," "));
+
+        buffer.append("单价");
+        buffer.append(MyUtils.rpad(10 - MyUtils.length("单价")," "));
+
+        buffer.append("数量");
+        buffer.append(MyUtils.rpad(10 - MyUtils.length("数量")," "));
+        buffer.append("\r\n");
+
+        for (int i = 0; i < mListDatas.size(); i++) {
+            GetClassPluResult obj = mListDatas.get(i);
+            //左对齐
+            buffer.append(obj.getItem_name());
+            buffer.append(MyUtils.rpad(26 - MyUtils.length(obj.getItem_name())," "));
+            //超出指定长度 空两格 防止相连
+            if(26 < MyUtils.length(obj.getItem_name())){
+                buffer.append(MyUtils.rpad(2," "));
+            }
+            String jg = String.format(Locale.CANADA, "%.2f", Float.parseFloat(obj.getSale_price()));
+
+            buffer.append(jg);
+            buffer.append(MyUtils.rpad(10 - MyUtils.length(jg)," "));
+            //超出指定长度 空两格 防止相连
+            if(10 < MyUtils.length(jg)){
+                buffer.append(MyUtils.rpad(2," "));
+            }
+            buffer.append(TextUtils.isEmpty(obj.getSale_qnty())?"0":obj.getSale_qnty());
+            buffer.append("\r\n");
+        }
+
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        bluetoothService.printText(buffer.toString());
+
+    }
+
+
 
 }

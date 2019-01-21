@@ -419,13 +419,6 @@ public class MyUtils {
         return true;
     }
 
-    public static String getNewOrderNO(){
-
-        java.util.Date now_date = new java.util.Date();
-        String curDate = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(now_date);  //.SSS
-        return curDate;
-    }
-
     private static long lastClickTime = 0;
     //防止重复点击 事件间隔，在这里我定义的是1000毫秒
     public static boolean isFastDoubleClick() {
@@ -439,7 +432,44 @@ public class MyUtils {
             return false;
 
         }
+    }
 
+    /**
+     * 补齐不足长度
+     * @param length 长度
+     * @param str 数字
+     * @return
+     */
+    public static String rpad(int length, String str)
+    {
+        if (length < 0 || length==0)
+            return "";
+        String f = "%-" + length + "s";
+        return String.format(f, str);
+    }
+
+    /**
+     * 获取字符串的长度，如果有中文，则每个中文字符计为2位
+     * @param value 指定的字符串
+     * @return 字符串的长度
+     */
+    public static int length(String value) {
+        int valueLength = 0;
+        String chinese = "[\u0391-\uFFE5]";
+        /* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
+        for (int i = 0; i < value.length(); i++) {
+            /* 获取一个字符 */
+            String temp = value.substring(i, i + 1);
+            /* 判断是否为中文字符 */
+            if (temp.matches(chinese)) {
+                /* 中文字符长度为2 */
+                valueLength += 2;
+            } else {
+                /* 其他字符长度为1 */
+                valueLength += 1;
+            }
+        }
+        return valueLength;
     }
 
 }

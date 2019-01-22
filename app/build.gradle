@@ -55,4 +55,6 @@ dependencies {
     implementation files('libs/btsdk.jar')
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.google.zxing:core:3.3.0'
+    //蓝牙打印
+    implementation files('libs/sprtprintersdk.jar')
 }

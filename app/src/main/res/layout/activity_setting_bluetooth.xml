@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_system_setting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    >
+    <com.eshop.jinxiaocun.widget.MyActionBar
+        android:id="@+id/actionbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_40"
+        android:background="@color/list_background"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="打印机名称"
+            style="@style/ListView_Header" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="状态"
+            style="@style/ListView_Header" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/alpha_blue" />
+
+    <ListView
+        android:id="@+id/listview_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="#ffffff"
+        android:dividerHeight="1dip"
+        android:listSelector="#00000000"
+        android:layout_marginBottom="5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        >
+
+        <Button
+            android:id="@+id/searchDevices"
+            style="@style/Button_green"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="搜索" />
+
+        <Button
+            android:id="@+id/btn_pair"
+            android:layout_marginStart="10dp"
+            style="@style/Button_red"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="配对" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_connect"
+            android:layout_marginStart="10dp"
+            style="@style/Button_red"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="连接" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_print"
+            android:layout_marginStart="10dp"
+            style="@style/Button_red"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="打印" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -39,6 +41,7 @@ import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -73,9 +76,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private String mCheckflag = "0";//0未审核，1审核
     private String SupCust_No ="";
     private DanJuMainBeanResultItem mSelectMainBean;
-    private String mAddSelectGoodsNo;//添加的商品编码
+    private GetClassPluResult mAddSelectGoods;//添加的商品
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
     private int mModifyPricePermission;//改价权限   1为有权限
+    private String mSheetNo;//标记本地数据的单据号
+    private GetDBDatas mGetDBDatas;
+    private final String mSheetType = "本地_"+Config.YwType.SS.toString();
 
     @Override
     protected int getLayoutContentId() {
@@ -90,9 +96,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         setTopToolBarRightTitleAndStyle("查找商品",R.drawable.border_bg);
         mEtBarcode.setOnKeyListener(onKey);
         mLayoutScanBottomZslZje.setVisibility(View.VISIBLE);
+        mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvUserStore.setText("["+Config.branch_no+"]");
+        mTvUserStore.setText(""+Config.branch_no);
 
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -117,13 +124,11 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mAdapter = new PifaOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
-
     }
 
     @Override
     protected void initData() {
         super.initData();
-
         mOtherApi = new OtherModelImp(this);
         mLingshouApi = new LingShouScanImp(this);
 
@@ -131,12 +136,21 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvUser.setText(mSelectMainBean.getSupplyName());
-            mTvUserStore.setText("["+mSelectMainBean.getBranch_No()+"]");
+            mTvUser.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
+            mTvUserStore.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
-            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
+            if(mSheetType.equals(mSelectMainBean.getSheetType())){
+                mSheetNo=mSelectMainBean.getSheet_No();
+                mGetDBDatas= new GetDBDatas(this);
+                mGetDBDatas.execute();
+            }else{
+                mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
+            }
+        }else{
+            String newOrderNo = BusinessBLL.getInstance().
+                    getNewBillNO("PifaOrder",3,true);
+            mSheetNo = mSheetType+newOrderNo;
         }
-
     }
 
     //手动输入条码事件
@@ -144,12 +158,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_UP){
-
                 if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
                     AlertUtil.showToast("请选择客户，再添加商品!");
                     return false;
                 }
-
                 scanResultData(mEtBarcode.getText().toString().trim());
                 return true;
             }
@@ -165,17 +177,14 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     @Override
     protected void onTopBarRightClick() {
         super.onTopBarRightClick();
-
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核，不能再添加商品!");
             return;
         }
-
         if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
             AlertUtil.showToast("请选择客户，再添加商品!");
             return ;
         }
-
         Intent mIntent = new Intent(this, QreShanpingActivity.class);
         startActivityForResult(mIntent,1);
     }
@@ -203,14 +212,29 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                     int pdNumber = MyUtils.convertToInt(mListDatas.get(i).getSale_qnty(),1)+1;
                     mListDatas.get(i).setSale_qnty(pdNumber+"");
                     isSame = true;
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult data : mListDatas) {
+                            zsl += MyUtils.convertToInt(data.getSale_qnty(),0);
+                        }
+                        int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
+                                scanOrSelectGoods.getItem_no(),pdNumber+"",zsl+"");
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改数量失败！");
+                        }
+                    }
                     break;
                 }
             }
             if(!isSame){//不存在添加 ，已经存在直接刷新
-                mListDatas.add(scanOrSelectGoods);
-                mAddSelectGoodsNo = scanOrSelectGoods.getItem_no();
+                mAddSelectGoods = scanOrSelectGoods;
                 mOtherApi.getOrderGoodsPrice(Config.YwType.SS.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
+            }
+            if(mListDatas.size()>0){//默认选中最后一条
+                mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                mAdapter.setItemClickPosition(mListDatas.size()-1);
             }
             mAdapter.setListInfo(mListDatas);
             upDateUI();
@@ -225,7 +249,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             zje += MyUtils.convertToFloat(data.getSale_qnty(),0)*
                     MyUtils.convertToFloat(data.getBase_price(),0);
         }
-
+        mTvAllRowNumber.setText(""+mListDatas.size());
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
     }
@@ -234,7 +258,24 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private void getPricePermission(){
         mLingshouApi.getOptAuth(Config.GRANT_ITEM_JINE);
     }
-
+    //保存临时主表信息
+    private void saveMainInfo(String sheet_no){
+        DanJuMainBeanResultItem mainInfo = new DanJuMainBeanResultItem();
+        mainInfo.setSheet_No(sheet_no);//单据号
+        mainInfo.setSheetType(mSheetType);//单据类型
+        mainInfo.setBranch_No(Config.branch_no);//当前门店/仓库
+        mainInfo.setSupCust_No(SupCust_No);//供应商 客户 代码
+        mainInfo.setSupplyName(mTvUser.getText().toString());
+        mainInfo.setUSER_ID(Config.UserId);//用户ID
+        mainInfo.setOper_Date(DateUtility.getCurrentDate());//操作日期
+        //是否保存过 没有保存过则保存
+        if(!BusinessBLL.getInstance().isSaveOrderMainInfo(sheet_no)){
+            mainInfo.setSheet_No(sheet_no);//单据号
+            if(!BusinessBLL.getInstance().insertOrderMianInfo(mainInfo)){
+                AlertUtil.showToast("保存本地数据失败！");
+            }
+        }
+    }
     //上传记录头数据（即上传主表信息）
     private void uploadRecordHeadData(){
         UploadDanjuMainBean bean = new UploadDanjuMainBean();
@@ -308,43 +349,42 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                             break;
                         }
                     }
-
                     if(!isSave){//不存在则添加
                         mListDatas.add(obj);
                     }
+
+                    GetClassPluResult old_obj = new GetClassPluResult();
+                    old_obj.setItem_name(detailData.getName());
+                    old_obj.setItem_no(detailData.getBarCode());
+                    old_obj.setItem_barcode(detailData.getPluBatch());//批次
+                    old_obj.setItem_subno(detailData.getSelfCode());//自编码
+                    old_obj.setUnit_no(detailData.getUnit());
+                    old_obj.setSale_qnty(detailData.getCheckNum()+"");
+                    old_obj.setStock_qty(detailData.getStockNum()+"");
+                    old_obj.setPrice(detailData.getBuyPrice()+"");//进价
+                    old_obj.setSale_price(detailData.getSalePrice()+"");//销价
+                    old_obj.setProduce_date(detailData.getMadeDate());
+                    old_obj.setValid_date(detailData.getVaildDate());
+                    old_obj.setEnable_batch(detailData.getEnable_batch());
+                    boolean isOldSave = false;
+                    for ( int i=0; i<mOldListDatas.size();i++) {
+                        GetClassPluResult data = mOldListDatas.get(i);
+                        if(detailData.getBarCode().equals(data.getItem_no())){
+                            isOldSave = true;
+                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+                            mOldListDatas.get(i).setSale_qnty(number+"");
+                            break;
+                        }
+                    }
+                    if(!isOldSave){//不存在则添加
+                        mOldListDatas.add(old_obj);
+                    }
                 }
 
-//                for (OrderDetailBeanResult detailData : orderDetailDatas) {
-//                    GetClassPluResult obj = new GetClassPluResult();
-//                    obj.setItem_name(detailData.getName());
-//                    obj.setItem_no(detailData.getBarCode());
-//                    obj.setItem_barcode(detailData.getPluBatch());//批次
-//                    obj.setItem_subno(detailData.getSelfCode());//自编码
-//                    obj.setUnit_no(detailData.getUnit());
-//                    obj.setSale_qnty(detailData.getCheckNum()+"");
-//                    obj.setStock_qty(detailData.getStockNum()+"");
-//                    obj.setPrice(detailData.getSalePrice()+"");//进价
-//                    obj.setBase_price(detailData.getSalePrice()+"");//批发价
-//                    obj.setProduce_date(detailData.getMadeDate());
-//                    obj.setValid_date(detailData.getVaildDate());
-//                    obj.setEnable_batch(detailData.getEnable_batch());
-//
-//                    boolean isSave = false;
-//                    for ( int i=0; i<mOldListDatas.size();i++) {
-//                        GetClassPluResult data = mOldListDatas.get(i);
-//                        if(detailData.getBarCode().equals(data.getItem_no())){
-//                            isSave = true;
-//                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
-//                            mOldListDatas.get(i).setSale_qnty(number+"");
-//                            break;
-//                        }
-//                    }
-//
-//                    if(!isSave){//不存在则添加
-//                        mOldListDatas.add(obj);
-//                    }
-//                }
-
+                if(mListDatas.size()>0){//默认选中和第一条
+                    mSelectGoodsEntity = mListDatas.get(0);
+                    mAdapter.setItemClickPosition(0);
+                }
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
@@ -368,7 +408,9 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
                     if(goodsData.size()==1){
-                        addGoodsData(goodsData.get(0));
+                        GetClassPluResult goods= goodsData.get(0);
+                        goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                        addGoodsData(goods);
                     }else{
                         //多条数据 弹出选择其中一条
                         Intent intent = new Intent(PifaOrderScanActivity.this,SelectPandianGoodsListActivity.class);
@@ -390,6 +432,13 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:
                 AlertUtil.showToast(o.toString());
+                //如果是新开单或之前保存本地的单据 删除
+                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+                    if(isSuccessDelete ==0){
+                        AlertUtil.showToast("删除本地数据失败");
+                    }
+                }
                 setResult(22);
                 finish();
                 break;
@@ -400,6 +449,12 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
                 OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
+                if(obj==null){
+                    AlertUtil.showToast("商品"+mAddSelectGoods.getItem_no()+"取价失败，没有此商品!");
+                    return;
+                }
+                mListDatas.add(mAddSelectGoods);
+                GetClassPluResult addGoodsInfo = null;
                 for (int i=0 ; i<mListDatas.size();i++) {
                     GetClassPluResult bean = mListDatas.get(i);
                     if(bean.getItem_no().equals(obj.getBarCode())){
@@ -407,20 +462,32 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                         mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
                         mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
                         mListDatas.get(i).setVip_price(obj.getVip_price()+"");
+                        addGoodsInfo=mListDatas.get(i);
                         break;
                     }
                 }
-                mAddSelectGoodsNo = null;
+                if(mListDatas.size()>0){//默认选中最后一条
+                    mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                    mAdapter.setItemClickPosition(mListDatas.size()-1);
+                }
+                //如果是新开单或之前保存本地的单据 更新数量
+                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                    int zsl = 0;
+                    for (GetClassPluResult info : mListDatas) {
+                        zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                    }
+                    addGoodsInfo.setSheet_No(mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
+                    if(isSuccess == 0){
+                        AlertUtil.showToast("商品信息保存本地失败!");
+                    }
+                }
+                mAddSelectGoods = null;
                 mAdapter.setListInfo(mListDatas);
                 upDateUI();
                 break;
             case Config.MESSAGE_GET_PRICE_FAIL:
-                for (int i = 0; i < mListDatas.size(); i++) {
-                    if(mListDatas.get(i).getItem_no().equals(mAddSelectGoodsNo)){
-                        mListDatas.remove(i);
-                        break;
-                    }
-                }
+                mAddSelectGoods = null;
                 AlertUtil.showToast(o.toString());
                 break;
             case Config.MESSAGE_GET_OPT_AUTH:
@@ -458,7 +525,9 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
             if(selectGoodsList !=null && selectGoodsList.size()>0){
-                addGoodsData(selectGoodsList.get(0));
+                GetClassPluResult goods= selectGoodsList.get(0);
+                goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                addGoodsData(goods);
             }
         }
 
@@ -467,6 +536,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             mCustomerInfo = (CustomerInfoBeanResult) data.getSerializableExtra("CustomerInfo");
             SupCust_No =mCustomerInfo.getId();
             mTvUser.setText(mCustomerInfo.getName());
+            //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
+            if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                saveMainInfo(mSheetNo);
+            }
         }
 
         //修改数量
@@ -477,6 +550,18 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                     mListDatas.get(i).setSale_qnty(countN);
                     mAdapter.setListInfo(mListDatas);
                     upDateUI();
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult info : mListDatas) {
+                            zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                        }
+                        int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
+                                mSelectGoodsEntity.getItem_no(),countN,zsl+"");
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改数量失败！");
+                        }
+                    }
                     break;
                 }
             }
@@ -487,9 +572,16 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             String price = data.getStringExtra("Price");
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
-                    mListDatas.get(i).setSale_price(price);
+                    mListDatas.get(i).setBase_price(price);
                     mAdapter.setListInfo(mListDatas);
                     upDateUI();
+                    //如果是新开单或之前保存本地的单据 更新价格
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int isSuccess = BusinessBLL.getInstance().updateGoodsInfoBasePrice(mSheetNo,price,mSelectGoodsEntity.getItem_no());
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改价格失败！");
+                        }
+                    }
                     break;
                 }
             }
@@ -498,6 +590,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         //搜索返回多条数据 ，选择其中一条
         if(requestCode == 44 && resultCode == RESULT_OK){
             GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
             addGoodsData(entity);
         }
 
@@ -510,12 +603,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected void scanResultData(String barcode) {
-
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核，不能再添加商品!");
             return;
         }
-
         if(!TextUtils.isEmpty(barcode)){
             //精准查询接口的
             mLingshouApi.getPLUInfo(barcode);
@@ -560,7 +651,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             AlertUtil.showToast("该单据已审核，不能再操作!");
             return false;
         }
-
         if(mListDatas ==null || mListDatas.size()==0){
             AlertUtil.showToast("没有批发商品，不能做删除操作!");
             return false;
@@ -574,8 +664,9 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected void deleteAfter() {
+        String itemNo = mSelectGoodsEntity.getItem_no();
         for (int i = 0; i < mListDatas.size(); i++) {
-            if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+            if(mListDatas.get(i).getItem_no().equals(itemNo)){
                 mSelectGoodsEntity = null;
                 mListDatas.remove(i);
                 mAdapter.setItemClickPosition(-1);
@@ -584,16 +675,26 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 break;
             }
         }
+        //如果是新开单或之前保存本地的单据 删除商品并更新数量
+        if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+            int zsl = 0;
+            for (GetClassPluResult info : mListDatas) {
+                zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+            }
+            int isSuccess = BusinessBLL.getInstance().deleteGoodsInfoAndUpdateOrderQty(mSheetNo,
+                    itemNo,zsl+"");
+            if(isSuccess==0){
+                AlertUtil.showToast("本地商品更改数量失败！");
+            }
+        }
     }
 
     @Override
     protected boolean modifyCountBefore() {
-
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核，不能再操作!");
             return false;
         }
-
         if(mListDatas ==null || mListDatas.size()==0){
             AlertUtil.showToast("没有批发商品，不能做改数操作!");
             return false;
@@ -703,10 +804,74 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         );
     }
 
+    private class GetDBDatas extends AsyncTask<String,String,String> {
+        // 弱引用是允许被gc回收的;
+        private final WeakReference<PifaOrderScanActivity> weakActivity;
+        GetDBDatas(PifaOrderScanActivity activity) {
+            this.weakActivity = new WeakReference<>(activity);
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            try{
+                List<GetClassPluResult> datas= BusinessBLL.getInstance().getAllGoodsInfo(mSheetNo);
+                List<GetClassPluResult> oldDatas=BusinessBLL.getInstance().getAllGoodsInfo(mSheetNo);
+                mListDatas.addAll(datas);
+                mOldListDatas.addAll(oldDatas);
+                return "ok";
+            }catch (Exception e){
+                e.printStackTrace();
+                return e.getMessage();
+            }
+        }
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            PifaOrderScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+            AlertUtil.setNoButtonMessage("正在加载数据 "+values[0]);
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            PifaOrderScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+            AlertUtil.dismissProgressDialog();
+            if(s.equals("ok")){
+                if(mListDatas.size()>0){//默认选中和第一条
+                    mSelectGoodsEntity = mListDatas.get(0);
+                    mAdapter.setItemClickPosition(0);
+                }
+                mAdapter.setListInfo(mListDatas);
+                upDateUI();
+            }else{
+                AlertUtil.showToast("获取本地数据异常："+s);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mListDatas.clear();
+        if(mListDatas!=null){
+            mListDatas.clear();
+            mListDatas=null;
+        }
+        if(mOldListDatas!=null){
+            mOldListDatas.clear();
+            mOldListDatas=null;
+        }
+        if(mGetDBDatas !=null){
+            mGetDBDatas.cancel(true);
+        }
     }
 
 }

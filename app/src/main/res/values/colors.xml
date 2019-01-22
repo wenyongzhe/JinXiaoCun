@@ -49,6 +49,7 @@
     <color name="button_background">#0c4050</color>
     <color name="button_dark">#2864A9</color>
     <color name="button_red">#ff4400</color>
+    <color name="button_green">#01c676</color>
     <color name="gray">#ff606060</color>
     <color name="alpha_blue">#b6bec9</color>
     <!-- 透明 -->

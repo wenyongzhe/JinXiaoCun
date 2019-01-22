@@ -880,7 +880,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 where.append(mSheetNo);
                 where.append("' and status=0");//0未上传
                 //取未上传的所有本地数据
-                BusinessBLL.getInstance().getDBStocktakeGoodsDatas(where.toString(), new BusinessBLL.DbCallBack() {
+                BusinessBLL.getInstance().getDBStocktakeGoodsDatas(where.toString(), new BusinessBLL.DbCallBack<PandianDetailBeanResult>() {
                     @Override
                     public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {
                         publishProgress(progress+"/"+maxProgress);

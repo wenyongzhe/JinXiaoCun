@@ -111,9 +111,11 @@ public class Config {
     public static final String PANDIAN_DETAIL_GOODS = "PANDIANDETAILGOODS";
     public static final String GETCLASSPLURESULT ="GetClassPluResult";
     public static final String DANJUMAINBEANRESULTITEM ="DanJuMainBeanResultItem";
-
+    public static final String BILLGLIDENO ="billGlideNO";
     //门店组
     public static String ShopGroup = "";
+    //记录连接的蓝牙地址
+    public static String BluetoothAddress = "";
 
     //下载文件路径
     public static final String download_dir = "eshop";

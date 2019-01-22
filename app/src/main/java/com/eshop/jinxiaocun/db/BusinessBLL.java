@@ -10,6 +10,7 @@ import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
+import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ReflactUtility;
@@ -60,9 +61,7 @@ public class BusinessBLL {
     }
     //盘点
     public boolean isHavePandianGoodsEntity(String where) {
-
         if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return false;
-
         String sql = "select * from " + Config.PANDIAN_DETAIL_GOODS;
         if (!where.equals(""))
             sql += " where " + where;
@@ -72,86 +71,6 @@ public class BusinessBLL {
         }
         else
             return false;
-    }
-    //根据条件获取盘点商品数据集合
-    public List<PandianDetailBeanResult> getDBStocktakeGoodsDatas(String where) throws SQLException{
-
-        Field[] flds = PandianDetailBeanResult.class.getDeclaredFields();//私有字段
-        String queryFlds = "";
-        int mark = 0;
-        for (Field fld  : flds) {
-            if (fld.isSynthetic()) {
-                continue;
-            }
-            if (fld.getName().equals("serialVersionUID")) {
-                continue;
-            }
-            if (fld.getName().equals("$change")) {
-                continue;
-            }
-            if (mark == 0) {
-                mark++;
-                queryFlds += fld.getName();
-            } else {
-                queryFlds += "," + fld.getName();
-            }
-        }
-        String sql = "select " + queryFlds + " from " + Config.PANDIAN_DETAIL_GOODS;
-        if (!where.equals(""))
-            sql += " where " + where;
-
-        SQLiteDatabase db =Config.DBHelper.getReadableDatabase();
-        db.beginTransaction();
-        Cursor cursor = db.rawQuery(sql, null);
-        List<PandianDetailBeanResult> moduleList = new ArrayList<>();
-        int count = cursor.getCount();
-        cursor.moveToFirst();
-        try{
-            // 取出所有的列名
-            Field[] arrField = PandianDetailBeanResult.class.getDeclaredFields();
-            // 遍历游标
-            for (int i = 0; i < count; i++) {
-                // 转化为moduleClass类的一个实例
-                PandianDetailBeanResult module = new PandianDetailBeanResult();
-                // 遍历有列
-                for (Field field : arrField) {
-                    if (field.isSynthetic()) {
-                        continue;
-                    }
-                    if (field.getName().equals("serialVersionUID")) {
-                        continue;
-                    }
-                    if (field.getName().equals("$change")) {
-                        continue;
-                    }
-                    String columnName = field.getName();
-                    int columnIdx = cursor.getColumnIndex(columnName);
-                    if (columnIdx == -1) {
-                        continue;
-                    }
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    Class<?> type = field.getType();
-                    if (type == String.class)
-                        field.set(module, cursor.getString(columnIdx));
-                    else if (type == int.class)
-                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx),0));
-                    else if (type == float.class)
-                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx),0f));
-                }
-                moduleList.add(module);
-                cursor.moveToNext();
-            }
-            db.setTransactionSuccessful();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            cursor.close();
-            db.endTransaction();
-        }
-
-        return moduleList;
     }
     //获取盘点商品数据  有进度条显示
     public void getDBStocktakeGoodsDatas(String where ,DbCallBack callBack) throws SQLException{
@@ -286,7 +205,6 @@ public class BusinessBLL {
         }
         return 0;
     }
-
     //添加或删除盘点商品时，修改盘点状态和盘点数量 has_stocktake 0未盘点 1已盘点
     public int updateStocktakeGoodsStatusAndCheckQty(int check_qty ,String has_stocktake,String item_no,String sheet_no)throws SQLException {
         try{
@@ -299,7 +217,6 @@ public class BusinessBLL {
         }
        return 0;
     }
-
     //根本商品号和盘点批号 删除对应的单品盘点记录
     public int deleteStocktakeGoods(String item_no,String sheet_no)throws SQLException {
         try{
@@ -325,44 +242,6 @@ public class BusinessBLL {
         }
     }
 
-    private void insertEntity(Class bean ,String tableName) throws SQLException{
-        StringBuilder insertSqlBuilder = new StringBuilder();
-        insertSqlBuilder.append("insert into ").append(tableName).append("(");
-        StringBuilder valuesBuilder = new StringBuilder();
-
-        List<Object> values=new ArrayList<>();
-        Field[] flds = bean.getClass().getDeclaredFields();//私有字段
-        int mark = 0;
-        for (Field fld : flds) {
-            if(fld.getName().equals("serialVersionUID"))
-                continue;
-            if (fld.getName().equals("$change")) {
-                continue;
-            }
-            if (fld.getName().equals("hasYiJia")) {
-                continue;
-            }
-            Object value = ReflactUtility.getInstance().getFldValue(bean, fld.getName());
-            if (value != null) {
-                values.add(value);
-                if (mark == 0) {
-                    insertSqlBuilder.append(fld.getName());//添加真实字段
-                    valuesBuilder.append("?");
-                    mark++;
-                } else {
-                    insertSqlBuilder.append(",").append(fld.getName());
-                    valuesBuilder.append(",?");
-                }
-            }
-        }
-
-        String[] strValues = new String[values.size()];
-        for (int i = 0; i < values.size(); i++) {
-            strValues[i] = values.get(i).toString();
-        }
-        String insertSql=insertSqlBuilder.toString()+") values ("+valuesBuilder.toString()+")";
-        Config.DBHelper.exeSql(insertSql,strValues);
-    }
     //取出类的字段
     private String queryFlds(Class moduleClass){
         Field[] flds = moduleClass.getDeclaredFields();//私有字段
@@ -384,28 +263,25 @@ public class BusinessBLL {
         }
         return queryFlds.toString();
     }
-    //根据单据类型 获取商品信息集合
-    public List<GetClassPluResult> getAllGoodsInfo(String orderType)throws SQLException{
-
+    //根据单据号 获取商品信息集合
+    public List<GetClassPluResult> getAllGoodsInfo(String sheet_No)throws SQLException{
         List<GetClassPluResult> list = new ArrayList<>();
-        StringBuffer sql = new StringBuffer();
-        sql.append("Select ");
-        sql.append(queryFlds(GetClassPluResult.class));
-        sql.append(" from ");
-        sql.append(Config.GETCLASSPLURESULT);
-        Cursor c = null;
-        try {
-            if(TextUtils.isEmpty(orderType)){
-                c = Config.DBHelper.exeRawQuery(sql.toString());
-            }else{
-                sql.append(" where orderType=?");
-                c = Config.DBHelper.exeRawQuery(sql.toString(),new String[]{orderType});
-            }
+        Cursor cursor = null;
+        try{
+            StringBuffer sbf = new StringBuffer();
+            sbf.append("select * from ");
+            sbf.append(Config.GETCLASSPLURESULT);
+            sbf.append(" where Sheet_No='"+sheet_No+"'");
 
-            while (c.moveToNext()) {
-                // 取出所有的列名
-                Field[] arrField = GetClassPluResult.class.getDeclaredFields();
-                GetClassPluResult module = GetClassPluResult.class.newInstance();
+            cursor = Config.DBHelper.query(sbf.toString());
+            int count = cursor.getCount();
+            cursor.moveToFirst();
+            // 取出所有的列名
+            Field[] arrField = GetClassPluResult.class.getDeclaredFields();
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                GetClassPluResult module = new GetClassPluResult();
                 // 遍历有列
                 for (Field field : arrField) {
                     if (field.isSynthetic()) {
@@ -414,35 +290,85 @@ public class BusinessBLL {
                     if (field.getName().equals("serialVersionUID")) {
                         continue;
                     }
-                    if (field.getName().equals("hasYiJia")) {
+                    if (field.getName().equals("$change")) {
                         continue;
                     }
-
                     String columnName = field.getName();
-                    int columnIdx = c.getColumnIndex(columnName);
+                    int columnIdx = cursor.getColumnIndex(columnName);
                     if (columnIdx == -1) {
                         continue;
                     }
-
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
                     Class<?> type = field.getType();
                     if (type == String.class)
-                        field.set(module, c.getString(columnIdx));
+                        field.set(module, cursor.getString(columnIdx));
                     else if (type == int.class)
-                        field.set(module, c.getInt(columnIdx));
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx), 0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx), 0f));
                 }
                 list.add(module);
+                cursor.moveToNext();
             }
+
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            cursor.close();
         }
-        finally {
-            if (c != null)
-                c.close();
-        }
-
+//        StringBuffer sql = new StringBuffer();
+//        sql.append("Select ");
+//        sql.append(queryFlds(GetClassPluResult.class));
+//        sql.append(" from ");
+//        sql.append(Config.GETCLASSPLURESULT);
+//        Cursor c = null;
+//        try {
+//            if(TextUtils.isEmpty(sheet_No)){
+//                c = Config.DBHelper.exeRawQuery(sql.toString());
+//            }else{
+//                sql.append(" where Sheet_No=?");
+//                c = Config.DBHelper.exeRawQuery(sql.toString(),new String[]{sheet_No});
+//            }
+//            while (c.moveToNext()) {
+//                // 取出所有的列名
+//                Field[] arrField = GetClassPluResult.class.getDeclaredFields();
+//                GetClassPluResult module = GetClassPluResult.class.newInstance();
+//                // 遍历有列
+//                for (Field field : arrField) {
+//                    if (field.isSynthetic()) {
+//                        continue;
+//                    }
+//                    if (field.getName().equals("serialVersionUID")) {
+//                        continue;
+//                    }
+//                    if (field.getName().equals("hasYiJia")) {
+//                        continue;
+//                    }
+//                    String columnName = field.getName();
+//                    int columnIdx = c.getColumnIndex(columnName);
+//                    if (columnIdx == -1) {
+//                        continue;
+//                    }
+//                    if (!field.isAccessible()) {
+//                        field.setAccessible(true);
+//                    }
+//                    Class<?> type = field.getType();
+//                    if (type == String.class)
+//                        field.set(module, c.getString(columnIdx));
+//                    else if (type == int.class)
+//                        field.set(module, c.getInt(columnIdx));
+//                }
+//                list.add(module);
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        finally {
+//            if (c != null)
+//                c.close();
+//        }
         return list;
     }
     //保存商品信息
@@ -451,39 +377,89 @@ public class BusinessBLL {
         if(infos==null||infos.size()<1) return ;
         Config.DBHelper.beginTrans();
         for (GetClassPluResult item : infos) {
-            insertEntity(item.getClass(),Config.GETCLASSPLURESULT);
+            insertGoodsInfo(item);
         }
         Config.DBHelper.commitTrans();
 
     }
     //保存商品信息
-    public void insertGoodsInfo(GetClassPluResult info){
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        insertEntity(info.getClass(),Config.GETCLASSPLURESULT);
+    public boolean insertGoodsInfo(GetClassPluResult data)throws SQLException{
+        try{
+            ContentValues values = new ContentValues();
+            Field[] flds = data.getClass().getDeclaredFields();//私有字段
+            for (Field fld : flds) {
+                if(fld.getName().equals("serialVersionUID"))
+                    continue;
+                if (fld.getName().equals("$change")) {
+                    continue;
+                }
+                Object value = ReflactUtility.getInstance().getFldValue(data, fld.getName());
+                if (value != null) {
+                    if(value instanceof String){
+                        values.put(fld.getName(),value.toString());
+                    }else if(value instanceof Integer){
+                        values.put(fld.getName(),MyUtils.convertToInt(value,0));
+                    }else if(value instanceof Float){
+                        values.put(fld.getName(),MyUtils.convertToFloat(value,0f));
+                    }else if(value instanceof Double){
+                        values.put(fld.getName(),MyUtils.convertToDouble(value,0d));
+                    }
+                }
+            }
+            Config.DBHelper.insert(Config.GETCLASSPLURESULT,values);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
-    //根本单据类型删除商品信息
-    public void deleteGoodsInfoByOrderType(String orderType)throws SQLException {
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        String sql = "DELETE FROM "+Config.GETCLASSPLURESULT+" where orderType=? ";
-        Config.DBHelper.exeSql(sql, new String[]{orderType});
+    //根本单据号,商品编码删除商品信息
+    public int deleteGoodsInfo(String sheet_No,String item_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
+            String sql = "DELETE FROM "+Config.GETCLASSPLURESULT+" where Sheet_No=? and item_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{sheet_No,item_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
     //修改商品数量
-    public void updateGoodsInfoSaleQnty(String orderType,String sale_qnty,String item_no)throws SQLException {
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        String sql = "update "+Config.GETCLASSPLURESULT+" set sale_qnty=? where orderType =? and item_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{sale_qnty, orderType,item_no});
+    public int updateGoodsInfoSaleQnty(String sheet_No,String sale_qnty,String item_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
+            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_qnty=? where Sheet_No=? and item_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{sale_qnty, sheet_No,item_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
     //修改商品销售价格
-    public void updateGoodsInfoSalePrice(String orderType,String sale_price,String item_no)throws SQLException {
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        String sql = "update "+Config.GETCLASSPLURESULT+" set sale_price=? where orderType =? and item_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{sale_price, orderType,item_no});
+    public int updateGoodsInfoSalePrice(String sheet_No,String sale_price,String item_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
+            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_price=? where Sheet_No=? and item_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{sale_price, sheet_No,item_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
     //修改商品批发价格
-    public void updateGoodsInfoBasePrice(String orderType,String base_price,String item_no)throws SQLException {
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        String sql = "update "+Config.GETCLASSPLURESULT+" set base_price=? where orderType =? and item_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{base_price, orderType,item_no});
+    public int updateGoodsInfoBasePrice(String sheet_No,String base_price,String item_no)throws SQLException {
+        try{
+            if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
+            String sql = "update "+Config.GETCLASSPLURESULT+" set base_price=? where Sheet_No=? and item_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{base_price, sheet_No,item_no});
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
     //修改商品VIP价格
     public void updateGoodsInfoVipPrice(String orderType,String vip_price,String item_no)throws SQLException {
@@ -492,9 +468,206 @@ public class BusinessBLL {
         Config.DBHelper.exeSql(sql, new String[]{vip_price, orderType,item_no});
     }
 
+    //取到单据主表的数量
+    public List<DanJuMainBeanResultItem> getOrderMainInfos(String sheetType) throws SQLException{
+        List<DanJuMainBeanResultItem> listDatas=new ArrayList<>();
+        Cursor cursor = null;
+        try{
+            String sql = "select * from " + Config.DANJUMAINBEANRESULTITEM;
+            if (!sheetType.equals(""))
+                sql += " where SheetType='" + sheetType+"'";
 
-    public interface DbCallBack{
-        void progressUpdate(int progress ,int maxProgress,PandianDetailBeanResult module);
+            cursor = Config.DBHelper.query(sql);
+            int count = cursor.getCount();
+            cursor.moveToFirst();
+            // 取出所有的列名
+            Field[] arrField = DanJuMainBeanResultItem.class.getDeclaredFields();
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                DanJuMainBeanResultItem module = new DanJuMainBeanResultItem();
+                // 遍历有列
+                for (Field field : arrField) {
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
+                    if (field.getName().equals("$change")) {
+                        continue;
+                    }
+                    String columnName = field.getName();
+                    int columnIdx = cursor.getColumnIndex(columnName);
+                    if (columnIdx == -1) {
+                        continue;
+                    }
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Class<?> type = field.getType();
+                    if (type == String.class)
+                        field.set(module, cursor.getString(columnIdx));
+                    else if (type == int.class)
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx), 0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx), 0f));
+                }
+                listDatas.add(module);
+                cursor.moveToNext();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+        }
+        return listDatas;
+    }
+    //根据单据号,是否保存过单据主表信息
+    public boolean isSaveOrderMainInfo(String sheet_No){
+        String sql = "Select Sheet_No from "+Config.DANJUMAINBEANRESULTITEM+" where Sheet_No=? limit 1";
+        Cursor c = null;
+        try {
+            c = Config.DBHelper.exeRawQuery(sql, new String[]{sheet_No});
+            if (c.moveToFirst() && c.getCount() > 0) {
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            if (c != null)
+                c.close();
+        }
+        return false;
+    }
+    //保存单据主表信息
+    public boolean insertOrderMianInfo(DanJuMainBeanResultItem data) throws SQLException {
+        try{
+            ContentValues values = new ContentValues();
+            Field[] flds = data.getClass().getDeclaredFields();//私有字段
+            for (Field fld : flds) {
+                if(fld.getName().equals("serialVersionUID"))
+                    continue;
+                if (fld.getName().equals("$change")) {
+                    continue;
+                }
+                Object value = ReflactUtility.getInstance().getFldValue(data, fld.getName());
+                if (value != null) {
+                    if(value instanceof String){
+                        values.put(fld.getName(),value.toString());
+                    }else if(value instanceof Integer){
+                        values.put(fld.getName(),MyUtils.convertToInt(value,0));
+                    }else if(value instanceof Float){
+                        values.put(fld.getName(),MyUtils.convertToFloat(value,0f));
+                    }else if(value instanceof Double){
+                        values.put(fld.getName(),MyUtils.convertToDouble(value,0d));
+                    }
+                }
+            }
+            Config.DBHelper.insert(Config.DANJUMAINBEANRESULTITEM,values);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    //添加商品时  更新商品数量和主表总数量
+    public int upDateGoodsQtyAndOrderQty(String sheet_no,String item_no,String goodsQty,String orderAllQty){
+        try{
+            Config.DBHelper.beginTrans();
+            updateGoodsInfoSaleQnty(sheet_no,goodsQty,item_no);
+            String sql = "update "+Config.DANJUMAINBEANRESULTITEM+" set GoodsNum=? where Sheet_No=?";
+            Config.DBHelper.exeSql(sql, new String[]{orderAllQty, sheet_no});
+            Config.DBHelper.commitTrans();
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    //添加一个商品，并更新主表总数量
+    public int insertGoodsInfoAndUpdateOrderQty(GetClassPluResult goodsInfo,String sheet_no,String orderAllQty){
+        try{
+            Config.DBHelper.beginTrans();
+            insertGoodsInfo(goodsInfo);
+            String sql = "update "+Config.DANJUMAINBEANRESULTITEM+" set GoodsNum=? where Sheet_No=?";
+            Config.DBHelper.exeSql(sql, new String[]{orderAllQty, sheet_no});
+            Config.DBHelper.commitTrans();
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    //删除一个商品，并更新主表总数量
+    public int deleteGoodsInfoAndUpdateOrderQty(String sheet_no,String item_no ,String orderAllQty){
+        try{
+            Config.DBHelper.beginTrans();
+            deleteGoodsInfo(sheet_no,item_no);
+            String sql = "update "+Config.DANJUMAINBEANRESULTITEM+" set GoodsNum=? where Sheet_No=?";
+            Config.DBHelper.exeSql(sql, new String[]{orderAllQty, sheet_no});
+            Config.DBHelper.commitTrans();
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    //删除单据下的商品和主表
+    public int deleteMainInfoAndGoodsInfo(String sheet_no){
+        try{
+            Config.DBHelper.beginTrans();
+            String sql_goods = "DELETE FROM "+Config.GETCLASSPLURESULT+" where Sheet_No=?";
+            Config.DBHelper.exeSql(sql_goods, new String[]{sheet_no});
+            String sql_mainInfo = "DELETE FROM "+Config.DANJUMAINBEANRESULTITEM+" where Sheet_No=?";
+            Config.DBHelper.exeSql(sql_mainInfo, new String[]{sheet_no});
+            Config.DBHelper.commitTrans();
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    //生成一个唯一的编号
+    public String getNewBillNO(String tableName, int glideLength, boolean withIncre){
+        java.util.Date now_date = new java.util.Date();
+        String curDate = new java.text.SimpleDateFormat("yyMMdd").format(now_date);  //.SSS
+
+        String sql = "select glide from billGlideNO where tableName=? and glideDate=?";
+        Cursor cursor = null;
+        try {
+            cursor = Config.DBHelper.exeRawQuery(sql, new String[]{ tableName,curDate });
+            if (cursor.moveToFirst()) {
+                int iGlide = cursor.getInt(0);
+                iGlide = iGlide + 1;
+                if (withIncre) {
+                    sql = "update billGlideNO set glide=? where tableName=? and glideDate=?";
+                    Config.DBHelper.exeSql(sql, new String[]{String.valueOf(iGlide), tableName, curDate}, false);
+                }
+                String format = String.format("%%s%%0%dd", glideLength);
+                return String.format(format, curDate, iGlide);
+            }else{
+                int iGlide = 1;
+                if (withIncre) {
+                    sql = "insert into billGlideNO(tableName, glideDate, glide) values(?,?,?)";
+                    Config.DBHelper.exeSql(sql, new String[]{tableName, curDate, String.valueOf(iGlide)}, false);
+                }
+                String format = String.format("%%s%%0%dd", glideLength);
+                return String.format(format, curDate, iGlide);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return "";
+    }
+    public interface DbCallBack<T>{
+        void progressUpdate(int progress ,int maxProgress,T module);
     }
 
 }

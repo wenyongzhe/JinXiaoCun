@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.caigou.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,10 +15,13 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothDeviceInfo;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothService;
+import com.eshop.jinxiaocun.bluetoothprinter.view.SettingBluetoothActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
@@ -24,12 +29,9 @@ import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuDetailBean;
 import com.eshop.jinxiaocun.othermodel.bean.UploadDanjuMainBean;
-import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
-import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
-import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -37,11 +39,11 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
-import com.eshop.jinxiaocun.widget.InputRemarksDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +57,7 @@ import butterknife.OnClick;
  * Desc: 采购订单扫描
  */
 
-public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
+public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult, BluetoothService.BluetoothResultListerner {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
@@ -74,11 +76,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private String mStr_OrderNo;//采购订单单据号
     private String mCheckflag = "0";//0未审核，1审核
     private String SupCust_No ="";
-    // 用来计算点击间隔时间
-    private long clickTime = 0;
     private DanJuMainBeanResultItem mSelectMainBean;
     private GetClassPluResult mAddSelectGoods;//添加的新商品
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
+    private String mSheetNo;//标记本地数据的单据号
+    private GetDBDatas mGetDBDatas;
+    private final String mSheetType = "本地_"+Config.YwType.PO.toString();
+    //打印
+    private BluetoothService bluetoothService;
+    private boolean isPrinter = true;//正在打印
+    private ProgressDialog progressDialog;
 
     @Override
     protected int getLayoutContentId() {
@@ -96,7 +103,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvReceivingWarehouse.setText(Config.branch_no);
+        mTvReceivingWarehouse.setText(Config.branch_no+"");
 
         mTvProvider.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -129,17 +136,26 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     @Override
     protected void initData() {
         super.initData();
-
         mOtherApi = new OtherModelImp(this);
         mQueryGoodsApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvProvider.setText(mSelectMainBean.getSupplyName());
-            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No());
+            mTvProvider.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
+            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
-            mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
+            if(mSheetType.equals(mSelectMainBean.getSheetType())){
+                mSheetNo=mSelectMainBean.getSheet_No();
+                mGetDBDatas= new GetDBDatas(this);
+                mGetDBDatas.execute();
+            }else{
+                mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
+            }
+        }else{
+            String newOrderNo = BusinessBLL.getInstance().
+                    getNewBillNO("Caigou",3,true);
+            mSheetNo = mSheetType+newOrderNo;
         }
     }
 
@@ -161,7 +177,11 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected boolean onTopBarLeftClick() {
-        return onBackFinish();
+        if(!onBackFinish()){
+            setResult(22);
+            finish();
+        }
+        return true;
     }
 
     @Override
@@ -171,7 +191,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("该单据已审核，不能再添加商品!");
             return;
         }
-
         if(TextUtils.isEmpty(mTvProvider.getText().toString().trim())){
             AlertUtil.showToast("请选择供应商，再添加商品!");
             return ;
@@ -200,12 +219,33 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
     @OnClick(R.id.btn_print)
     public void onClickPront(){
-        AlertUtil.showToast("好的，我去打印");
+        if (mListDatas == null || mListDatas.size()==0){
+            AlertUtil.showToast("没有商品信息,不能进行打印！", this);
+            return ;
+        }
+
+        AlertUtil.showAlert(this, R.string.dialog_title, "您确定要打印吗？", R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    gotoPrinter();
+                }catch (Exception ex){
+                    AlertUtil.showToast("打印失败！原因："+ex.getMessage(),CaigouOrderScanActivity.this);
+                }
+                AlertUtil.dismissDialog();
+            }
+        }, R.string.cancel, new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertUtil.dismissDialog();
+            }
+        });
+
     }
 
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){
         if(scanOrSelectGoods !=null){
-
             boolean isSame = false;
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())){
@@ -213,6 +253,18 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     int pdNumber = MyUtils.convertToInt(mListDatas.get(i).getSale_qnty(),1)+1;
                     mListDatas.get(i).setSale_qnty(pdNumber+"");
                     isSame = true;
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult data : mListDatas) {
+                            zsl += MyUtils.convertToInt(data.getSale_qnty(),0);
+                        }
+                        int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
+                                scanOrSelectGoods.getItem_no(),pdNumber+"",zsl+"");
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改数量失败！");
+                        }
+                    }
                     break;
                 }
             }
@@ -230,7 +282,24 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             upDateUI();
         }
     }
-
+    //保存临时主表信息
+    private void saveMainInfo(String sheet_no){
+        DanJuMainBeanResultItem mainInfo = new DanJuMainBeanResultItem();
+        mainInfo.setSheet_No(sheet_no);//单据号
+        mainInfo.setSheetType(mSheetType);//单据类型
+        mainInfo.setBranch_No(Config.branch_no);//当前门店/仓库
+        mainInfo.setSupCust_No(SupCust_No);//供应商 客户 代码
+        mainInfo.setSupplyName(mTvProvider.getText().toString());
+        mainInfo.setUSER_ID(Config.UserId);//用户ID
+        mainInfo.setOper_Date(DateUtility.getCurrentDate());//操作日期
+        //是否保存过 没有保存过则保存
+        if(!BusinessBLL.getInstance().isSaveOrderMainInfo(sheet_no)){
+            mainInfo.setSheet_No(sheet_no);//单据号
+            if(!BusinessBLL.getInstance().insertOrderMianInfo(mainInfo)){
+                AlertUtil.showToast("保存本地数据失败！");
+            }
+        }
+    }
     private void upDateUI(){
         int zsl = 0;
         float zje = 0f;
@@ -243,7 +312,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
     }
-
     //上传记录头数据（即上传主表信息）
     private void uploadRecordHeadData(){
         UploadDanjuMainBean bean = new UploadDanjuMainBean();
@@ -252,10 +320,9 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         bean.JsonData.Branch_No = Config.branch_no;//当前门店/仓库
         bean.JsonData.SupCust_No = SupCust_No;//供应商 客户 代码
         bean.JsonData.USER_ID = Config.UserId;//用户ID
-        bean.JsonData.Oper_Date = DateUtility.getCurrentTime();//操作日期
+        bean.JsonData.Oper_Date = DateUtility.getCurrentDate();//操作日期
         mOtherApi.uploadDanjuMainInfo(bean);
     }
-
     //上传商品明细数据
     private void uploadGoodDetailData(){
         List<UploadDanjuDetailBean.UploadDanjuDetail> jsonData = new ArrayList<>();
@@ -285,7 +352,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mOtherApi.uploadDanjuDetailInfo(bean);
 
     }
-
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
@@ -306,7 +372,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     obj.setProduce_date(detailData.getMadeDate());
                     obj.setValid_date(detailData.getVaildDate());
                     obj.setEnable_batch(detailData.getEnable_batch());
-
                     boolean isSave = false;
                     for ( int i=0; i<mListDatas.size();i++) {
                         GetClassPluResult data = mListDatas.get(i);
@@ -317,42 +382,37 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                             break;
                         }
                     }
-
                     if(!isSave){//不存在则添加
                         mListDatas.add(obj);
                     }
-                }
 
-//                for (OrderDetailBeanResult detailData : orderDetailDatas) {
-//                    GetClassPluResult obj = new GetClassPluResult();
-//                    obj.setItem_name(detailData.getName());
-//                    obj.setItem_no(detailData.getBarCode());
-//                    obj.setItem_barcode(detailData.getPluBatch());//批次
-//                    obj.setItem_subno(detailData.getSelfCode());//自编码
-//                    obj.setUnit_no(detailData.getUnit());
-//                    obj.setSale_qnty(detailData.getCheckNum()+"");
-//                    obj.setStock_qty(detailData.getStockNum()+"");
-//                    obj.setPrice(detailData.getBuyPrice()+"");//进价
-//                    obj.setSale_price(detailData.getSalePrice()+"");//销价
-//                    obj.setProduce_date(detailData.getMadeDate());
-//                    obj.setValid_date(detailData.getVaildDate());
-//                    obj.setEnable_batch(detailData.getEnable_batch());
-//
-//                    boolean isSave = false;
-//                    for ( int i=0; i<mOldListDatas.size();i++) {
-//                        GetClassPluResult data = mOldListDatas.get(i);
-//                        if(detailData.getBarCode().equals(data.getItem_no())){
-//                            isSave = true;
-//                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
-//                            mOldListDatas.get(i).setSale_qnty(number+"");
-//                            break;
-//                        }
-//                    }
-//
-//                    if(!isSave){//不存在则添加
-//                        mOldListDatas.add(obj);
-//                    }
-//                }
+                    GetClassPluResult old_obj = new GetClassPluResult();
+                    old_obj.setItem_name(detailData.getName());
+                    old_obj.setItem_no(detailData.getBarCode());
+                    old_obj.setItem_barcode(detailData.getPluBatch());//批次
+                    old_obj.setItem_subno(detailData.getSelfCode());//自编码
+                    old_obj.setUnit_no(detailData.getUnit());
+                    old_obj.setSale_qnty(detailData.getCheckNum()+"");
+                    old_obj.setStock_qty(detailData.getStockNum()+"");
+                    old_obj.setPrice(detailData.getBuyPrice()+"");//进价
+                    old_obj.setSale_price(detailData.getSalePrice()+"");//销价
+                    old_obj.setProduce_date(detailData.getMadeDate());
+                    old_obj.setValid_date(detailData.getVaildDate());
+                    old_obj.setEnable_batch(detailData.getEnable_batch());
+                    boolean isOldSave = false;
+                    for ( int i=0; i<mOldListDatas.size();i++) {
+                        GetClassPluResult data = mOldListDatas.get(i);
+                        if(detailData.getBarCode().equals(data.getItem_no())){
+                            isOldSave = true;
+                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+                            mOldListDatas.get(i).setSale_qnty(number+"");
+                            break;
+                        }
+                    }
+                    if(!isOldSave){//不存在则添加
+                        mOldListDatas.add(old_obj);
+                    }
+                }
 
                 if(mListDatas.size()>0){//默认选中和第一条
                     mSelectGoodsEntity = mListDatas.get(0);
@@ -381,7 +441,9 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
                 if(goodsData !=null && goodsData.size()>0){
                     if(goodsData.size()==1){
-                        addGoodsData(goodsData.get(0));
+                        GetClassPluResult goods= goodsData.get(0);
+                        goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                        addGoodsData(goods);
                     }else{
                         //多条数据 弹出选择其中一条
                         Intent intent = new Intent(CaigouOrderScanActivity.this,SelectPandianGoodsListActivity.class);
@@ -403,6 +465,13 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             //保存业务单据 成功
             case Config.RESULT_SUCCESS:
                 AlertUtil.showToast(o.toString());
+                //如果是新开单或之前保存本地的单据 删除
+                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+                    if(isSuccessDelete ==0){
+                        AlertUtil.showToast("删除本地数据失败");
+                    }
+                }
                 setResult(22);
                 finish();
                 break;
@@ -412,8 +481,13 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 break;
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
-                mListDatas.add(mAddSelectGoods);
                 OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
+                if(obj==null){
+                    AlertUtil.showToast("商品"+mAddSelectGoods.getItem_no()+"取价失败，没有此商品价格!");
+                    return;
+                }
+                mListDatas.add(mAddSelectGoods);
+                GetClassPluResult addGoodsInfo = null;
                 for (int i=0 ; i<mListDatas.size();i++) {
                     GetClassPluResult bean = mListDatas.get(i);
                     if(bean.getItem_no().equals(obj.getBarCode())){
@@ -421,12 +495,25 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                         mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
                         mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
                         mListDatas.get(i).setVip_price(obj.getVip_price()+"");
+                        addGoodsInfo=mListDatas.get(i);
                         break;
                     }
                 }
                 if(mListDatas.size()>0){//默认选中最后一条
                     mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
                     mAdapter.setItemClickPosition(mListDatas.size()-1);
+                }
+                //如果是新开单或之前保存本地的单据 更新数量
+                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                    int zsl = 0;
+                    for (GetClassPluResult info : mListDatas) {
+                        zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                    }
+                    addGoodsInfo.setSheet_No(mSheetNo);
+                    int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
+                    if(isSuccess == 0){
+                        AlertUtil.showToast("商品信息保存本地失败!");
+                    }
                 }
                 mAddSelectGoods = null;
                 mAdapter.setListInfo(mListDatas);
@@ -439,7 +526,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -447,7 +533,9 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
             if(selectGoodsList !=null && selectGoodsList.size()>0){
-                addGoodsData(selectGoodsList.get(0));
+                GetClassPluResult goods= selectGoodsList.get(0);
+                goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                addGoodsData(goods);
             }
         }
 
@@ -456,6 +544,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             mProviderInfo = (ProviderInfoBeanResult) data.getSerializableExtra("ProviderInfo");
             SupCust_No =mProviderInfo.getId();
             mTvProvider.setText(mProviderInfo.getName());
+            //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
+            if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                saveMainInfo(mSheetNo);
+            }
         }
 
         //修改数量
@@ -466,6 +558,18 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     mListDatas.get(i).setSale_qnty(countN);
                     mAdapter.setListInfo(mListDatas);
                     upDateUI();
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult info : mListDatas) {
+                            zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                        }
+                        int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
+                                mSelectGoodsEntity.getItem_no(),countN,zsl+"");
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改数量失败！");
+                        }
+                    }
                     break;
                 }
             }
@@ -479,6 +583,13 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     mListDatas.get(i).setSale_price(price);
                     mAdapter.setListInfo(mListDatas);
                     upDateUI();
+                    //如果是新开单或之前保存本地的单据 更新价格
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int isSuccess = BusinessBLL.getInstance().updateGoodsInfoSalePrice(mSheetNo,price,mSelectGoodsEntity.getItem_no());
+                        if(isSuccess==0){
+                            AlertUtil.showToast("本地商品更改价格失败！");
+                        }
+                    }
                     break;
                 }
             }
@@ -487,6 +598,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         //搜索返回多条数据 ，选择其中一条
         if(requestCode == 44 && resultCode == RESULT_OK){
             GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
             addGoodsData(entity);
         }
 
@@ -496,12 +608,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         }
 
     }
-
     @Override
     protected boolean scanBefore() {
         return true;
     }
-
     @Override
     protected void scanResultData(String barcode) {
         if(mCheckflag.equals("1")){
@@ -514,7 +624,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             mQueryGoodsApi.getPLUInfo(barcode);
         }
     }
-
     //保存前
     @Override
     protected boolean addBefore() {
@@ -538,7 +647,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
         return true;
     }
-
     @Override
     protected void addAfter() {
 //        在上传保存前，获取采购订单单据号
@@ -568,11 +676,11 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         }
         return true;
     }
-
     @Override
     protected void deleteAfter() {
+        String itemNo = mSelectGoodsEntity.getItem_no();
         for (int i = 0; i < mListDatas.size(); i++) {
-            if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
+            if(mListDatas.get(i).getItem_no().equals(itemNo)){
                 mSelectGoodsEntity = null;
                 mListDatas.remove(i);
                 mAdapter.setItemClickPosition(-1);
@@ -581,6 +689,20 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 break;
             }
         }
+
+        //如果是新开单或之前保存本地的单据 删除商品并更新数量
+        if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+            int zsl = 0;
+            for (GetClassPluResult info : mListDatas) {
+                zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+            }
+            int isSuccess = BusinessBLL.getInstance().deleteGoodsInfoAndUpdateOrderQty(mSheetNo,
+                    itemNo,zsl+"");
+            if(isSuccess==0){
+                AlertUtil.showToast("本地商品更改数量失败！");
+            }
+        }
+
     }
 
     @Override
@@ -638,6 +760,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
             if(!onBackFinish()){
+                setResult(22);
                 finish();
             }
         }
@@ -694,6 +817,60 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         );
     }
 
+    private class GetDBDatas extends AsyncTask<String,String,String> {
+        // 弱引用是允许被gc回收的;
+        private final WeakReference<CaigouOrderScanActivity> weakActivity;
+        GetDBDatas(CaigouOrderScanActivity activity) {
+            this.weakActivity = new WeakReference<>(activity);
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            try{
+                List<GetClassPluResult> datas=BusinessBLL.getInstance().getAllGoodsInfo(mSheetNo);
+                List<GetClassPluResult> oldDatas=BusinessBLL.getInstance().getAllGoodsInfo(mSheetNo);
+                mListDatas.addAll(datas);
+                mOldListDatas.addAll(oldDatas);
+                return "ok";
+            }catch (Exception e){
+                e.printStackTrace();
+                return e.getMessage();
+            }
+        }
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            CaigouOrderScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+            AlertUtil.setNoButtonMessage("正在加载数据 "+values[0]);
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            CaigouOrderScanActivity activity = weakActivity.get();
+            if (activity == null
+                    || activity.isFinishing()
+                    || activity.isDestroyed()) {
+                // activity没了,就结束可以了
+                return;
+            }
+            AlertUtil.dismissProgressDialog();
+            if(s.equals("ok")){
+                if(mListDatas.size()>0){//默认选中和第一条
+                    mSelectGoodsEntity = mListDatas.get(0);
+                    mAdapter.setItemClickPosition(0);
+                }
+                mAdapter.setListInfo(mListDatas);
+                upDateUI();
+            }else{
+                AlertUtil.showToast("获取本地数据异常："+s);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -701,6 +878,128 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             mListDatas.clear();
             mListDatas=null;
         }
+        if(mOldListDatas!=null){
+            mOldListDatas.clear();
+            mOldListDatas=null;
+        }
+        if(mGetDBDatas !=null){
+            mGetDBDatas.cancel(true);
+        }
     }
+
+    //打印
+    private void gotoPrinter(){
+        if(isPrinter){
+            isPrinter = false;
+            //判断是否有蓝牙地址
+            if (Config.BluetoothAddress.equals("")) {
+                isPrinter = true;
+                Intent i = new Intent(this, SettingBluetoothActivity.class);
+                startActivity(i);
+            }else{
+                if(mListDatas.size()>0){
+                    AlertUtil.showToast("正在打印...", this);
+                    bluetoothService.connectBluetooth();
+                }else{
+                    isPrinter = true;
+                    AlertUtil.showToast("没有数据，不能打印!", this);
+                }
+            }
+        }else{
+            AlertUtil.showToast("正在打印，请稍后..", this);
+        }
+    }
+    //打印机是否连接了
+    @Override
+    public void IsConnect(boolean isConnect) {
+        isPrinter = true;
+        try {
+            if (isConnect) {
+                printHeader();
+                printContent();
+                bluetoothService.disConnectBluetooth();
+                finish();
+            } else {
+                AlertUtil.showToast("连接打印机失败！可能要重新配置蓝牙打印机！", this);
+            }
+        } catch (Exception ex) {
+            AlertUtil.showToast("打印小票失败，原因：" + ex.getMessage(), this);
+        }
+    }
+    @Override
+    public void SearchDevices(List<BluetoothDeviceInfo> mDevices) { }
+    @Override
+    public void IsPair(boolean isPair) {}
+
+    private void printHeader() {
+        bluetoothService.setMargin(0);
+        bluetoothService.setFont(1, true, false);
+
+        //居中
+        StringBuilder buf = new StringBuilder();
+        buf.append("\r\n"+ MyUtils.rpad((25 - MyUtils.length("库存"))/2," "));
+        buf.append("库存");
+        buf.append("\r\n");
+        bluetoothService.printText(buf.toString());
+        bluetoothService.setFont(0, false, false);
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("\r\n");
+        buffer.append("操作人：");
+        buffer.append(Config.UserName);
+        buffer.append(MyUtils.rpad(46 - MyUtils.length("操作人："
+                +Config.UserName+"打印日期："+DateUtility.getCurrentTime())," "));
+        buffer.append("打印日期：");
+        buffer.append(DateUtility.getCurrentTime());
+        buffer.append("\r\n");
+        buffer.append("------------------------------------------------");
+        buffer.append("\r\n");
+        bluetoothService.printText(buffer.toString());
+    }
+
+    private void printContent() {
+
+        StringBuilder buffer = new StringBuilder();
+        //左对齐
+        buffer.append("商品");
+        buffer.append(MyUtils.rpad(26 - MyUtils.length("商品")," "));
+
+        buffer.append("单价");
+        buffer.append(MyUtils.rpad(10 - MyUtils.length("单价")," "));
+
+        buffer.append("数量");
+        buffer.append(MyUtils.rpad(10 - MyUtils.length("数量")," "));
+        buffer.append("\r\n");
+
+        for (int i = 0; i < mListDatas.size(); i++) {
+            GetClassPluResult obj = mListDatas.get(i);
+            //左对齐
+            buffer.append(obj.getItem_name());
+            buffer.append(MyUtils.rpad(26 - MyUtils.length(obj.getItem_name())," "));
+            //超出指定长度 空两格 防止相连
+            if(26 < MyUtils.length(obj.getItem_name())){
+                buffer.append(MyUtils.rpad(2," "));
+            }
+            String jg = String.format(Locale.CANADA, "%.2f", Float.parseFloat(obj.getSale_price()));
+
+            buffer.append(jg);
+            buffer.append(MyUtils.rpad(10 - MyUtils.length(jg)," "));
+            //超出指定长度 空两格 防止相连
+            if(10 < MyUtils.length(jg)){
+                buffer.append(MyUtils.rpad(2," "));
+            }
+            buffer.append(TextUtils.isEmpty(obj.getSale_qnty())?"0":obj.getSale_qnty());
+            buffer.append("\r\n");
+        }
+
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        buffer.append("\r\n");
+        bluetoothService.printText(buffer.toString());
+
+    }
+
+
 
 }

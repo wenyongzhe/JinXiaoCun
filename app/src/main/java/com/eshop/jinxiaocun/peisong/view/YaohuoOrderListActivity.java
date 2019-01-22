@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.peisong.adapter.YaohuoOrderListAdapter;
@@ -53,6 +54,7 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
     private int mPageIndex = 1;
     private int mPageSize = 20;
     private String mCheckflag = "0";//0未审核，1审核
+    private final String mSheetType = "本地_"+Config.YwType.YH.toString();
 
     @Override
     protected int getLayoutContentId() {
@@ -106,7 +108,6 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         mServerApi= new OtherModelImp(this);
         getYaohuoOrderData();
     }
-
     private void getYaohuoOrderData() {
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
@@ -186,7 +187,14 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
         switch (flag) {
             case Config.MESSAGE_OK:
                 if(mPageIndex==1){
-                    mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    if("0".equals(mCheckflag)){//未审核
+                        //取缓存本地的主表信息
+                        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
+                        datas.addAll((List<DanJuMainBeanResultItem>)o);
+                        mListInfo=datas;
+                    }else{
+                        mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    }
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
                     }
@@ -240,12 +248,33 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
 
     @Override
     protected boolean deleteOrderBefore() {
-        return false;
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+        return true;
     }
-
     @Override
     protected void deleteOrderAfter() {
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            int isSuccess = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+            if(isSuccess ==0){
+                AlertUtil.showToast("删除本地数据失败");
+                return;
+            }
+            for (DanJuMainBeanResultItem item : mListInfo) {
+                if(item.getSheet_No().equals(mSelectMainBean.getSheet_No())){
+                    mListInfo.remove(item);
+                    break;
+                }
+            }
 
+            mSelectMainBean =null;
+            mAdapter.setItemClickPosition(-1);
+            mAdapter.notifyDataSetInvalidated();
+        }else{
+            AlertUtil.showToast("删除还没有接口!");
+        }
     }
 
     @Override
@@ -267,22 +296,22 @@ public class YaohuoOrderListActivity extends CommonBaseListActivity implements I
 
     @Override
     protected boolean checkBefore() {
-
         if(!CommonUtility.getInstance().havePermission(2)){
             AlertUtil.showToast("没有权限，不能做审核操作，请联系管理员!");
             return false;
         }
-
         if(mListInfo.size()==0){
             AlertUtil.showToast("没有单据，不能做审核操作!");
             return false;
         }
-
         if(mSelectMainBean==null){
             AlertUtil.showToast("请选择单据，再做审核操作!");
             return false;
         }
-
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            AlertUtil.showToast("本地数据只能做修改操作!");
+            return false;
+        }
         if(mCheckflag.equals("1")){
             AlertUtil.showToast("该单据已审核过，不能再做审核操作!");
             return false;

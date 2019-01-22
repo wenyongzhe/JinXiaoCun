@@ -9,6 +9,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouRucangListAdapter;
+import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
@@ -53,6 +54,7 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
     private int mPageIndex = 1;
     private int mPageSize = 20;
     private String mCheckflag = "0";//0未审核，1审核
+    private final String mSheetType = "本地_"+Config.YwType.PI.toString();
 
     @Override
     protected int getLayoutContentId() {
@@ -103,11 +105,10 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
         super.initData();
         mDanJuList = new DanJuListImp(this);
         mServerApi = new OtherModelImp(this);
-         getCaigouRucangData();
+        getCaigouRucangData();
     }
 
     private void getCaigouRucangData() {
-
         DanJuMainBean mDanJuMainBean = new DanJuMainBean();
         mDanJuMainBean.JsonData.pos_id = Config.posid;
         mDanJuMainBean.JsonData.branchNo = Config.branch_no;
@@ -186,7 +187,14 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
         switch (flag) {
             case Config.MESSAGE_OK:
                 if(mPageIndex==1){
-                    mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    if("0".equals(mCheckflag)){//未审核
+                        //取缓存本地的主表信息
+                        List<DanJuMainBeanResultItem> datas = BusinessBLL.getInstance().getOrderMainInfos(mSheetType);
+                        datas.addAll((List<DanJuMainBeanResultItem>)o);
+                        mListInfo=datas;
+                    }else{
+                        mListInfo = (List<DanJuMainBeanResultItem>)o;
+                    }
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
                     }
@@ -240,12 +248,33 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
 
     @Override
     protected boolean deleteOrderBefore() {
-        return false;
+        if(mSelectMainBean==null){
+            AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+        return true;
     }
 
     @Override
     protected void deleteOrderAfter() {
-
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            int isSuccess = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+            if(isSuccess ==0){
+                AlertUtil.showToast("删除本地数据失败");
+                return;
+            }
+            for (DanJuMainBeanResultItem item : mListInfo) {
+                if(item.getSheet_No().equals(mSelectMainBean.getSheet_No())){
+                    mListInfo.remove(item);
+                    break;
+                }
+            }
+            mSelectMainBean =null;
+            mAdapter.setItemClickPosition(-1);
+            mAdapter.notifyDataSetInvalidated();
+        }else{
+            AlertUtil.showToast("删除还没有接口!");
+        }
     }
 
     @Override
@@ -280,6 +309,10 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
 
         if(mSelectMainBean==null){
             AlertUtil.showToast("请选择单据，再做审核操作!");
+            return false;
+        }
+        if(mSheetType.equals(mSelectMainBean.getSheetType())){
+            AlertUtil.showToast("本地数据只能做修改操作!");
             return false;
         }
 

@@ -318,57 +318,6 @@ public class BusinessBLL {
         }finally {
             cursor.close();
         }
-//        StringBuffer sql = new StringBuffer();
-//        sql.append("Select ");
-//        sql.append(queryFlds(GetClassPluResult.class));
-//        sql.append(" from ");
-//        sql.append(Config.GETCLASSPLURESULT);
-//        Cursor c = null;
-//        try {
-//            if(TextUtils.isEmpty(sheet_No)){
-//                c = Config.DBHelper.exeRawQuery(sql.toString());
-//            }else{
-//                sql.append(" where Sheet_No=?");
-//                c = Config.DBHelper.exeRawQuery(sql.toString(),new String[]{sheet_No});
-//            }
-//            while (c.moveToNext()) {
-//                // 取出所有的列名
-//                Field[] arrField = GetClassPluResult.class.getDeclaredFields();
-//                GetClassPluResult module = GetClassPluResult.class.newInstance();
-//                // 遍历有列
-//                for (Field field : arrField) {
-//                    if (field.isSynthetic()) {
-//                        continue;
-//                    }
-//                    if (field.getName().equals("serialVersionUID")) {
-//                        continue;
-//                    }
-//                    if (field.getName().equals("hasYiJia")) {
-//                        continue;
-//                    }
-//                    String columnName = field.getName();
-//                    int columnIdx = c.getColumnIndex(columnName);
-//                    if (columnIdx == -1) {
-//                        continue;
-//                    }
-//                    if (!field.isAccessible()) {
-//                        field.setAccessible(true);
-//                    }
-//                    Class<?> type = field.getType();
-//                    if (type == String.class)
-//                        field.set(module, c.getString(columnIdx));
-//                    else if (type == int.class)
-//                        field.set(module, c.getInt(columnIdx));
-//                }
-//                list.add(module);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        finally {
-//            if (c != null)
-//                c.close();
-//        }
         return list;
     }
     //保存商品信息
@@ -441,7 +390,7 @@ public class BusinessBLL {
     public int updateGoodsInfoSalePrice(String sheet_No,String sale_price,String item_no)throws SQLException {
         try{
             if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
-            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_price=? where Sheet_No=? and item_no=?";
+            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_price=?,hasModifyPrice=1 where Sheet_No=? and item_no=?";
             Config.DBHelper.exeSql(sql, new String[]{sale_price, sheet_No,item_no});
             return 1;
         }catch (Exception e){
@@ -453,19 +402,13 @@ public class BusinessBLL {
     public int updateGoodsInfoBasePrice(String sheet_No,String base_price,String item_no)throws SQLException {
         try{
             if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
-            String sql = "update "+Config.GETCLASSPLURESULT+" set base_price=? where Sheet_No=? and item_no=?";
+            String sql = "update "+Config.GETCLASSPLURESULT+" set base_price=?,hasModifyPrice=1 where Sheet_No=? and item_no=?";
             Config.DBHelper.exeSql(sql, new String[]{base_price, sheet_No,item_no});
             return 1;
         }catch (Exception e){
             e.printStackTrace();
             return 0;
         }
-    }
-    //修改商品VIP价格
-    public void updateGoodsInfoVipPrice(String orderType,String vip_price,String item_no)throws SQLException {
-        if(!tableIsExist(Config.GETCLASSPLURESULT))return ;
-        String sql = "update "+Config.GETCLASSPLURESULT+" set vip_price=? where orderType =? and item_no=?";
-        Config.DBHelper.exeSql(sql, new String[]{vip_price, orderType,item_no});
     }
 
     //取到单据主表的数量

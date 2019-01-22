@@ -43,18 +43,18 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.println("upgrade a database1");
-//        //创建表结构
-//        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id integer primary key autoincrement,"
-//                + cloumFile(UpMainBean.class) +")";
-//        sqLiteDatabase.execSQL(sql);//执行sql语句
-//
-//        //创建表结构
-//        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id integer primary key autoincrement,"
-//                + cloumFile(UpDetailBean.class) +")";
-//        sqLiteDatabase.execSQL(sql);//执行sql语句
+        //创建表结构
+        String sql = "create table "+ Config.UP_MAIN_DANJU+"("+ "id integer primary key autoincrement,"
+                + cloumFile(UpMainBean.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构
-        String sql = "create table "+ Config.PANDIAN_DETAIL_GOODS+"("+ "id integer primary key autoincrement,"
+        sql = "create table "+ Config.UP_DETAIL_DANJU+"("+ "id integer primary key autoincrement,"
+                + cloumFile(UpDetailBean.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构
+        sql = "create table "+ Config.PANDIAN_DETAIL_GOODS+"("+ "id integer primary key autoincrement,"
                 +"sheet_no varchar(50),"
                 + cloumFile(PandianDetailBeanResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句

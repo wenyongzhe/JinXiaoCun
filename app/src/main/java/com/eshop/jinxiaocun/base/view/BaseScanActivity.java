@@ -20,23 +20,14 @@ import com.eastaeon.decoderapi.DecoderHelperResult;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
-import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
-import com.eshop.jinxiaocun.lingshou.view.LingShouScanAdapter;
-import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
-import com.eshop.jinxiaocun.widget.AlertUtil;
-import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
-import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
-
 import android.hardware.BarcodeScan;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener ,DecoderHelperListener {
 

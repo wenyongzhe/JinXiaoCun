@@ -1,12 +1,10 @@
 package com.eshop.jinxiaocun.base.view;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
-import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.MyActionBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;

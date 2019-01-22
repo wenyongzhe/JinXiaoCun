@@ -8,17 +8,12 @@ import android.hardware.BarcodeScan;
 import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.eastaeon.decoderapi.DecoderHelper;
-import com.eastaeon.decoderapi.DecoderHelperListener;
-import com.eastaeon.decoderapi.DecoderHelperResult;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;

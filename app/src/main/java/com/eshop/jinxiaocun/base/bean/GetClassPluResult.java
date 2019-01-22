@@ -32,11 +32,19 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private boolean hasYiJia = false;//是否已经议价
     private String orderType;//保存本地时与单据类型绑定
     public String Sheet_No;//保存本地时与单据号绑定
+    private int hasModifyPrice = 0;//0未修改过价格  1表示已修改价格
+
+    public int getHasModifyPrice() {
+        return hasModifyPrice;
+    }
+
+    public void setHasModifyPrice(int hasModifyPrice) {
+        this.hasModifyPrice = hasModifyPrice;
+    }
 
     public boolean isHasYiJia() {
         return hasYiJia;
     }
-
     public void setHasYiJia(boolean hasYiJia) {
         this.hasYiJia = hasYiJia;
     }

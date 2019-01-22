@@ -113,6 +113,7 @@ public class MainActivity extends BaseActivity implements INetWorResult {
                         GetOptAuthResult mGetOptAuthResult =  mJsonFormatImp.JsonToBean(jsonData,GetOptAuthResult.class);
                         Config.zhendanYiJialimit = mGetOptAuthResult.getLimitdiscount();
                         Config.danbiYiJialimit = mGetOptAuthResult.getSavediscount();
+                        Config.mYiJiaPermission = mGetOptAuthResult.getIsgrant();
                     }else{
                         AlertUtil.showAlert(MainActivity.this, "提示", "请求失败");
                     }

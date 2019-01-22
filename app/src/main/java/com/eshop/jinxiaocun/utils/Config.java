@@ -95,6 +95,7 @@ public class Config {
 
     public static double zhendanYiJialimit = 0.000;//整笔议价最高金额
     public static double danbiYiJialimit = 0.000;// 单笔议价最高金额
+    public static int mYiJiaPermission = 2;// 议价权限  ‘3’密码错误，‘2’没有权限， ‘1’有权限
     public static double zhendanZheKoulimit = 0.000;//整笔折扣最高金额
     public static double danbiZheKoulimit = 0.000;// 单笔折扣最高金额
 

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.db.BusinessBLL;
-import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
@@ -38,7 +36,7 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
-import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
+import com.eshop.jinxiaocun.widget.ModifyGoodsPriceDialog;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -78,7 +76,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private DanJuMainBeanResultItem mSelectMainBean;
     private GetClassPluResult mAddSelectGoods;//添加的商品
     private ArrayList<GetClassPluResult> mOldListDatas=new ArrayList<>();//列表过来的原有商品
-    private int mModifyPricePermission;//改价权限   1为有权限
     private String mSheetNo;//标记本地数据的单据号
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.SS.toString();
@@ -252,11 +249,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mTvAllRowNumber.setText(""+mListDatas.size());
         mTvZsl.setText(zsl+"");
         mTvZje.setText(String.format(Locale.CANADA, "%.2f",zje)+"元");
-    }
-
-    //取改价权限
-    private void getPricePermission(){
-        mLingshouApi.getOptAuth(Config.GRANT_ITEM_JINE);
     }
     //保存临时主表信息
     private void saveMainInfo(String sheet_no){
@@ -490,31 +482,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 mAddSelectGoods = null;
                 AlertUtil.showToast(o.toString());
                 break;
-            case Config.MESSAGE_GET_OPT_AUTH:
-                GetOptAuthResult getOptAuthResult = (GetOptAuthResult) o;
-                //3’密码错误，‘2’没有权限， ‘1’有权限
-                if(getOptAuthResult!=null){
-                    if("1".equals(getOptAuthResult.getIsgrant())){
-                        mModifyPricePermission = 1;
-                        Intent intent = new Intent();
-                        intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
-                        intent.setClass(this, ModifyPriceDialog.class);
-                        startActivityForResult(intent, 33);
-                    }else if("2".equals(getOptAuthResult.getIsgrant())){
-                        AlertUtil.showToast("没有改价权限");
-                    }else if("3".equals(getOptAuthResult.getIsgrant())){
-                        AlertUtil.showToast("密码错误,请查看接口");
-                    }else{
-                        AlertUtil.showToast("没有改价权限");
-                    }
-                }else{
-                    AlertUtil.showToast("返回NULL，请查看接口");
-                }
-                break;
-            //取改价权限失败
-            case Config.MESSAGE_ERROR:
-                AlertUtil.showToast(o.toString());
-                break;
         }
     }
 
@@ -568,20 +535,22 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         }
 
         //修改价格
-        if(requestCode == 33 && resultCode == RESULT_OK){
-            String price = data.getStringExtra("Price");
+        if(requestCode == 200 && resultCode == RESULT_OK){
+            String modifyPrice =  data.getStringExtra("ModifyPrice");
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
-                    mListDatas.get(i).setBase_price(price);
-                    mAdapter.setListInfo(mListDatas);
-                    upDateUI();
+                    mListDatas.get(i).setBase_price(modifyPrice);
                     //如果是新开单或之前保存本地的单据 更新价格
                     if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
-                        int isSuccess = BusinessBLL.getInstance().updateGoodsInfoBasePrice(mSheetNo,price,mSelectGoodsEntity.getItem_no());
-                        if(isSuccess==0){
+                        int isSuccess = BusinessBLL.getInstance().updateGoodsInfoBasePrice(mSheetNo,modifyPrice,mSelectGoodsEntity.getItem_no());
+                        if(isSuccess==1){
+                            mListDatas.get(i).setHasModifyPrice(1);
+                        }else{
                             AlertUtil.showToast("本地商品更改价格失败！");
                         }
                     }
+                    mAdapter.setListInfo(mListDatas);
+                    upDateUI();
                     break;
                 }
             }
@@ -728,20 +697,29 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             AlertUtil.showToast("请选择要改数的商品!");
             return false;
         }
+        //1允许0不允许
+        if(!"1".equals(mSelectGoodsEntity.getChange_price())){
+            AlertUtil.showToast("此商品不允许议价!");
+            return false;
+        }
+        if(mSelectGoodsEntity.getHasModifyPrice()==1){//1已修改过价格  0未修改过价格
+            AlertUtil.showToast("此商品已改过价，不能再改价!");
+            return false;
+        }
+        //3’密码错误，‘2’没有权限， ‘1’有权限
+        if(Config.mYiJiaPermission!=1){
+            AlertUtil.showToast("当前登录用户没有改价权限!");
+            return false;
+        }
         return true;
     }
 
     @Override
     protected void modifyPriceAfter() {
-        //取到过改价权限就不再访问接口了
-        if(mModifyPricePermission==1){
-            Intent intent = new Intent();
-            intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
-            intent.setClass(this, ModifyPriceDialog.class);
-            startActivityForResult(intent, 33);
-        }else{
-            getPricePermission();
-        }
+        Intent intent = new Intent(this, ModifyGoodsPriceDialog.class);
+        intent.putExtra("OldPrice",mSelectGoodsEntity.getSale_price());
+        intent.putExtra("DiscountsPrice",Config.danbiYiJialimit);
+        startActivityForResult(intent,200);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.eshop.jinxiaocun.base.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -12,21 +11,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
-import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
-import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.thread.TaskInterface;
-import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.MyActionBar;
-import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
-import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
-
-import java.util.zip.Inflater;
-
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 
 public abstract class BaseActivity extends AppCompatActivity implements TaskInterface{
 

@@ -3,28 +3,17 @@ package com.eshop.jinxiaocun.base.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
-import com.eshop.jinxiaocun.base.IJsonFormat;
-import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.db.DBHelper;
-import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
-import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
-import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.CrashHandler;
 import com.eshop.jinxiaocun.utils.MyUtils;
-import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.Stack;
-
-import okhttp3.Response;
 
 public class Application extends android.app.Application{
 

@@ -10,7 +10,7 @@ public class GetOptAuthResult extends BaseResult {
     private double limitdiscount;//:80 //折扣最小额度
     private double savediscount;// : 60//折扣最大额度
 
-    public double getIsgrant() {
+    public int getIsgrant() {
         return isgrant;
     }
 

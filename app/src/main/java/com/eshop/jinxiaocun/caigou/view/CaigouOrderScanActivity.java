@@ -103,7 +103,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvReceivingWarehouse.setText(Config.branch_no);
+        mTvReceivingWarehouse.setText(Config.branch_no+"");
 
         mTvProvider.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -142,8 +142,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvProvider.setText(mSelectMainBean.getSupplyName());
-            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No());
+            mTvProvider.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
+            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
             if(mSheetType.equals(mSelectMainBean.getSheetType())){
                 mSheetNo=mSelectMainBean.getSheet_No();

@@ -98,7 +98,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvYhStore.setText("["+Config.branch_no+"]");
+        mTvYhStore.setText(Config.branch_no+"");
 
         mTvFhStore.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -138,8 +138,8 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             mT_Branch_No =mSelectMainBean.getT_Branch_No();
-            mTvFhStore.setText("["+mSelectMainBean.getT_Branch_No()+"]"+mSelectMainBean.getShopName());
-            mTvYhStore.setText("["+mSelectMainBean.getBranch_No()+"]"+mSelectMainBean.getYHShopName());
+            mTvFhStore.setText(TextUtils.isEmpty(mSelectMainBean.getShopName())?""+mSelectMainBean.getT_Branch_No():mSelectMainBean.getShopName());
+            mTvYhStore.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
             if(mSheetType.equals(mSelectMainBean.getSheetType())){
                 mSheetNo=mSelectMainBean.getSheet_No();
@@ -540,7 +540,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 2 && resultCode == 22){
             mStoreInfo = (WarehouseInfoBeanResult) data.getSerializableExtra("WarehouseInfo");
             mT_Branch_No =mStoreInfo.getId();
-            mTvFhStore.setText("["+mStoreInfo.getId()+"]"+mStoreInfo.getName());
+            mTvFhStore.setText(mStoreInfo.getName());
             //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
             if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
                 saveMainInfo(mSheetNo);

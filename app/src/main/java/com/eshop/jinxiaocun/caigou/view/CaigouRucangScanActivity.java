@@ -113,7 +113,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
             }
         });
 
-        mTvReceivingWarehouse.setText(Config.branch_no);
+        mTvReceivingWarehouse.setText(Config.branch_no+"");
 
         setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
         setHeaderTitle(R.id.tv_1,R.string.list_item_ProdCode,150);//商品编码
@@ -140,8 +140,8 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvProvider.setText(mSelectMainBean.getSupplyName());
-            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No());
+            mTvProvider.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
+            mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
             if(mSheetType.equals(mSelectMainBean.getSheetType())){
                 mSheetNo=mSelectMainBean.getSheet_No();

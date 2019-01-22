@@ -99,7 +99,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvTiaoRu.setText("["+Config.branch_no+"]");
+        mTvTiaoRu.setText(Config.branch_no+"");
 
         mTvTiaoChu.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -209,8 +209,8 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
             mStr_OrderNo = selectMainBean.getSheet_No();
             mBranch_No =selectMainBean.getBranch_No();
             //这个单特殊，配入单是配出的出库仓  Branch_No与T_Branch_No互换的  引单也要互换
-            mTvTiaoChu.setText("["+selectMainBean.getBranch_No()+"]"+selectMainBean.getShopName());
-            mTvTiaoRu.setText("["+selectMainBean.getT_Branch_No()+"]"+selectMainBean.getYHShopName());
+            mTvTiaoChu.setText(TextUtils.isEmpty(selectMainBean.getShopName())?""+selectMainBean.getBranch_No():selectMainBean.getShopName());
+            mTvTiaoRu.setText(selectMainBean.getT_Branch_No()+"");
             if(mSheetType.equals(selectMainBean.getSheetType())){
                 mSheetNo=selectMainBean.getSheet_No();
                 mGetDBDatas= new GetDBDatas(this);
@@ -585,7 +585,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 2 && resultCode == 22){
             mStoreInfo = (WarehouseInfoBeanResult) data.getSerializableExtra("WarehouseInfo");
             mBranch_No =mStoreInfo.getId();
-            mTvTiaoChu.setText("["+mStoreInfo.getId()+"]"+mStoreInfo.getName());
+            mTvTiaoChu.setText(mStoreInfo.getName());
             //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
             if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
                 saveMainInfo(mSheetNo);

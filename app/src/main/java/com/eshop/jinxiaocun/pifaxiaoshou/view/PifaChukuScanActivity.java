@@ -101,7 +101,7 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvUserStore.setText("["+Config.branch_no+"]");
+        mTvUserStore.setText(""+Config.branch_no);
 
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -145,8 +145,8 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
         if (selectMainBean != null) {
             mStr_OrderNo = selectMainBean.getSheet_No();
             SupCust_No =selectMainBean.getSupCust_No();
-            mTvUser.setText(selectMainBean.getSupplyName());
-            mTvUserStore.setText("["+selectMainBean.getBranch_No()+"]");
+            mTvUser.setText(TextUtils.isEmpty(selectMainBean.getSupplyName())?""+selectMainBean.getSupCust_No():selectMainBean.getSupplyName());
+            mTvUserStore.setText(""+selectMainBean.getBranch_No());
             if(mSheetType.equals(selectMainBean.getSheetType())){
                 mSheetNo=selectMainBean.getSheet_No();
                 mGetDBDatas= new GetDBDatas(this);

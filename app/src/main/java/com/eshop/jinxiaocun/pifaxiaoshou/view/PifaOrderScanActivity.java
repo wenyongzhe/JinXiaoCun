@@ -99,7 +99,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mLayoutAllRowNumber.setVisibility(View.VISIBLE);
         mBtnModifyPrice.setVisibility(View.VISIBLE);
         mBtnAdd.setText(R.string.btnSave);
-        mTvUserStore.setText("["+Config.branch_no+"]");
+        mTvUserStore.setText(""+Config.branch_no);
 
         mTvUser.setDrawableRightClick(new DrawableTextView.DrawableRightClickListener() {
             @Override
@@ -136,8 +136,8 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         if(mSelectMainBean !=null){
             mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
-            mTvUser.setText(mSelectMainBean.getSupplyName());
-            mTvUserStore.setText("["+mSelectMainBean.getBranch_No()+"]");
+            mTvUser.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
+            mTvUserStore.setText(mSelectMainBean.getBranch_No()+"");
             mCheckflag = getIntent().getStringExtra("Checkflag");
             if(mSheetType.equals(mSelectMainBean.getSheetType())){
                 mSheetNo=mSelectMainBean.getSheet_No();

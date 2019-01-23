@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.lingshou.view;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +33,7 @@ import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
+import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
@@ -56,6 +58,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Response;
 
 import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
@@ -297,6 +300,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             case Config.MESSAGE_OK:
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissDialog();
+                if(((String)o).equals("")){
+                    o = "程序错误";
+                }
                 AlertUtil.showAlert(PayActivity.this, "提示", (String)o,
                         "确定", new View.OnClickListener() {
                             @Override
@@ -331,6 +338,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
+                if(query==false){
+                    return;
+                }
                 NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
                 if(mNetPlayBeanResult==null){
                     ToastUtils.showShort(R.string.message_sell_error);
@@ -338,8 +348,18 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 }
                 if( mNetPlayBeanResult.getReturn_code().equals("000000")){
                     mHan.sendEmptyMessage(0);
+                    AlertUtil.dismissDialog();
                 }else {
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
+                    rtWzfQry();
+                    AlertUtil.showAlert(PayActivity.this, "提示", "结算处理中......",
+                            "取消", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    query = false;
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
                 }
                 break;
             case Config.MESSAGE_SELL_SUB:
@@ -361,6 +381,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 });
 //                printMs();
                 break;
+        }
+    }
+
+    boolean query = true;
+    private void rtWzfQry(){
+        if(query){
+            mLingShouScanImp.RtWzfQry(tempayway, code, FlowNo, temMoney, temMoney);
         }
     }
 
@@ -642,6 +669,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         return false;
     }
 
+    String code;
+    String tempayway;
+    String temMoney;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -663,14 +693,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 reflashGaiJiaItemPrice();
                 break;
             case Config.MESSAGE_CAPTURE_RETURN:
-                String code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
-                String tempayway = "";
+                code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
+                tempayway = "";
                 if(sp_payway.getSelectedItemPosition()==1){
                     tempayway = "ZFB";
                 }else if(sp_payway.getSelectedItemPosition()==2){
                     tempayway = "WXZ";
                 }
-                String temMoney = money+"";
+                temMoney = money+"";
                 mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);
                 break;

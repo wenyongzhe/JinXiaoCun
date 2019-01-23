@@ -18,6 +18,7 @@ public interface ILingshouScan {
     public void getBillDiscount(Double total,String FlowNo);//整单议价、折扣
     public void getPayMode();//付款方式
     public void RtWzfPay(String payWay,String auth_code,String flowNo,String payAmount,String totalAmount);//网络支付扣款
+    public void RtWzfQry(String payWay,String auth_code,String flowNo,String payAmount,String totalAmount);//网络支付扣款状态查询
     public void sellVipPay(String name, String password,Double money);
     public void getSystemInfo();//8.1参数（抹零，卡密码，四舍五入等）
 }

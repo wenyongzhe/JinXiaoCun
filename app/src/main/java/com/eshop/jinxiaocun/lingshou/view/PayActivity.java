@@ -350,16 +350,28 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     mHan.sendEmptyMessage(0);
                     AlertUtil.dismissDialog();
                 }else {
-                    ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
-                    rtWzfQry();
-                    AlertUtil.showAlert(PayActivity.this, "提示", "结算处理中......",
-                            "取消", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    query = false;
-                                    AlertUtil.dismissDialog();
-                                }
-                            });
+                    //ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
+                    if( mNetPlayBeanResult.getReturn_code().equals("1013")){
+                        AlertUtil.showAlert(PayActivity.this, "提示", mNetPlayBeanResult.getReturn_msg(),
+                                "整单取消", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        query = false;
+                                        AlertUtil.dismissDialog();
+                                        cancle();
+                                    }
+                                });
+                    }else{
+                        AlertUtil.showAlert(PayActivity.this, "提示", "结算处理中 "+mNetPlayBeanResult.getReturn_msg(),
+                                "取消", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        query = false;
+                                        AlertUtil.dismissDialog();
+                                    }
+                                });
+                        mHan.sendEmptyMessageDelayed(2,2000);
+                    }
                 }
                 break;
             case Config.MESSAGE_SELL_SUB:
@@ -368,6 +380,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                             @Override
                             public void onClick(View view) {
                                 AlertUtil.dismissDialog();
+                                cancle();
                             }
                         },R.string.txt_print, new View.OnClickListener() {
                             @Override
@@ -377,11 +390,17 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                                     startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
                                 }
                                 AlertUtil.dismissDialog();
+                                cancle();
                             }
                 });
 //                printMs();
                 break;
         }
+    }
+
+    private void cancle(){
+        setResult(Config.RESULT_PAY_CANCLE);
+        finish();
     }
 
     boolean query = true;
@@ -402,6 +421,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 case 1:
                     Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
                     startActivityForResult(intent, Config.REQ_QR_CODE);
+                    break;
+                case 2:
+                    rtWzfQry();
                     break;
             }
         }
@@ -580,8 +602,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 @Override
                 public void onClick(View view) {
                     AlertUtil.dismissDialog();
-                    setResult(Config.RESULT_PAY_CANCLE);
-                    finish();
+                    cancle();
                 }
             },R.string.cancel, new View.OnClickListener() {
                         @Override
@@ -611,6 +632,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     void btn_jiesuan() {
         try {
+            query = true;
             List<HashMap<String,String>> hashMapList = new ArrayList<>();
             switch (sp_payway.getSelectedItemPosition()){
                 case 0:

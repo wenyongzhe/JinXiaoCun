@@ -281,7 +281,8 @@ public class LingShouScanImp implements ILingshouScan {
             }
         }
     }
-
+//{"return_code":"1013","return_msg":"商户订单号重复","paytype":"","trade_no":""}
+    //{"return_code":"010001","return_msg":"超时","paytype":"WECHAT","trade_no":""}
     //付款方式
     class GetPayModeInterface implements IResponseListener {
 

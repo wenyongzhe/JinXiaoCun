@@ -675,6 +675,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     mPageIndex++;
                     getPandianDetailData(mSheetNo);
                 }else{
+                    mTvNoPandian.setVisibility(View.VISIBLE);
                     AlertUtil.dismissProgressDialog();
                 }
                 break;

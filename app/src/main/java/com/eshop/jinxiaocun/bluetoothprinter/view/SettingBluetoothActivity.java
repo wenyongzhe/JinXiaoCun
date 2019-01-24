@@ -8,15 +8,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.bluetoothprinter.adapter.BluetoothDeviceListAdapter;
-import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothService;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothPrinterManage;
 import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothDeviceInfo;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -30,14 +27,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class SettingBluetoothActivity extends AppCompatActivity implements BluetoothService.BluetoothResultListerner {
+public class SettingBluetoothActivity extends AppCompatActivity implements BluetoothPrinterManage.BluetoothResultListerner {
 
     @BindView(R.id.actionbar)
     MyActionBar mMyActionBar;
     @BindView(R.id.listview_data)
     ListView mListView;
 
-    private BluetoothService bluetoothService;
+    private BluetoothPrinterManage bluetoothService;
     private BluetoothDeviceInfo selectMainEntity;
     private List<BluetoothDeviceInfo> listData = new ArrayList<>();
     private BluetoothDeviceListAdapter adapterData;
@@ -56,7 +53,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     protected void initView() {
         ButterKnife.bind(this);
         setTopToolBar("蓝牙打印机设置",R.mipmap.ic_left_light,"",0,"");
-        bluetoothService = new BluetoothService(this, this);
+        bluetoothService = new BluetoothPrinterManage(this, this);
         listData = bluetoothService.getPairedDevices();
         adapterData = new BluetoothDeviceListAdapter(this, listData);
         mListView.setAdapter(adapterData);
@@ -116,12 +113,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     }
 
     @OnClick(R.id.btn_print)
-    public void OnPrint(){
-        bluetoothService.setFont(1, true, false);
-        bluetoothService.printText("中国人民共茜枯在在在 大基本面\r\n");
-        bluetoothService.setFont(0, false, false);
-        bluetoothService.printText("中国人民共茜枯在在在 大基本面\r\n");
-    }
+    public void OnPrint(){}
 
     @Override
     public void IsConnect(boolean isConnect) {

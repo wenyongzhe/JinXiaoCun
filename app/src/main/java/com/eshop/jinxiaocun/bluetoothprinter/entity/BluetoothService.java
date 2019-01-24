@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.bluetoothprinter.entity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -160,8 +161,7 @@ public class BluetoothService {
                 myPrinter = PrinterInstance.getPrinterInstance(mDevice, mHandler);
                 new connectThread().start();
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             AlertUtil.showToast("连接蓝牙打印机出现失败！原因：" + ex.getMessage(), mContext);
             if(progressDialog!=null){
                 progressDialog.dismiss();
@@ -184,6 +184,8 @@ public class BluetoothService {
                             .getMethod("createBond");
                     createBondMethod.invoke(mDevice);
                 } else {
+                    //保存已配对的地址
+                    Config.BluetoothAddress = mDevice.getAddress();
                     AlertUtil.showToast("该打印机已配对", mContext);
                     return true;
 
@@ -283,6 +285,7 @@ public class BluetoothService {
     };
 
     // 用于接受连接状态消息的 Handler
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

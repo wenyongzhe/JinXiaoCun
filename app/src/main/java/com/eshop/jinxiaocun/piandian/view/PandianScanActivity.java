@@ -423,12 +423,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         }
                     }
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                    //只要添加了盘点单就显示未盘点商品按钮
-                    if(mAddPandianGoodsDetailData.size()>0){
-                        mTvNoPandian.setVisibility(View.VISIBLE);
-                    }else{
-                        mTvNoPandian.setVisibility(View.GONE);
-                    }
                     upDateShowView();
                 }
 
@@ -487,12 +481,6 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }
             }
             mAdapter.setListInfo(mAddPandianGoodsDetailData);
-            //只要添加了盘点单就显示未盘点商品按钮
-            if(mAddPandianGoodsDetailData.size()>0){
-                mTvNoPandian.setVisibility(View.VISIBLE);
-            }else{
-                mTvNoPandian.setVisibility(View.GONE);
-            }
             upDateShowView();
         }else{
             AlertUtil.showToast("不在盘点范围!");
@@ -923,10 +911,17 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             }
             AlertUtil.dismissProgressDialog();
             if(s.equals("ok")){
-                if(mAddPandianGoodsDetailData.size()>0){
-                    if(!isDianpin){
+
+                if(!isDianpin){
+                    //本地数据库里有盘点单就显示未盘点商品按钮
+                    if(mPandianDetailData.size()>0){
                         mTvNoPandian.setVisibility(View.VISIBLE);
+                    }else{
+                        mTvNoPandian.setVisibility(View.GONE);
                     }
+                }
+
+                if(mAddPandianGoodsDetailData.size()>0){
                     mAdapter.setListInfo(mAddPandianGoodsDetailData);
                     upDateShowView();
                 }

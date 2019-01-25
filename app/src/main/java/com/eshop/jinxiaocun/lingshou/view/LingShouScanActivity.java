@@ -351,14 +351,20 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.MESSAGE_GOODS_INFOR:
                 mGetClassPluResultList = (List<GetClassPluResult>)o;
-                if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
-                    getPiCi(mGetClassPluResultList);
+                if(mGetClassPluResultList!=null && mGetClassPluResultList.size()>1){
+                    intent = new Intent(this, QreShanpingActivity.class);
+                    intent.putExtra("barcode",et_barcode.getText().toString());
+                    startActivityForResult(intent,100);
                 }else{
-                    mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
-                    addListData();
+                    if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                        getPiCi(mGetClassPluResultList);
+                    }else{
+                        mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
+                        addListData();
 //                    reflashList();
+                    }
+                    setSaleFlowBean();
                 }
-                setSaleFlowBean();
                 break;
             case Config.MESSAGE_FLOW_NO:
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
@@ -504,11 +510,11 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                 }
                 break;
-            case Config.MESSAGE_start_query:
-                intent = new Intent(this, QreShanpingActivity.class);
-                intent.putExtra("barcode",et_barcode.getText().toString());
-                startActivityForResult(intent,100);
-                break;
+//            case Config.MESSAGE_start_query:
+//                intent = new Intent(this, QreShanpingActivity.class);
+//                intent.putExtra("barcode",et_barcode.getText().toString());
+//                startActivityForResult(intent,100);
+//                break;
             case Config.MESSAGE_VIP_PAY_RESULT:
                 setPlayFlowBean(total+"","VIP");
                 break;

@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -59,6 +61,8 @@ import butterknife.OnClick;
 
 public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult, BluetoothPrinterManage.BluetoothResultListerner {
 
+    @BindView(value = R.id.sp_type)
+    Spinner sp_type;
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
     @BindView(R.id.tv_provider)
@@ -125,6 +129,13 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
 //        setHeaderTitle(R.id.tv_7,R.string.list_item_giveAway_Number,100);//赠送数量
+
+        List<String> listType = new ArrayList<>();
+        listType.add("精确查询");
+        listType.add("模糊查询");
+        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
+        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
+        sp_type.setAdapter(adapterBCType);
 
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
@@ -453,6 +464,9 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                     AlertUtil.showToast("该条码没有对应的商品数据!");
                 }
                 break;
+            case Config.MESSAGE_GOODS_INFOR_FAIL:
+                AlertUtil.showToast("搜索失败："+o.toString());
+                break;
             //上传单据主表 成功
             case Config.MESSAGE_SUCCESS:
                 uploadGoodDetailData();// 上传商品明细
@@ -619,8 +633,14 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         }
 
         if(!TextUtils.isEmpty(barcode)){
-            //精准查询接口的
-            mQueryGoodsApi.getPLUInfo(barcode);
+            if("精确查询".equals(sp_type.getSelectedItem().toString())){
+                //精准查询接口的
+                mQueryGoodsApi.getPLUInfo(barcode);
+            }else{
+                //模糊查询接口的
+                mQueryGoodsApi.getPLULikeInfo(barcode);
+            }
+
         }
     }
     //保存前

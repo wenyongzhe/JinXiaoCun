@@ -510,11 +510,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                 }
                 break;
-//            case Config.MESSAGE_start_query:
-//                intent = new Intent(this, QreShanpingActivity.class);
-//                intent.putExtra("barcode",et_barcode.getText().toString());
-//                startActivityForResult(intent,100);
-//                break;
             case Config.MESSAGE_VIP_PAY_RESULT:
                 setPlayFlowBean(total+"","VIP");
                 break;

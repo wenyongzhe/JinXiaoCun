@@ -414,11 +414,12 @@ public class LingShouScanImp implements ILingshouScan {
                     for(int i=0; i<mGoodGetBeanResult.size(); i++){
                         mGoodGetBeanResult.get(i).setSource_price(mGoodGetBeanResult.get(i).getSale_price());
                     }
-                    if(mGoodGetBeanResult.size()>1){
-                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
-                    }else {
-                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-                    }
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+//                    if(mGoodGetBeanResult.size()>1){
+//                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
+//                    }else {
+//                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+//                    }
                 }else{
                     mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,Msg);
                 }
@@ -448,11 +449,12 @@ public class LingShouScanImp implements ILingshouScan {
                     for(int i=0; i<mGoodGetBeanResult.size(); i++){
                         mGoodGetBeanResult.get(i).setSource_price(mGoodGetBeanResult.get(i).getSale_price());
                     }
-                    if(mGoodGetBeanResult.size()>1){
-                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
-                    }else {
-                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
-                    }
+                    mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+//                    if(mGoodGetBeanResult.size()>1){
+//                        mHandler.handleResule(Config.MESSAGE_start_query,mGoodGetBeanResult);
+//                    }else {
+//                        mHandler.handleResule(Config.MESSAGE_GOODS_INFOR,mGoodGetBeanResult);
+//                    }
                 }else{
                     mHandler.handleResule(Config.MESSAGE_GOODS_INFOR_FAIL,Msg);
                 }

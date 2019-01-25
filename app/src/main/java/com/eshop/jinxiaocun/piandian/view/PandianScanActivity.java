@@ -118,6 +118,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     }
 
     @Override
+    protected boolean onTopBarLeftClick() {
+        setResult(22);
+        finish();
+        return true;
+    }
+
+    @Override
     protected void initView() {
         super.initView();
 
@@ -835,6 +842,16 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             AlertUtil.showToast("放弃盘点该商品!");
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(KeyEvent.KEYCODE_BACK == keyCode){
+            setResult(22);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     //非单品   从未盘点的商品中选择

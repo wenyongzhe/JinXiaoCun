@@ -27,6 +27,7 @@ public class PandianManagerActivity extends CommonBaseActivity {
     @OnClick(R.id.btn_create_pd)
     public void onClickCreatePandianOrder(){
         startActivity(new Intent(this,PandianCreateActivity.class));
+        finish();
     }
 
 

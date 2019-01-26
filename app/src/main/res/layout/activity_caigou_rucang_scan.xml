@@ -12,24 +12,23 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
-        <TextView
+        <Spinner
+            android:id="@+id/sp_type"
+            style="@style/SpinnerStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="@dimen/txt_size16"
-            android:textColor="@color/black"
-            android:paddingRight="10dp"
-            android:gravity="center_vertical"
-            android:text="条码" />
+            android:paddingLeft="0dp"
+            />
 
         <EditText
             android:id="@+id/et_barcode"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="1"
             android:imeOptions="actionSend"
             style="@style/EditText_Grey_Border"
             android:gravity="left|center_vertical"
-            android:hint="请扫描/输入精准条码添加商品"
+            android:hint="请扫描/输入搜索条码"
             />
 
     </LinearLayout>

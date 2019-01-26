@@ -15,16 +15,16 @@
         <Spinner
             android:id="@+id/sp_type"
             style="@style/SpinnerStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="0dp"
-            android:layout_weight="2.5" />
+            />
 
         <EditText
             android:id="@+id/et_barcode"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="1"
             android:imeOptions="actionSend"
             style="@style/EditText_Grey_Border"
             android:gravity="left|center_vertical"

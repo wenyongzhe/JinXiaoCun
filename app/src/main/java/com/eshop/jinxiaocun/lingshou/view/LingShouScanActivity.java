@@ -177,13 +177,20 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @Override
     public synchronized void onResume() {
         super.onResume();
+        try {
+            if(!mService.isEnabled()){
+                mService.enabled();
+                //AlertUtil.showAlert(LingShouScanActivity.this,"提示","请打开蓝牙" );
+            }else {
+                if (mService != null) {
 
-        if (mService != null) {
-
-            if (mService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Bluetooth services
-                mService.start();
+                    if (mService.getState() == BluetoothService.STATE_NONE) {
+                        // Start the Bluetooth services
+                        mService.start();
+                    }
+                }
             }
+        }catch (Exception e){
         }
     }
 
@@ -928,6 +935,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     @OnClick(R.id.btn_add)
     void sell() {
+        if(mListData==null ||mListData.size()==0){
+            ToastUtils.showShort("请选择商品");
+            return;
+        }
         isOk = true;
         setSaleFlowBean();
         Intent mIntent = new Intent(this,PayActivity.class);
@@ -1037,4 +1048,5 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             et_barcode.setText(barcode);
         }
     };
+
 }

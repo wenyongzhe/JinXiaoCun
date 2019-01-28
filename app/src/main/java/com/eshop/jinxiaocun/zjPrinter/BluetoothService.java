@@ -62,6 +62,14 @@ public class BluetoothService {
     }
     
 
+    public boolean isEnabled(){
+        return mAdapter.isEnabled();
+    }
+
+    public boolean enabled(){
+        return mAdapter.enable();
+    }
+
     /**
      * Set the current state of the connection
      * @param state  An integer defining the current connection state

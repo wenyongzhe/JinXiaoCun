@@ -9,6 +9,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.eshop.jinxiaocun.base.view.Application;
+
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -78,8 +80,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Log.e(TAG, "error : ", e);
             }
             //退出程序
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+//            android.os.Process.killProcess(android.os.Process.myPid());
+//            System.exit(0);
+            Application.getInstance().AppExit();
         }
     }
 

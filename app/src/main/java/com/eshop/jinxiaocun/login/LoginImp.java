@@ -1,6 +1,5 @@
 package com.eshop.jinxiaocun.login;
 
-import android.os.Handler;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
@@ -14,12 +13,10 @@ import com.eshop.jinxiaocun.login.Bean.RegistBeanResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
-import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 import com.eshop.jinxiaocun.utils.Config;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,15 +118,11 @@ public class LoginImp implements ILogin {
                     Config.posid = "1001";
                     Config.branch_no = "000101";
                     Config.soft_name = "智能移动POS";
-                    ConfigureParamSP.getInstance().getValue(Application.mContext,ConfigureParamSP.KEY_BRANCH_NO,"000101");
-                    ConfigureParamSP.getInstance().getValue(Application.mContext,ConfigureParamSP.KEY_POSID,"1001");
                     mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+Msg);
                 }else{
                     Config.posid = jsonBean.getPosid();
                     Config.branch_no = jsonBean.getBranch_no();
                     Config.soft_name = jsonBean.getSoft_name();
-                    ConfigureParamSP.getInstance().getValue(Application.mContext,ConfigureParamSP.KEY_BRANCH_NO,Config.branch_no);
-                    ConfigureParamSP.getInstance().getValue(Application.mContext,ConfigureParamSP.KEY_POSID,Config.posid);
                     mHandler.handleResule(Config.MESSAGE_OK,jsonBean);
                 }
             }catch (Exception e){

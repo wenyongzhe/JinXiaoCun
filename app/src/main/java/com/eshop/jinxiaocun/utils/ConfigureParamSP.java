@@ -8,8 +8,6 @@ public class ConfigureParamSP {
 	private final String FILE_NAME = "CONFIGURE";
 	public final static String KEY_SERVERURL = "ServerUrl";
 	public final static String KEY_SERVERPORT = "ServerPORT";
-	public final static String KEY_BRANCH_NO = "branch_no";
-	public final static String KEY_POSID = "posid";
 
 	private static ConfigureParamSP instance;
 	public static ConfigureParamSP getInstance() {

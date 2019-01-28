@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.netWork.httpDB;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.netWork.httpDB.message.MessageManage;
@@ -35,24 +36,12 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class NetWorkImp implements INetWork {
 
     private static OkHttpClient myOkHttpClient = null;
-
-//    private volatile static NetWorkImp mOKHttpRequest;
     private MessageManage messageManage;
+    public final String AERCONTENT="C41Ore7aL5n8E";
 
     public NetWorkImp(Context context){
         init(context);
     }
-
-//    public static NetWorkImp getInstance(){
-//        if (mOKHttpRequest == null) {
-//            synchronized (NetWorkImp.class) {
-//                if (mOKHttpRequest == null) {
-//                    mOKHttpRequest = new NetWorkImp();
-//                }
-//            }
-//        }
-//        return mOKHttpRequest;
-//    }
 
     @Override
     public void init(Context context) {
@@ -135,7 +124,8 @@ public class NetWorkImp implements INetWork {
     @Override
     public void doGet(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
         //数据加密
-        String md5Tem = paramsMap.get("JsonData")+"C41Ore7aL5n8E";
+        String data = TextUtils.isEmpty(paramsMap.get("JsonData"))?paramsMap.get("jsonData"):paramsMap.get("JsonData");
+        String md5Tem = data+AERCONTENT;
         String md5 = MD5Util.string2MD5(md5Tem).toUpperCase();
         paramsMap.put("Sign",md5);
         doGet(url,paramsMap,null,iResponseListener);
@@ -189,7 +179,8 @@ public class NetWorkImp implements INetWork {
     @Override
     public void doPost(String url, Map<String, String> paramsMap, final IResponseListener iResponseListener) {
         //数据加密
-        String md5Tem = paramsMap.get("JsonData")+"C41Ore7aL5n8E";
+        String data = TextUtils.isEmpty(paramsMap.get("JsonData"))?paramsMap.get("jsonData"):paramsMap.get("JsonData");
+        String md5Tem = data+AERCONTENT;
         String md5 = MD5Util.string2MD5(md5Tem).toUpperCase();
         paramsMap.put("Sign",md5);
         doPost(url,paramsMap,null,iResponseListener);

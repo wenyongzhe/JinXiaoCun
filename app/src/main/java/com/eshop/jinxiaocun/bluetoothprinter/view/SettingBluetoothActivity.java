@@ -96,6 +96,11 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             bluetoothService.disConnectBluetooth();
             bluetoothService = null;
         }
+
+        if(listData!=null){
+            listData.clear();
+            listData=null;
+        }
         Application.getInstance().finishActivity(this);
         super.onDestroy();
     }

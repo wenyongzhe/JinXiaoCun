@@ -135,9 +135,9 @@ public class BluetoothPrinterManage {
                             resultListerner.IsConnect(true);
                         return;
                     }
-                    if (mPrinterService.getState() == BluetoothService.STATE_NONE) {
-                        mPrinterService.start();
-                    }
+//                    if (mPrinterService.getState() == BluetoothService.STATE_NONE) {
+//                        mPrinterService.start();
+//                    }
                     mPrinterService.connect(mDevice);
                 }else{
                     mPrinterService = new BluetoothService(mContext, mHandler);
@@ -235,13 +235,16 @@ public class BluetoothPrinterManage {
                         case BluetoothService.STATE_CONNECTING://现在启动一个传出连接
                             break;
                         case BluetoothService.STATE_LISTEN://现在监听传入连接
+                            break;
                         case BluetoothService.STATE_NONE:
                             break;
                     }
                     break;
                 case SystemSettingActivity.MESSAGE_DEVICE_NAME:
-                    break;
                 case SystemSettingActivity.MESSAGE_TOAST:
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     break;
                 case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
 //                    AlertUtil.showToast("无法连接设备");

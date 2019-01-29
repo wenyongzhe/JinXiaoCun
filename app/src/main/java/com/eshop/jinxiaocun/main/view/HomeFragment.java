@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.main.view;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.caigou.view.CaigouManagerActivity;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.peisong.view.PeisongManagerActivity;
 import com.eshop.jinxiaocun.peisong.view.YaohuoOrderListActivity;
@@ -25,6 +27,7 @@ import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaOrderListActivity;
 import com.eshop.jinxiaocun.stock.view.GoodDetailCheckActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +37,7 @@ public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.gridview)
     GridView gridview;
+    private BluetoothAdapter mBluetoothAdapter = null;
 
     private Unbinder unbinder;
     private int[] iconIds = {
@@ -71,6 +75,7 @@ public class HomeFragment extends BaseFragment {
         gridview = (GridView) view.findViewById(R.id.gridview);
         gridview.setAdapter(menuAdapter);
         gridview.setOnItemClickListener(this);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         loadData();
         return view;
     }
@@ -100,9 +105,17 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 2:
-                intent.setClass(Application.mContext, LingShouScanActivity.class);
-                intent.putExtra(Config.SHEET_NO,"");
-                startActivity(intent);
+                if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+                    Intent enableIntent = new Intent(
+                            BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
+                    // Otherwise, setup the session
+                } else {
+                    intent.setClass(Application.mContext, LingShouScanActivity.class);
+                    intent.putExtra(Config.SHEET_NO,"");
+                    startActivity(intent);
+                }
+
                 break;
             case 3:
                 intent.setClass(Application.mContext, PandianManagerActivity.class);

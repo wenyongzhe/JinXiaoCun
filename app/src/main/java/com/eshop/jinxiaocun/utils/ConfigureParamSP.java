@@ -8,7 +8,7 @@ public class ConfigureParamSP {
 	private final String FILE_NAME = "CONFIGURE";
 	public final static String KEY_SERVERURL = "ServerUrl";
 	public final static String KEY_SERVERPORT = "ServerPORT";
-
+	public final static String KEY_BLUETOOTHADDRESS = "BluetoothAddress";
 	private static ConfigureParamSP instance;
 	public static ConfigureParamSP getInstance() {
 		if (null == instance) {

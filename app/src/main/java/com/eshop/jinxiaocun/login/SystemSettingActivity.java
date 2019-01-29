@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.login;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothPrinterManage;
+import com.eshop.jinxiaocun.bluetoothprinter.view.SettingBluetoothActivity;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
@@ -36,22 +39,14 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.et_service_url)
     EditText txtSeverUrl;
 
-//    @BindView(R.id.et_shop_group)
-//    EditText txtShopGroup;
-
     @BindView(R.id.et_service_port)
     EditText txtSeverPort;
 
     @BindView(R.id.btn_blue)
     Button btn_blue;
 
-    TextView tv_blu_status;
-
-    // Intent request codes
     public static final int REQUEST_CONNECT_DEVICE = 1;
     public static final int REQUEST_ENABLE_BT = 2;
-    private BluetoothAdapter mBluetoothAdapter = null;
-    // Message types sent from the BluetoothService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int MESSAGE_WRITE = 3;
@@ -60,11 +55,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     public static final int MESSAGE_CONNECTION_LOST = 6;
     public static final int MESSAGE_UNABLE_CONNECT = 7;
     public static final String TOAST = "toast";
-    // Key names received from the BluetoothService Handler
     public static final String DEVICE_NAME = "device_name";
-
-    // Member object for the services
-    private BluetoothService mService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,118 +87,26 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
         Button btnTest = (Button)findViewById(R.id.btn_test);
         Button btn_blue = (Button)findViewById(R.id.btn_blue);
-        tv_blu_status = (TextView) findViewById(R.id.tv_blu_status);
         btnTest.setOnClickListener(this);
         btn_blue.setOnClickListener(this);
 
         closeEditTextKeyboard();
 
-        // Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mService = new BluetoothService(this, mHandler);
 
-        btn_blue.setClickable(true);
-        // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-            btn_blue.setClickable(false);
-        }
 
-    }
-
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case BluetoothService.STATE_CONNECTED:
-                            tv_blu_status.setText("连接成功");
-                            break;
-                        case BluetoothService.STATE_CONNECTING:
-                            tv_blu_status.setText("连接中~~~");
-                            break;
-                        case BluetoothService.STATE_LISTEN:
-                        case BluetoothService.STATE_NONE:
-                            tv_blu_status.setText("没有连接");
-                            break;
-                    }
-                    break;
-                case MESSAGE_WRITE:
-
-                    break;
-                case MESSAGE_READ:
-
-                    break;
-                case MESSAGE_DEVICE_NAME:
-                    break;
-                case MESSAGE_UNABLE_CONNECT:     //无法连接设备
-                    Toast.makeText(getApplicationContext(), "Unable to connect device",
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-                    Toast.makeText(getApplicationContext(), "Device connection was lost",
-                            Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // If Bluetooth is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if ( !mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mService == null)
-                mService = new BluetoothService(this, mHandler);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Stop the Bluetooth services
-        if (mService != null)
-            mService.stop();
-        if (DEBUG)
-            Log.e("", "--- ON DESTROY ---");
-    }
-
-    @Override
-    public synchronized void onResume() {
-        super.onResume();
-
-        if (mService != null) {
-
-            if (mService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Bluetooth services
-                mService.start();
-            }
-        }
     }
 
     @Override
     protected void loadData() {
-
     }
 
     @Override
     protected void initView() {
-
     }
 
     private void closeEditTextKeyboard() {
         MyUtils.closeKeyboard(this, txtSeverUrl);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -229,73 +128,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
 
             case R.id.btn_blue:
-                Intent serverIntent = new Intent(SystemSettingActivity.this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                Intent serverIntent = new Intent(SystemSettingActivity.this, SettingBluetoothActivity.class);
+                startActivity(serverIntent);
                 break;
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (DEBUG)
-            Log.d("", "onActivityResult " + resultCode);
-        switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE: {
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    // Get the device MAC address
-                    String address = data.getExtras().getString(
-                            DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-                    // Get the BLuetoothDevice object
-                    if (BluetoothAdapter.checkBluetoothAddress(address)) {
-                        BluetoothDevice device = mBluetoothAdapter
-                                .getRemoteDevice(address);
-                        // Attempt to connect to the device
-                        mService.connect(device);
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-//    private class TestServer extends AsyncTask<String, String, Void>
-//    {
-//        @Override
-//        protected Void doInBackground(String... params) {
-//            try {
-//
-//                ConfigureParam.WebURL = params[0];
-//                T_ResultMsg msg = soapService.Test();
-//                if (msg.getStatusCode().equals("0"))
-//                {
-//                    publishProgress("true");
-//                    ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_SERVERURL, params[0]);
-//                }
-//                else{
-//                    publishProgress("测试失败");
-//                }
-//            } catch (Exception ex) {
-//                publishProgress("快鱼服务器地址["+ params[0] +"]不通，请查询服务地址和端口号是否正确");
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            progressDialog = AlertUtil.showNoButtonProgressDialog(SystemSettingActivity.this,"正在测试");
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(String... values) {
-//            progressDialog.dismiss();
-//            if (values[0].equals("true")) {
-//                AlertUtil.showToast("测试成功",SystemSettingActivity.this);
-//            }
-//            else
-//                AlertUtil.showToast("测试失败！原因："+values[0],SystemSettingActivity.this);
-//            super.onProgressUpdate(values);
-//        }
-//    }
 }

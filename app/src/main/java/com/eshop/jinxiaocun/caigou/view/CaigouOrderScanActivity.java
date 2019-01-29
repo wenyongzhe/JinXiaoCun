@@ -140,7 +140,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
-        bluetoothService = new BluetoothPrinterManage(this, this);
+        bluetoothService = BluetoothPrinterManage.getInstance();
+        bluetoothService.init(this,this);
     }
 
     @Override
@@ -904,6 +905,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(mGetDBDatas !=null){
             mGetDBDatas.cancel(true);
         }
+        if(bluetoothService!=null){
+            bluetoothService.disConnectBluetooth();
+            bluetoothService = null;
+        }
     }
 
     //打印
@@ -935,9 +940,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         isPrinter = true;
         try {
             if (isConnect) {
-                bluetoothService.printerTxt_58mm(mSheetNo,mListDatas);
-                bluetoothService.disConnectBluetooth();
-                finish();
+                AlertUtil.showToast("可以打印了，谢谢", this);
+//                bluetoothService.printerTxt_58mm(mSheetNo,mListDatas);
+//                bluetoothService.disConnectBluetooth();
+//                finish();
             } else {
                 AlertUtil.showToast("连接打印机失败！可能要重新配置蓝牙打印机！", this);
             }

@@ -15,6 +15,8 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.bluetoothprinter.adapter.BluetoothDeviceListAdapter;
 import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothPrinterManage;
 import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothDeviceInfo;
+import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.MyActionBar;
@@ -53,11 +55,17 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     protected void initView() {
         ButterKnife.bind(this);
         setTopToolBar("蓝牙打印机设置",R.mipmap.ic_left_light,"",0,"");
-        bluetoothService = new BluetoothPrinterManage(this, this);
+        bluetoothService = BluetoothPrinterManage.getInstance();
+        bluetoothService.init(this,this);
         listData = bluetoothService.getPairedDevices();
         adapterData = new BluetoothDeviceListAdapter(this, listData);
         mListView.setAdapter(adapterData);
 
+        if(listData.size()>0){
+            //保存已配对的地址
+            Config.BluetoothAddress = listData.get(0).getBluetoothAddress();
+            ConfigureParamSP.getInstance().saveValue(this, ConfigureParamSP.KEY_BLUETOOTHADDRESS, Config.BluetoothAddress);
+        }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -100,7 +108,16 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     @OnClick(R.id.btn_connect)
     public void OnConnect(){
-        bluetoothService.connectBluetooth();
+        if (selectMainEntity != null) {
+            bluetoothService.connectBluetooth();
+        }else{
+            AlertUtil.showToast("请选择连接的蓝牙打印机", this);
+        }
+    }
+
+    @OnClick(R.id.btn_cancel_connect)
+    public void onDisConnect(){
+        bluetoothService.disConnectBluetooth();
     }
 
     @OnClick(R.id.btn_pair)

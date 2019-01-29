@@ -80,14 +80,23 @@
             android:text="配对" />
 
         <Button
-            android:visibility="gone"
             android:id="@+id/btn_connect"
+            android:layout_marginStart="10dp"
+            style="@style/Button_blue"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="连接" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_cancel_connect"
             android:layout_marginStart="10dp"
             style="@style/Button_red"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="连接" />
+            android:text="取消连接" />
 
         <Button
             android:visibility="gone"

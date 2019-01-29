@@ -15,6 +15,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -47,11 +48,25 @@ public class BluetoothPrinterManage {
     private static boolean  hasRegSearchReceiver = false;
     private Context mContext;
 
-    public BluetoothPrinterManage(Context context, BluetoothResultListerner resultListerner){
+    private BluetoothPrinterManage(){}
+    private static final class BluetoothPrinterInstance{
+        private static final BluetoothPrinterManage INSTANCE = new BluetoothPrinterManage();
+    }
+    public static BluetoothPrinterManage getInstance(){
+        return BluetoothPrinterInstance.INSTANCE;
+    }
+
+    public void init(Context context, BluetoothResultListerner resultListerner){
         this.resultListerner = resultListerner;
         this.mContext = context;
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPrinterService = new BluetoothService(mContext, mHandler);
+        if (mPrinterService != null) {
+            if (mPrinterService.getState() == BluetoothService.STATE_NONE) {
+                mPrinterService.start();
+            }
+        }else{
+            mPrinterService = new BluetoothService(mContext, mHandler);
+        }
     }
 
     public List<BluetoothDeviceInfo> getPairedDevices(){
@@ -104,16 +119,29 @@ public class BluetoothPrinterManage {
                     AlertUtil.showToast("请先配对蓝牙打印机！", mContext);
                     return;
                 }
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
                 progressDialog = AlertUtil.showNoButtonProgressDialog(mContext, "正在连接蓝牙打印机...");
                 mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(Config.BluetoothAddress);
                 if (mPrinterService != null) {
+                    if (mPrinterService.getState() == BluetoothService.STATE_CONNECTED) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                        isConnected = true;
+                        AlertUtil.showToast("已成功连接蓝牙打印机！", mContext);
+                        if (resultListerner != null)
+                            resultListerner.IsConnect(true);
+                        return;
+                    }
                     if (mPrinterService.getState() == BluetoothService.STATE_NONE) {
-                        // Start the Bluetooth services
                         mPrinterService.start();
                     }
+                    mPrinterService.connect(mDevice);
                 }else{
                     mPrinterService = new BluetoothService(mContext, mHandler);
-                    mPrinterService.start();
+                    mPrinterService.connect(mDevice);
                 }
             }
         } catch (Exception ex) {
@@ -170,6 +198,7 @@ public class BluetoothPrinterManage {
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
+//            AlertUtil.showToast("取消蓝牙打印机成功!" , mContext);
         }catch (Exception ex) {
             AlertUtil.showToast("释放蓝牙打印机出现异常！原因：" + ex.getMessage(), mContext);
         }
@@ -203,20 +232,16 @@ public class BluetoothPrinterManage {
                             if (resultListerner != null)
                                 resultListerner.IsConnect(true);
                             break;
-                        case BluetoothService.STATE_CONNECTING:
-//                            AlertUtil.showToast("连接中");
+                        case BluetoothService.STATE_CONNECTING://现在启动一个传出连接
                             break;
-                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_LISTEN://现在监听传入连接
                         case BluetoothService.STATE_NONE:
-                            //ToastUtils.showShort("没有连接打印机");
-                            isConnected = false;
-                            if (resultListerner != null)
-                                resultListerner.IsConnect(false);
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
                             break;
                     }
+                    break;
+                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
+                    break;
+                case SystemSettingActivity.MESSAGE_TOAST:
                     break;
                 case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
 //                    AlertUtil.showToast("无法连接设备");
@@ -225,11 +250,6 @@ public class BluetoothPrinterManage {
                     isConnected = false;
                     if (resultListerner != null)
                         resultListerner.IsConnect(false);
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    break;
-                default:
                     if (progressDialog != null && progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
@@ -284,10 +304,10 @@ public class BluetoothPrinterManage {
                 switch (device.getBondState()) {
                     case BluetoothDevice.BOND_BONDING:
                         break;
-                    case BluetoothDevice.BOND_BONDED:
+                    case BluetoothDevice.BOND_BONDED://配对成功
                         //保存已配对的地址
                         Config.BluetoothAddress = device.getAddress();
-                        //ConfigureParamSP.getInstance().saveValue(mContext, ConfigureParamSP.KEY_BLUETOOTHADDRESS, device.getAddress());
+                        ConfigureParamSP.getInstance().saveValue(mContext, ConfigureParamSP.KEY_BLUETOOTHADDRESS, device.getAddress());
                         if (progressDialog != null && progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }

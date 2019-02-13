@@ -81,7 +81,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
             mBarcodeScan = new BarcodeScan(this);
             mBarcodeScan.open();
         }catch (Exception e){
-
+            Log.e("",e.getMessage());
         }
     }
 
@@ -97,7 +97,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
             mBarcodeScan = new BarcodeScan(this);
             mBarcodeScan.open();
         }catch (Exception e){
-
+            Log.e("",e.getMessage());
         }
     }
 

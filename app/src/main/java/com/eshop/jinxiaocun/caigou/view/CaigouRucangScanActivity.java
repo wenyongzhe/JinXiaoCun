@@ -233,6 +233,12 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
 
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){
         if(scanOrSelectGoods !=null){
+            //采购添加商品 根据供应商作限制 相同供应商才能添加 否则弹出提示  其他单据则不作限制
+            if(TextUtils.isEmpty(scanOrSelectGoods.getMain_supcust())||TextUtils.isEmpty(SupCust_No)
+                    ||!SupCust_No.equals(scanOrSelectGoods.getMain_supcust())){
+                AlertUtil.showToast("商品:"+scanOrSelectGoods.getItem_name()+",不在选择的供应商商品内！");
+                return;
+            }
 
             boolean isSame = false;
             for (int i = 0; i < mListDatas.size(); i++) {
@@ -267,7 +273,10 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
             }
             mAdapter.setListInfo(mListDatas);
             upDateUI();
+        }else{
+            AlertUtil.showToast("无商品信息!");
         }
+
     }
 
     //保存临时主表信息

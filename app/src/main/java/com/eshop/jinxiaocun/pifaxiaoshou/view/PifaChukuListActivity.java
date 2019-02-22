@@ -314,7 +314,7 @@ public class PifaChukuListActivity extends CommonBaseListActivity implements INe
             return false;
         }
         if(mSheetType.equals(mSelectMainBean.getSheetType())){
-            AlertUtil.showToast("本地数据只能做修改操作!");
+            AlertUtil.showToast("单据内容没有保存，请先修改内容并保存内容!");
             return false;
         }
         return true;

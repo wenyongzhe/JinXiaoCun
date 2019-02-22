@@ -35,6 +35,7 @@ import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -749,6 +750,11 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         }
         if(mSelectGoodsEntity ==null){
             AlertUtil.showToast("请选择要改数的商品!");
+            return false;
+        }
+        //1有权限 位置27
+        if(!CommonUtility.getInstance().havePermission(27)){
+            AlertUtil.showToast("当前登录用户没有改价权限!");
             return false;
         }
         return true;

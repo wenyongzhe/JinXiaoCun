@@ -276,7 +276,7 @@ public class CommonUtility {
      * @return true为有权限，false则没有权限
      */
     public boolean havePermission(int position){
-//        "strgrant":"1111111111111111111111111"  26种权限 1表示有权限 0表示没有权限
+//        "strgrant":"1111111111111111111111111111"  30种权限 1表示有权限 0表示没有权限
 //        权限对应序号依次为：
 //        @grant1  char(1),  --要货单 打开
 //        @grant2  char(1),  --要货单 审核
@@ -303,7 +303,11 @@ public class CommonUtility {
 //        @grant23 char(1),  --预售
 //        @grant24 char(1),  --退货
 //        @grant25 char(1),	--盘点机销售
-
+//        @grant26 char(1),	--现在用做批发价权限
+//        @grant27 char(1),	--现在用做(采购)进价权限
+//        @grant28 char(1),	--未使用
+//        @grant29 char(1),	--未使用
+//        @grant30 char(1),	--未使用
         position = position-1;
         if(TextUtils.isEmpty(Config.strgrant)){
             return false;

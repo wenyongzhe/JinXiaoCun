@@ -36,6 +36,7 @@ import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -774,12 +775,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("请选择要改数的商品!");
             return false;
         }
+        //有权限
+        if(!CommonUtility.getInstance().havePermission(27)){
+            AlertUtil.showToast("当前登录用户没有改价权限!");
+            return false;
+        }
         return true;
     }
 
     @Override
     protected void modifyPriceAfter() {
-        //采购可以允许自行改价，目前没有权限控制
         Intent intent = new Intent();
         intent.putExtra("Price", mSelectGoodsEntity.getSale_price()+"");
         intent.setClass(this, ModifyPriceDialog.class);

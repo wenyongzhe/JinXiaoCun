@@ -33,6 +33,7 @@ import com.eshop.jinxiaocun.peisong.view.CiteOrderListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaTuihuoScanAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -40,6 +41,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPriceDialog;
+import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -618,7 +620,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
 
         //修改价格
         if(requestCode ==200 && resultCode == RESULT_OK){
-            String modifyPrice =  data.getStringExtra("ModifyPrice");
+            String modifyPrice =  data.getStringExtra("Price");
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
                     mListDatas.get(i).setBase_price(modifyPrice);
@@ -784,17 +786,8 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             return false;
         }
 
-        //1允许0不允许
-        if(!"1".equals(mSelectGoodsEntity.getChange_price())){
-            AlertUtil.showToast("此商品不允许议价!");
-            return false;
-        }
-        if(mSelectGoodsEntity.getHasModifyPrice()==1){//1已修改过价格  0未修改过价格
-            AlertUtil.showToast("此商品已改过价，不能再改价!");
-            return false;
-        }
-        //3’密码错误，‘2’没有权限， ‘1’有权限
-        if(Config.mYiJiaPermission!=1){
+        //有权限
+        if(!CommonUtility.getInstance().havePermission(26)){
             AlertUtil.showToast("当前登录用户没有改价权限!");
             return false;
         }
@@ -803,9 +796,8 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
 
     @Override
     protected void modifyPriceAfter() {
-        Intent intent = new Intent(this, ModifyGoodsPriceDialog.class);
-        intent.putExtra("OldPrice",mSelectGoodsEntity.getSale_price());
-        intent.putExtra("DiscountsPrice",Config.danbiYiJialimit);
+        Intent intent = new Intent(this, ModifyPriceDialog.class);
+        intent.putExtra("Price",mSelectGoodsEntity.getSale_price());
         startActivityForResult(intent,200);
     }
 

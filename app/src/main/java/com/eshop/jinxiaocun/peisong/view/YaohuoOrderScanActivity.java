@@ -39,6 +39,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPriceDialog;
+import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -554,7 +555,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 
         //修改价格
         if(requestCode == 200 && resultCode==RESULT_OK){
-            String modifyPrice =  data.getStringExtra("ModifyPrice");
+            String modifyPrice =  data.getStringExtra("Price");
             for (int i = 0; i < mListDatas.size(); i++) {
                 if(mListDatas.get(i).getItem_no().equals(mSelectGoodsEntity.getItem_no())){
                     mListDatas.get(i).setSale_price(modifyPrice);
@@ -719,29 +720,14 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("请选择要改数的商品!");
             return false;
         }
-
-        //1允许0不允许
-        if(!"1".equals(mSelectGoodsEntity.getChange_price())){
-            AlertUtil.showToast("此商品不允许议价!");
-            return false;
-        }
-        if(mSelectGoodsEntity.getHasModifyPrice()==1){//1已修改过价格  0未修改过价格
-            AlertUtil.showToast("此商品已改过价，不能再改价!");
-            return false;
-        }
-        //3’密码错误，‘2’没有权限， ‘1’有权限
-        if(Config.mYiJiaPermission!=1){
-            AlertUtil.showToast("当前登录用户没有改价权限!");
-            return false;
-        }
+        //暂时没有权限限制
         return true;
     }
 
     @Override
     protected void modifyPriceAfter() {
-        Intent intent = new Intent(this, ModifyGoodsPriceDialog.class);
-        intent.putExtra("OldPrice",mSelectGoodsEntity.getSale_price());
-        intent.putExtra("DiscountsPrice",Config.danbiYiJialimit);
+        Intent intent = new Intent(this, ModifyPriceDialog.class);
+        intent.putExtra("Price",mSelectGoodsEntity.getSale_price());
         startActivityForResult(intent,200);
     }
 

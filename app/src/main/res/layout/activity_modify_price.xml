@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:inputType="numberDecimal"
-            android:maxLength="6"
+            android:maxLength="8"
             android:maxLines="1"
             android:textColor="@color/dialogcolor"
             android:textSize="20sp" />

@@ -445,7 +445,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
                 AlertUtil.showToast(o.toString());
                 //如果是新开单或之前保存本地的单据 删除
                 if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
-                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
                     if(isSuccessDelete ==0){
                         AlertUtil.showToast("删除本地数据失败");
                     }

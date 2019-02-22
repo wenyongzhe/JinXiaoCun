@@ -152,7 +152,6 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
     //从单据列表进入 取此单据明细
     private void getOrderDetail(DanJuMainBeanResultItem selectMainBean) {
         if (selectMainBean != null) {
-            mStr_OrderNo = selectMainBean.getSheet_No();
             SupCust_No =selectMainBean.getSupCust_No();
             mTvUser.setText(TextUtils.isEmpty(selectMainBean.getSupplyName())?""+selectMainBean.getSupCust_No():selectMainBean.getSupplyName());
             mTvUserStore.setText(""+selectMainBean.getBranch_No());
@@ -161,6 +160,7 @@ public class PifaChukuScanActivity extends CommonBaseScanActivity implements INe
                 mGetDBDatas= new GetDBDatas(this);
                 mGetDBDatas.execute();
             }else{
+                mStr_OrderNo = mSelectMainBean.getSheet_No();
                 mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
             }
         }else{

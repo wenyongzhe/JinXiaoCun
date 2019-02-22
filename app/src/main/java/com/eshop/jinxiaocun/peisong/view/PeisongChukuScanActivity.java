@@ -306,7 +306,6 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
     //从单据列表进入 取此单据明细
     private void getOrderDetail(DanJuMainBeanResultItem selectMainBean) {
         if (selectMainBean != null) {
-            mStr_OrderNo = selectMainBean.getSheet_No();
             mT_Branch_No =selectMainBean.getT_Branch_No();
             mTvTiaoRu.setText(selectMainBean.getYHShopName());
             mTvTiaoChu.setText(TextUtils.isEmpty(selectMainBean.getShopName())?selectMainBean.getBranch_No()+"":selectMainBean.getShopName());
@@ -315,6 +314,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
                 mGetDBDatas= new GetDBDatas(this);
                 mGetDBDatas.execute();
             }else{
+                mStr_OrderNo = mSelectMainBean.getSheet_No();
                 mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
             }
         }else{

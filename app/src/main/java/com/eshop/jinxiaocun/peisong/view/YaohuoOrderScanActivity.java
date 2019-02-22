@@ -145,7 +145,6 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         mLingshouApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
         if(mSelectMainBean !=null){
-            mStr_OrderNo = mSelectMainBean.getSheet_No();
             mT_Branch_No =mSelectMainBean.getT_Branch_No();
             mTvFhStore.setText(TextUtils.isEmpty(mSelectMainBean.getShopName())?""+mSelectMainBean.getT_Branch_No():mSelectMainBean.getShopName());
             mTvYhStore.setText(mSelectMainBean.getBranch_No()+"");
@@ -155,6 +154,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
                 mGetDBDatas= new GetDBDatas(this);
                 mGetDBDatas.execute();
             }else{
+                mStr_OrderNo = mSelectMainBean.getSheet_No();
                 mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
             }
         }else{

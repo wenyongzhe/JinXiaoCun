@@ -152,7 +152,6 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         mQueryGoodsApi = new LingShouScanImp(this);
         mSelectMainBean = (DanJuMainBeanResultItem) getIntent().getSerializableExtra("MainBean");
         if(mSelectMainBean !=null){
-            mStr_OrderNo = mSelectMainBean.getSheet_No();
             SupCust_No =mSelectMainBean.getSupCust_No();
             mTvProvider.setText(TextUtils.isEmpty(mSelectMainBean.getSupplyName())?""+mSelectMainBean.getSupCust_No():mSelectMainBean.getSupplyName());
             mTvReceivingWarehouse.setText(mSelectMainBean.getBranch_No()+"");
@@ -162,6 +161,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
                 mGetDBDatas= new GetDBDatas(this);
                 mGetDBDatas.execute();
             }else{
+                mStr_OrderNo = mSelectMainBean.getSheet_No();
                 mOtherApi.getOrderDetail(mSelectMainBean.getSheetType(),mSelectMainBean.getSheet_No(),mSelectMainBean.getVoucher_Type());
             }
         }else{

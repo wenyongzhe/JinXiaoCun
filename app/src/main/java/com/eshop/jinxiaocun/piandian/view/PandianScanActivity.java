@@ -532,9 +532,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                                 AlertUtil.dismissDialog();
                             }
                         });
+                return false;
+            }else{//说明盘点完了 直接保存
+                return true;
             }
-            return false;
-
         }
 
         return true;
@@ -932,11 +933,11 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
                 if(!isDianpin){
                     //本地数据库里有盘点单就显示未盘点商品按钮
-                    if(mPandianDetailData.size()>0){
+//                    if(mPandianDetailData.size()>0){
                         mTvNoPandian.setVisibility(View.VISIBLE);
-                    }else{
-                        mTvNoPandian.setVisibility(View.GONE);
-                    }
+//                    }else{
+//                        mTvNoPandian.setVisibility(View.GONE);
+//                    }
                 }
 
                 if(mAddPandianGoodsDetailData.size()>0){

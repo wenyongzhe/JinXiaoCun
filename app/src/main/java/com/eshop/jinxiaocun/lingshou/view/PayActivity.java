@@ -180,13 +180,16 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.toString().equals("")){
-                    tv_pay_return.setText(money+"");
+                    tv_pay_return.setText("");
                 }else {
                     double tv_money = Double.valueOf(charSequence.toString());
                     tv_money = tv_money + 0.0000000000001;
-                    double moneyTem = initDouble(3,tv_money-money);
-
-                    tv_pay_return.setText(moneyTem+"");
+                    if(tv_money>money){
+                        double moneyTem = initDouble(3,tv_money-money);
+                        tv_pay_return.setText(moneyTem+"");
+                    }else{
+                        tv_pay_return.setText("");
+                    }
                 }
             }
             @Override

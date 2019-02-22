@@ -55,7 +55,7 @@ public class DanPinZheKouDialog extends Activity {
         txtCountN.requestFocus();
 
         Intent intent = getIntent();
-        limit = intent.getDoubleExtra("limit",0.000);
+        limit = intent.getDoubleExtra("limit",0.000)*100;
         if(limit !=-1){
             txtCountN.setHint("最低折扣："+limit);
         }
@@ -74,7 +74,7 @@ public class DanPinZheKouDialog extends Activity {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
-                        tv_newprice.setText("￥"+(oldPrice*price));
+                        tv_newprice.setText("￥"+(oldPrice*price/100));
                     }
                 }catch (Exception e){
                 }
@@ -83,7 +83,7 @@ public class DanPinZheKouDialog extends Activity {
             public void afterTextChanged(Editable editable) {
             }
         });
-
+        txtCountN.setText("100");
         closeEditTextKeyboard();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);

@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColorHint="@color/mid_gray"
-            android:text="折扣：" />
+            android:text="折扣%：" />
 
         <EditText
             android:id="@+id/txtCountN"
@@ -72,6 +72,7 @@
             android:gravity="start|center"
             android:maxLength="6"
             android:maxLines="1"
+            android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />
 

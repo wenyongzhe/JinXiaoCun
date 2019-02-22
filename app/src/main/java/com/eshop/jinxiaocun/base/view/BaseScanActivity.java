@@ -63,7 +63,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
             mDecoderHelper = DecoderHelper.getInstance(this);
             mDecoderHelper.setDecoderHelperListeners(this);
         }catch (Exception e){
-
+            Log.e("",e.getMessage());
         }
 
         //mBarcodeScan.scanning();

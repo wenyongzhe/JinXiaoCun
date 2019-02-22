@@ -91,10 +91,10 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="2"
-                android:inputType="number"
                 android:paddingLeft="10dp"
                 android:lines="1"
                 android:textSize="@dimen/txt_size20"
+                android:inputType="number|numberDecimal"
                 android:gravity="left|center_vertical"/>
 
         </LinearLayout>

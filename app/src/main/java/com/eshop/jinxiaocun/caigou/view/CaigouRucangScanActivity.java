@@ -33,6 +33,7 @@ import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.othermodel.view.SelectProviderListActivity;
 import com.eshop.jinxiaocun.othermodel.view.SelectWarehouseListActivity;
+import com.eshop.jinxiaocun.peisong.view.CiteOrderListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.CommonUtility;
@@ -87,6 +88,8 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
     private String mSheetNo;//标记本地数据的单据号
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.PI.toString();
+    private boolean isCiteOrder;//false不是引单  true为引单
+
     @Override
     protected int getLayoutContentId() {
         return R.layout.activity_caigou_rucang_scan;
@@ -184,6 +187,17 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
             return false;
         }
     };
+
+    @OnClick(R.id.btn_citeOrder)
+    public void onClickCiteOrder(){
+        if(mCheckflag.equals("1")){
+            AlertUtil.showToast("该单据已审核，不能再添加商品!");
+            return;
+        }
+        Intent intent = new Intent(this,CiteOrderListActivity.class);
+        intent.putExtra("SheetType",Config.YwType.PI.toString());
+        startActivityForResult(intent,4);
+    }
 
     @Override
     protected boolean onTopBarLeftClick() {
@@ -381,42 +395,69 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
                             isSave = true;
                             int number = MyUtils.convertToInt(mListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
                             mListDatas.get(i).setSale_qnty(number+"");
+                            //如果是引单进入 新开单或之前保存本地的单据 商品保存本地
+                            if(isCiteOrder && mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                                int zsl = 0;
+                                for (GetClassPluResult info : mListDatas) {
+                                    zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                                }
+                                int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
+                                        data.getItem_no(),number+"",zsl+"");
+                                if(isSuccess==0){
+                                    AlertUtil.showToast("本地商品更改数量失败！");
+                                }
+                            }
                             break;
                         }
                     }
                     if(!isSave){//不存在则添加
                         mListDatas.add(obj);
-                    }
-
-                    GetClassPluResult old_obj = new GetClassPluResult();
-                    old_obj.setItem_name(detailData.getName());
-                    old_obj.setItem_no(detailData.getBarCode());
-                    old_obj.setItem_barcode(detailData.getPluBatch());//批次
-                    old_obj.setItem_subno(detailData.getSelfCode());//自编码
-                    old_obj.setUnit_no(detailData.getUnit());
-                    old_obj.setSale_qnty(detailData.getCheckNum()+"");
-                    old_obj.setStock_qty(detailData.getStockNum()+"");
-                    old_obj.setPrice(detailData.getBuyPrice()+"");//进价
-                    old_obj.setSale_price(detailData.getSalePrice()+"");//销价
-                    old_obj.setProduce_date(detailData.getMadeDate());
-                    old_obj.setValid_date(detailData.getVaildDate());
-                    old_obj.setEnable_batch(detailData.getEnable_batch());
-                    boolean isOldSave = false;
-                    for ( int i=0; i<mOldListDatas.size();i++) {
-                        GetClassPluResult data = mOldListDatas.get(i);
-                        if(detailData.getBarCode().equals(data.getItem_no())){
-                            isOldSave = true;
-                            int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
-                            mOldListDatas.get(i).setSale_qnty(number+"");
-                            break;
+                        //如果是引单进入 新开单或之前保存本地的单据 商品保存本地
+                        if(isCiteOrder && mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                            int zsl = 0;
+                            for (GetClassPluResult info : mListDatas) {
+                                zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                            }
+                            obj.setSheet_No(mSheetNo);
+                            int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(obj,mSheetNo,zsl+"");
+                            if(isSuccess == 0){
+                                AlertUtil.showToast("商品信息保存本地失败!");
+                            }
                         }
                     }
-                    if(!isOldSave){//不存在则添加
-                        mOldListDatas.add(old_obj);
-                    }
-                }
 
-                if(mListDatas.size()>0){//默认选中第一条
+                    if(!isCiteOrder){//不是引单时  从列表进入的网上取到的主表取其明细
+                        GetClassPluResult old_obj = new GetClassPluResult();
+                        old_obj.setItem_name(detailData.getName());
+                        old_obj.setItem_no(detailData.getBarCode());
+                        old_obj.setItem_barcode(detailData.getPluBatch());//批次
+                        old_obj.setItem_subno(detailData.getSelfCode());//自编码
+                        old_obj.setUnit_no(detailData.getUnit());
+                        old_obj.setSale_qnty(detailData.getCheckNum()+"");
+                        old_obj.setStock_qty(detailData.getStockNum()+"");
+                        old_obj.setPrice(detailData.getBuyPrice()+"");//进价
+                        old_obj.setSale_price(detailData.getSalePrice()+"");//销价
+                        old_obj.setProduce_date(detailData.getMadeDate());
+                        old_obj.setValid_date(detailData.getVaildDate());
+                        old_obj.setEnable_batch(detailData.getEnable_batch());
+                        boolean isOldSave = false;
+                        for ( int i=0; i<mOldListDatas.size();i++) {
+                            GetClassPluResult data = mOldListDatas.get(i);
+                            if(detailData.getBarCode().equals(data.getItem_no())){
+                                isOldSave = true;
+                                int number = MyUtils.convertToInt(mOldListDatas.get(i).getSale_qnty(),0)+detailData.getCheckNum();
+                                mOldListDatas.get(i).setSale_qnty(number+"");
+                                break;
+                            }
+                        }
+                        if(!isOldSave){//不存在则添加
+                            mOldListDatas.add(old_obj);
+                        }
+                    }
+
+                }
+                if(isCiteOrder)isCiteOrder = false;
+                if(mListDatas.size()>0){//默认选中和第一条
                     mSelectGoodsEntity = mListDatas.get(0);
                     mAdapter.setItemClickPosition(0);
                 }
@@ -472,7 +513,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
                 AlertUtil.showToast(o.toString());
                 //如果是新开单或之前保存本地的单据 删除
                 if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
-                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSelectMainBean.getSheet_No());
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
                     if(isSuccessDelete ==0){
                         AlertUtil.showToast("删除本地数据失败");
                     }
@@ -606,6 +647,21 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         if(requestCode == 55 && resultCode == RESULT_OK){
             String remarks = data.getStringExtra("Remarks");
             AlertUtil.showToast("修改好了 "+remarks);
+        }
+
+        //引用单据
+        if(requestCode == 4 && resultCode == RESULT_OK){
+            DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
+            //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
+            if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                saveMainInfo(mSheetNo);
+            }
+            // 单据类型，入库方法需要自己填 入库方式，加库存的填“+”，减库存的填"-" 订单不产生库存变化的可以填空
+            selectMainBean.setSheetType(Config.YwType.PI.toString());
+            selectMainBean.setVoucher_Type("+");
+            //引单  根据主表取引单明细
+            isCiteOrder = true;
+            mOtherApi.getOrderDetail(selectMainBean.getSheetType(),selectMainBean.getSheet_No(),selectMainBean.getVoucher_Type());
         }
 
     }

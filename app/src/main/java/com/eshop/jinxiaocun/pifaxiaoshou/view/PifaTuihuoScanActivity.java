@@ -190,10 +190,10 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             AlertUtil.showToast("该单据已审核，不能再添加商品!");
             return;
         }
-        if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
-            AlertUtil.showToast("请选择客户，再引单!");
-            return ;
-        }
+//        if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
+//            AlertUtil.showToast("请选择客户，再引单!");
+//            return ;
+//        }
         Intent intent = new Intent(PifaTuihuoScanActivity.this,CiteOrderListActivity.class);
         intent.putExtra("SheetType",Config.YwType.RI.toString());
         startActivityForResult(intent,4);
@@ -288,7 +288,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
         mainInfo.setSheet_No(sheet_no);//单据号
         mainInfo.setSheetType(mSheetType);//单据类型
         mainInfo.setBranch_No(Config.branch_no);//当前门店/仓库
-        mainInfo.setSupCust_No(mStr_OrderNo);//供应商/客户
+        mainInfo.setSupCust_No(SupCust_No);//供应商/客户
         mainInfo.setSupplyName(mTvUser.getText().toString());
         mainInfo.setUSER_ID(Config.UserId);//用户ID
         mainInfo.setOper_Date(DateUtility.getCurrentDate());//操作日期
@@ -365,9 +365,10 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                     obj.setItem_barcode(detailData.getPluBatch());//批次
                     obj.setItem_subno(detailData.getSelfCode());//自编码
                     obj.setUnit_no(detailData.getUnit());
-                    obj.setSale_qnty(detailData.getCheckNum()+"");
+                    obj.setSale_qnty(detailData.getCheckNum()+"");//实际数量
                     obj.setStock_qty(detailData.getStockNum()+"");
                     obj.setPrice(detailData.getSalePrice()+"");
+                    obj.setSale_price(detailData.getSalePrice()+"");//销价
                     obj.setBase_price(detailData.getSalePrice()+"");//批发价
                     obj.setProduce_date(detailData.getMadeDate());
                     obj.setValid_date(detailData.getVaildDate());
@@ -418,10 +419,11 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                         old_obj.setItem_barcode(detailData.getPluBatch());//批次
                         old_obj.setItem_subno(detailData.getSelfCode());//自编码
                         old_obj.setUnit_no(detailData.getUnit());
-                        old_obj.setSale_qnty(detailData.getCheckNum()+"");
+                        old_obj.setSale_qnty(detailData.getCheckNum()+"");//实际数量
                         old_obj.setStock_qty(detailData.getStockNum()+"");
                         old_obj.setPrice(detailData.getBuyPrice()+"");//进价
                         old_obj.setSale_price(detailData.getSalePrice()+"");//销价
+                        old_obj.setBase_price(detailData.getSalePrice()+"");//批发价
                         old_obj.setProduce_date(detailData.getMadeDate());
                         old_obj.setValid_date(detailData.getVaildDate());
                         old_obj.setEnable_batch(detailData.getEnable_batch());
@@ -602,7 +604,10 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
         //引用单据
         if(requestCode == 4 && resultCode == RESULT_OK){
             DanJuMainBeanResultItem selectMainBean = (DanJuMainBeanResultItem) data.getSerializableExtra("SelectOrder");
-//            mCheckflag = data.getStringExtra("Checkflag");
+            //如果是新开单或之前保存本地的单据  添加商品时也选择供应商 所以这时创建一个临时主表信息
+            if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())){
+                saveMainInfo(mSheetNo);
+            }
             // 单据类型，入库方法需要自己填 入库方式，加库存的填“+”，减库存的填"-" 订单不产生库存变化的可以填空
             selectMainBean.setSheetType(Config.YwType.RI.toString());
             selectMainBean.setVoucher_Type("+");

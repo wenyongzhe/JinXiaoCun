@@ -55,7 +55,7 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 //            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
 //        }
 
-        SelectGoodsFragment mSelectGoodsFragment = SelectGoodsFragment.getInstance();
+        SelectGoodsFragment mSelectGoodsFragment = SelectGoodsFragment.getInstance(getIntent().getStringExtra("TYPE_NO"));
         QueryFragment mQueryFragment = QueryFragment.getInstance();
         if(barcodeQuery!=null){
             mQueryFragment.setText(barcodeQuery);

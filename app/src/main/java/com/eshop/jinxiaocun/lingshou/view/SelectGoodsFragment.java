@@ -34,9 +34,15 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     private List<GetClassPluResult> selectList;
     private TwoListView mTwoListView;
     ISelectGoods mISelectGoods;
-    public static SelectGoodsFragment getInstance() {
-        SelectGoodsFragment sf = new SelectGoodsFragment();
+    private String type_no = "";
+
+    public static SelectGoodsFragment getInstance(String type_no) {
+        SelectGoodsFragment sf = new SelectGoodsFragment(type_no);
         return sf;
+    }
+
+    public SelectGoodsFragment(String type_no) {
+        this.type_no = type_no;
     }
 
     @Override
@@ -68,6 +74,17 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         switch (flag){
             case Config.MESSAGE_QRYCLASSINFO:
                 mQryClassResult = (List<QryClassResult>) o;
+                if(type_no!=null && !type_no.equals("")){
+                    for(int i=0; i<mQryClassResult.size(); i++){
+                        if(mQryClassResult.get(i).getType_no().equals(type_no)){
+                            QryClassResult qryClassResult = new QryClassResult();
+                            qryClassResult = mQryClassResult.get(i);
+                            mQryClassResult.clear();
+                            mQryClassResult.add(qryClassResult);
+                            break;
+                        }
+                    }
+                }
                 ms.what = 1;
                 mHandler.sendMessage(ms);
                 mISelectGoods.getClassPluInfo(mQryClassResult.get(0).getType_no(),1);

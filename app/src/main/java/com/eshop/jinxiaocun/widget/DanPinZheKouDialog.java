@@ -60,7 +60,6 @@ public class DanPinZheKouDialog extends Activity {
             txtCountN.setHint("最低折扣："+limit);
         }
         txtCountN.setText(intent.getStringExtra("countN"));
-        txtCountN.selectAll();
 
         oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
         tv_oldprice.setText("￥"+oldPrice);
@@ -98,6 +97,7 @@ public class DanPinZheKouDialog extends Activity {
         localLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(localLayoutParams);
         mH.sendEmptyMessageDelayed(2,300);
+        txtCountN.selectAll();
     }
 
     private void closeEditTextKeyboard() {

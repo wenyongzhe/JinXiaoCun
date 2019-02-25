@@ -145,9 +145,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         //数据源
         ArrayList<String> spinners = new ArrayList<>();
         spinners.add("现金");
-        spinners.add("支付宝");
-        spinners.add("微信");
-        spinners.add("会员卡");
+        spinners.add("聚合支付");
+//        spinners.add("支付宝");
+//        spinners.add("微信");
+//        spinners.add("会员卡");
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
@@ -722,13 +723,21 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 reflashGaiJiaItemPrice();
                 break;
             case Config.MESSAGE_CAPTURE_RETURN:
+                /*微信付款码是18位纯数字，以10、11、12、13、14、15为主。微信的背景色是绿色。
+                支付宝条码规则：28开头的18位数字。支付宝背景色是黄色*/
                 code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
                 tempayway = "";
-                if(sp_payway.getSelectedItemPosition()==1){
+                /*if(sp_payway.getSelectedItemPosition()==1){
                     tempayway = "ZFB";
                 }else if(sp_payway.getSelectedItemPosition()==2){
                     tempayway = "WXZ";
+                }*/
+                if(code.startsWith("28")){
+                    tempayway = "ZFB";
+                }else{
+                    tempayway = "WXZ";
                 }
+
                 temMoney = money+"";
                 mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);

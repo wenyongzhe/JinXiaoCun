@@ -33,6 +33,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String orderType;//保存本地时与单据类型绑定
     public String Sheet_No;//保存本地时与单据号绑定
     private int hasModifyPrice = 0;//0未修改过价格  1表示已修改价格
+    public String sale_price_beforModify;//改价前售价
 
     public int getHasModifyPrice() {
         return hasModifyPrice;

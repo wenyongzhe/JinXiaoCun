@@ -31,8 +31,8 @@ public class DanPinGaiJiaDialog extends Activity {
     EditText txtCountN;
     @BindView(R.id.tv_oldprice)
     TextView tv_oldprice;
-    @BindView(R.id.tv_newprice)
-    TextView tv_newprice;
+    @BindView(R.id.et_newprice)
+    EditText et_newprice;
 
     double oldPrice;
     double limit = -1;
@@ -68,7 +68,7 @@ public class DanPinGaiJiaDialog extends Activity {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
-                        tv_newprice.setText("￥"+(oldPrice-price));
+                        et_newprice.setText("￥"+(oldPrice-price));
                     }
                 }catch (Exception e){
                 }

@@ -532,6 +532,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }
             }
         }
+        for(int i=0; i<mGetClassPluResultList.size(); i++){
+            mGetClassPluResultList.get(i).sale_price_beforModify = mGetClassPluResultList.get(i).getSale_price();
+        }
         mListData.addAll(mGetClassPluResultList);
     }
 
@@ -746,7 +749,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_MONEY:
                 String gaijia =  data.getStringExtra("countN");
                 GetClassPluResult mGetClassPluResult = getSelectObject();
-                temprice = Double.valueOf(mGetClassPluResult.getSale_price()) - Double.valueOf(gaijia);
+                temprice = Double.valueOf(mGetClassPluResult.sale_price_beforModify) - Double.valueOf(gaijia);
                 mGetClassPluResult.setSale_price(temprice+"");
                 mGetClassPluResult.setHasYiJia(true);
                 reflashList();
@@ -981,7 +984,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 return;
             }
             GetClassPluResult item = getSelectObject();
-            if( !canModifyPrice(item))return;
+//            if( !canModifyPrice(item))return;
             if(!item.getEnable_discount().equals("1")){
                 ToastUtils.showShort("此商品不允许打折。");
             }
@@ -1004,12 +1007,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 return;
             }
             GetClassPluResult item = getSelectObject();
-            if( !canModifyPrice(item))return;
+//            if( !canModifyPrice(item))return;
             if(!item.getChange_price().equals("1")){
                 ToastUtils.showShort("此商品不允许议价。");
             }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
-            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
+            intent.putExtra("oldPrice",Double.parseDouble(item.sale_price_beforModify));
             intent.putExtra("limit",Config.danbiYiJialimit);
             startActivityForResult(intent,200);
         }catch (Exception e){

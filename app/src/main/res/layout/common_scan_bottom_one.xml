@@ -265,7 +265,7 @@
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="总行数："
+                android:text="总行数:"
                 android:textSize="@dimen/text_14"
                 />
 
@@ -294,7 +294,7 @@
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="总数量："
+                android:text="总数:"
                 android:textSize="@dimen/text_14"
                 />
 
@@ -313,7 +313,7 @@
         <LinearLayout
             android:id="@+id/ll_ZJE"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -323,7 +323,7 @@
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="总金额："
+                android:text="总金额:"
                 android:textSize="@dimen/text_14"
                 />
 
@@ -332,7 +332,7 @@
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="0.00元"
                 android:textSize="@dimen/text_14"
                 android:textColor="@color/red"
                 />

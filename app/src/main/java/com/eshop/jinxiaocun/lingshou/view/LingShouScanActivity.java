@@ -749,7 +749,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_MONEY:
                 String gaijia =  data.getStringExtra("countN");
                 GetClassPluResult mGetClassPluResult = getSelectObject();
-                temprice = Double.valueOf(mGetClassPluResult.sale_price_beforModify) - Double.valueOf(gaijia);
+                temprice = Double.valueOf(gaijia);
                 mGetClassPluResult.setSale_price(temprice+"");
                 mGetClassPluResult.setHasYiJia(true);
                 reflashList();

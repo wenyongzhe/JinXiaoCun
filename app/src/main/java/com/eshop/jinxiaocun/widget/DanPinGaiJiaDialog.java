@@ -27,8 +27,8 @@ import butterknife.OnClick;
 
 public class DanPinGaiJiaDialog extends Activity {
 
-    @BindView(R.id.txtCountN)
-    EditText txtCountN;
+//    @BindView(R.id.txtCountN)
+//    EditText txtCountN;
     @BindView(R.id.tv_oldprice)
     TextView tv_oldprice;
     @BindView(R.id.et_newprice)
@@ -46,37 +46,16 @@ public class DanPinGaiJiaDialog extends Activity {
         oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
         tv_oldprice.setText("￥"+oldPrice);
 
-        txtCountN.setFocusable(true);
-        txtCountN.setFocusableInTouchMode(true);
-        txtCountN.requestFocus();
+        et_newprice.setFocusable(true);
+        et_newprice.setFocusableInTouchMode(true);
+        et_newprice.requestFocus();
 
         Intent intent = getIntent();
-        txtCountN.setText(intent.getStringExtra("countN"));
-        txtCountN.selectAll();
-        txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
+        et_newprice.setHintTextColor(getResources().getColor(R.color.mid_gray));
         limit = intent.getDoubleExtra("limit",0.000);
         if(limit !=-1){
-            txtCountN.setHint("最高折让金额："+limit);
+            et_newprice.setHint("￥"+oldPrice+"—"+"￥"+(oldPrice-limit));
         }
-
-        txtCountN.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    double price = Double.parseDouble(charSequence.toString().trim());
-                    if(price>0){
-                        et_newprice.setText("￥"+(oldPrice-price));
-                    }
-                }catch (Exception e){
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
 
         closeEditTextKeyboard();
 
@@ -108,27 +87,23 @@ public class DanPinGaiJiaDialog extends Activity {
     }
 
     private void closeEditTextKeyboard() {
-        MyUtils.closeKeyboard(this, txtCountN);
+        MyUtils.closeKeyboard(this, et_newprice);
     }
 
     @OnClick(R.id.btn_ok)
     void OnOk()
     {
-        if (txtCountN.getText().toString().trim().equals("")) {
+        if (et_newprice.getText().toString().trim().equals("")) {
             MyUtils.showToast("请输入金额！", this);
             return;
         }
 
-        if (txtCountN.getText().toString().trim().equals("0")) {
-            MyUtils.showToast("请输入大于0的金额！", this);
+        if (Integer.decode(et_newprice.getText().toString().trim())>oldPrice || Integer.decode(et_newprice.getText().toString().trim())<(oldPrice-limit)) {
+            MyUtils.showToast("请输入系统设置的金额！", this);
             return;
         }
-//        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>limit) {
-//            MyUtils.showToast("请输入大于0小于等于"+limit+"的金额！", this);
-//            return;
-//        }
 
-        String countN = txtCountN.getText().toString().trim();
+        String countN = et_newprice.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(DanPinGaiJiaDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);

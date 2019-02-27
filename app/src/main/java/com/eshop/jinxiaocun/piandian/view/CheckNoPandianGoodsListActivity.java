@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
@@ -53,19 +54,6 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
 
         mSheetNo = getIntent().getStringExtra("SheetNo");
         setTopToolBar("未盘点商品", R.mipmap.ic_left_light,"",0,"");
-        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListView.onRefreshComplete();
-            }
-        });
-
-        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListView.onRefreshComplete();
-            }
-        });
 
         mAdapter = new CheckNoPandianGoodsListAdapter(this,mListData);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,34 +76,38 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
             }
         });
 
-        AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
         if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
+            AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
             mGetDBDatas= new GetDBDatas(this);
             mGetDBDatas.execute();
         }
+
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        //点击盘点 先修改盘点数量
-        if(requestCode==1 && resultCode==RESULT_OK){
-            int checkQty = MyUtils.convertToInt(data.getStringExtra("countN"),1);
-            mSelectItem.setCheck_qty(checkQty);//重新修改盘点数量
-            EventBus.getDefault().post(mSelectItem);
-            Iterator<PandianDetailBeanResult> iter = mListData.iterator();
-            while (iter.hasNext()) {
-                PandianDetailBeanResult item = iter.next();
-                if (item.getItem_no().equals(mSelectItem.getItem_no())) {
-                    iter.remove();
-                    break;
+        try {
+            //点击盘点 先修改盘点数量
+            if(requestCode==1 && resultCode==RESULT_OK){
+                int checkQty = MyUtils.convertToInt(data.getStringExtra("countN"),1);
+                mSelectItem.setCheck_qty(checkQty);//重新修改盘点数量
+                EventBus.getDefault().post(mSelectItem);
+                Iterator<PandianDetailBeanResult> iter = mListData.iterator();
+                while (iter.hasNext()) {
+                    PandianDetailBeanResult item = iter.next();
+                    if (item.getItem_no().equals(mSelectItem.getItem_no())) {
+                        iter.remove();
+                        break;
+                    }
                 }
+                setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
+                mAdapter.setListInfo(mListData);
             }
-            setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
-            mAdapter.setListInfo(mListData);
+        }catch (Exception e) {
         }
+
 
     }
 
@@ -154,13 +146,18 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            CheckNoPandianGoodsListActivity activity = weakActivity.get();
-            if (activity == null
-                    || activity.isFinishing()
-                    || activity.isDestroyed()) {
-                // activity没了,就结束可以了
-                return;
+            try {
+                CheckNoPandianGoodsListActivity activity = weakActivity.get();
+                if (activity == null
+                        || activity.isFinishing()
+                        || activity.isDestroyed()) {
+                    // activity没了,就结束可以了
+                    return;
+                }
+            }catch (Exception e){
+
             }
+
 
             AlertUtil.setNoButtonMessage("正在加载数据 "+values[0]);
         }
@@ -188,12 +185,17 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mListData!=null){
-            mListData.clear();
-            mListData=null;
+        try {
+            if(mListData!=null){
+                mListData.clear();
+                mListData=null;
+            }
+            if(mGetDBDatas !=null){
+                mGetDBDatas.cancel(true);
+            }
+        }catch (Exception e){
+
         }
-        if(mGetDBDatas !=null){
-            mGetDBDatas.cancel(true);
-        }
+
     }
 }

@@ -118,7 +118,7 @@ public class DanPinZheKouDialog extends Activity {
         }
 
         if (Double.valueOf(txtCountN.getText().toString().trim())<limit) {
-            MyUtils.showToast("请输入大于"+limit+"的折扣！", this);
+            MyUtils.showToast("后台设置折扣必须大于等于"+limit, this);
             return;
         }
 

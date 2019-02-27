@@ -51,36 +51,40 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        try {
+            mSheetNo = getIntent().getStringExtra("SheetNo");
+            setTopToolBar("未盘点商品", R.mipmap.ic_left_light,"",0,"");
 
-        mSheetNo = getIntent().getStringExtra("SheetNo");
-        setTopToolBar("未盘点商品", R.mipmap.ic_left_light,"",0,"");
+            mAdapter = new CheckNoPandianGoodsListAdapter(this,mListData);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        mAdapter = new CheckNoPandianGoodsListAdapter(this,mListData);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                }
+            });
+            mListView.setAdapter(mAdapter);
+            mAdapter.setCallback(new CheckNoPandianGoodsListAdapter.CallbackInterface() {
+                @Override
+                public void onClickAddPandian(int position) {
 
+                    //点击盘点 先修改盘点数量
+                    mSelectItem = mListData.get(position);
+                    Intent intent = new Intent(CheckNoPandianGoodsListActivity.this, ModifyCountDialog.class);
+                    intent.putExtra("countN",mSelectItem.getCheck_qty()+"");
+                    startActivityForResult(intent,1);
+
+                }
+            });
+
+            if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
+                AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
+                mGetDBDatas= new GetDBDatas(this);
+                mGetDBDatas.execute();
             }
-        });
-        mListView.setAdapter(mAdapter);
-        mAdapter.setCallback(new CheckNoPandianGoodsListAdapter.CallbackInterface() {
-            @Override
-            public void onClickAddPandian(int position) {
-
-                //点击盘点 先修改盘点数量
-                mSelectItem = mListData.get(position);
-                Intent intent = new Intent(CheckNoPandianGoodsListActivity.this, ModifyCountDialog.class);
-                intent.putExtra("countN",mSelectItem.getCheck_qty()+"");
-                startActivityForResult(intent,1);
-
-            }
-        });
-
-        if(BusinessBLL.getInstance().isHavePandianGoodsEntity("sheet_no='"+mSheetNo+"'")){
-            AlertUtil.showNoButtonProgressDialog(this,"正在加载数据");
-            mGetDBDatas= new GetDBDatas(this);
-            mGetDBDatas.execute();
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 
@@ -104,8 +108,10 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
                 }
                 setTopToolBar("未盘点商品"+mListData.size()+"种", R.mipmap.ic_left_light,"",0,"");
                 mAdapter.setListInfo(mListData);
+                mAdapter.notifyDataSetInvalidated();
             }
         }catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -132,6 +138,7 @@ public class CheckNoPandianGoodsListActivity extends CommonBaseActivity {
                     public void progressUpdate(int progress, int maxProgress,PandianDetailBeanResult module) {
                         publishProgress(progress+"/"+maxProgress);
                         mListData.add(module);
+                        mAdapter.notifyDataSetChanged();
 
                     }
                 });

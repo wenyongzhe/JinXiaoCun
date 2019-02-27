@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.netWork.httpDB.message.MessageManage;
 import com.eshop.jinxiaocun.utils.MD5Util;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -135,29 +136,35 @@ public class NetWorkImp implements INetWork {
     public void doGet(String url, Map<String, String> paramsMap, NetworkOption networkOption,
                       final   IResponseListener iResponseListener) {
         //url= NetWorkUtil.checkUrl(url);
-        url= NetWorkUtil.appendUrl(url,paramsMap);
+        try {
+            url= NetWorkUtil.appendUrl(url,paramsMap);
 //        final NetworkOption option=NetUtils.checkNetworkOption(networkOption,url);
-        Request.Builder builder;
-        if(networkOption==null){
-            builder = new Request.Builder().url(url);
-        }else{
-            builder = new Request.Builder().url(url).tag(networkOption.mTag);
-            builder=configHeaders(builder,networkOption);
+            Request.Builder builder;
+            if(networkOption==null){
+                builder = new Request.Builder().url(url);
+            }else{
+                builder = new Request.Builder().url(url).tag(networkOption.mTag);
+                builder=configHeaders(builder,networkOption);
+            }
+
+            Request build = builder.build();
+
+
+            myOkHttpClient.newCall(build).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    messageManage.postError(e, iResponseListener);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    messageManage.postResult(response, iResponseListener);
+                }
+            });
+        }catch (Exception e){
+            messageManage.postError(null, iResponseListener);
+            ToastUtils.showLong("操作失败，原因："+e.getMessage());
         }
-
-        Request build = builder.build();
-
-        myOkHttpClient.newCall(build).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                messageManage.postError(e, iResponseListener);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                messageManage.postResult(response, iResponseListener);
-            }
-        });
     }
 
     private Request.Builder configHeaders(Request.Builder builder, NetworkOption option) {

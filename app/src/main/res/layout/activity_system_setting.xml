@@ -93,6 +93,7 @@
             android:scrollHorizontally="false"
             android:gravity="top"
             android:singleLine="false"
+            android:inputType="number"
             android:layout_width="match_parent" />
 
     </LinearLayout>

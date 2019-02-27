@@ -50,7 +50,7 @@ public class LoginImp implements ILogin {
         map.put("SoftVer",Config.VersionCode+"");
         map.put("strCmd",WebConfig.getPosLogin());
         map.put("JsonData",jsonData);
-
+        mHandler.handleResule(Config.SHOW_PROGRESS,null);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new LoginInterface());
 
     }
@@ -60,6 +60,7 @@ public class LoginImp implements ILogin {
         RegistBean mRegistBean = new RegistBean();
         mRegistBean.getJsonData().setiDevID(Config.DeviceID + DeviceUtils.getMacAddress());
         Map map = ReflectionUtils.obj2Map(mRegistBean);
+        mHandler.handleResule(Config.SHOW_PROGRESS,null);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new RegistInterface());
     }
 
@@ -68,12 +69,13 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleError(Object event) {
-
+            mHandler.handleResule(Config.DISS_PROGRESS,null);
             Log.e("-----",event.toString());
         }
 
         @Override
         public void handleResult(Response event,String result) {
+            mHandler.handleResule(Config.DISS_PROGRESS,null);
             Log.e("-----",result);
         }
 
@@ -81,6 +83,7 @@ public class LoginImp implements ILogin {
         public void handleResultJson(String status, String Msg, String jsonData) {
             //Log.e("-----",jsonData);
             try{
+                mHandler.handleResule(Config.DISS_PROGRESS,null);
                 LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
                     if(jsonBean.getResult().equals("Y")){
@@ -103,16 +106,19 @@ public class LoginImp implements ILogin {
 
         @Override
         public void handleError(Object event) {
+            mHandler.handleResule(Config.DISS_PROGRESS,null);
         }
 
         @Override
         public void handleResult(Response event,String result) {
+            mHandler.handleResule(Config.DISS_PROGRESS,null);
         }
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
 
             try {
+                mHandler.handleResule(Config.DISS_PROGRESS,null);
                 RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
                 if(!status.equals(Config.MESSAGE_OK+"") && jsonBean==null){
                     Config.posid = "1001";

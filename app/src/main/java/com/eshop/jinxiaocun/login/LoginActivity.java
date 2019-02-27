@@ -238,6 +238,12 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 startActivity(intent);
                 finish();
                 break;
+            case Config.SHOW_PROGRESS:
+                showLoadingDialog("",true);
+                break;
+            case Config.DISS_PROGRESS:
+                closeLoadingDialog();
+                break;
         }
     }
 }

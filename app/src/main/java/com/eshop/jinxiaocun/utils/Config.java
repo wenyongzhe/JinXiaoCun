@@ -20,7 +20,6 @@ public class Config {
     public static String DB_NAME="EWESHOP";
     public static String DB_USER_NAME ="sa";
     public static String DB_PASSWORD ="123456";
-    public static String httpURL = "";
     public static String VersionName = "";
     public static int VersionCode = 1;
 
@@ -86,7 +85,8 @@ public class Config {
     public final static int MESSAGE_GET_SYSTEM_INFO_RETURN = 43;
     public final static int RESULT_PAY_CANCLE = 44;
     public final static int MESSAGE_PAY_MAN = 45;
-
+    public final static int SHOW_PROGRESS = 46;
+    public final static int DISS_PROGRESS = 47;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

@@ -50,6 +50,9 @@ public class Application extends android.app.Application{
         Config.DBHelper = DBHelper.getInstance(this);
         Config.BluetoothAddress = ConfigureParamSP.getInstance().getValue(this,
                 ConfigureParamSP.KEY_BLUETOOTHADDRESS,Config.BluetoothAddress);
+        Config.IP = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_SERVERURL,Config.IP);
+        Config.IP_POIN = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_SERVERPORT,Config.IP_POIN);
+
         FileUtils.createOrExistsDir(Config.updateFile);
         FileUtils.createOrExistsDir(Config.databasePath);
         FileUtils.createOrExistsDir(Config.crashPath);

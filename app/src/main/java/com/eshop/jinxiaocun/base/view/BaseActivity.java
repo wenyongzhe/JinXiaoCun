@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.base.view;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.thread.TaskInterface;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.LightProgressDialog;
 import com.eshop.jinxiaocun.widget.MyActionBar;
 
 public abstract class BaseActivity extends AppCompatActivity implements TaskInterface{
@@ -20,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
     protected LinearLayout mLinearLayout;
     public MyActionBar mMyActionBar;
     public boolean hasBackDialog = false;
+    public ProgressDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,10 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
 
     @Override
     protected void onDestroy() {
+        if(loadingDialog!=null){
+            loadingDialog.dismiss();
+            loadingDialog=null;
+        }
         Application.getInstance().finishActivity(this);
         super.onDestroy();
     }
@@ -127,6 +134,24 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
     @Override
     public void onPostExecute(Object o) {
 
+    }
+
+    public void showLoadingDialog(String msg, boolean isDefaultMsg){
+        loadingDialog = LightProgressDialog.show(this,null,msg);
+        if (isDefaultMsg){
+            loadingDialog.setMessage(getResources().getString(R.string.loading));
+        }else {
+            loadingDialog.setMessage(msg);
+        }
+
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
+    }
+
+    public void closeLoadingDialog() {
+        if(loadingDialog!=null && loadingDialog.isShowing()){
+            loadingDialog.dismiss();
+        }
     }
 
     /*protected void setKeyboard(boolean flag) {

@@ -105,7 +105,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     }
 
     private void closeEditTextKeyboard() {
-        MyUtils.closeKeyboard(this, txtSeverUrl);
+        //MyUtils.closeKeyboard(this, txtSeverUrl);
     }
 
     @Override
@@ -121,8 +121,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 //                Config.ShopGroup = txtShopGroup.getText().toString();
                 Config.IP = txtSeverUrl.getText().toString();
                 Config.IP_POIN = txtSeverPort.getText().toString();
-
-                Config.httpURL = "http://"+Config.IP+":"+Config.IP_POIN+"/mssp/odsi/amso/service";
 
                 MyUtils.showToast("参数保存成功！",SystemSettingActivity.this);
                 break;

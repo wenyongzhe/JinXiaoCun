@@ -184,20 +184,41 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/tv_pd_nopandian"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ListView_Header"
-        android:gravity="center"
-        android:layout_gravity="right"
-        android:text="未盘商品"
-        android:padding="5dp"
-        android:visibility="gone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:textColor="@color/white"
-        android:background="@drawable/border_bg_primary"
-        />
+        >
+
+        <ImageView
+            android:id="@+id/iv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:paddingLeft="30dp"
+            android:paddingTop="5dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="5dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/arrow_down"
+            />
+
+        <TextView
+            android:id="@+id/tv_pd_nopandian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListView_Header"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="未盘商品"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:background="@drawable/border_bg_primary"
+            />
+    </RelativeLayout>
+
+
 
 </LinearLayout>

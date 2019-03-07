@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -89,7 +90,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     TextView mTvStore;
     @BindView(R.id.et_pd_bz)
     EditText mEtBz;
-
+    @BindView(R.id.iv_hint)
+    ImageView mIvHint;
     @BindView(R.id.tv_pd_nopandian)
     TextView mTvNoPandian;
 
@@ -617,6 +619,20 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         startActivityForResult(intent, 22);
     }
 
+    @OnClick(R.id.iv_hint)
+    public void onClickShowHint(){
+        if(mLayoutContent2.getVisibility()==View.VISIBLE){
+            mIvHint.setImageResource(R.mipmap.arrow_up);
+            mLayoutContent1.setVisibility(View.GONE);
+            mLayoutContent2.setVisibility(View.GONE);
+        }else{
+            mIvHint.setImageResource(R.mipmap.arrow_down);
+            mLayoutContent1.setVisibility(View.VISIBLE);
+            mLayoutContent2.setVisibility(View.VISIBLE);
+        }
+
+    }
+
     @OnClick(R.id.tv_pd_nopandian)
     public void onClickNoPandian(){
         Intent intent = new Intent(this,CheckNoPandianGoodsListActivity.class);
@@ -954,9 +970,11 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         if(mAddPandianGoodsDetailData.size()>0){
             mLayoutContent1.setVisibility(View.GONE);
             mLayoutContent2.setVisibility(View.GONE);
+            mIvHint.setImageResource(R.mipmap.arrow_up);
         }else{
             mLayoutContent1.setVisibility(View.VISIBLE);
             mLayoutContent2.setVisibility(View.VISIBLE);
+            mIvHint.setImageResource(R.mipmap.arrow_down);
         }
 
         float allCount=0;

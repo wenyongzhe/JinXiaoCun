@@ -77,8 +77,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         });
 //        ButterKnife.bind(this);
 
-        txtSeverUrl = findViewById(R.id.et_service_url);
-        txtSeverPort = findViewById(R.id.et_service_port);
+        txtSeverUrl = (EditText) findViewById(R.id.et_service_url);
+        txtSeverPort = (EditText) findViewById(R.id.et_service_port);
 //        txtShopGroup = findViewById(R.id.et_shop_group);
 
         txtSeverUrl.setText(Config.IP);

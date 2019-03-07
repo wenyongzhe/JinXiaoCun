@@ -91,9 +91,9 @@ public class PiFaXiaoshouDanScanActivity extends BaseScanActivity implements INe
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_add_xiaoshou_dan, null);
         mLinearLayout.addView(mView,0,params);
-        mSpinner1 = findViewById(R.id.ly1_sp);
-        mSpinner2 = findViewById(R.id.ly2_sp);
-        mSpinner3 = findViewById(R.id.ly3_sp);
+        mSpinner1 = (Spinner) findViewById(R.id.ly1_sp);
+        mSpinner2 = (Spinner) findViewById(R.id.ly2_sp);
+        mSpinner3 = (Spinner) findViewById(R.id.ly3_sp);
         ButterKnife.bind(this);
 
         setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 150);

@@ -28,8 +28,8 @@ public abstract class BaseActivity extends AppCompatActivity implements TaskInte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        mMyActionBar = findViewById(R.id.actionbar);
-        mLinearLayout = findViewById(R.id.content);
+        mMyActionBar = (MyActionBar) findViewById(R.id.actionbar);
+        mLinearLayout = (LinearLayout) findViewById(R.id.content);
         Application.getInstance().addActivity(this);
         getSupportActionBar().hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);

@@ -118,7 +118,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
         mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
-        btn_jiesuan = findViewById(R.id.btn_jiesuan);
+        btn_jiesuan = (Button) findViewById(R.id.btn_jiesuan);
         btn_jiesuan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +139,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
         money = initDouble(3,money);
         et_price.setText("￥"+money);
-        sp_payway = findViewById(R.id.sp_payway);
+        sp_payway = (Spinner) findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
 
         //数据源

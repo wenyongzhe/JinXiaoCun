@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="0dp"
+            android:visibility="gone"
             />
 
         <EditText
@@ -30,7 +31,14 @@
             android:gravity="left|center_vertical"
             android:hint="请扫描/输入搜索条码"
             />
-
+        <ImageButton
+            android:id="@+id/ib_seach"
+            android:background="@drawable/seach"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout

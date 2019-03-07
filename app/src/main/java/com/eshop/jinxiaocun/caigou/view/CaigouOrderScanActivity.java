@@ -62,8 +62,8 @@ import butterknife.OnClick;
 
 public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult, BluetoothPrinterManage.BluetoothResultListerner {
 
-    @BindView(value = R.id.sp_type)
-    Spinner sp_type;
+//    @BindView(value = R.id.sp_type)
+//    Spinner sp_type;
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
     @BindView(R.id.tv_provider)
@@ -131,12 +131,12 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
 //        setHeaderTitle(R.id.tv_7,R.string.list_item_giveAway_Number,100);//赠送数量
 
-        List<String> listType = new ArrayList<>();
-        listType.add("精确查询");
-        listType.add("模糊查询");
-        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
-        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
-        sp_type.setAdapter(adapterBCType);
+//        List<String> listType = new ArrayList<>();
+//        listType.add("精确查询");
+//        listType.add("模糊查询");
+//        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
+//        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
+//        sp_type.setAdapter(adapterBCType);
 
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
@@ -227,6 +227,15 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 //            startActivityForResult(intent,55);
 //
 //        }
+    }
+
+    @OnClick(R.id.ib_seach)
+    public void onClickSearch(){
+        if(TextUtils.isEmpty(mTvProvider.getText().toString().trim())){
+            AlertUtil.showToast("请选择供应商，再添加商品!");
+            return ;
+        }
+        scanResultData(mEtBarcode.getText().toString().trim());
     }
 
     @OnClick(R.id.btn_print)
@@ -454,31 +463,31 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             case Config.MESSAGE_SHEETNO_ERROR:
                 AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
-            //扫描时返回搜索的数据
-            case Config.MESSAGE_GOODS_INFOR:
-                mEtBarcode.requestFocus();
-                mEtBarcode.setFocusable(true);
-                mEtBarcode.setText("");
-                //精准查询接口的  可能有多条数据
-                List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
-                if(goodsData !=null && goodsData.size()>0){
-                    if(goodsData.size()==1){
-                        GetClassPluResult goods= goodsData.get(0);
-                        goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
-                        addGoodsData(goods);
-                    }else{
-                        //多条数据 弹出选择其中一条
-                        Intent intent = new Intent(CaigouOrderScanActivity.this,SelectPandianGoodsListActivity.class);
-                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
-                        startActivityForResult(intent,44);
-                    }
-                }else{
-                    AlertUtil.showToast("该条码没有对应的商品数据!");
-                }
-                break;
-            case Config.MESSAGE_GOODS_INFOR_FAIL:
-                AlertUtil.showToast("搜索失败："+o.toString());
-                break;
+//            //扫描时返回搜索的数据
+//            case Config.MESSAGE_GOODS_INFOR:
+//                mEtBarcode.requestFocus();
+//                mEtBarcode.setFocusable(true);
+//                mEtBarcode.setText("");
+//                //精准查询接口的  可能有多条数据
+//                List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
+//                if(goodsData !=null && goodsData.size()>0){
+//                    if(goodsData.size()==1){
+//                        GetClassPluResult goods= goodsData.get(0);
+//                        goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+//                        addGoodsData(goods);
+//                    }else{
+//                        //多条数据 弹出选择其中一条
+//                        Intent intent = new Intent(CaigouOrderScanActivity.this,SelectPandianGoodsListActivity.class);
+//                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
+//                        startActivityForResult(intent,44);
+//                    }
+//                }else{
+//                    AlertUtil.showToast("该条码没有对应的商品数据!");
+//                }
+//                break;
+//            case Config.MESSAGE_GOODS_INFOR_FAIL:
+//                AlertUtil.showToast("搜索失败："+o.toString());
+//                break;
             //上传单据主表 成功
             case Config.MESSAGE_SUCCESS:
                 uploadGoodDetailData();// 上传商品明细
@@ -556,6 +565,9 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1 && resultCode == Config.RESULT_SELECT_GOODS){
+            mEtBarcode.requestFocus();
+            mEtBarcode.setFocusable(true);
+            mEtBarcode.setText("");
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
             if(selectGoodsList !=null && selectGoodsList.size()>0){
                 GetClassPluResult goods= selectGoodsList.get(0);
@@ -620,12 +632,12 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             }
         }
 
-        //搜索返回多条数据 ，选择其中一条
-        if(requestCode == 44 && resultCode == RESULT_OK){
-            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
-            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
-            addGoodsData(entity);
-        }
+//        //搜索返回多条数据 ，选择其中一条
+//        if(requestCode == 44 && resultCode == RESULT_OK){
+//            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
+//            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
+//            addGoodsData(entity);
+//        }
 
         if(requestCode == 55 && resultCode == RESULT_OK){
             String remarks = data.getStringExtra("Remarks");
@@ -644,16 +656,20 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             return;
         }
 
-        if(!TextUtils.isEmpty(barcode)){
-            if("精确查询".equals(sp_type.getSelectedItem().toString())){
-                //精准查询接口的
-                mQueryGoodsApi.getPLUInfo(barcode);
-            }else{
-                //模糊查询接口的
-                mQueryGoodsApi.getPLULikeInfo(barcode);
-            }
+        Intent intent = new Intent(this, QreShanpingActivity.class);
+        intent.putExtra("barcode",barcode);
+        startActivityForResult(intent,1);
 
-        }
+//        if(!TextUtils.isEmpty(barcode)){
+//            if("精确查询".equals(sp_type.getSelectedItem().toString())){
+//                //精准查询接口的
+//                mQueryGoodsApi.getPLUInfo(barcode);
+//            }else{
+//                //模糊查询接口的
+//                mQueryGoodsApi.getPLULikeInfo(barcode);
+//            }
+//
+//        }
     }
     //保存前
     @Override

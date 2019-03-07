@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -81,6 +83,20 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
                 if(inputMethodManager.isActive()){
                     inputMethodManager.hideSoftInputFromWindow(et_query.getApplicationWindowToken(), 0);
                 }
+            }
+        });
+        et_query.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mQueryGoods.getPLULikeInfo(charSequence.toString(),0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
         et_query.setOnEditorActionListener(new TextView.OnEditorActionListener() {

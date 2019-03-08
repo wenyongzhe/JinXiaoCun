@@ -55,6 +55,7 @@ public class QreShanpingActivity extends BaseTabListActivity  implements Adapter
 //            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
 //        }
 
+        //如果是类别盘点，查询商品只显示这个类别
         SelectGoodsFragment mSelectGoodsFragment = SelectGoodsFragment.getInstance(getIntent().getStringExtra("TYPE_NO"));
         QueryFragment mQueryFragment = QueryFragment.getInstance();
         if(barcodeQuery!=null){

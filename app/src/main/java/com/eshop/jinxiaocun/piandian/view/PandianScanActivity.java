@@ -121,9 +121,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
     @Override
     protected boolean onTopBarLeftClick() {
-        setResult(22);
-        finish();
-        return true;
+        return finishActivity();
     }
 
     @Override
@@ -864,9 +862,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(KeyEvent.KEYCODE_BACK == keyCode){
-            setResult(22);
-            finish();
-            return true;
+            return finishActivity();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -988,6 +984,33 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         mTvZsl.setText(allCount+"");
         mTvZje.setText(allMoney+"");
     }
+    //退出界面时判断是否保存数据
+    private boolean finishActivity(){
+        if(mAddPandianGoodsDetailData.size()>0){
+            AlertUtil.showAlert(this, R.string.dialog_title,
+                    "商品没有上传保存，是否退出？", R.string.btnSave, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                            if(addBefore()){
+                                addAfter();
+                            }
+                        }
+                    }, R.string.menu_signout, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                            setResult(22);
+                            finish();
+                        }
+                    });
+            return true;
+        }
+        setResult(22);
+        finish();
+        return true;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

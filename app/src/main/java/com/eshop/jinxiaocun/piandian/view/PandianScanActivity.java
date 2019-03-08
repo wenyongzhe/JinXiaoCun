@@ -660,6 +660,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected void onTopBarRightClick() {
         super.onTopBarRightClick();
         Intent mIntent = new Intent(this, QreShanpingActivity.class);
+        //如果是类别盘点，查询商品只显示这个类别
+        if( mPandianPihao !=null && mPandianPihao.getOper_range_name().equals("类别盘点")){
+            mIntent.putExtra("TYPE_NO",mPandianPihao.getCheck_cls());
+        }
         startActivityForResult(mIntent,1);
     }
 

@@ -237,7 +237,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                             zsl += MyUtils.convertToInt(data.getSale_qnty(),0);
                         }
                         int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
-                                scanOrSelectGoods.getItem_no(),pdNumber+"",zsl+"");
+                                scanOrSelectGoods.getItem_no(),pdNumber+"",mListDatas.get(i).getOrder_qnty()+"",zsl+"");
                         if(isSuccess==0){
                             AlertUtil.showToast("本地商品更改数量失败！");
                         }
@@ -551,7 +551,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                             zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
                         }
                         int isSuccess = BusinessBLL.getInstance().upDateGoodsQtyAndOrderQty(mSheetNo,
-                                mSelectGoodsEntity.getItem_no(),countN,zsl+"");
+                                mSelectGoodsEntity.getItem_no(),countN,mListDatas.get(i).getOrder_qnty()+"",zsl+"");
                         if(isSuccess==0){
                             AlertUtil.showToast("本地商品更改数量失败！");
                         }

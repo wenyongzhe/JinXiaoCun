@@ -34,6 +34,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
     public String Sheet_No;//保存本地时与单据号绑定
     private int hasModifyPrice = 0;//0未修改过价格  1表示已修改价格
     public String sale_price_beforModify;//改价前售价
+    private int order_qnty;//订单数量
 
     public int getHasModifyPrice() {
         return hasModifyPrice;
@@ -248,6 +249,22 @@ public class GetClassPluResult extends ListBean implements Serializable{
 
     public void setSheet_No(String sheet_No) {
         Sheet_No = sheet_No;
+    }
+
+    public String getSale_price_beforModify() {
+        return sale_price_beforModify;
+    }
+
+    public void setSale_price_beforModify(String sale_price_beforModify) {
+        this.sale_price_beforModify = sale_price_beforModify;
+    }
+
+    public int getOrder_qnty() {
+        return order_qnty;
+    }
+
+    public void setOrder_qnty(int order_qnty) {
+        this.order_qnty = order_qnty;
     }
 
     @Override

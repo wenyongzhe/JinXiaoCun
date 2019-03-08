@@ -73,12 +73,11 @@
                 android:maxLines="1" />
 
             <TextView
-                android:id="@+id/tv_giveaway_number"
+                android:id="@+id/tv_orderQty"
                 style="@style/TextView_Grey"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:visibility="gone"
                 android:maxLines="1" />
 
         </LinearLayout>

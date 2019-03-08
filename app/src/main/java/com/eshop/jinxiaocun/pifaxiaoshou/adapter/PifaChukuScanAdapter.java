@@ -59,7 +59,7 @@ public class PifaChukuScanAdapter extends BaseAdapter {
         TextView tv_je = ViewHolderUtils.get(convertView, R.id.tv_je);
         TextView tv_price = ViewHolderUtils.get(convertView, R.id.tv_price);
         TextView tv_number = ViewHolderUtils.get(convertView, R.id.tv_number);
-
+        TextView tv_orderQty = ViewHolderUtils.get(convertView, R.id.tv_orderQty);
         tv_product_name.setSelected(true);
         tv_product_code.setSelected(true);
         tv_zi_code.setSelected(true);
@@ -72,7 +72,7 @@ public class PifaChukuScanAdapter extends BaseAdapter {
         tv_je.setText(String.format(Locale.CANADA, "%.2f",zje));
         tv_price.setText(listInfo.get(position).getBase_price());
         tv_number.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
-
+        tv_orderQty.setText(listInfo.get(position).getOrder_qnty()+listInfo.get(position).getUnit_no());
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
         } else {

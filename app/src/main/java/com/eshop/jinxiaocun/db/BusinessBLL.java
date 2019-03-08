@@ -374,12 +374,12 @@ public class BusinessBLL {
             return 0;
         }
     }
-    //修改商品数量
-    public int updateGoodsInfoSaleQnty(String sheet_No,String sale_qnty,String item_no)throws SQLException {
+    //修改商品数量 订单数量
+    public int updateGoodsInfoSaleQnty(String sheet_No,String sale_qnty,String order_qnty,String item_no)throws SQLException {
         try{
             if(!tableIsExist(Config.GETCLASSPLURESULT))return 0;
-            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_qnty=? where Sheet_No=? and item_no=?";
-            Config.DBHelper.exeSql(sql, new String[]{sale_qnty, sheet_No,item_no});
+            String sql = "update "+Config.GETCLASSPLURESULT+" set sale_qnty=?,order_qnty=? where Sheet_No=? and item_no=?";
+            Config.DBHelper.exeSql(sql, new String[]{sale_qnty,order_qnty,sheet_No,item_no});
             return 1;
         }catch (Exception e){
             e.printStackTrace();
@@ -517,10 +517,10 @@ public class BusinessBLL {
         return true;
     }
     //添加商品时  更新商品数量和主表总数量
-    public int upDateGoodsQtyAndOrderQty(String sheet_no,String item_no,String goodsQty,String orderAllQty){
+    public int upDateGoodsQtyAndOrderQty(String sheet_no,String item_no,String goodsQty,String orderQty,String orderAllQty){
         try{
             Config.DBHelper.beginTrans();
-            updateGoodsInfoSaleQnty(sheet_no,goodsQty,item_no);
+            updateGoodsInfoSaleQnty(sheet_no,goodsQty,orderQty,item_no);
             String sql = "update "+Config.DANJUMAINBEANRESULTITEM+" set GoodsNum=? where Sheet_No=?";
             Config.DBHelper.exeSql(sql, new String[]{orderAllQty, sheet_no});
             Config.DBHelper.commitTrans();

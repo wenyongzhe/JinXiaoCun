@@ -58,8 +58,6 @@ import butterknife.OnClick;
  */
 
 public class PifaOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
-//    @BindView(value = R.id.sp_type)
-//    Spinner mSpinnerType;
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
     @BindView(R.id.tv_pf_user)
@@ -123,13 +121,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
 
-//        List<String> listType = new ArrayList<>();
-//        listType.add("精确查询");
-//        listType.add("模糊查询");
-//        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
-//        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
-//        mSpinnerType.setAdapter(adapterBCType);
-
         mAdapter = new PifaOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
@@ -180,7 +171,17 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @Override
     protected boolean onTopBarLeftClick() {
-        return onBackFinish();
+        if(!onBackFinish()){
+            if(mListDatas.size()==0){
+                int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                if(isSuccessDelete ==0){
+                    AlertUtil.showToast("删除本地数据失败");
+                }
+            }
+            setResult(22);
+            finish();
+        }
+        return true;
     }
 
     @Override
@@ -412,35 +413,10 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             case Config.MESSAGE_SHEETNO_ERROR:
                 AlertUtil.showToast("获取业务单据号失败："+o.toString());
                 break;
-//            //扫描时返回搜索的数据
-//            case Config.MESSAGE_GOODS_INFOR:
-//                mEtBarcode.requestFocus();
-//                mEtBarcode.setFocusable(true);
-//                mEtBarcode.setText("");
-//                //精准查询接口的  可能有多条数据
-//                List<GetClassPluResult> goodsData = (List<GetClassPluResult>) o;
-//                if(goodsData !=null && goodsData.size()>0){
-//                    if(goodsData.size()==1){
-//                        GetClassPluResult goods= goodsData.get(0);
-//                        goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
-//                        addGoodsData(goods);
-//                    }else{
-//                        //多条数据 弹出选择其中一条
-//                        Intent intent = new Intent(PifaOrderScanActivity.this,SelectPandianGoodsListActivity.class);
-//                        intent.putExtra("GoodsInfoList", (Serializable) goodsData);
-//                        startActivityForResult(intent,44);
-//                    }
-//                }else{
-//                    AlertUtil.showToast("该条码没有对应的商品数据!");
-//                }
-//                break;
-//            case Config.MESSAGE_GOODS_INFOR_FAIL:
-//                AlertUtil.showToast("搜索失败："+o.toString());
-//                break;
-//            //上传单据主表 成功
-//            case Config.MESSAGE_SUCCESS:
-//                uploadGoodDetailData();// 上传批发商品明细
-//                break;
+            //上传单据主表 成功
+            case Config.MESSAGE_SUCCESS:
+                uploadGoodDetailData();// 上传批发商品明细
+                break;
             // 上传单据明细 成功
             case Config.MESSAGE_RESULT_SUCCESS:
                 mOtherApi.sheetSave(Config.YwType.SS.toString(),mStr_OrderNo);//保存业务单据
@@ -583,13 +559,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             }
         }
 
-//        //搜索返回多条数据 ，选择其中一条
-//        if(requestCode == 44 && resultCode == RESULT_OK){
-//            GetClassPluResult entity = (GetClassPluResult) data.getSerializableExtra("GoodsInfoEntity");
-//            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
-//            addGoodsData(entity);
-//        }
-
     }
 
     @Override
@@ -608,15 +577,6 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         intent.putExtra("barcode",barcode);
         startActivityForResult(intent,1);
 
-//        if(!TextUtils.isEmpty(barcode)){
-//            if("精确查询".equals(mSpinnerType.getSelectedItem().toString())){
-//                //精准查询接口的
-//                mLingshouApi.getPLUInfo(barcode);
-//            }else{
-//                //模糊查询接口的
-//                mLingshouApi.getPLULikeInfo(barcode);
-//            }
-//        }
     }
 
     //保存前
@@ -753,6 +713,13 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
             if(!onBackFinish()){
+                if(mListDatas.size()==0){
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                    if(isSuccessDelete ==0){
+                        AlertUtil.showToast("删除本地数据失败");
+                    }
+                }
+                setResult(22);
                 finish();
             }
         }
@@ -793,7 +760,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private void showHint(){
         AlertUtil.showAlert(this,
                 R.string.dialog_title,R.string.change_msg_back,
-                R.string.confirm,new View.OnClickListener() {
+                R.string.btnSave,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(addBefore()){
@@ -801,10 +768,15 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                         }
                         AlertUtil.dismissDialog();
                     } },
-                R.string.cancel,new View.OnClickListener() {
+                R.string.menu_signout,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         AlertUtil.dismissDialog();
+                        if(mListDatas.size()==0){
+                            BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                        }
+                        setResult(22);
+                        finish();
                     } }
         );
     }

@@ -57,8 +57,6 @@ import butterknife.OnClick;
  */
 
 public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
-//    @BindView(value = R.id.sp_type)
-//    Spinner mSpinnerType;
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
     @BindView(R.id.tv_fh_store)
@@ -124,13 +122,6 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
         setHeaderTitle(R.id.tv_5,R.string.list_item_Price,100);//价格
         setHeaderTitle(R.id.tv_6,R.string.list_item_CountN5,100);//数量
 
-//        List<String> listType = new ArrayList<>();
-//        listType.add("精确查询");
-//        listType.add("模糊查询");
-//        ArrayAdapter<String> adapterBCType = new ArrayAdapter<>(this, R.layout.my_simple_spinner_item, listType);
-//        adapterBCType.setDropDownViewResource(R.layout.my_drop_down_item);
-//        mSpinnerType.setAdapter(adapterBCType);
-
         mAdapter = new YaohuoOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
@@ -183,7 +174,17 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 
     @Override
     protected boolean onTopBarLeftClick() {
-        return onBackFinish();
+        if(!onBackFinish()){
+            if(mListDatas.size()==0){
+                int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                if(isSuccessDelete ==0){
+                    AlertUtil.showToast("删除本地数据失败");
+                }
+            }
+            setResult(22);
+            finish();
+        }
+        return true;
     }
 
     @Override
@@ -752,6 +753,13 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
             if(!onBackFinish()){
+                if(mListDatas.size()==0){
+                    int isSuccessDelete = BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                    if(isSuccessDelete ==0){
+                        AlertUtil.showToast("删除本地数据失败");
+                    }
+                }
+                setResult(22);
                 finish();
             }
         }
@@ -792,7 +800,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
     private void showHint(){
         AlertUtil.showAlert(this,
                 R.string.dialog_title,R.string.change_msg_back,
-                R.string.confirm,new View.OnClickListener() {
+                R.string.btnSave,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(addBefore()){
@@ -800,10 +808,15 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
                         }
                         AlertUtil.dismissDialog();
                     } },
-                R.string.cancel,new View.OnClickListener() {
+                R.string.menu_signout,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         AlertUtil.dismissDialog();
+                        if(mListDatas.size()==0){
+                            BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                        }
+                        setResult(22);
+                        finish();
                     } }
         );
     }

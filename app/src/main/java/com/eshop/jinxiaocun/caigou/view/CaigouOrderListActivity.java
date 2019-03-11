@@ -200,6 +200,8 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
                     }
                     if(mListInfo.size()>0){
                         mLayoutBottomTxt.setVisibility(View.VISIBLE);
+                    }else{
+                        mLayoutBottomTxt.setVisibility(View.GONE);
                     }
                 }else{
                     mListInfo.addAll((List<DanJuMainBeanResultItem>)o);
@@ -235,6 +237,7 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
             mSelectMainBean =null;
             mAdapter.setItemClickPosition(-1);
             mAdapter.notifyDataSetInvalidated();
+            mTvCurrentPosition.setText("当前选择是第0条单据");
             getCaigouOrderData();
         }
     }

@@ -888,7 +888,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
     private void showHint(){
         AlertUtil.showAlert(this,
                 R.string.dialog_title,R.string.change_msg_back,
-                R.string.confirm,new View.OnClickListener() {
+                R.string.btnSave,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(addBefore()){
@@ -896,10 +896,15 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
                         }
                         AlertUtil.dismissDialog();
                     } },
-                R.string.cancel,new View.OnClickListener() {
+                R.string.menu_signout,new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         AlertUtil.dismissDialog();
+                        if(mListDatas.size()==0){
+                            BusinessBLL.getInstance().deleteMainInfoAndGoodsInfo(mSheetNo);
+                        }
+                        setResult(22);
+                        finish();
                     } }
         );
     }

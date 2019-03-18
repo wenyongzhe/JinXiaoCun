@@ -39,7 +39,7 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
     private List<ProviderInfoBeanResult> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     private int mPageIndex = 1;
     private int mPageSize = 20;
     private String mSheetType;
@@ -91,12 +91,12 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
-        try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
-        }catch (Exception e){
-
-        }
+//        try {
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
+//        }catch (Exception e){
+//
+//        }
         mServerApi = new OtherModelImp(this);
         getProviderInfo("",mPageIndex,mPageSize);
 
@@ -208,9 +208,9 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
-        }
+//        if(mBarcodeScan!=null){
+//            mBarcodeScan.close();
+//        }
         unregisterReceiver(mScanDataReceiver);
     }
 }

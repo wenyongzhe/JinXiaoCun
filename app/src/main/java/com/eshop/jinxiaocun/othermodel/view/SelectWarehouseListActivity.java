@@ -41,7 +41,7 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
     private List<WarehouseInfoBeanResult> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     private String mSheetType;
     private int mShowType=1;//1门店、2仓库、3机构、4分部
 
@@ -92,8 +92,8 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
         }catch (Exception e){
 
         }
@@ -200,9 +200,9 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
-        }
+//        if(mBarcodeScan!=null){
+//            mBarcodeScan.close();
+//        }
         unregisterReceiver(mScanDataReceiver);
     }
 }

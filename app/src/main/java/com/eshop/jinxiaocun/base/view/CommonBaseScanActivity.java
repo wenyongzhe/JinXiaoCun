@@ -53,7 +53,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected TextView mTvZje;//总金额
 
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();
     protected abstract boolean scanBefore();//扫描前
     protected abstract void scanResultData(String barcode);//扫描返回的数据
@@ -78,8 +78,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected void initView() {
         super.initView();
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
         }catch (Exception e){
             Log.e("",e.getMessage());
         }
@@ -94,8 +94,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
         }catch (Exception e){
             Log.e("",e.getMessage());
         }
@@ -180,7 +180,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){
-        TextView textView=this.findViewById(tv_id);
+        TextView textView= (TextView) this.findViewById(tv_id);
         textView.setWidth(CommonUtility.dip2px(this,width));
         textView.setText(getResources().getString(title));
         textView.setGravity(Gravity.CENTER);
@@ -254,9 +254,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
-        }
+//        if(mBarcodeScan!=null){
+//            mBarcodeScan.close();
+//        }
         unregisterReceiver(mScanDataReceiver);
     }
 

@@ -35,7 +35,7 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     private List<CustomerInfoBeanResult> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     private int mPageIndex = 1;
     private int mPageSize = 20;
 
@@ -84,8 +84,8 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
         }catch (Exception e){
 
         }
@@ -201,9 +201,9 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
-        }
+//        if(mBarcodeScan!=null){
+//            mBarcodeScan.close();
+//        }
         unregisterReceiver(mScanDataReceiver);
     }
 }

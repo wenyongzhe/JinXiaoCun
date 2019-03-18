@@ -50,7 +50,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     private CiteOrderListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IOtherModel mServerApi;
@@ -122,8 +122,8 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
         }catch (Exception e){
 
         }

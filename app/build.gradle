@@ -65,4 +65,5 @@ dependencies {
     //蓝牙打印
     implementation files('libs/sprtprintersdk.jar')
     implementation 'com.android.support:support-v4:25.3.0'
+    implementation files('libs/cw-deviceapi20180918.jar')
 }

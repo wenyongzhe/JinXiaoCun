@@ -234,4 +234,8 @@
     <string name="change_msg_back">有数据变动,确定保存？</string>
     <string name="pay_cancle">整单取消？</string>
     <string name="pay_tips">请扫描或输入用户出示的付款码</string>
+    //RFID
+    <string name="uhf_msg_inventory_open_fail">开启识别标签失败</string>
+    <string name="uhf_msg_inventory_fail">识别失败</string>
+    <string name="uhf_msg_inventory_stop_fail">停止识别标签失败</string>
 </resources>

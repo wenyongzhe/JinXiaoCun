@@ -1,6 +1,5 @@
 package com.eshop.jinxiaocun.piandian.view;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -10,14 +9,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
@@ -25,10 +22,7 @@ import com.eshop.jinxiaocun.base.view.CommonBaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
-import com.eshop.jinxiaocun.lingshou.presenter.IQueryGoods;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.lingshou.presenter.QueryGoodsImp;
-import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
@@ -44,13 +38,11 @@ import com.eshop.jinxiaocun.piandian.bean.UploadPandianDetailDataEntity;
 import com.eshop.jinxiaocun.piandian.bean.UploadRecordHeadDataEntity;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
-import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
-import com.eshop.jinxiaocun.widget.ModifyGoodsPiciDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -113,6 +105,11 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private int mNowCount;//现在取到的行数
     private String mSheetNo;//盘点批次号
     private int lastClickedPosition = -1;//标记最后点击的位置
+
+    //RFID
+    private int inventoryFlag = 1;
+    private boolean loopFlag = false;
+    private boolean starting = false;
 
     @Override
     protected int getLayoutContentId() {
@@ -868,6 +865,13 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         if(KeyEvent.KEYCODE_BACK == keyCode){
             return finishActivity();
         }
+        //RFID
+        if (keyCode == 139 ||keyCode == 280) {
+            if (event.getRepeatCount() == 0) {
+                readTag();
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -1031,4 +1035,124 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             mGetDBDatas.cancel(true);
         }
     }
+
+    public class BtInventoryClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            readTag();
+        }
+    }
+
+    private void readTag() {
+        if ( !starting )// 识别标签
+        {
+            switch (inventoryFlag) {
+                case 0:// 单步
+                {
+                    String strUII = mReader.inventorySingleTag();
+                    if (!TextUtils.isEmpty(strUII)) {
+                        String strEPC = mReader.convertUiiToEPC(strUII);
+//                        addEPCToList(strEPC, "N/A");
+                    } else {
+                        ToastUtils.showLong( R.string.uhf_msg_inventory_fail);
+//					mContext.playSound(2);
+                    }
+                }
+                break;
+                case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
+                {
+                    //  mContext.mReader.setEPCTIDMode(true);
+                    if (mReader.startInventoryTag(0,0)) {
+                        starting = true;
+                        loopFlag = true;
+                        new TagThread().start();
+                    } else {
+                        mReader.stopInventory();
+                        ToastUtils.showLong( R.string.uhf_msg_inventory_open_fail);
+//					mContext.playSound(2);
+                    }
+                }
+                break;
+                default:
+                    break;
+            }
+        } else {// 停止识别
+            stopInventory();
+        }
+    }
+
+    /**
+     * 停止识别
+     */
+    private void stopInventory() {
+        if (loopFlag) {
+            loopFlag = false;
+            if (mReader.stopInventory()) {
+                starting = false;
+            } else {
+                ToastUtils.showLong( R.string.uhf_msg_inventory_stop_fail);
+            }
+        }
+    }
+
+//    /**
+//     * 判断EPC是否在列表中
+//     *
+//     * @param strEPC 索引
+//     * @return
+//     */
+    /*
+    public int checkIsExist(String strEPC) {
+        int existFlag = -1;
+        if (TextUtils.isEmpty(strEPC)) {
+            return existFlag;
+        }
+        String tempStr = "";
+        for (int i = 0; i < tagList.size(); i++) {
+            HashMap<String, String> temp = new HashMap<String, String>();
+            temp = tagList.get(i);
+            tempStr = temp.get("tagUii");
+            if (strEPC.equals(tempStr)) {
+                existFlag = i;
+                break;
+            }
+        }
+        return existFlag;
+    }*/
+
+    class TagThread extends Thread {
+        public void run() {
+            String strTid;
+            String strResult;
+            String[] res = null;
+            while (loopFlag) {
+                res = mReader.readTagFromBuffer();
+                if (res != null) {
+                    strTid = res[0];
+                    if (strTid.length() != 0 && !strTid.equals("0000000" +
+                            "000000000") && !strTid.equals("000000000000000000000000")) {
+                        strResult = "TID:" + strTid + "\n";
+                    } else {
+                        strResult = "";
+                    }
+                    Log.i("data","EPC:"+res[1]+"|"+strResult);
+                    Message msg = handler.obtainMessage();
+                    msg.obj = strResult + "EPC:" + mReader.convertUiiToEPC(res[1]) + "@" + res[2];
+
+                    handler.sendMessage(msg);
+                }
+            }
+        }
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String result = msg.obj + "";
+            String[] strs = result.split("@");
+            //addEPCToList(strs[0], strs[1]);
+            playSound(1);
+        }
+    };
+
 }

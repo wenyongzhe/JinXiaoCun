@@ -1,10 +1,16 @@
 package com.eshop.jinxiaocun.base.view;
 
+import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.BarcodeScan;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,9 +20,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.rscja.deviceapi.RFIDWithUHF;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,6 +76,13 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected abstract void modifyCountAfter();
     protected boolean modifyPriceBefore(){return false;}//修价格前
     protected void modifyPriceAfter(){}
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initSound();
+        initUHF();
+    }
 
     @Override
     protected int getLayoutId() {
@@ -257,6 +275,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
 //        if(mBarcodeScan!=null){
 //            mBarcodeScan.close();
 //        }
+        if (mReader != null) {
+            mReader.free();
+        }
         unregisterReceiver(mScanDataReceiver);
     }
 
@@ -277,5 +298,88 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
 //            et_barcode.setText(barcode);
         }
     };
+
+
+    public RFIDWithUHF mReader;
+    public void initUHF() {
+        try {
+            mReader = RFIDWithUHF.getInstance();
+        } catch (Exception ex) {
+            return;
+        }
+        if (mReader != null) {
+            new InitTask().execute();
+        }
+    }
+
+    /**
+     *
+     * 初始化RFID
+     * @author
+     */
+    public class InitTask extends AsyncTask<String, Integer, Boolean> {
+        ProgressDialog mypDialog;
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+
+            mypDialog = new ProgressDialog(CommonBaseScanActivity.this);
+            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mypDialog.setMessage("init...");
+            mypDialog.setCanceledOnTouchOutside(false);
+            mypDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            return mReader.init();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            mypDialog.cancel();
+            if (!result) {
+                Toast.makeText(CommonBaseScanActivity.this, "init fail",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+    private SoundPool soundPool;
+    private float volumnRatio;
+    private AudioManager am;
+    private void initSound(){
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 5);
+        soundMap.put(1, soundPool.load(this, R.raw.barcodebeep, 1));
+        soundMap.put(2, soundPool.load(this, R.raw.serror, 1));
+        am = (AudioManager) this.getSystemService(AUDIO_SERVICE);// 实例化AudioManager对象
+    }
+    /**
+     * 播放提示音
+     *
+     * @param id 成功1，失败2
+     */
+    public void playSound(int id) {
+
+        float audioMaxVolumn = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC); // 返回当前AudioManager对象的最大音量值
+        float audioCurrentVolumn = am.getStreamVolume(AudioManager.STREAM_MUSIC);// 返回当前AudioManager对象的音量值
+        volumnRatio = audioCurrentVolumn / audioMaxVolumn;
+        try {
+            soundPool.play(soundMap.get(id), volumnRatio, // 左声道音量
+                    volumnRatio, // 右声道音量
+                    1, // 优先级，0为最低
+                    0, // 循环次数，0无不循环，-1无永远循环
+                    1 // 回放速度 ，该值在0.5-2.0之间，1为正常速度
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
 }
 

@@ -38,6 +38,7 @@ import com.eshop.jinxiaocun.piandian.bean.UploadPandianDetailDataEntity;
 import com.eshop.jinxiaocun.piandian.bean.UploadRecordHeadDataEntity;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
+import com.eshop.jinxiaocun.utils.AndroidWakeLock;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -109,7 +110,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     //RFID
     private int inventoryFlag = 1;
     private boolean loopFlag = false;
+    private boolean getInforFlag = false;
     private boolean starting = false;
+    public static AndroidWakeLock Awl;
 
     @Override
     protected int getLayoutContentId() {
@@ -728,6 +731,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }else{
                     AlertUtil.showToast("该条码没有对应的商品数据!");
                 }
+                getInforFlag = true;
                 break;
             case Config.MESSAGE_GOODS_INFOR_FAIL:
                 AlertUtil.showToast("不在盘点范围！原因："+o.toString());
@@ -1046,6 +1050,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private void readTag() {
         if ( !starting )// 识别标签
         {
+            Awl.WakeLock();
             switch (inventoryFlag) {
                 case 0:// 单步
                 {
@@ -1077,6 +1082,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     break;
             }
         } else {// 停止识别
+            Awl.ReleaseWakeLock();
             stopInventory();
         }
     }
@@ -1125,21 +1131,23 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             String strTid;
             String strResult;
             String[] res = null;
+            getInforFlag = true;
             while (loopFlag) {
-                res = mReader.readTagFromBuffer();
-                if (res != null) {
-                    strTid = res[0];
-                    if (strTid.length() != 0 && !strTid.equals("0000000" +
-                            "000000000") && !strTid.equals("000000000000000000000000")) {
-                        strResult = "TID:" + strTid + "\n";
-                    } else {
-                        strResult = "";
+                while (getInforFlag){
+                    res = mReader.readTagFromBuffer();
+                    if (res != null) {
+                        strTid = res[0];
+                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
+                            strResult = strTid ;
+                        } else {
+                            strResult = "";
+                        }
+                        //Log.i("data","EPC:"+res[1]+"|"+strResult);
+                        Message msg = handler.obtainMessage();
+                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]) + "@" + res[2];
+                        getInforFlag = false;
+                        handler.sendMessage(msg);
                     }
-                    Log.i("data","EPC:"+res[1]+"|"+strResult);
-                    Message msg = handler.obtainMessage();
-                    msg.obj = strResult + "EPC:" + mReader.convertUiiToEPC(res[1]) + "@" + res[2];
-
-                    handler.sendMessage(msg);
                 }
             }
         }
@@ -1150,9 +1158,16 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         public void handleMessage(Message msg) {
             String result = msg.obj + "";
             String[] strs = result.split("@");
-            //addEPCToList(strs[0], strs[1]);
+            addEPCToList(strs[0], strs[1]);
             playSound(1);
         }
     };
+
+    private void addEPCToList(String str, String str1) {
+        if(!TextUtils.isEmpty(str1)){
+            //精准查询接口的
+            mQueryGoodsApi.getPLUInfo(str1);
+        }
+    }
 
 }

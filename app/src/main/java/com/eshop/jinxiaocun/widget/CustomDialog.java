@@ -92,6 +92,10 @@ class CustomDialog extends Dialog {
 		this.positiveButton.setOnClickListener(listener);
 	}
 
+	void setNotCancleButton(){
+		negativeButton.setVisibility(View.GONE);
+	}
+
 	void setNegativeButton(int text,
 						   View.OnClickListener listener) {
 		this.negativeButton.setText(mContext.getString(text));

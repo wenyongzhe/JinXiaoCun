@@ -41,7 +41,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected MyBaseAdapter mScanAdapter;
     protected int itemClickPosition;
 
-    public DecoderHelper mDecoderHelper=null;
+//    public DecoderHelper mDecoderHelper=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 //            mBarcodeScan = new BarcodeScan(this);
 //            mBarcodeScan.open();
 
-            mDecoderHelper = DecoderHelper.getInstance(this);
-            mDecoderHelper.setDecoderHelperListeners(this);
+//            mDecoderHelper = DecoderHelper.getInstance(this);
+//            mDecoderHelper.setDecoderHelperListeners(this);
         }catch (Exception e){
             Log.e("",e.getMessage());
         }
@@ -87,17 +87,17 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     @Override
     public void onResume() {
         super.onResume();
-        if(mDecoderHelper!=null){
-            mDecoderHelper.connect();//开始启动连接操作
-        }
+//        if(mDecoderHelper!=null){
+//            mDecoderHelper.connect();//开始启动连接操作
+//        }
     }
 
     @Override
     public void onPause() {
         super.onPause();;
-        if(mDecoderHelper!=null){
-            mDecoderHelper.disconnect();//断开连接
-        }
+//        if(mDecoderHelper!=null){
+//            mDecoderHelper.disconnect();//断开连接
+//        }
     }
 
     @Override
@@ -287,7 +287,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 		}else{
 			mDecoderHelper.startScan();//开始连续扫码
 		}*/
-        mDecoderHelper.startScanOneTimes();//单次扫码
+//        mDecoderHelper.startScanOneTimes();//单次扫码
     }
 
 }

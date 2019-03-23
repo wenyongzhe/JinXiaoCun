@@ -45,8 +45,8 @@ public class AlertUtil {
 	}
 
 	public static void showAlert(Context paramContext, CharSequence title,
-                                 CharSequence message, CharSequence positiveText,
-                                 View.OnClickListener listener) {
+								  CharSequence message, CharSequence positiveText,
+								  View.OnClickListener listener) {
 		mContext = paramContext;
 		if (mDialog != null && mDialog.isShowing()) {
 			return;
@@ -56,6 +56,23 @@ public class AlertUtil {
 		mDialog.setTitle(title);
 		mDialog.setMessage(message);
 		mDialog.setPositiveButton(positiveText, listener);
+		mDialog.setCancelable(false);
+		mDialog.show();
+	}
+
+	public static void showNoCancleAlert(Context paramContext, CharSequence title,
+								 CharSequence message, CharSequence positiveText,
+								 View.OnClickListener listener) {
+		mContext = paramContext;
+		if (mDialog != null && mDialog.isShowing()) {
+			return;
+		}
+		mDialog = new CustomDialog(paramContext, R.style.cusdom_dialog_whitebg);
+		dimBehind(mDialog);
+		mDialog.setTitle(title);
+		mDialog.setMessage(message);
+		mDialog.setPositiveButton(positiveText, listener);
+		mDialog.setNotCancleButton();
 		mDialog.setCancelable(false);
 		mDialog.show();
 	}

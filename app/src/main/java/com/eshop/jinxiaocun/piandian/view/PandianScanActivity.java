@@ -1,9 +1,11 @@
 package com.eshop.jinxiaocun.piandian.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -128,6 +130,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     protected void initView() {
         super.initView();
 
+        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        Awl = new AndroidWakeLock(pm);
         EventBus.getDefault().register(this);
         mPandianPihao = (PandianPihaoHuoquBeanResult) getIntent().getSerializableExtra("PandianPihaoEntity");
         if( mPandianPihao !=null && mPandianPihao.getOper_range_name().equals("单品盘点")){
@@ -723,15 +727,25 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         }else{
                             addNoDianpinGoodsData(goodsData.get(0));
                         }
+                        getInforFlag = true;
                     }else{
                         Intent intent = new Intent(PandianScanActivity.this,SelectPandianGoodsListActivity.class);
                         intent.putExtra("GoodsInfoList", (Serializable) goodsData);
                         startActivityForResult(intent,44);
                     }
                 }else{
-                    AlertUtil.showToast("该条码没有对应的商品数据!");
+                    //AlertUtil.showToast("该条码没有对应的商品数据!");
+                    AlertUtil.showNoCancleAlert(PandianScanActivity.this,
+                            "提示", "该条码没有对应的商品数据!",
+                            "确定",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                    getInforFlag = true;
+                                }
+                            });
                 }
-                getInforFlag = true;
                 break;
             case Config.MESSAGE_GOODS_INFOR_FAIL:
                 AlertUtil.showToast("不在盘点范围！原因："+o.toString());
@@ -856,6 +870,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             }else{
                 addNoDianpinGoodsData(entity);
             }
+            getInforFlag = true;
         }
 
         if(requestCode == 44 && resultCode == RESULT_CANCELED){
@@ -1144,7 +1159,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         }
                         //Log.i("data","EPC:"+res[1]+"|"+strResult);
                         Message msg = handler.obtainMessage();
-                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]) + "@" + res[2];
+                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
                         getInforFlag = false;
                         handler.sendMessage(msg);
                     }
@@ -1167,6 +1182,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         if(!TextUtils.isEmpty(str1)){
             //精准查询接口的
             mQueryGoodsApi.getPLUInfo(str1);
+        }else{
+            getInforFlag = true;
         }
     }
 

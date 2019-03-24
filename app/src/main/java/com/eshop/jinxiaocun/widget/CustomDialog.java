@@ -102,6 +102,12 @@ class CustomDialog extends Dialog {
 		this.negativeButton.setOnClickListener(listener);
 	}
 
+	void setNegativeButtonStr(CharSequence text,
+						   View.OnClickListener listener) {
+		this.negativeButton.setText(text);
+		this.negativeButton.setOnClickListener(listener);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

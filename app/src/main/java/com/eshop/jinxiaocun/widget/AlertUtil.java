@@ -111,6 +111,23 @@ public class AlertUtil {
 		mDialog.show();
 	}
 
+	public static void showAlert(Context paramContext, CharSequence title, CharSequence message,
+								 CharSequence positiveText, View.OnClickListener positiveBtnListener,
+								 CharSequence negativeText, View.OnClickListener negativeBtnListener) {
+		mContext = paramContext;
+		if (mDialog != null && mDialog.isShowing()) {
+			return;
+		}
+		mDialog = new CustomDialog(paramContext, R.style.cusdom_dialog_whitebg);
+		dimBehind(mDialog);
+		mDialog.setTitle(title);
+		mDialog.setMessage(message);
+		mDialog.setPositiveButton(positiveText, positiveBtnListener);
+		mDialog.setNegativeButtonStr(negativeText, negativeBtnListener);
+		mDialog.setCancelable(false);
+		mDialog.show();
+	}
+
 	/**
 	 * 这个把message用String类型了，方便格式化
 	 *

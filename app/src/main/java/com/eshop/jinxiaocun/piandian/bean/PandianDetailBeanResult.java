@@ -25,6 +25,15 @@ public class PandianDetailBeanResult implements Serializable{
     private String valid_date;//有效日期
     private int has_stocktake;//是否盘点过  0未盘点 1已盘点
     private int status; //0未上传 1已上传
+    private String epcBarCode;//EPC标签
+
+    public String getEpcBarCode() {
+        return epcBarCode;
+    }
+
+    public void setEpcBarCode(String epcBarCode) {
+        this.epcBarCode = epcBarCode;
+    }
 
     public String getBranch_no() {
         return branch_no;

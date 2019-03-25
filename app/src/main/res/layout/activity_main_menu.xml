@@ -11,14 +11,10 @@
         android:layout_height="wrap_content">
     </com.eshop.jinxiaocun.widget.MyActionBar>
 
-
-    <!--app:tab_tabViewBackgroundColor="@color/item_gray_line"-->
-    <com.ycl.tabview.library.TabView
-        android:id="@+id/tabView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.ycl.tabview.library.TabView>
-
-
+    <fragment
+             android:id="@+id/fragment_hello"
+             android:name="com.eshop.jinxiaocun.main.view.HomeFragment"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent" />
 
 </LinearLayout>

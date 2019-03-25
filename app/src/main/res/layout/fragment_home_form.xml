@@ -30,9 +30,9 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:listSelector="@null"
-        android:numColumns="3"
-        android:verticalSpacing="1px"
-        android:horizontalSpacing="1px">
+        android:numColumns="2"
+        android:verticalSpacing="10px"
+        android:horizontalSpacing="10px">
     </GridView>
 
 </LinearLayout>

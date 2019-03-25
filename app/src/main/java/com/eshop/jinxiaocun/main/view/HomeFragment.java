@@ -41,24 +41,26 @@ public class HomeFragment extends BaseFragment {
 
     private Unbinder unbinder;
     private int[] iconIds = {
-            R.drawable.cgd,
+//            R.drawable.cgd,
 //            R.drawable.xsdj,
-            R.drawable.kcgl,
-            R.drawable.kssk,
+//            R.drawable.kcgl,
+//            R.drawable.kssk,
             //R.drawable.tbgl,
             R.drawable.pdgl,
-            R.drawable.spgl,
-            R.drawable.spgl
+            R.drawable.setting
+//            R.drawable.spgl,
+//            R.drawable.spgl
     };
     private int[] nameIds = {
-            R.string.menu_caigoudan,
+//            R.string.menu_caigoudan,
 //            R.string.menu_xiaoshoudan,
-            R.string.menu_shanpingchaxun,
-            R.string.item_message_lingshou,
+//            R.string.menu_shanpingchaxun,
+//            R.string.item_message_lingshou,
             //R.string.menu_diaobo_manage,
             R.string.menu_pandian_manage,
-            R.string.menu_pifa_xiaoshou,
-            R.string.menu_peisong_manager
+            R.string.setting,
+//            R.string.menu_pifa_xiaoshou,
+//            R.string.menu_peisong_manager
     };
 
     public static Fragment newInstance() {
@@ -97,38 +99,41 @@ public class HomeFragment extends BaseFragment {
 
         switch (i){
             case 0:
-                intent.setClass(Application.mContext, CaigouManagerActivity.class);
-                startActivity(intent);
-                break;
-            case 1:
-                intent.setClass(Application.mContext, GoodDetailCheckActivity.class);
-                startActivity(intent);
-                break;
-            case 2:
-                if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
-                    Intent enableIntent = new Intent(
-                            BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
-                    // Otherwise, setup the session
-                } else {
-                    intent.setClass(Application.mContext, LingShouScanActivity.class);
-                    intent.putExtra(Config.SHEET_NO,"");
-                    startActivity(intent);
-                }
-
-                break;
-            case 3:
+//                intent.setClass(Application.mContext, CaigouManagerActivity.class);
                 intent.setClass(Application.mContext, PandianManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 4://批发管理
-                intent.setClass(Application.mContext, PifaManagerActivity.class);
+            case 1:
+//                intent.setClass(Application.mContext, GoodDetailCheckActivity.class);
+//                startActivity(intent);
+                intent.setClass(getActivity(), SystemSettingActivity.class);
                 startActivity(intent);
                 break;
-            case 5://配送管理
-                intent.setClass(Application.mContext, PeisongManagerActivity.class);
-                startActivity(intent);
-                break;
+//            case 2:
+//                if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+//                    Intent enableIntent = new Intent(
+//                            BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                    startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
+//                    // Otherwise, setup the session
+//                } else {
+//                    intent.setClass(Application.mContext, LingShouScanActivity.class);
+//                    intent.putExtra(Config.SHEET_NO,"");
+//                    startActivity(intent);
+//                }
+//
+//                break;
+//            case 3:
+//                intent.setClass(Application.mContext, PandianManagerActivity.class);
+//                startActivity(intent);
+//                break;
+//            case 4://批发管理
+//                intent.setClass(Application.mContext, PifaManagerActivity.class);
+//                startActivity(intent);
+//                break;
+//            case 5://配送管理
+//                intent.setClass(Application.mContext, PeisongManagerActivity.class);
+//                startActivity(intent);
+//                break;
 
         }
     }

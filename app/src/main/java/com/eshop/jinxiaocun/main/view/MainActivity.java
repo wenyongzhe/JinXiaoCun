@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.main.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,32 +38,6 @@ public class MainActivity extends BaseActivity implements INetWorResult {
         super.onCreate(savedInstanceState);
         hasBackDialog = true;
         setContentView(R.layout.activity_main_menu);
-        tabView= (TabView) findViewById(R.id.tabView);
-        List<TabViewChild> tabViewChildList=new ArrayList<>();
-        TabViewChild tabViewChild01=new TabViewChild(R.drawable.sydj,R.drawable.sy, Application.getInstance().getString(R.string.item_home),  HomeFragment.newInstance());
-//        TabViewChild tabViewChild02=new TabViewChild(R.drawable.kcdj,R.drawable.kc, Application.getInstance().getString(R.string.item_kucun),  KuChunFragment.newInstance());
-//        TabViewChild tabViewChild03=new TabViewChild(R.drawable.xsdj,R.drawable.xs, Application.getInstance().getString(R.string.item_xiaoshou), XiaoShouFragment.newInstance());
-//        TabViewChild tabViewChild04=new TabViewChild(R.drawable.tjdj,R.drawable.tj, Application.getInstance().getString(R.string.item_tongji),  TongJiFragment.newInstance());
-        TabViewChild tabViewChild05=new TabViewChild(R.drawable.jcdj,R.drawable.jc, Application.getInstance().getString(R.string.item_jichu), JichuFragment.newInstance());
-        tabViewChildList.add(tabViewChild01);
-//        tabViewChildList.add(tabViewChild02);
-//        tabViewChildList.add(tabViewChild03);
-//        tabViewChildList.add(tabViewChild04);
-        tabViewChildList.add(tabViewChild05);
-        //end add data
-        tabView.setTabViewDefaultPosition(0);
-        tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
-        tabView.setOnTabChildClickListener(new TabView.OnTabChildClickListener() {
-            @Override
-            public void onTabChildClick(int  position, ImageView currentImageIcon, TextView currentTextView) {
-//                 Toast.makeText(getApplicationContext(),"position:"+position,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        startLogin();
-
-      /*  ThreadManagerInterface mThreadManagerInterface = new AsyncTaskThreadImp();
-        mThreadManagerInterface.executeRunnable(this);*/
 
         getLimit();
     }

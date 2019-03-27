@@ -43,10 +43,10 @@ public class HomeFragment extends BaseFragment {
     private int[] iconIds = {
 //            R.drawable.cgd,
 //            R.drawable.xsdj,
-//            R.drawable.kcgl,
 //            R.drawable.kssk,
             //R.drawable.tbgl,
             R.drawable.pdgl,
+            R.drawable.kcgl,
             R.drawable.setting
 //            R.drawable.spgl,
 //            R.drawable.spgl
@@ -54,10 +54,10 @@ public class HomeFragment extends BaseFragment {
     private int[] nameIds = {
 //            R.string.menu_caigoudan,
 //            R.string.menu_xiaoshoudan,
-//            R.string.menu_shanpingchaxun,
 //            R.string.item_message_lingshou,
             //R.string.menu_diaobo_manage,
             R.string.menu_pandian_manage,
+            R.string.menu_shanpingchaxun,
             R.string.setting,
 //            R.string.menu_pifa_xiaoshou,
 //            R.string.menu_peisong_manager
@@ -104,8 +104,10 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 1:
-//                intent.setClass(Application.mContext, GoodDetailCheckActivity.class);
-//                startActivity(intent);
+                intent.setClass(Application.mContext, GoodDetailCheckActivity.class);
+                startActivity(intent);
+                break;
+            case 2:
                 intent.setClass(getActivity(), SystemSettingActivity.class);
                 startActivity(intent);
                 break;

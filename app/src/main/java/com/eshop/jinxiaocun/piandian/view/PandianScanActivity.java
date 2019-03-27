@@ -784,7 +784,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                 }
                 break;
             case Config.MESSAGE_GOODS_INFOR_FAIL:
-                ToastUitls.showShortToast(PandianScanActivity.this,"不在盘点范围！原因："+o.toString());
+                ToastUitls.showShortToast(PandianScanActivity.this,"获取商品失败！原因："+o.toString());
                 break;
             //业务单据号
             case Config.MESSAGE_SHEETNO_OK:

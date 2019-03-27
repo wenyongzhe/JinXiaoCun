@@ -31,8 +31,8 @@
         android:layout_gravity="center"
         android:listSelector="@null"
         android:numColumns="3"
-        android:verticalSpacing="10px"
-        android:horizontalSpacing="10px">
+        android:verticalSpacing="1px"
+        android:horizontalSpacing="1px">
     </GridView>
 
 </LinearLayout>

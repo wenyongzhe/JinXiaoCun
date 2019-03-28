@@ -11,9 +11,11 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,9 +26,12 @@ import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.utils.SoundManage;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.rscja.deviceapi.RFIDWithUHF;
+import com.zebra.adc.decoder.Barcode2DWithSoft;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -76,6 +81,12 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected abstract void modifyCountAfter();
     protected boolean modifyPriceBefore(){return false;}//修价格前
     protected void modifyPriceAfter(){}
+
+    //2D
+    Barcode2DWithSoft barcode2DWithSoft=null;
+    HomeKeyEventBroadCastReceiver receiver;
+    String seldata="ASCII";
+    String barCode="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,6 +286,13 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
 //        if(mBarcodeScan!=null){
 //            mBarcodeScan.close();
 //        }
+
+        //2D
+        if(barcode2DWithSoft!=null){
+            barcode2DWithSoft.stopScan();
+            barcode2DWithSoft.close();
+        }
+
         if (mReader != null) {
             mReader.free();
         }
@@ -304,6 +322,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     public void initUHF() {
         try {
             mReader = RFIDWithUHF.getInstance();
+            barcode2DWithSoft = Barcode2DWithSoft.getInstance();
+            receiver = new HomeKeyEventBroadCastReceiver();
+            registerReceiver(receiver, new IntentFilter("com.rscja.android.KEY_DOWN"));
         } catch (Exception ex) {
             return;
         }
@@ -379,6 +400,89 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         } catch (Exception e) {
             e.printStackTrace();
 
+        }
+    }
+
+    public Barcode2DWithSoft.ScanCallback  ScanBack= new Barcode2DWithSoft.ScanCallback(){
+        @Override
+        public void onScanComplete(int i, int length, byte[] bytes) {
+            if (length < 1) {
+                if (length == -1) {
+                } else if (length == 0) {
+                } else {
+                    Log.i("","Scan fail");
+                }
+            }else{
+                SoundManage.PlaySound(CommonBaseScanActivity.this, SoundManage.SoundType.SUCCESS);
+                barCode="";
+
+
+                //  String res = new String(dd,"gb2312");
+                try {
+                    Log.i("Ascii",seldata);
+                    barCode = new String(bytes, 0, length, seldata);
+                    zt();
+                }
+                catch (UnsupportedEncodingException ex)   {}
+                scanResultData(barCode);
+            }
+
+        }
+    };
+
+    void zt() {
+
+        Vibrator vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
+        vibrator.vibrate(100);
+    }
+    private void ScanBarcode(){
+        if(barcode2DWithSoft!=null) {
+            barcode2DWithSoft.scan();
+            barcode2DWithSoft.setScanCallback(ScanBack);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==139 || keyCode==66){
+            if(event.getRepeatCount()==0) {
+                ScanBarcode();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode==139){
+            if(event.getRepeatCount()==0) {
+                barcode2DWithSoft.stopScan();
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    class HomeKeyEventBroadCastReceiver extends BroadcastReceiver {
+
+        static final String SYSTEM_REASON = "reason";
+        static final String SYSTEM_HOME_KEY = "homekey";//home key
+        static final String SYSTEM_RECENT_APPS = "recentapps";//long home key
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals("com.rscja.android.KEY_DOWN")) {
+                int reason = intent.getIntExtra("Keycode",0);
+                //getStringExtra
+                boolean long1 = intent.getBooleanExtra("Pressed",false);
+                // home key处理点
+                if(reason==280 || reason==66){
+                    ScanBarcode();
+
+                }
+            }
         }
     }
 }

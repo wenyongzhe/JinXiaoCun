@@ -1,6 +1,9 @@
 package com.eshop.jinxiaocun.main.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +43,7 @@ public class MainActivity extends BaseActivity implements INetWorResult {
         setContentView(R.layout.activity_main_menu);
 
         getLimit();
+        initView();
     }
 
     private void startLogin(){
@@ -56,7 +60,10 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
     @Override
     protected void initView() {
-
+        // 在当前的activity中注册广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("ExitActivity");
+        this.registerReceiver(this.broadcastReceiver, filter);
     }
 
 
@@ -136,5 +143,18 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
                 break;
         }
+    }
+
+    protected BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(this.broadcastReceiver);
     }
 }

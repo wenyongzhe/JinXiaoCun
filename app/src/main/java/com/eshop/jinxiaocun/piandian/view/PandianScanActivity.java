@@ -288,7 +288,8 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
                 boolean isSame = false;
                 for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                    if(mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)
+                    //if(mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)&& TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())){
+                    if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
                             && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
                             ){
                         //已经存在自动+1
@@ -345,9 +346,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
             boolean isSame = false;
             for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(epcBarCode)
-                        && mAddPandianGoodsDetailData.get(i).getItem_barcode().equals(obj.getItem_barcode())
-                        ){
+                //if(mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)&& TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())){
+                if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(mScanOrSelectGoods.getItem_no())
+                        && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
+                ){
                     //已经存在自动+1
 //                    int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
 //                    mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
@@ -415,9 +417,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
                     boolean isSame = false;
                     for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                        if (mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)
+                        //if(mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)&& TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())){
+                        if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
                                 && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
-                                ) {
+                        ){
                             //已经存在自动+1
 //                            int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty() + 1;
 //                            mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
@@ -476,9 +479,10 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
             boolean isSame = false;
             for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(epcBarCode)
-                        && mAddPandianGoodsDetailData.get(i).getItem_barcode().equals(obj.getItem_barcode())
-                        ){
+                //if(mAddPandianGoodsDetailData.get(i).getEpcBarCode().equals(epcBarCode)&& TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())){
+                if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(mScanOrSelectGoods.getItem_no())
+                        && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
+                ){
                     //已经存在自动+1
 //                    int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
 //                    mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);

@@ -125,6 +125,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 MyUtils.showToast("参数保存成功！",SystemSettingActivity.this);
                 Intent intent = new Intent(SystemSettingActivity.this,LoginActivity.class);
                 startActivity(intent);
+
+                if(getIntent().getBooleanExtra("Main",false)){
+                    myExit();
+                }
                 finish();
                 break;
 
@@ -133,6 +137,12 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(serverIntent);
                 break;
         }
+    }
+
+    protected void myExit() {
+        Intent intent = new Intent();
+        intent.setAction("ExitActivity");
+        this.sendBroadcast(intent);
     }
 
 }

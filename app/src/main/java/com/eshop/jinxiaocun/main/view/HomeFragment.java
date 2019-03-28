@@ -109,6 +109,7 @@ public class HomeFragment extends BaseFragment {
                 break;
             case 2:
                 intent.setClass(getActivity(), SystemSettingActivity.class);
+                intent.putExtra("Main",true);
                 startActivity(intent);
                 break;
 //            case 2:

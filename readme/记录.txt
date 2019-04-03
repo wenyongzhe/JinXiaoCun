@@ -8,3 +8,9 @@ http://120.79.209.140:8111/index.aspx
 EFFZ02
 账号 1001
 密码 1001
+
+商米合作伙伴管理后台：
+http://partner.sunmi.com
+账号 253398533@qq.com
+密码 quwen1234
+

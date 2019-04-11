@@ -14,3 +14,6 @@ http://partner.sunmi.com
 账号 253398533@qq.com
 密码 quwen1234
 
+使用说明
+https://docs.sunmi.com/htmls/index.html?lang=zh##%E6%B3%A8%E5%86%8C%E5%90%88%E4%BD%9C%E4%BC%99%E4%BC%B4
+

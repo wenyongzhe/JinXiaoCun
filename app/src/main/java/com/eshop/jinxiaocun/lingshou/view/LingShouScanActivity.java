@@ -236,6 +236,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     //接收条码
     @Override
     protected void scanData(String barcode) {
+        if(et_barcode!=null && et_barcode.getText().toString().trim().equals("")){
+            et_barcode.setText(barcode);
+        }
         mLingShouScanImp.getPLUInfo(barcode);
     }
 

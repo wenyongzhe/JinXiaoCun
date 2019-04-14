@@ -42,6 +42,9 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected int itemClickPosition;
 
     public DecoderHelper mDecoderHelper=null;
+    private static final String ACTION_DATA_CODE_RECEIVED = "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED";
+    private static final String ACTION_BAR_SCAN = "ACTION_BAR_SCAN";
+    private static final String DATA = "data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         }
         /////////////////条码
         IntentFilter scanDataIntentFilter = new IntentFilter();
-        scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
+        scanDataIntentFilter.addAction(ACTION_DATA_CODE_RECEIVED);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
             mBarcodeScan = new BarcodeScan(this);
@@ -122,8 +125,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
-            if (action.equals("ACTION_BAR_SCAN")) {
-                String str = intent.getStringExtra("EXTRA_SCAN_DATA");
+            if (action.equals(ACTION_DATA_CODE_RECEIVED)) {
+                String str = intent.getStringExtra(DATA);
                 scanData(str);
             }
         }

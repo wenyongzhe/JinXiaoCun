@@ -50,6 +50,7 @@ import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -145,6 +146,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     Toast.LENGTH_LONG).show();
         }
         setScanBroadCast();
+        AidlUtil.getInstance().initPrinter();
     }
 
     @Override
@@ -555,6 +557,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
      */
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
+
+        //AidlUtil.getInstance().printText(content, size, isBold, isUnderLine);
 
         String lang = getString(R.string.strLang);
         if ((lang.compareTo("cn")) == 0) {

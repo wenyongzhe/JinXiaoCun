@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
 import com.eshop.jinxiaocun.db.DBHelper;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.CrashHandler;
@@ -59,6 +60,7 @@ public class Application extends android.app.Application{
         FileUtils.createOrExistsDir(Config.logPath);
         FileUtils.createOrExistsFile(Config.logFilePath);
 
+        AidlUtil.getInstance().connectPrinterService(this);
     }
 
     public static String getIMEI() {

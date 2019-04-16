@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/btn_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="新增会员"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+    <Button
+        android:id="@+id/btn_member_check"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="会员查询"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+    <Button
+        android:id="@+id/btn_member_recharge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="会员充值"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+    <Button
+        android:id="@+id/btn_expense_check"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="消费查询"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+    <Button
+        android:id="@+id/btn_integral_subtract"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="积分冲减"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+    <Button
+        android:id="@+id/btn_integral_exchange"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_heigth50"
+        android:layout_marginTop="15dp"
+        android:text="积分兑换"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/txt_size16"
+        />
+
+
+</LinearLayout>

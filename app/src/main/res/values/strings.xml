@@ -47,6 +47,7 @@
     <string name="menu_pifa_xiaoshou">批发销售</string>
     <string name="menu_peisong_manager">配送管理</string>
     <string name="menu_yaohuo_order">要货单</string>
+    <string name="menu_member_manager">会员</string>
 
     <!--销售-->
     <string name="item_title_xiaoshoudan">销售单</string>

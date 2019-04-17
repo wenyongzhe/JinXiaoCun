@@ -37,8 +37,8 @@ public class Application extends android.app.Application{
         IMEI = PhoneUtils.getIMEI();
         getMachineIMEI();
         //收集错误信息并保存在本地
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplicationContext());
 
         String serialNo = Build.SERIAL;
         if(serialNo.length()>7){

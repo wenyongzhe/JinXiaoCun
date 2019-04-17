@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
@@ -28,8 +31,10 @@ import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class SelectGoodsFragment extends BaseListFragment implements INetWorResult {
+    private LinearLayout lyButton;
     private List<DanJuMainBeanResult> mListData;
     private List<QryClassResult> mQryClassResult;
+    private List<QryClassResult> mMainlistTemp = new ArrayList<>();
     private List<GetClassPluResult> mGetClassPluResult;
     private List<GetClassPluResult> selectList;
     private TwoListView mTwoListView;
@@ -63,6 +68,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         mISelectGoods = new SelectGoodsImp(this);
         View v = inflater.inflate(R.layout.selectgoods_fragment, null);
         mTwoListView = v.findViewById(R.id.twlist);
+        lyButton = v.findViewById(R.id.ly_buttonContain);
 
         loadData();
         return v;
@@ -103,7 +109,12 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1:
-                    mTwoListView.setMainListBean(mQryClassResult,new MainListListener());
+                    for(int i=0; i<mQryClassResult.size(); i++){
+                        if(mQryClassResult.get(i).getType_no().length()==2){
+                            mMainlistTemp.add(mQryClassResult.get(i));
+                        }
+                    }
+                    mTwoListView.setMainListBean(mMainlistTemp,new MainListListener());
                     break;
                 case 2:
                     mGetClassPluResult = (List<GetClassPluResult>) msg.obj;
@@ -118,8 +129,15 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     public class MainListListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            mISelectGoods.getClassPluInfo(mQryClassResult.get(i).getType_no(),1);
+            mISelectGoods.getClassPluInfo(mMainlistTemp.get(i).getType_no(),1);
+            addButton();
         }
+    }
+
+    private void addButton() {
+        final Button btn1 = new Button(getActivity());
+        btn1.setText("Button1");
+        lyButton.addView(btn1);
     }
 
     public class DetailListListener implements AdapterView.OnItemClickListener{

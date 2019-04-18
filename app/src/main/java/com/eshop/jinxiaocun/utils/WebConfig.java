@@ -47,6 +47,9 @@ public class WebConfig {
     public static final String RT_WZF_QRY= "RT-WZF-QRY";//网络支付扣款状态查询
     public static final String SellVipPay= "SellVipPay";//会员支付
     public static final String GetSystemInfo = "GetSystemInfo";//参数（抹零，卡密码，四舍五入等）
+    public static final String QryHuiYuanInfo = "QryHuiYuanInfo";//会员查询
+    public static final String VipSaleQuery = "VipSaleQuery";//会员消费查询
+
 
 
     public static String getPosLogin() {

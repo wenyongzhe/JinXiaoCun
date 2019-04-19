@@ -49,6 +49,7 @@ public class WebConfig {
     public static final String GetSystemInfo = "GetSystemInfo";//参数（抹零，卡密码，四舍五入等）
     public static final String QryHuiYuanInfo = "QryHuiYuanInfo";//会员查询
     public static final String VipSaleQuery = "VipSaleQuery";//会员消费查询
+    public static final String CardAddMoney = "CardAddMoney";//会员充值
 
 
 

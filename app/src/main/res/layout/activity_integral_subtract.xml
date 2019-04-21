@@ -23,7 +23,7 @@
             android:layout_margin="1dp"
             android:background="@null"
             android:hint="会员卡号/手机号/姓名"
-            android:inputType="textVisiblePassword"
+            android:imeOptions="actionSearch"
             android:gravity="center_vertical" />
 
         <View

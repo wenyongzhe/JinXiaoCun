@@ -1,15 +1,17 @@
 package com.eshop.jinxiaocun.huiyuan.view;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.huiyuan.bean.ExpenseCheckResult;
+import com.eshop.jinxiaocun.huiyuan.bean.ExpenseCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimeListener;
@@ -66,6 +68,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
                     mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                             mTvStartDate.getText().toString(),
                             mTvEndDate.getText().toString());
+                    hideSoftInput();
                     return true;
                 }
                 return false;
@@ -88,6 +91,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
         mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                 mTvStartDate.getText().toString(),
                 mTvEndDate.getText().toString());
+        hideSoftInput();
     }
 
     @OnClick(R.id.tv_start_date)
@@ -152,8 +156,8 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
         switch (flag) {
 
             case Config.MESSAGE_OK:
-                ExpenseCheckResult data = (ExpenseCheckResult) o;
-                if(data!=null){
+                List<ExpenseCheckResultItem> data = (List<ExpenseCheckResultItem>) o;
+                if(data!=null && data.size()>0){
 
                 }else{
                     AlertUtil.showToast("没有对应此卡号的消费信息！");
@@ -162,6 +166,14 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
             case Config.MESSAGE_ERROR:
                 AlertUtil.showToast(o.toString());
                 break;
+        }
+    }
+
+    /*隐藏软键盘*/
+    private void hideSoftInput(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isActive()){
+            inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
         }
     }
 }

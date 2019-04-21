@@ -50,7 +50,10 @@ public class WebConfig {
     public static final String QryHuiYuanInfo = "QryHuiYuanInfo";//会员查询
     public static final String VipSaleQuery = "VipSaleQuery";//会员消费查询
     public static final String CardAddMoney = "CardAddMoney";//会员充值
-
+    public static final String HuiYuanWeiHu = "HuiYuanWeiHu";//会员维护（新增会员）
+    public static final String VipPointManage = "VipPointManage";//积分冲减
+    public static final String QryGiftInfo = "QryGiftInfo";//查询礼品
+    public static final String AccExchange = "AccExchange";//积分兑换
 
 
     public static String getPosLogin() {

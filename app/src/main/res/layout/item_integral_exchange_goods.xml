@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        style="@style/TextView_Black"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="商品名称：条码+规格"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="单价:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="数量:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_number"
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="积分:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_integral"
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="兑换时间:"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_start_date"
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_end_date"
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

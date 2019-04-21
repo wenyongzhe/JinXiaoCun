@@ -1,18 +1,18 @@
 package com.eshop.jinxiaocun.huiyuan.view;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.bean.BaseResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResult;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
@@ -20,6 +20,8 @@ import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -70,6 +72,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                         return false;
                     }
                     mApi.getMemberCheckData(mEtSearch.getText().toString());
+                    hideSoftInput();
                     return true;
                 }
                 return false;
@@ -138,6 +141,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             return;
         }
         mApi.getMemberCheckData(mEtSearch.getText().toString());
+        hideSoftInput();
     }
 
     //充值
@@ -166,6 +170,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         bean.JsonData.Memo = mEtRemarks.getText().toString().trim();
 
         mApi.setMemberRechargeData(bean);
+        hideSoftInput();
 
     }
 
@@ -175,13 +180,9 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         switch (flag){
 
             case Config.MESSAGE_OK:
-                MemberCheckResult data = (MemberCheckResult) o;
-                if (data != null) {
-                    if(data.getJsonData()!=null && data.getJsonData().size()>0){
-                        refreshUIByData(data.getJsonData().get(0));
-                    }else {
-                        AlertUtil.showToast("没有对应此卡号的信息！");
-                    }
+                List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
+                if (data != null && data.size()>0) {
+                    refreshUIByData(data.get(0));
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");
                 }
@@ -193,6 +194,14 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 AlertUtil.showToast(o.toString());
                 break;
 
+        }
+    }
+
+    /*隐藏软键盘*/
+    private void hideSoftInput(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isActive()){
+            inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
         }
     }
 }

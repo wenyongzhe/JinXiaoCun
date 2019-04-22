@@ -60,9 +60,9 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
     public void handleResule(int flag, Object o) {
         switch (flag){
             case Config.MESSAGE_OK:
-
+                mDatas = (List<IntegralExchangeGoodsResultItem>) o;
+                mAdapter.setListInfo(mDatas);
                 break;
-
             case Config.MESSAGE_ERROR:
                 AlertUtil.showToast(o.toString());
                 break;

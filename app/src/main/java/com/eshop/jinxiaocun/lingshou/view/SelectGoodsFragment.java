@@ -36,6 +36,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     private List<QryClassResult> mQryClassResult;
     private List<QryClassResult> mMainlistTemp = new ArrayList<>();
     private List<GetClassPluResult> mGetClassPluResult;
+    private List<GetClassPluResult> mDetaillistTemp = new ArrayList<>();
     private List<GetClassPluResult> selectList;
     private TwoListView mTwoListView;
     ISelectGoods mISelectGoods;
@@ -118,7 +119,17 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
                     break;
                 case 2:
                     mGetClassPluResult = (List<GetClassPluResult>) msg.obj;
-                    mTwoListView.setDetailListBean(mGetClassPluResult,new DetailListListener());
+                    mDetaillistTemp.clear();
+                    if(!currentType_no.equals("")){
+                        for(int i=0; i<mGetClassPluResult.size(); i++){
+                            if(mGetClassPluResult.get(i).getItem_clsno().equals(currentType_no)){
+                                mDetaillistTemp.add(mGetClassPluResult.get(i));
+                            }
+                        }
+                    }else{
+                        mDetaillistTemp.addAll(mGetClassPluResult);
+                    }
+                    mTwoListView.setDetailListBean(mDetaillistTemp,new DetailListListener());
                     break;
 
             }
@@ -130,13 +141,31 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             mISelectGoods.getClassPluInfo(mMainlistTemp.get(i).getType_no(),1);
-            addButton();
+            lyButton.removeAllViews();
+            currentType_no = "";
+            for(int j=0; j<mQryClassResult.size(); j++){
+                String type1 = mQryClassResult.get(j).getType_no();
+                String type2 = mMainlistTemp.get(i).getType_no();
+                if(type1.substring(0,2).equals(type2) && type1.length()>2){
+                    addButton(mQryClassResult.get(j));
+                }
+            }
         }
     }
 
-    private void addButton() {
+    String currentType_no = "";
+    private void addButton(QryClassResult mQryClassResult) {
         final Button btn1 = new Button(getActivity());
-        btn1.setText("Button1");
+        btn1.setTag(mQryClassResult);
+        btn1.setText(mQryClassResult.getType_name());
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QryClassResult mQryClassResult = (QryClassResult) view.getTag();
+                currentType_no = mQryClassResult.getType_no();
+                mISelectGoods.getClassPluInfo(mQryClassResult.getType_no(),1);
+            }
+        });
         lyButton.addView(btn1);
     }
 
@@ -144,7 +173,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             try {
-                selectList.add(mGetClassPluResult.get(i-1));
+                selectList.add(mDetaillistTemp.get(i-1));
                 Intent mIntent = new Intent();
                 mIntent.putExtra("SelectList", (Serializable) selectList);
                 getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);

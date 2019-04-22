@@ -5,7 +5,7 @@
 
     <HorizontalScrollView
         android:id="@+id/scroll_view"
-        android:layout_marginLeft="@dimen/layout_item_height_50"
+        android:layout_marginLeft="@dimen/layout_item_height_90"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <LinearLayout

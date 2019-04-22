@@ -143,12 +143,12 @@ public class MemberImp implements IMemberList{
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,"新增会员成功");
+                    mHandler.handleResule(Config.MESSAGE_OK,"保存成功");
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,"新增会员失败");
+                    mHandler.handleResule(Config.RESULT_SUCCESS,"保存失败:"+msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.MESSAGE_ERROR,"新增会员异常:"+e.getMessage());
+                mHandler.handleResule(Config.RESULT_FAIL,"保存异常:"+e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -167,13 +167,13 @@ public class MemberImp implements IMemberList{
         }
 
         @Override
-        public void handleResultJson(String status, String Msg, String jsonData) {
+        public void handleResultJson(String status, String msg, String jsonData) {
             try {
                 List<MemberCheckResultItem> listResult =  mJsonFormatImp.JsonToList(jsonData,MemberCheckResultItem.class);
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_OK,listResult);
                 }else{
-                    mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+                    mHandler.handleResule(Config.MESSAGE_ERROR,msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
@@ -223,7 +223,7 @@ public class MemberImp implements IMemberList{
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.RESULT_SUCCESS,"充值成功");
                 }else{
-                    mHandler.handleResule(Config.RESULT_FAIL,"充值失败");
+                    mHandler.handleResule(Config.RESULT_FAIL,"充值失败:"+msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,"充值异常:"+e.getMessage());
@@ -245,7 +245,7 @@ public class MemberImp implements IMemberList{
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.RESULT_SUCCESS,"积分冲减成功");
                 }else{
-                    mHandler.handleResule(Config.RESULT_FAIL,"积分冲减失败");
+                    mHandler.handleResule(Config.RESULT_FAIL,"积分冲减失败:"+msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,"积分冲减异常:"+e.getMessage());
@@ -294,7 +294,7 @@ public class MemberImp implements IMemberList{
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.RESULT_SUCCESS,"兑换成功");
                 }else{
-                    mHandler.handleResule(Config.RESULT_FAIL,"兑换失败");
+                    mHandler.handleResule(Config.RESULT_FAIL,"兑换失败:"+msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,"兑换异常:"+e.getMessage());

@@ -49,6 +49,7 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
 
 
     private IMemberList mApi;
+    private String mPassword;
 
     @Override
     protected int getLayoutId() {
@@ -82,6 +83,7 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     }
 
     private void refreshUIByData(MemberCheckResultItem data) {
+        mPassword = data.getPassword();
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());
@@ -105,17 +107,35 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     //点击积分奖励按钮
     @OnClick(R.id.btn_integral_add)
     public void onClickIntegralAdd(){
-        integralSubtract(2);
+
+        if(TextUtils.isEmpty(mEtSubtractIntegral.getText().toString().trim())){
+            AlertUtil.showToast("请先输入冲减积分");
+            return;
+        }
+        float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                + MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+        integralSubtract(2,integral);
     }
 
     //点击积分冲减按钮
     @OnClick(R.id.btn_integral_subtract)
     public void onClickIntegralSubtract(){
-        integralSubtract(3);
+        if(TextUtils.isEmpty(mEtSubtractIntegral.getText().toString().trim())){
+            AlertUtil.showToast("请先输入冲减积分");
+            return;
+        }
+        if(MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)<
+                MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0)){
+            AlertUtil.showToast("冲减积分不能大于当前积分");
+            return;
+        }
+        float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                - MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+        integralSubtract(3,integral);
     }
 
     //as_type;//业务类型 --1：储值消费，2:积分奖励，3：积分冲减 ,4:储值冲正
-    private void integralSubtract(int as_type){
+    private void integralSubtract(int as_type ,float integral){
 
         if(TextUtils.isEmpty(mTvCardNumber.getText().toString().trim())){
             AlertUtil.showToast("请先查询卡信息，再进行积分冲减/积分奖励");
@@ -128,10 +148,10 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         bean.JsonData.as_vipNo = mTvCardNumber.getText().toString().trim();
         bean.JsonData.as_type = as_type;
         bean.JsonData.as_flow_no = "小票号";//小票号
-        bean.JsonData.adec_consume_num ="本单积分值"; //本单积分值
-        bean.JsonData.adec_consume_amt ="本单消费金额";  //本单消费金额
-        bean.JsonData.adec_sav_amtnumeric ="储值消费金额";  //储值消费金额
-        bean.JsonData.as_card_pass = "卡密码";//卡密码
+        bean.JsonData.adec_consume_num =integral+""; //本单积分值
+        bean.JsonData.adec_consume_amt ="";  //本单消费金额  不用填写
+        bean.JsonData.adec_sav_amtnumeric ="";  //储值消费金额  不用填写
+        bean.JsonData.as_card_pass = mPassword;//卡密码
         bean.JsonData.memo = mEtRemarks.getText().toString().trim();
         mApi.integralSubtract(bean);
 

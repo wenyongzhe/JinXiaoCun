@@ -1,32 +1,23 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +26,6 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
-import com.eshop.jinxiaocun.base.view.BaseScanActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
@@ -62,7 +52,6 @@ import com.eshop.jinxiaocun.widget.MoneyDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
-import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
 import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
 import com.google.zxing.activity.CaptureActivity;
 
@@ -76,8 +65,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
 
 public class LingShouScanActivity extends BaseLinShouScanActivity implements INetWorResult {
@@ -127,7 +114,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private GetOptAuthResult mGetOptAuthResult = null;
     private boolean hasDiscount = false;
-    private BluetoothService mService = null;
+//    private BluetoothService mService = null;
     private static boolean is58mm = true;
     private BluetoothAdapter mBluetoothAdapter = null;
     private String Pay_way = "";
@@ -138,7 +125,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mService = new BluetoothService(this, mHandler);
+//        mService = new BluetoothService(this, mHandler);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mLinearLayout.setBackgroundColor(getResources().getColor(R.color.item_gray_line));
         if (mBluetoothAdapter == null) {
@@ -149,91 +136,91 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         AidlUtil.getInstance().initPrinter();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+//        // If Bluetooth is not on, request that it be enabled.
+//        // setupChat() will then be called during onActivityResult
+//        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+//            Intent enableIntent = new Intent(
+//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
+//            // Otherwise, setup the session
+//        } else {
+//            if (mService == null)
+//                mService = new BluetoothService(this, mHandler);
+//        }
+//    }
 
-        // If Bluetooth is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mService == null)
-                mService = new BluetoothService(this, mHandler);
-        }
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        // Stop the Bluetooth services
+//        if (mService != null)
+//            mService.stop();
+//        if (DEBUG)
+//            Log.e("", "--- ON DESTROY ---");
+//    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Stop the Bluetooth services
-        if (mService != null)
-            mService.stop();
-        if (DEBUG)
-            Log.e("", "--- ON DESTROY ---");
-    }
+//    @Override
+//    public synchronized void onResume() {
+//        super.onResume();
+//        try {
+//            if(!mService.isEnabled()){
+//                mService.enabled();
+//                //AlertUtil.showAlert(LingShouScanActivity.this,"提示","请打开蓝牙" );
+//            }else {
+//                if (mService != null) {
+//
+//                    if (mService.getState() == BluetoothService.STATE_NONE) {
+//                        // Start the Bluetooth services
+//                        mService.start();
+//                    }
+//                }
+//            }
+//        }catch (Exception e){
+//        }
+//    }
 
-    @Override
-    public synchronized void onResume() {
-        super.onResume();
-        try {
-            if(!mService.isEnabled()){
-                mService.enabled();
-                //AlertUtil.showAlert(LingShouScanActivity.this,"提示","请打开蓝牙" );
-            }else {
-                if (mService != null) {
-
-                    if (mService.getState() == BluetoothService.STATE_NONE) {
-                        // Start the Bluetooth services
-                        mService.start();
-                    }
-                }
-            }
-        }catch (Exception e){
-        }
-    }
-
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case BluetoothService.STATE_CONNECTED:
-                            ToastUtils.showShort("连接成功");
-                            printMs();
-                            break;
-                        case BluetoothService.STATE_CONNECTING:
-                            ToastUtils.showShort("连接中");
-                            break;
-                        case BluetoothService.STATE_LISTEN:
-                        case BluetoothService.STATE_NONE:
-                            //ToastUtils.showShort("没有连接打印机");
-                            break;
-                    }
-                    break;
-                case SystemSettingActivity.MESSAGE_WRITE:
-
-                    break;
-                case SystemSettingActivity.MESSAGE_READ:
-
-                    break;
-                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
-                    break;
-                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
-                    Toast.makeText(getApplicationContext(), "无法连接设备",
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
-                            Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    };
+//    private final Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
+//                    switch (msg.arg1) {
+//                        case BluetoothService.STATE_CONNECTED:
+//                            ToastUtils.showShort("连接成功");
+//                            printMs();
+//                            break;
+//                        case BluetoothService.STATE_CONNECTING:
+//                            ToastUtils.showShort("连接中");
+//                            break;
+//                        case BluetoothService.STATE_LISTEN:
+//                        case BluetoothService.STATE_NONE:
+//                            //ToastUtils.showShort("没有连接打印机");
+//                            break;
+//                    }
+//                    break;
+//                case SystemSettingActivity.MESSAGE_WRITE:
+//
+//                    break;
+//                case SystemSettingActivity.MESSAGE_READ:
+//
+//                    break;
+//                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
+//                    break;
+//                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
+//                    Toast.makeText(getApplicationContext(), "无法连接设备",
+//                            Toast.LENGTH_SHORT).show();
+//                    break;
+//                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
+//                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
+//                            Toast.LENGTH_SHORT).show();
+//
+//            }
+//        }
+//    };
 
     //接收条码
     @Override
@@ -467,14 +454,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     },R.string.txt_print, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
-                                        Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
-                                        startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
-                                    }
+//                                    if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
+//                                        Intent serverIntent = new Intent(LingShouScanActivity.this, DeviceListActivity.class);
+//                                        startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
+//                                    }
+                                    printMs();
                                     AlertUtil.dismissDialog();
                                 }
                             });
-//                printMs();
                 }
                 break;
             case Config.MESSAGE_GET_PAY_MODE:
@@ -545,9 +532,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     //打印小票
     private void printMs() {
-        if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
-            return;
-        }
+//        if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
+//            return;
+//        }
         Print_Ex();
         finish();
     }
@@ -666,12 +653,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
      */
     private void SendDataByte(byte[] data) {
 
-        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        mService.write(data);
+//        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+//            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+//                    .show();
+//            return;
+//        }
+//        mService.write(data);
     }
 
     /*
@@ -679,19 +666,19 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
      */
     private void SendDataString(String data) {
 
-        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        if (data.length() > 0) {
-            try {
-                mService.write(data.getBytes("GBK"));
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+//        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+//            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+//                    .show();
+//            return;
+//        }
+//        if (data.length() > 0) {
+//            try {
+//                mService.write(data.getBytes("GBK"));
+//            } catch (UnsupportedEncodingException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     /*
@@ -725,17 +712,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         double temprice;
         switch (resultCode){
             case SystemSettingActivity.REQUEST_CONNECT_DEVICE:
-                // When DeviceListActivity returns with a device to connect
-                // Get the device MAC address
-                String address = data.getExtras().getString(
-                        DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-                // Get the BLuetoothDevice object
-                if (BluetoothAdapter.checkBluetoothAddress(address)) {
-                    BluetoothDevice device = mBluetoothAdapter
-                            .getRemoteDevice(address);
-                    // Attempt to connect to the device
-                    mService.connect(device);
-                }
+//                String address = data.getExtras().getString(
+//                        DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+//                if (BluetoothAdapter.checkBluetoothAddress(address)) {
+//                    BluetoothDevice device = mBluetoothAdapter
+//                            .getRemoteDevice(address);
+//                    mService.connect(device);
+//                }
                 break;
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");

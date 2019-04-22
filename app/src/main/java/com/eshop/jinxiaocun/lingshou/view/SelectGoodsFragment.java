@@ -156,6 +156,8 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     String currentType_no = "";
     private void addButton(QryClassResult mQryClassResult) {
         final Button btn1 = new Button(getActivity());
+        btn1.setTextSize(12);
+        btn1.setHeight(8);
         btn1.setTag(mQryClassResult);
         btn1.setText(mQryClassResult.getType_name());
         btn1.setOnClickListener(new View.OnClickListener() {

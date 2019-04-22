@@ -66,6 +66,9 @@
     <dimen name="layout_item_height_40">40dp</dimen>
     <dimen name="layout_item_height_50">50dp</dimen>
     <dimen name="layout_item_height_90">90dp</dimen>
+    <dimen name="layout_item_height_100">100dp</dimen>
+    <dimen name="layout_item_height_110">110dp</dimen>
+    <dimen name="layout_item_height_120">120dp</dimen>
     <!--excel-->
     <dimen name="room_status_cell_length">200dp</dimen>
 

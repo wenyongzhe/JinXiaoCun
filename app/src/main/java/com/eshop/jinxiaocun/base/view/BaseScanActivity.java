@@ -50,10 +50,12 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hasBackDialog = true;
-        newSheet = getIntent().getStringExtra(Config.SHEET_NO).equals("")?true:false;
-        if( !newSheet ){
-            sheet_no = getIntent().getStringExtra(Config.SHEET_NO);
-            mDanJuMainBeanResultItem = (DanJuMainBeanResultItem) getIntent().getExtras().get("DanJuMain");
+        if(getIntent().getStringExtra(Config.SHEET_NO)!=null){
+            newSheet = getIntent().getStringExtra(Config.SHEET_NO).equals("")?true:false;
+            if( !newSheet ){
+                sheet_no = getIntent().getStringExtra(Config.SHEET_NO);
+                mDanJuMainBeanResultItem = (DanJuMainBeanResultItem) getIntent().getExtras().get("DanJuMain");
+            }
         }
         /////////////////条码
         IntentFilter scanDataIntentFilter = new IntentFilter();

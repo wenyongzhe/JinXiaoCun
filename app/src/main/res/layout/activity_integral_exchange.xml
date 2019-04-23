@@ -5,8 +5,6 @@
     android:orientation="vertical"
     >
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_item_height_35"
@@ -178,6 +176,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textColor="@color/red"
             android:gravity="center_vertical" />
 
         <TextView
@@ -206,14 +205,69 @@
         android:layout_weight="1"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/divider"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_surplus_integral"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_35"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"
+            android:text="本次所有积分:"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_all_select_integal"
+            style="@style/TextView_Black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/red"
+            android:gravity="center_vertical" />
+
+        <TextView
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="剩余积分:"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_surplus_integral"
+            style="@style/TextView_Black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/red"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_exchange_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center"
         android:visibility="gone"
         android:text="兑换礼品"

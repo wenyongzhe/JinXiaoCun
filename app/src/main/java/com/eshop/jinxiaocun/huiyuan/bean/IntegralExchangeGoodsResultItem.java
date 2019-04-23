@@ -18,6 +18,7 @@ public class IntegralExchangeGoodsResultItem implements Serializable {
     private String BeginTime; //兑换起始时间
     private String EndTime;  //兑换结束时间
     private String BranchNo; //机构号
+    private boolean isSelect;
 
     public String getcBarCode() {
         return cBarCode;
@@ -81,5 +82,13 @@ public class IntegralExchangeGoodsResultItem implements Serializable {
 
     public void setBranchNo(String branchNo) {
         BranchNo = branchNo;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

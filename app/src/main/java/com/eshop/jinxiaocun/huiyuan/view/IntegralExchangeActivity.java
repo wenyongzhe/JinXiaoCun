@@ -9,12 +9,16 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.huiyuan.adapter.ExchangeGoodsAdapter;
+import com.eshop.jinxiaocun.huiyuan.bean.IntegralExchangeBean;
+import com.eshop.jinxiaocun.huiyuan.bean.IntegralExchangeGoodsResultItem;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
@@ -22,6 +26,7 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,10 +57,21 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     TextView mTvCurrentIntegral;//卡的当前积分
     @BindView(R.id.lv_exchange_goods)
     ListView mListView;
+
+    @BindView(R.id.ll_surplus_integral)
+    LinearLayout mLAayoutSurplusIntegral;
+    @BindView(R.id.tv_all_select_integal)
+    TextView mTvAllSelectIntegral;//本次所有积分
+    @BindView(R.id.tv_surplus_integral)
+    TextView mTvSurplusIntegral;//剩余积分
+
     @BindView(R.id.btn_exchange_goods)
     Button mBtnExchangeGoods;
 
     private IMemberList mApi;
+    private ExchangeGoodsAdapter mAdapter;
+
+    private List<IntegralExchangeGoodsResultItem> mDatas = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -81,6 +97,9 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
                 return false;
             }
         });
+
+        mAdapter = new ExchangeGoodsAdapter(mDatas);
+        mListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -95,6 +114,21 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
         mTvCardType.setText(data.getCardType());
         mTvStatus.setText(data.getCardState());
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
+    }
+
+    private void refreshButtomUIByData(){
+        mLAayoutSurplusIntegral.setVisibility(View.VISIBLE);
+        mBtnExchangeGoods.setVisibility(View.VISIBLE);
+
+        float allSelectIntegral=0;
+        for (IntegralExchangeGoodsResultItem info : mDatas) {
+            allSelectIntegral=allSelectIntegral + info.getJiFen();
+        }
+        float surplusIntegral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim()
+                , 0)-allSelectIntegral;
+        mTvAllSelectIntegral.setText(allSelectIntegral+"");
+        mTvSurplusIntegral.setText(surplusIntegral+"");
+
     }
 
     //查询兑换商品
@@ -129,6 +163,15 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     //兑换礼品
     @OnClick(R.id.btn_exchange_goods)
     public void onClickExchangeGoods(){
+        IntegralExchangeBean bean = new IntegralExchangeBean();
+        bean.JsonData.Branch_No = Config.branch_no;
+        bean.JsonData.OperInfo = Config.UserId;
+        bean.JsonData.CardNo_TelNo = mTvCardNumber.getText().toString().trim();
+        bean.JsonData.HYGifts = "";//礼品信息
+        bean.JsonData.JiFen =0;//积分
+        bean.JsonData.Memo = "";//备注
+
+        mApi.integralExchange(bean);
 
     }
 
@@ -136,7 +179,12 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==111 && resultCode == RESULT_OK){
-            mBtnExchangeGoods.setVisibility(View.VISIBLE);
+            if(data==null){
+                return;
+            }
+            mDatas = (List<IntegralExchangeGoodsResultItem>) data.getSerializableExtra("SelectDatas");
+            mAdapter.setListInfo(mDatas);
+            refreshButtomUIByData();
         }
     }
 
@@ -165,5 +213,14 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
         if(inputMethodManager.isActive()){
             inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mDatas!=null){
+            mDatas.clear();
+            mDatas = null;
+        }
+        super.onDestroy();
     }
 }

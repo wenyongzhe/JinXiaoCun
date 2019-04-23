@@ -48,9 +48,8 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ToastUitls;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
-import com.rscja.deviceapi.RFIDWithUHF;
+import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
 import com.rscja.deviceapi.entity.SimpleRFIDEntity;
-import com.zebra.adc.decoder.Barcode2DWithSoft;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -115,7 +114,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private int lastClickedPosition = -1;//标记最后点击的位置
 
     //RFID
-    private int inventoryFlag = 1;
+    private int inventoryFlag = 0;
     private boolean loopFlag = false;
     private boolean getInforFlag = false;
     private boolean starting = false;
@@ -1115,7 +1114,16 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     String strUII = mReader.inventorySingleTag();
                     if (!TextUtils.isEmpty(strUII)) {
                         String strEPC = mReader.convertUiiToEPC(strUII);
-//                        addEPCToList(strEPC, "N/A");
+                        addEPCToList(strEPC, "N/A");
+
+                       /* SimpleRFIDEntity entity = mReader.readData("00000000",
+                                BankEnum.valueOf("USER"),
+                                Integer.parseInt("0"),
+                                Integer.parseInt("5"));
+                        if(entity==null){
+                            return;
+                        }*/
+
                     } else {
                         ToastUtils.showLong( R.string.uhf_msg_inventory_fail);
 //					mContext.playSound(2);
@@ -1193,28 +1201,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             while (loopFlag) {
                 while (getInforFlag){
                     res = mReader.readTagFromBuffer();
-//                    if (res != null) {
-//                        strTid = res[0];
-//                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
-//                            strResult = strTid ;
-//                        } else {
-//                            strResult = "";
-//                        }
+                    if (res != null) {
+                        strTid = res[0];
+                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
+                            strResult = strTid ;
+                        } else {
+                            strResult = "";
+                        }
                         //Log.i("data","EPC:"+res[1]+"|"+strResult);
                         Message msg = handler.obtainMessage();
-
-                        SimpleRFIDEntity entity = mReader.readData("00000000",
-                                RFIDWithUHF.BankEnum.valueOf("USER"),
-                                Integer.parseInt("0"),
-                                Integer.parseInt("5"));
-                        if(entity==null){
-                            return;
-                        }
-                        //msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
-//                        msg.obj = "666" + "@" + entity.getData() + "@" + res[2];
-//                        getInforFlag = false;
-                        //handler.sendMessage(msg);
-//                    }
+                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
+                        getInforFlag = false;
+                        handler.sendMessage(msg);
+                    }
                 }
             }
         }

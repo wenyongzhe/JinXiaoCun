@@ -80,7 +80,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_scan_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
-        mListview = bottomView.findViewById(R.id.listview_data);
+        mListview = (ListView) bottomView.findViewById(R.id.listview_data);
         mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"查询商品",this);
     }
 

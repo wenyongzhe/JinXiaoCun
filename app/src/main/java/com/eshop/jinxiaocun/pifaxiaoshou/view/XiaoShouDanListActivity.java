@@ -29,7 +29,7 @@ public class XiaoShouDanListActivity extends BaseListActivity implements INetWor
         mDanJuList = new DanJuListImp(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ActionBar.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mLinearLayout.addView(getView(R.layout.activity_xiaoshou_dan),0,params);
-        mListView = mLinearLayout.findViewById(R.id.list_view);
+        mListView = (RefreshListView) mLinearLayout.findViewById(R.id.list_view);
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
             public void onRefresh() {

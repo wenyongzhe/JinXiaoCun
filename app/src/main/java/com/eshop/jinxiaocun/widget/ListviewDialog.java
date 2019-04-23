@@ -35,7 +35,7 @@ public class ListviewDialog extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_listview);
-        mListView = findViewById(R.id.lv_select_list);
+        mListView = (ListView) findViewById(R.id.lv_select_list);
         mString = getIntent().getStringArrayListExtra("String");
 
 

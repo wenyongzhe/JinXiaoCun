@@ -48,6 +48,8 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ToastUitls;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
+import com.rscja.deviceapi.RFIDWithUHF;
+import com.rscja.deviceapi.entity.SimpleRFIDEntity;
 import com.zebra.adc.decoder.Barcode2DWithSoft;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1191,19 +1193,28 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             while (loopFlag) {
                 while (getInforFlag){
                     res = mReader.readTagFromBuffer();
-                    if (res != null) {
-                        strTid = res[0];
-                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
-                            strResult = strTid ;
-                        } else {
-                            strResult = "";
-                        }
+//                    if (res != null) {
+//                        strTid = res[0];
+//                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
+//                            strResult = strTid ;
+//                        } else {
+//                            strResult = "";
+//                        }
                         //Log.i("data","EPC:"+res[1]+"|"+strResult);
                         Message msg = handler.obtainMessage();
-                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
-                        getInforFlag = false;
-                        handler.sendMessage(msg);
-                    }
+
+                        SimpleRFIDEntity entity = mReader.readData("00000000",
+                                RFIDWithUHF.BankEnum.valueOf("USER"),
+                                Integer.parseInt("0"),
+                                Integer.parseInt("5"));
+                        if(entity==null){
+                            return;
+                        }
+                        //msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
+//                        msg.obj = "666" + "@" + entity.getData() + "@" + res[2];
+//                        getInforFlag = false;
+                        //handler.sendMessage(msg);
+//                    }
                 }
             }
         }

@@ -70,7 +70,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         mDanJuAdapter = new QueryGoodsListAdapter(getActivity(),mListData);
         View v = inflater.inflate(R.layout.query_fragment, null);
         mListView = (RefreshListView) v.findViewById(R.id.list_view);
-        ib_seach = v.findViewById(R.id.ib_seach);
+        ib_seach = (ImageButton) v.findViewById(R.id.ib_seach);
         mListView.setAdapter(mDanJuAdapter);
 
         et_query = (EditText) v.findViewById(R.id.et_query);

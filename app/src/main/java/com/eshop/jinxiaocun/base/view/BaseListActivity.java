@@ -31,7 +31,7 @@ public class BaseListActivity extends BaseActivity implements AdapterView.OnItem
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         View bottomView = this.getLayoutInflater().inflate(R.layout.common_list_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
-        mLayoutBottom = mLinearLayout.findViewById(R.id.ll_bottom);
+        mLayoutBottom = (LinearLayout) mLinearLayout.findViewById(R.id.ll_bottom);
     }
 
     @Override

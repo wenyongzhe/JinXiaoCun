@@ -62,7 +62,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         selectList = new ArrayList<GetClassPluResult>();
         mISelectGoods = new SelectGoodsImp(this);
         View v = inflater.inflate(R.layout.selectgoods_fragment, null);
-        mTwoListView = v.findViewById(R.id.twlist);
+        mTwoListView = (TwoListView) v.findViewById(R.id.twlist);
 
         loadData();
         return v;

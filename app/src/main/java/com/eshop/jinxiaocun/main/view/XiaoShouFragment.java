@@ -32,11 +32,11 @@ public class XiaoShouFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_xiaoshou_form, container, false);
-        imagetext1 = view.findViewById(R.id.imagetext1);
+        imagetext1 = (ImageTextView) view.findViewById(R.id.imagetext1);
 
-        myView_xiaoshou = view.findViewById(R.id.myView_xiaoshou);
-        myView_xiaoshoutui = view.findViewById(R.id.myView_xiaoshoutui);
-        myView_lingshou = view.findViewById(R.id.myView_lingshou);
+        myView_xiaoshou = (ImageTextView) view.findViewById(R.id.myView_xiaoshou);
+        myView_xiaoshoutui = (ImageTextView) view.findViewById(R.id.myView_xiaoshoutui);
+        myView_lingshou = (ImageTextView) view.findViewById(R.id.myView_lingshou);
         myView_xiaoshou.setOnClickListener(this);
         myView_xiaoshoutui.setOnClickListener(this);
         myView_lingshou.setOnClickListener(this);

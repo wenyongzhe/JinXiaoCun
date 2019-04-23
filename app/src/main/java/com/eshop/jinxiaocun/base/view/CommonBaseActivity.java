@@ -41,7 +41,7 @@ public abstract class CommonBaseActivity extends AppCompatActivity implements Ta
 
         mView = new FrameLayout(this);
         View rootView = View.inflate(this, R.layout.activity_base, null);
-        mLinearLayout = rootView.findViewById(R.id.content);
+        mLinearLayout = (LinearLayout) rootView.findViewById(R.id.content);
         View contentView = LayoutInflater.from(this).inflate(getLayoutId(),null);
         mLinearLayout.addView(contentView,0);
         setContentView(rootView);

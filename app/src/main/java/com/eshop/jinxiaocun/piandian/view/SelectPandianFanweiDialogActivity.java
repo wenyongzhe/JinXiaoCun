@@ -46,10 +46,10 @@ public class SelectPandianFanweiDialogActivity extends Activity implements INetW
 
         ButterKnife.bind(this);
 
-        title=findViewById(R.id.title);
-        tv_0=findViewById(R.id.tv_0);
-        tv_1=findViewById(R.id.tv_1);
-        mListView=findViewById(R.id.listview_data);
+        title= (TextView) findViewById(R.id.title);
+        tv_0= (TextView) findViewById(R.id.tv_0);
+        tv_1= (TextView) findViewById(R.id.tv_1);
+        mListView= (ListView) findViewById(R.id.listview_data);
         title.setText("请选择盘点范围");
         tv_0.setText("编号");
         tv_1.setText("名称");

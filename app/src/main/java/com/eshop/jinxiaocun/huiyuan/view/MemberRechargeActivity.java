@@ -17,6 +17,9 @@ import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -52,6 +55,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     EditText mEtRemarks;//备注
 
     private IMemberList mApi;
+    private ILingshouScan mApi2;
 
 
     @Override
@@ -116,6 +120,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     @Override
     protected void initData() {
         mApi = new MemberImp(this);
+        mApi2 = new LingShouScanImp(this);
     }
 
     //计算合计并显示
@@ -156,22 +161,25 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             AlertUtil.showToast("充值前,先输入充值金额!");
             return;
         }
+        AlertUtil.showNoButtonProgressDialog(this,"正在为您充值，请稍后...");
+        mApi2.getFlowNo();//取流水号
+        hideSoftInput();
+    }
 
+    private void rechargeData(String flowNo){
         MemberRechargeBean bean = new MemberRechargeBean();
         bean.JsonData.BranchNo = Config.branch_no;
         bean.JsonData.UserId = Config.UserId;
         bean.JsonData.CardNo = mTvCardNumber.getText().toString().trim();
-        //充值金额
+        //充值金额(有可能包含赠送金额)
         bean.JsonData.AddMoney = MyUtils.convertToFloat(mTvAllRechargeMoney.getText().toString().trim(),0);
         //实付金额
         bean.JsonData.PayMoney = MyUtils.convertToFloat(mEtRechargeMoney.getText().toString().trim(),0);
-        bean.JsonData.FlowNo = "流水号";
-        bean.JsonData.PayWay = "支付方式";
+        bean.JsonData.FlowNo = flowNo;//"流水号"
+        bean.JsonData.PayWay = "RMB";//支付方式  后续需要改成多种支付方式，跟销售一样
         bean.JsonData.Memo = mEtRemarks.getText().toString().trim();
 
         mApi.setMemberRechargeData(bean);
-        hideSoftInput();
-
     }
 
 
@@ -186,11 +194,32 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");
                 }
+                AlertUtil.dismissProgressDialog();
                 break;
-
+            case Config.MESSAGE_FLOW_NO:
+                GetFlowNoBeanResult.FlowNoJson result = (GetFlowNoBeanResult.FlowNoJson)o;
+                if(result != null ){
+                    String flowNo = MyUtils.formatFlowNo(result.getFlowNo());
+                    rechargeData(flowNo);
+                }else{
+                    AlertUtil.dismissProgressDialog();
+                    AlertUtil.showToast("没有小票号信息");
+                }
+                break;
             case Config.RESULT_SUCCESS:
+                mTvCardNumber.setText("");
+                mTvName.setText("");
+                mTvBalance.setText("");
+                mEtRechargeMoney.setText("");
+                mEtGiveFreeMoney.setText("");
+                mEtRemarks.setText("");
+                mTvAllRechargeMoney.setText("");
+                AlertUtil.dismissProgressDialog();
+                AlertUtil.showToast(o.toString());
+                break;
             case Config.RESULT_FAIL:
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
 

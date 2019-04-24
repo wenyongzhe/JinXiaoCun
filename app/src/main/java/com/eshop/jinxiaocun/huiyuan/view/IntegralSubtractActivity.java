@@ -15,11 +15,16 @@ import com.eshop.jinxiaocun.huiyuan.bean.IntegralSubtractBean;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,7 +54,13 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
 
 
     private IMemberList mApi;
+    private ILingshouScan mApi2;
     private String mPassword;
+    private float mIntegral;
+    private int mAsType;
+    private String mAccFlag;
+    private boolean isStatusNormal;
+    private boolean isSubtractIntegral;
 
     @Override
     protected int getLayoutId() {
@@ -80,10 +91,28 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     @Override
     protected void initData() {
         mApi = new MemberImp(this);
+        mApi2 = new LingShouScanImp(this);
     }
 
     private void refreshUIByData(MemberCheckResultItem data) {
         mPassword = data.getPassword();
+        mAccFlag = data.getAcc_Flag();
+
+        if(!TextUtils.isEmpty(data.getCardState())){
+            //取出字符中的数字 [02]储值卡
+            String regEx="[^0-9]";
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(data.getCardState());
+            String cardStatusId = m.replaceAll("").trim();
+            if("0".equals(cardStatusId)){
+                isStatusNormal = true;
+            }else {
+                if(data.getCardState().contains("正常")){
+                    isStatusNormal = true;
+                }
+            }
+        }
+
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());
@@ -108,18 +137,41 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     @OnClick(R.id.btn_integral_add)
     public void onClickIntegralAdd(){
 
+        if(!isStatusNormal){
+            AlertUtil.showToast("非正常状态卡，请检查！");
+            return;
+        }
+
+        if("1".equals(mAccFlag)){
+            AlertUtil.showToast("非积分卡，不能进行积分奖励！");
+            return;
+        }
+
         if(TextUtils.isEmpty(mEtSubtractIntegral.getText().toString().trim())){
             AlertUtil.showToast("请先输入冲减积分");
             return;
         }
-        float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
-                + MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
-        integralSubtract(2,integral);
+        mIntegral = MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+        mAsType = 2;
+        isSubtractIntegral = false;
+        AlertUtil.showNoButtonProgressDialog(this,"奖励积分中，请稍后...");
+        mApi2.getFlowNo();
     }
 
     //点击积分冲减按钮
     @OnClick(R.id.btn_integral_subtract)
     public void onClickIntegralSubtract(){
+
+        if(!isStatusNormal){
+            AlertUtil.showToast("非正常状态卡，请检查！");
+            return;
+        }
+
+        if("1".equals(mAccFlag)){
+            AlertUtil.showToast("非积分卡，不能进行积分冲减！");
+            return;
+        }
+
         if(TextUtils.isEmpty(mEtSubtractIntegral.getText().toString().trim())){
             AlertUtil.showToast("请先输入冲减积分");
             return;
@@ -129,13 +181,15 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
             AlertUtil.showToast("冲减积分不能大于当前积分");
             return;
         }
-        float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
-                - MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
-        integralSubtract(3,integral);
+        mIntegral = MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+        mAsType = 3;
+        isSubtractIntegral = true;
+        AlertUtil.showNoButtonProgressDialog(this,"积分冲减中，请稍后...");
+        mApi2.getFlowNo();
     }
 
     //as_type;//业务类型 --1：储值消费，2:积分奖励，3：积分冲减 ,4:储值冲正
-    private void integralSubtract(int as_type ,float integral){
+    private void integralSubtract(int as_type ,float integral ,String flowNo){
 
         if(TextUtils.isEmpty(mTvCardNumber.getText().toString().trim())){
             AlertUtil.showToast("请先查询卡信息，再进行积分冲减/积分奖励");
@@ -147,10 +201,10 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         bean.JsonData.branch_no = Config.branch_no;
         bean.JsonData.as_vipNo = mTvCardNumber.getText().toString().trim();
         bean.JsonData.as_type = as_type;
-        bean.JsonData.as_flow_no = "小票号";//小票号
-        bean.JsonData.adec_consume_num =integral+""; //本单积分值
-        bean.JsonData.adec_consume_amt ="";  //本单消费金额  不用填写
-        bean.JsonData.adec_sav_amtnumeric ="";  //储值消费金额  不用填写
+        bean.JsonData.as_flow_no = flowNo;//小票号
+        bean.JsonData.adec_consume_num =integral; //本单积分值
+//        bean.JsonData.adec_consume_amt ="";  //本单消费金额  不用填写
+//        bean.JsonData.adec_sav_amtnumeric ="";  //储值消费金额  不用填写
         bean.JsonData.as_card_pass = mPassword;//卡密码
         bean.JsonData.memo = mEtRemarks.getText().toString().trim();
         mApi.integralSubtract(bean);
@@ -170,13 +224,46 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");
                 }
+                AlertUtil.dismissProgressDialog();
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
+            //取小票号
+            case Config.MESSAGE_FLOW_NO:
+                GetFlowNoBeanResult.FlowNoJson result = (GetFlowNoBeanResult.FlowNoJson)o;
+                if(result != null ){
+                    String flowNo = MyUtils.formatFlowNo(result.getFlowNo());
+                    integralSubtract(mAsType,mIntegral,flowNo);
+                }else{
+                    AlertUtil.showToast("没有小票号信息");
+                    AlertUtil.dismissProgressDialog();
+                }
+                break;
             case Config.RESULT_SUCCESS:
+                AlertUtil.dismissProgressDialog();
+                if(isSubtractIntegral){
+                    float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                                    - MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+                    mTvCurrentIntegral.setText(integral+"");
+                    AlertUtil.showToast("积分冲减成功！");
+                }else{
+                    AlertUtil.showToast("积分奖励成功！");
+                    float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                            + MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+                    mTvCurrentIntegral.setText(integral+"");
+                }
+                mEtSubtractIntegral.setText("");
+                mEtRemarks.setText("");
+                break;
             case Config.RESULT_FAIL:
-                AlertUtil.showToast(o.toString());
+                AlertUtil.dismissProgressDialog();
+                if(isSubtractIntegral){
+                    AlertUtil.showToast("积分冲减失败！");
+                }else{
+                    AlertUtil.showToast("积分奖励失败！");
+                }
                 break;
         }
     }

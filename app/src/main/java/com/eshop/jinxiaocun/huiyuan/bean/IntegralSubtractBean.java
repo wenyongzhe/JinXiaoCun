@@ -24,9 +24,9 @@ public class IntegralSubtractBean extends BaseBean {
         public String oper_id;  //操作人员
         public String branch_no;     //机构编码
         public String as_flow_no; //小票号
-        public String adec_consume_num; //本单积分值
-        public String adec_consume_amt;  //本单消费金额
-        public String adec_sav_amtnumeric;  //储值消费金额
+        public float adec_consume_num; //本单积分值
+        public float adec_consume_amt;  //本单消费金额
+        public float adec_sav_amtnumeric;  //储值消费金额
         public String as_card_pass;//卡密码
         public String memo;    //备注
 

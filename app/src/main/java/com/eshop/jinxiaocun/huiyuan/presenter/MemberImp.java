@@ -52,7 +52,7 @@ public class MemberImp implements IMemberList{
     @Override
     public void addMemberData(AddMemberBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new AddMemberInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new AddMemberInterface());
     }
 
     /**
@@ -93,7 +93,7 @@ public class MemberImp implements IMemberList{
     @Override
     public void setMemberRechargeData(MemberRechargeBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new MemberRechargeInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new MemberRechargeInterface());
     }
     /**
      * 积分冲减
@@ -102,7 +102,7 @@ public class MemberImp implements IMemberList{
     @Override
     public void integralSubtract(IntegralSubtractBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new IntegralSubtractInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new IntegralSubtractInterface());
     }
 
     /**
@@ -129,7 +129,7 @@ public class MemberImp implements IMemberList{
     @Override
     public void integralExchange(IntegralExchangeBean bean) {
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doGet(WebConfig.getPostWsdlUri(),map,new IntegralExchangeInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new IntegralExchangeInterface());
     }
 
     //新增会员

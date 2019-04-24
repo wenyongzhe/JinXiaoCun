@@ -8,24 +8,24 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.huiyuan.bean.IntegralExchangeGoodsResultItem;
+import com.eshop.jinxiaocun.huiyuan.bean.ExpenseCheckResultItem;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2019/4/23
+ * Date: 2019/4/24
  * Desc:
  */
 
-public class ExchangeGoodsAdapter extends BaseAdapter {
+public class ExpenseCheckAdapter extends BaseAdapter {
 
-    private List<IntegralExchangeGoodsResultItem> mListInfo;
+    private List<ExpenseCheckResultItem> mListInfo;
     private LayoutInflater inflater = null;
     private int itemClickPosition = -1;
 
-    public ExchangeGoodsAdapter(List<IntegralExchangeGoodsResultItem> listInfo) {
+    public ExpenseCheckAdapter(List<ExpenseCheckResultItem> listInfo) {
         this.mListInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -48,18 +48,22 @@ public class ExchangeGoodsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_exchange_goods,parent,false);
+            convertView = inflater.inflate(R.layout.item_expense_check_list,parent,false);
         }
-        TextView tvGoodsName = ViewHolderUtils.get(convertView, R.id.tv_goods_name);
-        TextView tvPrice = ViewHolderUtils.get(convertView, R.id.tv_price);
-        TextView tvNumber = ViewHolderUtils.get(convertView, R.id.tv_number);
-        TextView tvIntegral = ViewHolderUtils.get(convertView, R.id.tv_integral);
+        TextView tvFlowNo = ViewHolderUtils.get(convertView, R.id.tv_flow_no);
+        TextView tvBranchName = ViewHolderUtils.get(convertView, R.id.tv_branch_name);
+        TextView tvCashierName = ViewHolderUtils.get(convertView, R.id.tv_cashier_name);
+        TextView tvPayTime = ViewHolderUtils.get(convertView, R.id.tv_pay_time);
+        TextView tvAmount = ViewHolderUtils.get(convertView, R.id.tv_amount);
+        TextView tvRemarks = ViewHolderUtils.get(convertView, R.id.tv_remarks);
 
-        IntegralExchangeGoodsResultItem info = mListInfo.get(position);
-        tvGoodsName.setText(info.getName());
-        tvPrice.setText("￥"+0);
-        tvNumber.setText(info.getSelectNum()+"/"+info.getNum());
-        tvIntegral.setText(info.getJiFen()+"");
+        ExpenseCheckResultItem info = mListInfo.get(position);
+        tvFlowNo.setText(""+info.getFlow_no());
+        tvBranchName.setText(""+info.getBranch_name());
+        tvCashierName.setText(""+info.getCashier_id());
+        tvPayTime.setText(""+info.getPay_time());
+        tvAmount.setText(""+info.getAmount());
+        tvRemarks.setText(""+info.getMemo());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -69,7 +73,7 @@ public class ExchangeGoodsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListInfo(List<IntegralExchangeGoodsResultItem> listInfo) {
+    public void setListInfo(List<ExpenseCheckResultItem> listInfo) {
         this.mListInfo = listInfo;
         notifyDataSetChanged();
     }
@@ -81,4 +85,5 @@ public class ExchangeGoodsAdapter extends BaseAdapter {
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }
+
 }

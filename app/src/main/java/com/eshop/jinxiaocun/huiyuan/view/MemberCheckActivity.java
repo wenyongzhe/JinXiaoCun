@@ -67,6 +67,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
                         AlertUtil.showToast("请输入卡号/手机号/姓名");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(MemberCheckActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
                     hideSoftInput();
                     return true;
@@ -98,7 +99,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
-
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -110,6 +111,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         switch (flag) {
 
             case Config.MESSAGE_OK:
+                AlertUtil.dismissProgressDialog();
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     refreshUIByData(data.get(0));
@@ -118,6 +120,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
                 }
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
         }

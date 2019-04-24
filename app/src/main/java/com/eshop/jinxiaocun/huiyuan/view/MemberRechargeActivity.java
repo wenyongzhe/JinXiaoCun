@@ -75,6 +75,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                         AlertUtil.showToast("请输入会员卡号/手机号/姓名");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(MemberRechargeActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString());
                     hideSoftInput();
                     return true;
@@ -145,6 +146,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             AlertUtil.showToast("请输入会员卡号/手机号/姓名");
             return;
         }
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString());
         hideSoftInput();
     }
@@ -207,9 +209,9 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 }
                 break;
             case Config.RESULT_SUCCESS:
-                mTvCardNumber.setText("");
-                mTvName.setText("");
-                mTvBalance.setText("");
+                float balance = MyUtils.convertToFloat(mTvBalance.getText().toString().trim(),0)+
+                        MyUtils.convertToFloat(mTvAllRechargeMoney.getText().toString().trim(),0);
+                mTvBalance.setText(MyUtils.convertToString(balance,"0"));
                 mEtRechargeMoney.setText("");
                 mEtGiveFreeMoney.setText("");
                 mEtRemarks.setText("");

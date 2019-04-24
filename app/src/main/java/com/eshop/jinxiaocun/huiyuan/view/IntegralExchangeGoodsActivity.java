@@ -103,6 +103,7 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
         String cardNo = getIntent().getStringExtra("CardNo");
         mIntegral = getIntent().getFloatExtra("Integral",0);
         setTopToolBar("可兑换的礼品("+mIntegral+"积分)", R.mipmap.ic_left_light,"",0,"");
+        AlertUtil.showNoButtonProgressDialog(this,"正在获取兑换的礼品信息，请稍后...");
         mApi.getIntegralExchangeGoods(cardNo,mIntegral);
 
     }
@@ -174,10 +175,12 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
     public void handleResule(int flag, Object o) {
         switch (flag){
             case Config.MESSAGE_OK:
+                AlertUtil.dismissProgressDialog();
                 mDatas = (List<IntegralExchangeGoodsResultItem>) o;
                 mAdapter.setListInfo(mDatas);
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
         }

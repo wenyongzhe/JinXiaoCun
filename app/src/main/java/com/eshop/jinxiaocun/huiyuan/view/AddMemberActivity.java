@@ -52,7 +52,6 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
     EditText mEtRemarks;
 
     private IMemberList mApi;
-    private ProgressDialog mProgressDialog;
 
     @Override
     protected int getLayoutId() {
@@ -73,6 +72,7 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
                         AlertUtil.showToast("请输入卡号/手机号/姓名");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(AddMemberActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
                     hideSoftInput();
                     return true;
@@ -106,7 +106,7 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
-
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -153,7 +153,7 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
             return;
         }
 
-        mProgressDialog = AlertUtil.showNoButtonProgressDialog(this,"正在激活新会员，请稍后...");
+        AlertUtil.showNoButtonProgressDialog(this,"正在激活新会员，请稍后...");
         AddMemberBean bean = new AddMemberBean();
         bean.JsonData.OperInfo = Config.UserId;//操作人员
         bean.JsonData.Branch_No = Config.branch_no;
@@ -175,6 +175,7 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         switch (flag){
 
             case Config.MESSAGE_OK:
+                AlertUtil.dismissProgressDialog();
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     refreshUIByData(data.get(0));
@@ -183,13 +184,13 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
                 }
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
-
             case Config.RESULT_SUCCESS:
             case Config.RESULT_FAIL:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
-                mProgressDialog.dismiss();
                 break;
         }
     }

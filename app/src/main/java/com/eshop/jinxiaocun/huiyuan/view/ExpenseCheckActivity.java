@@ -6,11 +6,13 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.huiyuan.adapter.ExpenseCheckAdapter;
 import com.eshop.jinxiaocun.huiyuan.bean.ExpenseCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
@@ -21,6 +23,7 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,8 +45,12 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
     TextView mTvStartDate;
     @BindView(R.id.tv_end_date)
     TextView mTvEndDate;
+    @BindView(R.id.lv_expense_info)
+    ListView mListView;
 
     private IMemberList mApi;
+    private ExpenseCheckAdapter mAdapter;
+    private List<ExpenseCheckResultItem> mDatas = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -65,6 +72,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
                         AlertUtil.showToast("请输入会员ID");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(ExpenseCheckActivity.this,"正在查询消费信息，请稍后...");
                     mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                             mTvStartDate.getText().toString(),
                             mTvEndDate.getText().toString());
@@ -80,6 +88,10 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
     @Override
     protected void initData() {
         mApi = new MemberImp(this);
+
+        mAdapter = new ExpenseCheckAdapter(mDatas);
+        mListView.setAdapter(mAdapter);
+
     }
 
     @OnClick(R.id.iv_search)
@@ -88,6 +100,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
             AlertUtil.showToast("请输入会员ID");
             return ;
         }
+        AlertUtil.showNoButtonProgressDialog(this,"正在查询消费信息，请稍后...");AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                 mTvStartDate.getText().toString(),
                 mTvEndDate.getText().toString());
@@ -114,6 +127,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
             if (TextUtils.isEmpty(mEtSearch.getText().toString().trim())) {
                 return ;
             }
+            AlertUtil.showNoButtonProgressDialog(ExpenseCheckActivity.this,"正在查询消费信息，请稍后...");
             mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                     mTvStartDate.getText().toString(),
                     mTvEndDate.getText().toString());
@@ -142,6 +156,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
             if (TextUtils.isEmpty(mEtSearch.getText().toString().trim())) {
                 return ;
             }
+            AlertUtil.showNoButtonProgressDialog(ExpenseCheckActivity.this,"正在查询消费信息，请稍后...");
             mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                     mTvStartDate.getText().toString(),
                     mTvEndDate.getText().toString());
@@ -156,14 +171,16 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
         switch (flag) {
 
             case Config.MESSAGE_OK:
-                List<ExpenseCheckResultItem> data = (List<ExpenseCheckResultItem>) o;
-                if(data!=null && data.size()>0){
-
+                AlertUtil.dismissProgressDialog();
+                mDatas = (List<ExpenseCheckResultItem>) o;
+                if(mDatas!=null && mDatas.size()>0){
+                    mAdapter.setListInfo(mDatas);
                 }else{
                     AlertUtil.showToast("没有对应此卡号的消费信息！");
                 }
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
         }
@@ -175,5 +192,14 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
         if(inputMethodManager.isActive()){
             inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mDatas!=null){
+            mDatas.clear();
+            mDatas = null;
+        }
+        super.onDestroy();
     }
 }

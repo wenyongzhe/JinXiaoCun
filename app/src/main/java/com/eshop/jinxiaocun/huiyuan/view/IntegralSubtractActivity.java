@@ -79,6 +79,7 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
                         AlertUtil.showToast("请输入卡号/手机号/姓名");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(IntegralSubtractActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
                     hideSoftInput();
                     return true;
@@ -127,7 +128,7 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
-
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -218,13 +219,13 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         switch (flag) {
 
             case Config.MESSAGE_OK:
+                AlertUtil.dismissProgressDialog();
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     refreshUIByData(data.get(0));
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");
                 }
-                AlertUtil.dismissProgressDialog();
                 break;
             case Config.MESSAGE_ERROR:
                 AlertUtil.dismissProgressDialog();

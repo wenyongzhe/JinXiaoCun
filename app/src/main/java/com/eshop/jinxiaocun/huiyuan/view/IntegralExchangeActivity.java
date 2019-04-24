@@ -92,6 +92,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
                         AlertUtil.showToast("请输入卡号/手机号/姓名");
                         return false;
                     }
+                    AlertUtil.showNoButtonProgressDialog(IntegralExchangeActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
                     hideSoftInput();
                     return true;
@@ -164,7 +165,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
-
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -215,6 +216,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
         switch (flag) {
             //查询卡信息
             case Config.MESSAGE_OK:
+                AlertUtil.dismissProgressDialog();
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     refreshUIByData(data.get(0));

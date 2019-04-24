@@ -61,7 +61,7 @@ public class ExchangeGoodsAdapter extends BaseAdapter {
         IntegralExchangeGoodsResultItem info = mListInfo.get(position);
         tvGoodsName.setText(info.getName());
         tvPrice.setText("￥"+0);
-        tvNumber.setText(info.getNum()+"");
+        tvNumber.setText(info.getSelectNum()+"/"+info.getNum());
         tvIntegral.setText(info.getJiFen()+"");
 
         if (itemClickPosition == position) {

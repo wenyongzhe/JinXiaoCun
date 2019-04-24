@@ -14,7 +14,9 @@ import com.eshop.jinxiaocun.huiyuan.bean.IntegralExchangeGoodsResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
     private IntegralExchangeGoodsAdapter mAdapter;
 
     private List<IntegralExchangeGoodsResultItem> mDatas = new ArrayList<>();
+    private IntegralExchangeGoodsResultItem mSelectGoods;
     private float mIntegral;
 
     @Override
@@ -50,11 +53,9 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
 
         mAdapter = new IntegralExchangeGoodsAdapter(mDatas);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAdapter.setSelectGoodsCallbck(new IntegralExchangeGoodsAdapter.SelectGoodsCallback() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+            public void onSelectGoods(IntegralExchangeGoodsResultItem info) {
                 int selectQry=0;
                 for (IntegralExchangeGoodsResultItem data : mDatas) {
                     if(data.isSelect()){
@@ -63,23 +64,37 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
                 }
 
                 for (int i = 0; i < mDatas.size(); i++) {
-                    if(i==position){
+                    if(info.getBarCode().equals(mDatas.get(i).getBarCode())){
                         if(mDatas.get(i).isSelect()){//如果选中，再次点击则视为放弃选中
                             mDatas.get(i).setSelect(false);
+                            mDatas.get(i).setSelectNum(0f);
                         }else{
                             if(selectQry>5 || selectQry==5){
                                 AlertUtil.showToast("最多可选5种礼品！");
                                 return;
                             }
-                            mDatas.get(i).setSelect(true);
+                            if(mDatas.get(i).getNum()>1){//原数量大于2个   手动输入礼品数量
+                                mSelectGoods = mDatas.get(i);
+                                Intent intent = new Intent(IntegralExchangeGoodsActivity.this,ModifyCountDialog.class);
+                                intent.putExtra("countN",""+mSelectGoods.getNum());
+                                startActivityForResult(intent,222);
+                            }else if(mDatas.get(i).getNum()==1){
+                                mDatas.get(i).setSelectNum(1f);
+                                mDatas.get(i).setSelect(true);
+                            }
+
                         }
+                        break;
                     }
                 }
 
-                mAdapter.setListInfo(mDatas);
+                if(mSelectGoods==null){
+                    mAdapter.setListInfo(mDatas);
+                }
 
             }
         });
+
     }
 
     @Override
@@ -103,7 +118,7 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
         List<IntegralExchangeGoodsResultItem> selectDatas = new ArrayList<>();
         for (IntegralExchangeGoodsResultItem info : mDatas) {
             if(info.isSelect()){
-                allSelectIntegral = +info.getJiFen();
+                allSelectIntegral +=(info.getJiFen()*info.getSelectNum());
                 selectDatas.add(info);
             }
         }
@@ -119,6 +134,30 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
             setResult(RESULT_OK,intent);
         }
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==222 && resultCode==RESULT_OK){
+            if(mSelectGoods!=null && data!=null){
+                float selectNum = MyUtils.convertToFloat(data.getStringExtra("countN"),0);
+                if(selectNum>mSelectGoods.getNum()){
+                    AlertUtil.showToast("输入的数量不能大于原有数量("+mSelectGoods.getNum()+")");
+                    mSelectGoods = null;
+                    return;
+                }
+                for (int i = 0; i < mDatas.size(); i++) {
+                    if (mSelectGoods.getBarCode().equals(mDatas.get(i).getBarCode())) {
+                        mDatas.get(i).setSelectNum(selectNum);
+                        mDatas.get(i).setSelect(true);
+                        mAdapter.setListInfo(mDatas);
+                        mSelectGoods = null;
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     @Override

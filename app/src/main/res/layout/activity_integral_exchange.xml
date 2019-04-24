@@ -206,17 +206,19 @@
         />
 
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:background="@color/divider"
         />
 
     <LinearLayout
         android:id="@+id/ll_surplus_integral"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_item_height_35"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:visibility="gone"

@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.huiyuan.view;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -57,7 +58,8 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     TextView mTvCurrentIntegral;//卡的当前积分
     @BindView(R.id.lv_exchange_goods)
     ListView mListView;
-
+    @BindView(R.id.view_line)
+    View mLine;
     @BindView(R.id.ll_surplus_integral)
     LinearLayout mLAayoutSurplusIntegral;
     @BindView(R.id.tv_all_select_integal)
@@ -70,8 +72,8 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
 
     private IMemberList mApi;
     private ExchangeGoodsAdapter mAdapter;
-
     private List<IntegralExchangeGoodsResultItem> mDatas = new ArrayList<>();
+    private MemberCheckResultItem mCardInfo;
 
     @Override
     protected int getLayoutId() {
@@ -108,6 +110,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     }
 
     private void refreshUIByData(MemberCheckResultItem data) {
+        mCardInfo = data;
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());
@@ -117,12 +120,13 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     }
 
     private void refreshButtomUIByData(){
+        mLine.setVisibility(View.VISIBLE);
         mLAayoutSurplusIntegral.setVisibility(View.VISIBLE);
         mBtnExchangeGoods.setVisibility(View.VISIBLE);
 
         float allSelectIntegral=0;
         for (IntegralExchangeGoodsResultItem info : mDatas) {
-            allSelectIntegral=allSelectIntegral + info.getJiFen();
+            allSelectIntegral+=info.getJiFen()*info.getSelectNum();
         }
         float surplusIntegral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim()
                 , 0)-allSelectIntegral;
@@ -136,6 +140,11 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     public void onClickLookExchangeGoods(){
         if (TextUtils.isEmpty(mTvCardNumber.getText().toString().trim())) {
             AlertUtil.showToast("请查询会员卡信息，再查询兑换商品信息");
+            return;
+        }
+
+        if(mCardInfo!=null && "1".equals(mCardInfo.getAcc_Flag())){
+            AlertUtil.showToast("非积分卡!");
             return;
         }
 
@@ -163,14 +172,27 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     //兑换礼品
     @OnClick(R.id.btn_exchange_goods)
     public void onClickExchangeGoods(){
+
+        AlertUtil.showNoButtonProgressDialog(this,"正在兑换礼品，请稍后...");
+        //HYGifts   编码1*数量*积分|编码2*数量*积分  商锐的兑换礼品格式
+        //HYGifts  编码1*数量*积分*批次号|编码2*数量*积分*批次号   eshop的兑换俄式
+        StringBuffer sbf = new StringBuffer();
+        for (int i = 0; i < mDatas.size(); i++) {
+            sbf.append(mDatas.get(i).getBarCode());
+            sbf.append("*"+mDatas.get(i).getSelectNum());
+            sbf.append("*"+mDatas.get(i).getJiFen());
+            if(i!=mDatas.size()-1){
+                sbf.append("|");
+            }
+        }
+
         IntegralExchangeBean bean = new IntegralExchangeBean();
         bean.JsonData.Branch_No = Config.branch_no;
         bean.JsonData.OperInfo = Config.UserId;
         bean.JsonData.CardNo_TelNo = mTvCardNumber.getText().toString().trim();
-        bean.JsonData.HYGifts = "";//礼品信息
-        bean.JsonData.JiFen =0;//积分
+        bean.JsonData.HYGifts = sbf.toString().trim();//礼品信息
+        bean.JsonData.JiFen = MyUtils.convertToFloat(mTvAllSelectIntegral.getText().toString().trim(),0);//积分
         bean.JsonData.Memo = "";//备注
-
         mApi.integralExchange(bean);
 
     }
@@ -191,6 +213,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
+            //查询卡信息
             case Config.MESSAGE_OK:
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
@@ -200,8 +223,20 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
                 }
                 break;
             case Config.MESSAGE_ERROR:
-            case Config.RESULT_SUCCESS:
             case Config.RESULT_FAIL:
+                AlertUtil.dismissProgressDialog();
+                AlertUtil.showToast(o.toString());
+                break;
+            case Config.RESULT_SUCCESS:
+                mLine.setVisibility(View.GONE);
+                mLAayoutSurplusIntegral.setVisibility(View.GONE);
+                mBtnExchangeGoods.setVisibility(View.GONE);
+                mTvCurrentIntegral.setText(mTvSurplusIntegral.getText().toString().trim());
+                mTvAllSelectIntegral.setText("0");
+                mTvSurplusIntegral.setText("0");
+                mDatas.clear();
+                mAdapter.setListInfo(mDatas);
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
         }

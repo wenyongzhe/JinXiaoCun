@@ -26,8 +26,9 @@ import java.util.List;
 public class IntegralExchangeGoodsAdapter extends BaseAdapter {
 
     private List<IntegralExchangeGoodsResultItem> mListInfo;
-    private LayoutInflater inflater = null;
+    private LayoutInflater inflater;
     private int itemClickPosition = -1;
+    private SelectGoodsCallback mSelectGoodsCallback;
 
     public IntegralExchangeGoodsAdapter(List<IntegralExchangeGoodsResultItem> listInfo) {
         this.mListInfo = listInfo;
@@ -62,10 +63,10 @@ public class IntegralExchangeGoodsAdapter extends BaseAdapter {
         TextView tvEndDate = ViewHolderUtils.get(convertView, R.id.tv_end_date);
         ImageView ivSelect = ViewHolderUtils.get(convertView, R.id.iv_select);
 
-        IntegralExchangeGoodsResultItem info = mListInfo.get(position);
+        final IntegralExchangeGoodsResultItem info = mListInfo.get(position);
         tvGoodsName.setText(info.getName());
         tvPrice.setText("￥"+0);
-        tvNumber.setText(info.getNum()+"");
+        tvNumber.setText(info.getSelectNum()+"/"+info.getNum());
         tvIntegral.setText(info.getJiFen()+"");
 
         if(!TextUtils.isEmpty(info.getBeginTime())){
@@ -86,6 +87,14 @@ public class IntegralExchangeGoodsAdapter extends BaseAdapter {
             ivSelect.setImageResource(R.drawable.checkbox_unchecked);
         }
 
+        ivSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mSelectGoodsCallback!=null){
+                    mSelectGoodsCallback.onSelectGoods(info);
+                }
+            }
+        });
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -100,6 +109,10 @@ public class IntegralExchangeGoodsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void setSelectGoodsCallbck(SelectGoodsCallback selectGoodsCallback){
+        this.mSelectGoodsCallback = selectGoodsCallback;
+    }
+
     public int getItemClickPosition() {
         return itemClickPosition;
     }
@@ -107,4 +120,10 @@ public class IntegralExchangeGoodsAdapter extends BaseAdapter {
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }
+
+    public interface SelectGoodsCallback{
+        void onSelectGoods(IntegralExchangeGoodsResultItem info);
+    }
+
+
 }

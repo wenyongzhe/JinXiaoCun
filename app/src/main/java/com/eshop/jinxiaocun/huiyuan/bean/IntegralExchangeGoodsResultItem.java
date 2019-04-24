@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class IntegralExchangeGoodsResultItem implements Serializable {
 
-    private String cBarCode;  //编号
+    private String BarCode;  //编号
     private String SelfCode;  //自编码
     private String Name;      //名称
     private float Num;      //数量
@@ -19,13 +19,14 @@ public class IntegralExchangeGoodsResultItem implements Serializable {
     private String EndTime;  //兑换结束时间
     private String BranchNo; //机构号
     private boolean isSelect;
+    private float selectNum;
 
-    public String getcBarCode() {
-        return cBarCode;
+    public String getBarCode() {
+        return BarCode;
     }
 
-    public void setcBarCode(String cBarCode) {
-        this.cBarCode = cBarCode;
+    public void setBarCode(String BarCode) {
+        this.BarCode = BarCode;
     }
 
     public String getSelfCode() {
@@ -90,5 +91,13 @@ public class IntegralExchangeGoodsResultItem implements Serializable {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public float getSelectNum() {
+        return selectNum;
+    }
+
+    public void setSelectNum(float selectNum) {
+        this.selectNum = selectNum;
     }
 }

@@ -114,9 +114,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private GetOptAuthResult mGetOptAuthResult = null;
     private boolean hasDiscount = false;
-//    private BluetoothService mService = null;
     private static boolean is58mm = true;
-    private BluetoothAdapter mBluetoothAdapter = null;
     private String Pay_way = "";
     private String Pay_way2 = "";
     private boolean isVipPay = false;
@@ -125,102 +123,11 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mService = new BluetoothService(this, mHandler);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mLinearLayout.setBackgroundColor(getResources().getColor(R.color.item_gray_line));
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-        }
         setScanBroadCast();
         AidlUtil.getInstance().initPrinter();
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        // If Bluetooth is not on, request that it be enabled.
-//        // setupChat() will then be called during onActivityResult
-//        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
-//            Intent enableIntent = new Intent(
-//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
-//            // Otherwise, setup the session
-//        } else {
-//            if (mService == null)
-//                mService = new BluetoothService(this, mHandler);
-//        }
-//    }
-
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        // Stop the Bluetooth services
-//        if (mService != null)
-//            mService.stop();
-//        if (DEBUG)
-//            Log.e("", "--- ON DESTROY ---");
-//    }
-
-//    @Override
-//    public synchronized void onResume() {
-//        super.onResume();
-//        try {
-//            if(!mService.isEnabled()){
-//                mService.enabled();
-//                //AlertUtil.showAlert(LingShouScanActivity.this,"提示","请打开蓝牙" );
-//            }else {
-//                if (mService != null) {
-//
-//                    if (mService.getState() == BluetoothService.STATE_NONE) {
-//                        // Start the Bluetooth services
-//                        mService.start();
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//        }
-//    }
-
-//    private final Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
-//                    switch (msg.arg1) {
-//                        case BluetoothService.STATE_CONNECTED:
-//                            ToastUtils.showShort("连接成功");
-//                            printMs();
-//                            break;
-//                        case BluetoothService.STATE_CONNECTING:
-//                            ToastUtils.showShort("连接中");
-//                            break;
-//                        case BluetoothService.STATE_LISTEN:
-//                        case BluetoothService.STATE_NONE:
-//                            //ToastUtils.showShort("没有连接打印机");
-//                            break;
-//                    }
-//                    break;
-//                case SystemSettingActivity.MESSAGE_WRITE:
-//
-//                    break;
-//                case SystemSettingActivity.MESSAGE_READ:
-//
-//                    break;
-//                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
-//                    break;
-//                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
-//                    Toast.makeText(getApplicationContext(), "无法连接设备",
-//                            Toast.LENGTH_SHORT).show();
-//                    break;
-//                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-//                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
-//                            Toast.LENGTH_SHORT).show();
-//
-//            }
-//        }
-//    };
 
     //接收条码
     @Override

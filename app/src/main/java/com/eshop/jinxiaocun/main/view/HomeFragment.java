@@ -39,7 +39,6 @@ public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.gridview)
     GridView gridview;
-    private BluetoothAdapter mBluetoothAdapter = null;
 
     private Unbinder unbinder;
     private int[] iconIds = {
@@ -81,7 +80,6 @@ public class HomeFragment extends BaseFragment {
         gridview = (GridView) view.findViewById(R.id.gridview);
         gridview.setAdapter(menuAdapter);
         gridview.setOnItemClickListener(this);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         loadData();
         return view;
     }
@@ -111,17 +109,9 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 2:
-                if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
-                    Intent enableIntent = new Intent(
-                            BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
-                    // Otherwise, setup the session
-                } else {
-                    intent.setClass(Application.mContext, LingShouScanActivity.class);
-                    intent.putExtra(Config.SHEET_NO,"");
-                    startActivity(intent);
-                }
-
+                intent.setClass(Application.mContext, LingShouScanActivity.class);
+                intent.putExtra(Config.SHEET_NO,"");
+                startActivity(intent);
                 break;
             case 3:
                 intent.setClass(Application.mContext, PandianManagerActivity.class);

@@ -257,6 +257,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.MESSAGE_GOODS_INFOR:
                 mGetClassPluResultList = (List<GetClassPluResult>)o;
+                if(mGetClassPluResultList!=null && mGetClassPluResultList.size()==0){
+                    AlertUtil.showAlert(LingShouScanActivity.this,"提示", "没有商品");
+                    return;
+                }
                 if(mGetClassPluResultList!=null && mGetClassPluResultList.size()>1){
                     intent = new Intent(this, QreShanpingActivity.class);
                     intent.putExtra("barcode",et_barcode.getText().toString());

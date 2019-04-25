@@ -23,7 +23,7 @@ public class GetClassPluInfoBean extends BaseBean{
     public class GetClassPluInfoData {
 
         private String as_branchNo;//" :”0001” // 门店机构
-        private String as_posId;// " : “1001”,  //POSID号
+        private String oper_id;// " : “1001”,  //POSID号
         private String as_cls;//查询类别
         private String PerNum;//每页显示数量
         private String PageNum;//页码
@@ -37,12 +37,12 @@ public class GetClassPluInfoBean extends BaseBean{
             this.as_branchNo = as_branchNo;
         }
 
-        public String getAs_posId() {
-            return as_posId;
+        public String getOper_id() {
+            return oper_id;
         }
 
-        public void setAs_posId(String as_posId) {
-            this.as_posId = as_posId;
+        public void setOper_id(String oper_id) {
+            this.oper_id = oper_id;
         }
 
         public String getAs_cls() {

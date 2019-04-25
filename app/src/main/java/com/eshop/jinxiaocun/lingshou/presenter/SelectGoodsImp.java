@@ -47,7 +47,7 @@ public class SelectGoodsImp implements ISelectGoods{
     public void getClassPluInfo(String as_cls, int pageNum) {
         GetClassPluInfoBean mGetClassPluInfoBean = new GetClassPluInfoBean();
         mGetClassPluInfoBean.getJsonData().setAs_branchNo(Config.branch_no);
-        mGetClassPluInfoBean.getJsonData().setAs_posId(Config.posid);
+        mGetClassPluInfoBean.getJsonData().setOper_id(Config.UserName);
         mGetClassPluInfoBean.getJsonData().setAs_cls(as_cls);
         mGetClassPluInfoBean.getJsonData().setPerNum("50");
         mGetClassPluInfoBean.getJsonData().setPageNum(""+pageNum);

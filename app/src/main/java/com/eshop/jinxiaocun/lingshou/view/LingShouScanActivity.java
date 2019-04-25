@@ -98,9 +98,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     public final static int SELL_DANPING_YIJIA = 111;
     public final static int SELL_ZHENDAN_YIJIA = 112;
     public final static int SELL_ZHENDAN_ZHEKOU = 113;
-    public String Play_type = "RMB";
     public boolean isOk = false;
-    private LinearLayout ly_kaidan;
     private ILingshouScan mLingShouScanImp;
     private IOtherModel mIOtherModel;
     protected List<SaleFlowBean> mSaleFlowBeanList;
@@ -113,7 +111,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private Double payMoney = 0.0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private GetOptAuthResult mGetOptAuthResult = null;
-    private boolean hasDiscount = false;
     private static boolean is58mm = true;
     private String Pay_way = "";
     private String Pay_way2 = "";

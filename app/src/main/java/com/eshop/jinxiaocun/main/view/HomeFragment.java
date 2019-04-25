@@ -17,6 +17,7 @@ import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.caigou.view.CaigouManagerActivity;
 import com.eshop.jinxiaocun.huiyuan.view.HuiyuanManagerActivity;
 import com.eshop.jinxiaocun.lingshou.view.GetSellBillActivity;
+import com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
@@ -109,7 +110,7 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 2:
-                intent.setClass(Application.mContext, LingShouScanActivity.class);
+                intent.setClass(Application.mContext, LingShouCreatAtivity.class);
                 intent.putExtra(Config.SHEET_NO,"");
                 startActivity(intent);
                 break;

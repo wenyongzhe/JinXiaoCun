@@ -125,7 +125,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         super.onCreate(savedInstanceState);
         mLinearLayout.setBackgroundColor(getResources().getColor(R.color.item_gray_line));
         setScanBroadCast();
-        AidlUtil.getInstance().initPrinter();
     }
 
 

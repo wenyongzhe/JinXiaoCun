@@ -60,7 +60,9 @@ public class Application extends android.app.Application{
         FileUtils.createOrExistsDir(Config.logPath);
         FileUtils.createOrExistsFile(Config.logFilePath);
 
+        //sunmi机器打印机，通过aidl方式链接，初始化打印机
         AidlUtil.getInstance().connectPrinterService(this);
+        AidlUtil.getInstance().initPrinter();
     }
 
     public static String getIMEI() {

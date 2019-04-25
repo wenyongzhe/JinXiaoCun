@@ -452,7 +452,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
 
-        //AidlUtil.getInstance().printText(content, size, isBold, isUnderLine);
+        //AidlUtil.getInstance().printText("123456打印测试", 24, false, false);
 
         String lang = getString(R.string.strLang);
         if ((lang.compareTo("cn")) == 0) {

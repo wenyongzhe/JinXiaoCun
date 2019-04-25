@@ -22,6 +22,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
 import com.eshop.jinxiaocun.main.view.MainActivity;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -116,6 +117,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
         loginAction = new LoginImp(this);
 
         HomeProhibit();
+
     }
 
 

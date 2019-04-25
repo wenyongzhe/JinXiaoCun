@@ -79,6 +79,7 @@ public class AidlUtil {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             woyouService = IWoyouService.Stub.asInterface(service);
+            AidlUtil.getInstance().initPrinter();
         }
     };
 

@@ -89,7 +89,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     Button btn_jiesuan;//
 
-    private BluetoothAdapter mBluetoothAdapter = null;
     private static boolean is58mm = true;
     public boolean isOk = false;
     private boolean hasMoling = false;
@@ -108,7 +107,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     protected List<PlayFlowBean> mPlayFlowBeanList = new ArrayList<>();
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
-    private BluetoothService mService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,12 +196,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }
         });
         mLingShouScanImp.getSystemInfo();
-        mService = new BluetoothService(this, mHandler);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     private void displayLayout(boolean display){
@@ -215,20 +207,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             ly_fukuan_zhaoling.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, SystemSettingActivity.REQUEST_ENABLE_BT);
-        } else {
-            if (mService == null)
-                mService = new BluetoothService(this, mHandler);
-        }
-    }
-
 
     //打印小票
     private void printMs() {
@@ -280,24 +258,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Stop the Bluetooth services
-        if (mService != null)
-            mService.stop();
-        if (DEBUG)
-            Log.e("", "--- ON DESTROY ---");
     }
 
     @Override
     public synchronized void onResume() {
         super.onResume();
-
-        if (mService != null) {
-
-            if (mService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Bluetooth services
-                mService.start();
-            }
-        }
     }
 
 
@@ -393,12 +358,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         },R.string.txt_print, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (mService!=null && mService.getState() != BluetoothService.STATE_CONNECTED){
-                                    Intent serverIntent = new Intent(PayActivity.this, DeviceListActivity.class);
-                                    startActivityForResult(serverIntent, SystemSettingActivity.REQUEST_CONNECT_DEVICE);
-                                }
                                 AlertUtil.dismissDialog();
                                 cancle();
+                                Print_Ex();
                             }
                 });
 //                printMs();
@@ -848,138 +810,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
 
-        String lang = getString(R.string.strLang);
-        if ((lang.compareTo("cn")) == 0) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
-            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-            String str = formatter.format(curDate);
-            String date = str + "\n\n\n";
-            if (is58mm) {
-
-                try {
-//                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 6);//
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-//                    SendDataByte(qrcode);
-
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x11;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("专卖店\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x00;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x00;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    String mes = "";
-                    int shuliang = 0;
-                    mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
-                    SendDataByte(mes.getBytes("GBK"));
-                    mes = "品名       数量    单价    金额\n";
-                    for(int i=0; i<mListData.size(); i++){
-                        GetClassPluResult mGetClassPluResult = mListData.get(i);
-                        Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-                        shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
-                        mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
-                    }
-                    SendDataByte(mes.getBytes("GBK"));
-                    mes = "数量：                "+shuliang+"\n总计：                "+money+"\n付款：                "+et_pay_money.getText().toString()+"\n找零：                "+et_pay_money.getText().toString()+"\n";
-                    SendDataByte(mes.getBytes("GBK"));
-                    mes = "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
-                    SendDataByte(mes.getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x11;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x00;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x00;
-                    SendDataByte(Command.GS_ExclamationMark);
-
-//                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x02;
-                    SendDataByte(Command.ESC_Align);
-                    SendDataString(date);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
-                    SendDataByte(Command.GS_V_m_n);
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    byte[] qrcode = PrinterCommand.getBarCommand("资江电子热敏票据打印机!", 0, 3, 8);
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(qrcode);
-
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x11;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("NIKE专卖店\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x00;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x00;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("门店号: 888888\n单据  S00003333\n收银员：1001\n单据日期：xxxx-xx-xx\n打印时间：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
-                    SendDataByte("品名            数量    单价    金额\nNIKE跑鞋        10.00   899     8990\nNIKE篮球鞋      10.00   1599    15990\n".getBytes("GBK"));
-                    SendDataByte("数量：                20.00\n总计：                16889.00\n付款：                17000.00\n找零：                111.00\n".getBytes("GBK"));
-                    SendDataByte("公司名称：NIKE\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-11111111\n服务专线：400-xxx-xxxx\n===========================================\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x11;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("谢谢惠顾,欢迎再次光临!\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x00;
-                    SendDataByte(Command.ESC_Align);
-                    Command.GS_ExclamationMark[2] = 0x00;
-                    SendDataByte(Command.GS_ExclamationMark);
-                    SendDataByte("(以上信息为测试模板,如有苟同，纯属巧合!)\n".getBytes("GBK"));
-                    Command.ESC_Align[2] = 0x02;
-                    SendDataByte(Command.ESC_Align);
-                    SendDataString(date);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(1));
-                    SendDataByte(Command.GS_V_m_n);
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
-    /*
-     *SendDataByte
-     */
-    private void SendDataByte(byte[] data) {
 
-        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        mService.write(data);
-    }
-
-    /*
-     * SendDataString
-     */
-    private void SendDataString(String data) {
-
-        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        if (data.length() > 0) {
-            try {
-                mService.write(data.getBytes("GBK"));
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }
 
 }

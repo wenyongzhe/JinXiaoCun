@@ -143,9 +143,9 @@ public class MemberImp implements IMemberList{
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,"保存成功");
+                    mHandler.handleResule(Config.RESULT_SUCCESS,"保存成功");
                 }else{
-                    mHandler.handleResule(Config.RESULT_SUCCESS,"保存失败:"+msg);
+                    mHandler.handleResule(Config.RESULT_FAIL,"保存失败:"+msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.RESULT_FAIL,"保存异常:"+e.getMessage());

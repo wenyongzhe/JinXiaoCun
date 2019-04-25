@@ -153,6 +153,17 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
             return;
         }
 
+        //正则表达式  判断日期为合法日期
+        String rexp = "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))";
+        Pattern pat = Pattern.compile(rexp);
+        Matcher mat = pat.matcher(mEtBirthday.getText().toString().trim());
+        boolean dateType = mat.matches();
+        if(!dateType){
+            AlertUtil.showToast("生日格式为xxxx-xx-xx/xxxx/xx/xx");
+            return;
+        }
+
+
         AlertUtil.showNoButtonProgressDialog(this,"正在激活新会员，请稍后...");
         AddMemberBean bean = new AddMemberBean();
         bean.JsonData.OperInfo = Config.UserId;//操作人员

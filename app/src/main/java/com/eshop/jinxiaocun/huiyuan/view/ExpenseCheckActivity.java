@@ -100,7 +100,7 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
             AlertUtil.showToast("请输入会员ID");
             return ;
         }
-        AlertUtil.showNoButtonProgressDialog(this,"正在查询消费信息，请稍后...");AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
+        AlertUtil.showNoButtonProgressDialog(this,"正在查询消费信息，请稍后...");
         mApi.getExpenseCheckData(mEtSearch.getText().toString().trim(),
                 mTvStartDate.getText().toString(),
                 mTvEndDate.getText().toString());
@@ -169,7 +169,6 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
-
             case Config.MESSAGE_OK:
                 AlertUtil.dismissProgressDialog();
                 mDatas = (List<ExpenseCheckResultItem>) o;

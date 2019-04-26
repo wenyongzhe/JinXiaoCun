@@ -20,6 +20,10 @@ public class MemberCheckResultItem {
     private String Acc_Flag="";//--是否积分 (是0  否1)
     private String Password="";    //密码
     private String ValidDate="";//有效期
+    private String vip_tel;//电话号码
+    private String mobile;//手机号码
+    private String vip_sex;// 性别
+    private String memo;//备注
 
     public String getCardNo_TelNo() {
         return CardNo_TelNo;
@@ -115,5 +119,37 @@ public class MemberCheckResultItem {
 
     public void setValidDate(String validDate) {
         ValidDate = validDate;
+    }
+
+    public String getVip_tel() {
+        return vip_tel;
+    }
+
+    public void setVip_tel(String vip_tel) {
+        this.vip_tel = vip_tel;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getVip_sex() {
+        return vip_sex;
+    }
+
+    public void setVip_sex(String vip_sex) {
+        this.vip_sex = vip_sex;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

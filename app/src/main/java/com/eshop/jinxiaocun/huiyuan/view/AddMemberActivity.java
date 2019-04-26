@@ -92,11 +92,11 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         mEtSearch.setText("");
         mEtCardNumber.setText(info.getCardNo_TelNo());
         mEtName.setText(info.getCardName());
-        mEtPhoneNumber.setText("");
+        mEtPhoneNumber.setText(info.getMobile());
         mEtCardType.setText(info.getCardType());
-        mEtSex.setText("");
+        mEtSex.setText(info.getVip_sex());
         mEtBirthday.setText(info.getBirthDay());
-        mEtRemarks.setText("");
+        mEtRemarks.setText(info.getMemo());
     }
 
     //搜索

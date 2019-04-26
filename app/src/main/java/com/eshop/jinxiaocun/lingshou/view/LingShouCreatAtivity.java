@@ -12,12 +12,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
@@ -35,6 +37,7 @@ import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,11 +125,7 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView, 0, params);
         ButterKnife.bind(this);
-//        btSell.setText(R.string.bt_sell);
-//        tv_check_num.setText("总价：");
-//        tv_total_num.setText("商品数：");
-//        tv_order_num.setText("记录数：");
-        ly_buttom1.setVisibility(View.VISIBLE);
+        btSell.setText(R.string.bt_sell);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -173,6 +172,37 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
         mScanAdapter.notifyDataSetChanged();
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                itemClickPosition = i;
+                mScanAdapter.setItemClickPosition(i);
+                mScanAdapter.notifyDataSetInvalidated();
+                btn_zhekou(mListData.get(i));
+            }
+        });
+    }
+
+    void btn_zhekou(GetClassPluResult mGetClassPluResult) {
+        try {
+            if(mScanAdapter.getItemClickPosition() == -1){
+                ToastUtils.showShort("请选择商品");
+                return;
+            }
+            GetClassPluResult item = mGetClassPluResult;
+//            if( !canModifyPrice(item))return;
+            if(!item.getEnable_discount().equals("1")){
+                ToastUtils.showShort("此商品不允许打折。");
+            }
+            Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
+            intent.putExtra("limit",Config.danbiZheKoulimit);
+            startActivityForResult(intent,100);
+        }catch (Exception e){
+            Log.e("","");
+
+        }
+
     }
 
     @Override
@@ -199,6 +229,14 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
                     addListData();
                     reflashList();
                 }
+                break;
+            case Config.MESSAGE_INTENT_ZHEKOU:
+                String zhekou =  data.getStringExtra("countN");
+                GetClassPluResult mClass = mListData.get(itemClickPosition);
+//                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
+                mClass.setSale_price(zhekou);
+                mClass.setHasYiJia(true);
+                reflashList();
                 break;
         }
     }

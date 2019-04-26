@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -470,6 +472,32 @@ public class MyUtils {
             }
         }
         return valueLength;
+    }
+
+    /**
+     * 4舍5入。
+     * DecimalFormat is a concrete subclass of NumberFormat that formats decimal numbers.
+     * @param d
+     * @return
+     */
+    public static String formatDouble4(double d) {
+        DecimalFormat df = new DecimalFormat("#.0000");
+        return df.format(d);
+    }
+
+    /**
+     * NumberFormat is the abstract base class for all number formats.
+     * This class provides the interface for formatting and parsing numbers.
+     * @param d
+     * @return
+     */
+    public static String formatDouble3(double d) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        // 保留两位小数
+        nf.setMaximumFractionDigits(4);
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(RoundingMode.UP);
+        return nf.format(d);
     }
 
 }

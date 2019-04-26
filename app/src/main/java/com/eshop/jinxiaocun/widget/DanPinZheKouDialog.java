@@ -73,7 +73,7 @@ public class DanPinZheKouDialog extends Activity {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
-                        tv_newprice.setText("￥"+(oldPrice*price/100));
+                        tv_newprice.setText("￥"+MyUtils.formatDouble3(oldPrice*price/100));
                     }
                 }catch (Exception e){
                 }
@@ -128,7 +128,7 @@ public class DanPinZheKouDialog extends Activity {
                 InputMethodManager.HIDE_NOT_ALWAYS);
         if(!TextUtils.isEmpty(countN)){
             Intent intent = new Intent();
-            intent.putExtra("countN",countN);
+            intent.putExtra("countN",tv_newprice.getText().toString().trim().replace("￥",""));
             setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
             finish();
         }else {

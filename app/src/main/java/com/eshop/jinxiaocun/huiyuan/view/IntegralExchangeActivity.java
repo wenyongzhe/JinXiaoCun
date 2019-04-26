@@ -115,6 +115,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());
+        mTvSex.setText(data.getVip_sex());
         mTvCardType.setText(data.getCardType());
         mTvStatus.setText(data.getCardState());
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));

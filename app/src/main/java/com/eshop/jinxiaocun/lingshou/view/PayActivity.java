@@ -127,8 +127,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         FlowNo = getIntent().getStringExtra("FlowNo");
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
 
-        money = initDouble(3,money);
-        money = addDouble(money);
+//        money = initDouble(3,money);
+//        money = addDouble(money);
         double moneyTemp0 = money*100.000;
         int moneyTemp = (int)moneyTemp0;
         fenRmb = moneyTemp%10;

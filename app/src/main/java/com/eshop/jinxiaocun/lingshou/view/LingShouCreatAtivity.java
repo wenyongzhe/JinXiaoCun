@@ -39,11 +39,13 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INetWorResult {
 
@@ -78,7 +80,6 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
     private IOtherModel mIOtherModel;
     protected List<SaleFlowBean> mSaleFlowBeanList;
     protected List<PlayFlowBean> mPlayFlowBeanList;
-    private String FlowNo = "";
     private Double total = 0.00;
     private List<GetPluPriceBeanResult> mGetPluPriceBeanResult;
     private List<GetClassPluResult> mGetClassPluResultList;
@@ -333,5 +334,17 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
     public void onRightClick() {
         Intent mIntent = new Intent(this, QreShanpingActivity.class);
         startActivityForResult(mIntent,100);
+    }
+
+    @OnClick(R.id.btn_add)
+    void sell() {
+        if(mListData==null ||mListData.size()==0){
+            ToastUtils.showShort("请选择商品");
+            return;
+        }
+        Intent mIntent = new Intent(this,LingShouScanActivity.class);
+        mIntent.putExtra("mListData", (Serializable) mListData);
+        startActivityForResult(mIntent,300);
+
     }
 }

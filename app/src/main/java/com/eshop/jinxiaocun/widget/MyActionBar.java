@@ -134,6 +134,9 @@ public final class MyActionBar extends LinearLayout {
         iconRight.setAlpha(transAlpha);
     }
 
+    public TextView getTvRight() {
+        return tvRight;
+    }
 
     /**
      * 设置数据

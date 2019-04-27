@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.PopupWindowCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -93,7 +95,11 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     ImageButton ib_seach;
     @BindView(R.id.btn_vip)
     Button btn_vip;
+    @BindView(R.id.ly_shanpingBarcode)
+    LinearLayout ly_shanpingBarcode;
 
+    private double gaiJiaMoney = 0;
+    private boolean hasGaiJia = false;
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
     public final static int SELL_ZHENDAN_YIJIA = 112;
@@ -115,7 +121,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private String Pay_way = "";
     private String Pay_way2 = "";
     private boolean isVipPay = false;
-
+    YouHuiPopupWindow mWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -152,8 +158,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         super.initView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
+        mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"更多优惠",this);
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
+        ly_shanpingBarcode.setVisibility(View.GONE);
         btSell.setText(R.string.bt_sell);
         tv_check_num.setText("总价：");
         tv_total_num.setText("商品数：");
@@ -226,9 +234,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         setHeaderTitle(R.id.tv_5, R.string.list_item_VipPrice, 100);
         setHeaderTitle(R.id.tv_6, R.string.list_item_Pici_Name, 100);
 
+        mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
-        mScanAdapter.notifyDataSetChanged();
+        reflashList();
     }
 
     @Override
@@ -599,10 +608,59 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         finish();
     }
 
+
     @Override
     public void onRightClick() {
-        Intent mIntent = new Intent(this, QreShanpingActivity.class);
-        startActivityForResult(mIntent,100);
+        mWindow = new YouHuiPopupWindow(this, new YouHuiPopupWindow.OnPopupWindowClick() {
+            @Override
+            public void OnClick(int id) {
+                if(mWindow.isShowing()){
+                    switch (id){
+                        case R.id.id_1:
+
+                            break;
+                        case R.id.id_2:
+                            btn_zhengdanzhekou();
+                            break;
+                    }
+                    mWindow.dismiss();
+                }
+            }
+        });
+        //根据指定View定位
+        PopupWindowCompat.showAsDropDown(mWindow,mMyActionBar.getTvRight(), 0, 0, Gravity.START);
+
+    }
+
+    void btn_zhengdanzhekou() {
+        try {
+            if(hasGaiJia == true || hasDanPingGaiJia()){
+                AlertUtil.showAlert(this, "提示",
+                        "已经修改过价格。", "确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertUtil.dismissDialog();
+                            }
+                        });
+                return;
+            }
+            Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            intent.putExtra("oldPrice",total);
+            intent.putExtra("limit",Config.zhendanZheKoulimit);
+            startActivityForResult(intent,200);
+        }catch (Exception e){
+            Log.e("","");
+
+        }
+    }
+
+    private boolean hasDanPingGaiJia(){
+        for(int i=0; i<mListData.size(); i++){
+            if(mListData.get(i).isHasYiJia()){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void getPiCi(List<GetClassPluResult> mGetClassPluResult){
@@ -652,12 +710,20 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 reflashList();
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
-                String zhekou =  data.getStringExtra("countN");
-                GetClassPluResult mClass = getSelectObject();
-                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
-                mClass.setSale_price(temprice+"");
-                mClass.setHasYiJia(true);
-                reflashList();
+                hasGaiJia = true;
+                if(requestCode==200){
+                    String zhekou =  data.getStringExtra("countN");
+                    gaiJiaMoney = total-Double.valueOf(zhekou);
+                    hasGaiJia = true;
+                    reflashGaiJiaItemPrice();
+                }else{
+                    String zhekou =  data.getStringExtra("countN");
+                    GetClassPluResult mClass = getSelectObject();
+                    temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
+                    mClass.setSale_price(temprice+"");
+                    mClass.setHasYiJia(true);
+                    reflashList();
+                }
                 break;
 //            case Config.MESSAGE_MONEY:
 //                if(requestCode == 100){
@@ -734,6 +800,30 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
 
         }
+    }
+
+    private void reflashGaiJiaItemPrice(){
+        double tempmoney = 0;
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            double itemPrice = Double.valueOf(mGetClassPluResult.getSale_price());
+            itemPrice = itemPrice-((itemPrice/total) * gaiJiaMoney);
+            itemPrice =  initDouble(4,itemPrice);
+            mGetClassPluResult.setSale_price(itemPrice+"");
+            tempmoney += itemPrice;
+        }
+        setSaleFlowBean();//销售流水
+        total = total-gaiJiaMoney;
+        reflashList();
+    }
+
+    private double initDouble(int leng, double moneyTem){
+        String totalStr = moneyTem+"";
+        if((totalStr.length()-totalStr.indexOf("."))>leng){
+            totalStr = totalStr.substring(0,totalStr.indexOf(".")+(leng));
+            moneyTem = Double.parseDouble(totalStr);
+        }
+        return moneyTem;
     }
 
     //整单议价、折扣

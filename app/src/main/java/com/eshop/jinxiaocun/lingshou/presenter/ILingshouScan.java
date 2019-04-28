@@ -1,11 +1,13 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
+import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 
 import java.util.List;
 
 public interface ILingshouScan {
-    public void getFlowNo();//去销售流水
+    public void getFlowNo();//获取销售流水
     public void getSheetDetail(String sheetNo);//单据明细
     public void getPLUInfo(String barCode);//销售商品精确查询（编码）
     public void getPLULikeInfo(String barCode);//销售商品模糊查询
@@ -21,4 +23,5 @@ public interface ILingshouScan {
     public void RtWzfQry(String payWay,String auth_code,String flowNo,String payAmount,String totalAmount);//网络支付扣款状态查询
     public void sellVipPay(String name, String password,Double money);
     public void getSystemInfo();//8.1参数（抹零，卡密码，四舍五入等）
+    public void saletemp(List mListData);//1.15 销售预售/结转
 }

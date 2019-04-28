@@ -3,7 +3,6 @@ package com.eshop.jinxiaocun.lingshou.view;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,8 +32,6 @@ import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
-import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
-import com.eshop.jinxiaocun.piandian.bean.PandianLeibieBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
@@ -43,24 +40,15 @@ import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
-import com.eshop.jinxiaocun.zjPrinter.Command;
-import com.eshop.jinxiaocun.zjPrinter.DeviceListActivity;
-import com.eshop.jinxiaocun.zjPrinter.PrinterCommand;
 import com.google.zxing.activity.CaptureActivity;
 
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Response;
-
-import static com.eshop.jinxiaocun.BuildConfig.DEBUG;
 
 public class PayActivity extends BaseActivity implements ActionBarClickListener, INetWorResult {
 
@@ -107,6 +95,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     protected List<PlayFlowBean> mPlayFlowBeanList = new ArrayList<>();
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
+    private String memberId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +135,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         spinners.add("聚合支付");
 //        spinners.add("支付宝");
 //        spinners.add("微信");
-//        spinners.add("会员卡");
+        spinners.add("会员卡");
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
@@ -162,9 +151,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         break;
                     case 2:
                         displayLayout(false);
-                        break;
-                    case 3:
-                        displayLayout(false);
+                        if(memberId.equals("")){
+                            Intent mIntent = new Intent(PayActivity.this, SaveMemberActivity.class);
+                            startActivityForResult(mIntent,200);
+                        }
                         break;
                 }
             }
@@ -301,10 +291,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         mHan.sendEmptyMessage(0);
                         break;
                     case 1:
-                    case 2:
                         mHan.sendEmptyMessage(1);
                         break;
-                    case 3:
+                    case 2:
+                        mHan.sendEmptyMessage(2);
                         break;
 
                 }
@@ -393,6 +383,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     startActivityForResult(intent, Config.REQ_QR_CODE);
                     break;
                 case 2:
+                    rtWzfQry();
+                    break;
+                case 3:
                     rtWzfQry();
                     break;
             }
@@ -628,13 +621,17 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     hashMapZFB.put("pay_type","ZFB");
                     hashMapList.add(hashMapZFB);
                     break;
-                case 2:
+               /* case 2:
                     HashMap<String,String> hashMapWX = new HashMap<>();
                     hashMapWX.put("payAmount",money+"");
                     hashMapWX.put("pay_type","WXZ");
                     hashMapList.add(hashMapWX);
-                    break;
-                case 3:
+                    break;*/
+                case 2:
+                    if(memberId==null || btn_jiesuan.equals("")){
+                        AlertUtil.showAlert(this,"提示","请点击会员验证会员信息！");
+                        return;
+                    }
                     HashMap<String,String> hashMapVIP = new HashMap<>();
                     hashMapVIP.put("payAmount",money+"");
                     hashMapVIP.put("pay_type","VIP");
@@ -703,6 +700,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 temMoney = money+"";
                 mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
                 Log.e("",code);
+                break;
+            case Config.SAVE_MEMBER_ID:
+                memberId = data.getStringExtra("memberId");
                 break;
         }
     }

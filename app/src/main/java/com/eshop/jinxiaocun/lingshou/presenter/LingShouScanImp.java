@@ -1,8 +1,5 @@
 package com.eshop.jinxiaocun.lingshou.presenter;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.eshop.jinxiaocun.base.IJsonFormat;
@@ -11,7 +8,6 @@ import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
@@ -621,4 +617,35 @@ public class LingShouScanImp implements ILingshouScan {
             }
         }
     }
+
+    @Override
+    public void saletemp(List listdata) {
+        UpSallFlowBean mUpSallFlowBean = new UpSallFlowBean();
+        mUpSallFlowBean.setJsonData(listdata);
+        mUpSallFlowBean.setStrCmd(WebConfig.W_SALETEMP);
+        Map map = ReflectionUtils.obj2Map(mUpSallFlowBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SaletempInterface());
+    }
+
+    //1.15 销售预售/结转
+    class SaletempInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.JIE_ZHUANG,null);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,null);
+            }
+        }
+    }
+
 }

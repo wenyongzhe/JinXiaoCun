@@ -344,7 +344,8 @@ public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INe
         }
         Intent mIntent = new Intent(this,LingShouScanActivity.class);
         mIntent.putExtra("mListData", (Serializable) mListData);
-        startActivityForResult(mIntent,300);
+        startActivity(mIntent);
+        //startActivityForResult(mIntent,300);
 
     }
 }

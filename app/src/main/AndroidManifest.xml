@@ -319,6 +319,9 @@
         <activity android:name=".huiyuan.view.MemberCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".lingshou.view.SaveMemberActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".huiyuan.view.MemberRechargeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />

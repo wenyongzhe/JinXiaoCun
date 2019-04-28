@@ -428,6 +428,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_VIP_PAY_RESULT:
                 setPlayFlowBean(total+"","VIP");
                 break;
+            case Config.JIE_ZHUANG:
+                ToastUtils.showShort(R.string.jiezhuang_ok);
+                finish();
+                break;
         }
     }
 
@@ -617,7 +621,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 if(mWindow.isShowing()){
                     switch (id){
                         case R.id.id_1:
-
+                            setSaleTemData();
+                            mLingShouScanImp.saletemp(mSaleFlowBeanList);
                             break;
                         case R.id.id_2:
                             btn_zhengdanzhekou();
@@ -855,8 +860,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         tv_order_num.setText("记录数："+mListData.size());
     }
 
-    private void setSaleFlowBean(){
-        mSaleFlowBeanList.clear();
+    private void setSaleTemData(){
         for(int i=0; i<mListData.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
             GetClassPluResult mGetClassPluResult = mListData.get(i);
@@ -892,6 +896,11 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
             mSaleFlowBeanList.add(mSaleFlowBean);
         }
+    }
+
+    private void setSaleFlowBean(){
+        mSaleFlowBeanList.clear();
+        setSaleTemData();
         mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
 
     }

@@ -54,6 +54,7 @@ public class WebConfig {
     public static final String VipPointManage = "VipPointManage";//积分冲减
     public static final String QryGiftInfo = "QryGiftInfo";//查询礼品
     public static final String AccExchange = "AccExchange";//积分兑换
+    public static final String W_SALETEMP = "W-SALETEMP";//销售预售/结转
 
 
     public static String getPosLogin() {

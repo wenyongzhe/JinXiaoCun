@@ -34,9 +34,9 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
 
 
     @BindView(R.id.et_search)
-    EditText mEtSearch;
+    public EditText mEtSearch;
     @BindView(R.id.tv_cardNumber)
-    TextView mTvCardNumber;
+    public TextView mTvCardNumber;
     @BindView(R.id.tv_name)
     TextView mTvName;
     @BindView(R.id.tv_card_type)

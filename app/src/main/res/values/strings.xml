@@ -1,4 +1,4 @@
-﻿<resources>
+﻿<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">智能移动POS</string>
 
     <string name="title">标题</string>
@@ -238,4 +238,6 @@
     <string name="pay_tips">请扫描或输入用户出示的付款码</string>
     <string name="toast_2">服务已断开!</string>
     <string name="jiezhuang">结转</string>
+    <string name="jiezhuang_ok">结转成功</string>
+    <string name="save_member">保存会员号码</string>
 </resources>

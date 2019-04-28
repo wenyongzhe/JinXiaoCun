@@ -49,6 +49,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
     TextView mTvCurrentIntegral;// 当前积分
 
     private IMemberList mApi;
+    public List<MemberCheckResultItem> data;
 
     @Override
     protected int getLayoutId() {
@@ -112,7 +113,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
 
             case Config.MESSAGE_OK:
                 AlertUtil.dismissProgressDialog();
-                List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
+                data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     refreshUIByData(data.get(0));
                 } else {

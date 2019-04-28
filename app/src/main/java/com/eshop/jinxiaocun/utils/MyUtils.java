@@ -386,7 +386,7 @@ public class MyUtils {
         if(Config.branch_no.length()>4){
             tempBranch_no = tempBranch_no.substring(0,4);
         }
-        flowno = tempBranch_no+Config.posid+DateUtility.getCurrentDateYYMMdd() + flowno;
+        flowno = tempBranch_no.trim()+Config.posid.trim()+DateUtility.getCurrentDateYYMMdd().trim() + flowno.trim();
         return flowno;
     }
 

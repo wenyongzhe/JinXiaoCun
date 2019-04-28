@@ -1,12 +1,14 @@
 package com.eshop.jinxiaocun.huiyuan.bean;
 
+import java.io.Serializable;
+
 /**
  * Author: 安仔夏天勤奋
  * Date: 2019/4/18
  * Desc:
  */
 
-public class MemberCheckResultItem {
+public class MemberCheckResultItem implements Serializable{
 
     private String CardNo_TelNo="";    //会员卡号,手机号,电话号码
     private String CardName="";   //--卡名称

@@ -25,6 +25,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
@@ -96,6 +97,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
     private String memberId = "";
+    private List<MemberCheckResultItem> memberData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -379,14 +381,20 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     mLingShouScanImp.sellSub(FlowNo);
                     break;
                 case 1:
-                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
-                    startActivityForResult(intent, Config.REQ_QR_CODE);
+                    /*Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);*/
+                    rtWzfQry();
                     break;
                 case 2:
-                    rtWzfQry();
-                    break;
-                case 3:
-                    rtWzfQry();
+                    if(memberData!=null&&memberData.size()>0){
+                        MemberCheckResultItem mMemberCheckResultItem =  memberData.get(0);
+                        mLingShouScanImp.sellVipPay(FlowNo,"-1",
+                                mMemberCheckResultItem.getCardNo_TelNo(),
+                                mMemberCheckResultItem.getPassword(),
+                                money);
+                    }else{
+                        AlertUtil.showToast("没有会员信息");
+                    }
                     break;
             }
         }
@@ -646,6 +654,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }
             setPlayFlowBean(hashMapList);
         }catch (Exception e){
+            Log.e("","");
         }
     }
 
@@ -703,6 +712,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 break;
             case Config.SAVE_MEMBER_ID:
                 memberId = data.getStringExtra("memberId");
+                memberData =  (ArrayList<MemberCheckResultItem>) data.getSerializableExtra("data");
                 break;
         }
     }

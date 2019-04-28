@@ -48,7 +48,7 @@ public class VipPayActivity extends BaseActivity implements ActionBarClickListen
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLingShouScanImp.sellVipPay(vip_name.getText().toString(),vip_password.getText().toString(),money);
+                mLingShouScanImp.sellVipPay("","-1",vip_name.getText().toString(),vip_password.getText().toString(),money);
             }
         });
     }

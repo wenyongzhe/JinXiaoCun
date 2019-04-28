@@ -551,15 +551,18 @@ public class LingShouScanImp implements ILingshouScan {
     }
 
     @Override
-    public void sellVipPay(String name,String pass,Double money) {
+    public void sellVipPay(String flowno,String as_type,String name,String pass,Double money) {
         VipPayBean mVipPayBean = new VipPayBean();
         VipPayBean.VipPayJsonData mVipPayJsonData = mVipPayBean.getJsonData();
         mVipPayJsonData.setAs_vipNo(name);
         mVipPayJsonData.setAs_card_pass(pass);
         mVipPayJsonData.setOper_id(Config.UserName);
+        mVipPayJsonData.setAs_branchNo(Config.branch_no);
+        mVipPayJsonData.setAs_flowno(flowno);
         mVipPayJsonData.setAdec_consume_num(money+"");
         mVipPayJsonData.setAdec_consume_amt(money+"");
         mVipPayJsonData.setAdec_sav_amt(money+"");
+        mVipPayJsonData.setMemo("");
         Map map = ReflectionUtils.obj2Map(mVipPayBean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new VipPayInterface());
     }

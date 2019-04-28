@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,6 +10,8 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,6 +29,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
         }
         Intent mIntent = new Intent();
         mIntent.putExtra("memberId",mTvCardNumber.getText().toString().trim());
+        mIntent.putExtra("data", (Serializable) data);
         setResult(Config.SAVE_MEMBER_ID,mIntent);
         finish();
     }

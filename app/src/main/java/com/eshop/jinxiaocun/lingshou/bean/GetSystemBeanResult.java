@@ -15,8 +15,8 @@ public class GetSystemBeanResult extends BaseResult{
     }
 
     public class SystemJson{
-        private String name;//" :”抹零” // 名称
-        private String value;//" :1      //值
+        private String name;  // 名称
+        private String value;    //值
 
         public String getName() {
             return name;

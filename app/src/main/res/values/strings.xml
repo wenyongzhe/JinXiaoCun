@@ -237,4 +237,11 @@
     <string name="pay_cancle">整单取消？</string>
     <string name="pay_tips">请扫描或输入用户出示的付款码</string>
     <string name="toast_2">服务已断开!</string>
+
+    <!--打印-->
+    <string name="recharge_success">充值成功</string>
+    <string name="is_need_print">是否需要打印小票</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
 </resources>

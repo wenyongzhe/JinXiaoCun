@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -20,7 +21,9 @@ import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
@@ -139,6 +142,17 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         mTvBalance.setText(MyUtils.convertToString(data.getResidual_amt(),"0"));
     }
 
+    //全部设置默认值
+    private void reSetViewValues(){
+        mTvCardNumber.setText("");
+        mTvName.setText("");
+        mTvBalance.setText("");
+        mEtRechargeMoney.setText("");
+        mEtGiveFreeMoney.setText("");
+        mEtRemarks.setText("");
+        mTvAllRechargeMoney.setText("");
+    }
+
     //点击搜索按钮
     @OnClick(R.id.iv_search)
     public void onClickSearch(){
@@ -166,6 +180,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         AlertUtil.showNoButtonProgressDialog(this,"正在为您充值，请稍后...");
         mApi2.getFlowNo();//取流水号
         hideSoftInput();
+
     }
 
     private void rechargeData(String flowNo){
@@ -209,15 +224,24 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 }
                 break;
             case Config.RESULT_SUCCESS:
-                float balance = MyUtils.convertToFloat(mTvBalance.getText().toString().trim(),0)+
-                        MyUtils.convertToFloat(mTvAllRechargeMoney.getText().toString().trim(),0);
-                mTvBalance.setText(MyUtils.convertToString(balance,"0"));
-                mEtRechargeMoney.setText("");
-                mEtGiveFreeMoney.setText("");
-                mEtRemarks.setText("");
-                mTvAllRechargeMoney.setText("");
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
+
+                AlertUtil.showAlert(this, R.string.recharge_success, R.string.is_need_print,
+                        R.string.yes, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                                print();
+                            }
+                        }, R.string.no, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                                reSetViewValues();
+                            }
+                        });
+
                 break;
             case Config.RESULT_FAIL:
             case Config.MESSAGE_ERROR:
@@ -227,6 +251,73 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
 
         }
     }
+
+    //打印
+    private void print(){
+        int maxLength = 25;
+        String title = "充值成功";
+        if(MyUtils.length(title)<maxLength){
+            int beginLength = (maxLength-MyUtils.length(title))>>1;
+            int endLength=beginLength;
+            if(beginLength%2!=0){
+                endLength+=1;
+            }
+            title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(title,30f,false,false);
+        }
+
+        String userName = "操作人: "+ Config.UserName;
+        if(MyUtils.length(userName)<maxLength){
+            int endLength = maxLength-MyUtils.length(userName);
+            userName=userName+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+
+        String exchargeData = "充值时间: "+ DateUtility.getCurrentTime();
+        if(MyUtils.length(exchargeData)<maxLength){
+            int endLength = maxLength-MyUtils.length(exchargeData);
+            exchargeData=exchargeData+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+
+        String balance = "余额: ￥"+mTvBalance.getText().toString().trim();
+        AidlUtil.getInstance().printText(balance,30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+        String rechargeMoney = "充值金额: ￥"+mEtRechargeMoney.getText().toString().trim();
+        AidlUtil.getInstance().printText(rechargeMoney,30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+        if(!TextUtils.isEmpty(mEtGiveFreeMoney.getText().toString().trim())){
+            String giveFreeMoney = "赠送金额: ￥"+mEtGiveFreeMoney.getText().toString().trim();
+            AidlUtil.getInstance().printText(giveFreeMoney,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+
+        float cardAllBalance = MyUtils.convertToFloat(mTvBalance.getText().toString().trim(),0)+
+                MyUtils.convertToFloat(mTvAllRechargeMoney.getText().toString().trim(),0);
+
+        String cardAllMoney = "卡总金额: ￥"+cardAllBalance;
+        AidlUtil.getInstance().printText(cardAllMoney,30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+
+        if(!TextUtils.isEmpty(mEtRemarks.getText().toString().trim())){
+            AidlUtil.getInstance().printText("备注: "+mEtRemarks.getText().toString().trim(),30f,false,false);
+        }
+
+        AidlUtil.getInstance().printEmptyLine(3);
+        reSetViewValues();
+    }
+
 
     /*隐藏软键盘*/
     private void hideSoftInput(){

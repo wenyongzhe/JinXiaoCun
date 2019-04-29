@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -246,7 +247,7 @@ public class AidlUtil {
             }
 
             woyouService.printTextWithFont(content, null, size, null);
-            woyouService.lineWrap(3, null);
+            //woyouService.lineWrap(3, null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -330,6 +331,21 @@ public class AidlUtil {
 
         try {
             woyouService.lineWrap(3, null);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    * 空行几行打
+     */
+    public void printEmptyLine(int emptyLineNumber){
+        if (woyouService == null) {
+            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
+            return;
+        }
+        try {
+            woyouService.lineWrap(emptyLineNumber, null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

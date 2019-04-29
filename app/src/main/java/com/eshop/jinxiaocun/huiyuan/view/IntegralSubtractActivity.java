@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.huiyuan.view;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -18,7 +19,9 @@ import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
@@ -119,6 +122,16 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         mTvName.setText(data.getCardName());
         mTvStatus.setText(data.getCardState());
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
+    }
+
+    //全部设置默认值
+    private void reSetViewValues(){
+        mTvCardNumber.setText("");
+        mTvName.setText("");
+        mTvStatus.setText("");
+        mTvCurrentIntegral.setText("");
+        mEtSubtractIntegral.setText("");
+        mEtRemarks.setText("");
     }
 
     //点击搜索按钮
@@ -245,18 +258,24 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
             case Config.RESULT_SUCCESS:
                 AlertUtil.dismissProgressDialog();
                 if(isSubtractIntegral){
-                    float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
-                                    - MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
-                    mTvCurrentIntegral.setText(integral+"");
                     AlertUtil.showToast("积分冲减成功！");
                 }else{
                     AlertUtil.showToast("积分奖励成功！");
-                    float integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
-                            + MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
-                    mTvCurrentIntegral.setText(integral+"");
                 }
-                mEtSubtractIntegral.setText("");
-                mEtRemarks.setText("");
+                AlertUtil.showAlert(this, R.string.recharge_success, R.string.is_need_print,
+                        R.string.yes, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                                print();
+                            }
+                        }, R.string.no, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertUtil.dismissDialog();
+                                reSetViewValues();
+                            }
+                        });
                 break;
             case Config.RESULT_FAIL:
                 AlertUtil.dismissProgressDialog();
@@ -267,6 +286,82 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
                 }
                 break;
         }
+    }
+
+    //打印
+    private void print(){
+        int maxLength = 25;
+        String title ;
+        if(isSubtractIntegral){
+            title = "积分冲减";
+        }else{
+            title = "积分奖励";
+        }
+        if(MyUtils.length(title)<maxLength){
+            int beginLength = (maxLength-MyUtils.length(title))>>1;
+            int endLength=beginLength;
+            if(beginLength%2!=0){
+                endLength+=1;
+            }
+            title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(title,30f,false,false);
+        }
+
+        String userName = "操作人: "+ Config.UserName;
+        if(MyUtils.length(userName)<maxLength){
+            int endLength = maxLength-MyUtils.length(userName);
+            userName=userName+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+
+        String exchargeData = "充值时间: "+ DateUtility.getCurrentTime();
+        if(MyUtils.length(exchargeData)<maxLength){
+            int endLength = maxLength-MyUtils.length(exchargeData);
+            exchargeData=exchargeData+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+
+        float integral ;
+        String subtractName;
+        if(isSubtractIntegral){
+            integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                    - MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+
+            subtractName = "冲减积分: ";
+        }else{
+            integral = MyUtils.convertToFloat(mTvCurrentIntegral.getText().toString().trim(), 0)
+                    + MyUtils.convertToFloat(mEtSubtractIntegral.getText().toString().trim(), 0);
+
+            subtractName = "奖励积分: ";
+        }
+
+        AidlUtil.getInstance().printText("卡积分: "+mTvCurrentIntegral.getText().toString().trim(),30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+        String subtractIntegral = subtractName+mEtSubtractIntegral.getText().toString().trim();
+        AidlUtil.getInstance().printText(subtractIntegral,30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+        AidlUtil.getInstance().printText("卡当前积分: "+integral,30f,false,false);
+        AidlUtil.getInstance().printEmptyLine(1);
+
+
+
+        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+
+        if(!TextUtils.isEmpty(mEtRemarks.getText().toString().trim())){
+            AidlUtil.getInstance().printText("备注: "+mEtRemarks.getText().toString().trim(),30f,false,false);
+        }
+
+        AidlUtil.getInstance().printEmptyLine(3);
+        reSetViewValues();
     }
 
 

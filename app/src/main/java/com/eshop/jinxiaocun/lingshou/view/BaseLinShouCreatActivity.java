@@ -14,7 +14,7 @@ public class BaseLinShouCreatActivity extends BaseScanActivity {
         View bottomView = this.getLayoutInflater().inflate(R.layout.lingshou_creat_bottom, null);
         mLinearLayout.addView(bottomView,-1,params);
         mListview = bottomView.findViewById(R.id.listview_data);
-        mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"查询商品",this);
+        mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"更多商品",this);
 
     }
 

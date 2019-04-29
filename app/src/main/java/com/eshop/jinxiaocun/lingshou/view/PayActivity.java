@@ -795,8 +795,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
-            mPlayFlowBean.setCard_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
-            mPlayFlowBean.setVip_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
+            if(memberData==null){
+                mPlayFlowBean.setCard_no(1);
+                mPlayFlowBean.setVip_no(1);
+            }else{
+                mPlayFlowBean.setCard_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
+                mPlayFlowBean.setVip_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
+            }
             mPlayFlowBean.setCoin_no("RMB");
             mPlayFlowBean.setCoin_rate(1);
             mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额

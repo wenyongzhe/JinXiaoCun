@@ -75,9 +75,9 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构  挂单取单
-//        sql = "create table "+ Config.LINSHOU+"("+ "idno integer primary key autoincrement,"
-//                + cloumFile(BillGlideNo.class) +")";
-//        sqLiteDatabase.execSQL(sql);//执行sql语句
+        sql = "create table "+ Config.LINSHOU+"("+ "idno integer primary key autoincrement,"
+                + cloumFile(GetClassPluResult.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
     }
 
     private String cloumFile(Class bean){

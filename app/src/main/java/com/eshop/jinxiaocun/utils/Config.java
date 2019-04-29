@@ -18,7 +18,7 @@ public class Config {
     public static String DeviceID = "";
 //    public static String IP="192.168.10.67";
     public static String IP="120.79.209.140";
-    public static String IP_POIN="8111";
+    public static String IP_POIN="8113";
     public static String DB_NAME="EWESHOP";
     public static String DB_USER_NAME ="sa";
     public static String DB_PASSWORD ="123456";

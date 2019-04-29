@@ -123,6 +123,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 Config.IP_POIN = txtSeverPort.getText().toString();
 
                 MyUtils.showToast("参数保存成功！",SystemSettingActivity.this);
+                finish();
+                Intent mIntent = new Intent(SystemSettingActivity.this,LoginActivity.class);
+                startActivity(mIntent);
                 break;
 
             case R.id.btn_blue:

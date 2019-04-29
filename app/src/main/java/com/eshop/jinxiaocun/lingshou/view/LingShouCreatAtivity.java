@@ -47,7 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LingShouCreatAtivity extends BaseLinShouScanActivity implements INetWorResult {
+public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText et_barcode;

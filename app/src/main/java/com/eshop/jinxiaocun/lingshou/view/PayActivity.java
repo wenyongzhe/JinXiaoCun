@@ -824,23 +824,22 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
      */
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
-        String mes = "";
         int shuliang = 0;
-        AidlUtil.getInstance().printText("门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n", 14, false, false);
-        AidlUtil.getInstance().printText("品名       数量    单价    金额\n", 14, false, false);
-
+        String mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
+        mes += "品名      数量    单价    金额\n";
+        mes += "-------------------------------\n";
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
             shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
             mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
         }
-        AidlUtil.getInstance().printText(mes, 14, false, false);
-        mes = "数量：     "+shuliang+"\n总计：     "+money+"\n";
-        AidlUtil.getInstance().printText(mes, 14, false, false);
-        mes = "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
-        AidlUtil.getInstance().printText(mes, 14, false, false);
-        AidlUtil.getInstance().printText("谢谢惠顾,欢迎再次光临!\n", 14, false, false);
+        mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";
+        mes += "-------------------------------\n";
+        mes += "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
+        mes += "谢谢惠顾,欢迎再次光临!\n";
+
+        AidlUtil.getInstance().printText(mes, 24, false, false);
 
     }
 

@@ -240,4 +240,11 @@
     <string name="jiezhuang">结转</string>
     <string name="jiezhuang_ok">结转成功</string>
     <string name="save_member">保存会员号码</string>
+
+    <!--打印-->
+    <string name="recharge_success">充值成功</string>
+    <string name="is_need_print">是否需要打印小票</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
 </resources>

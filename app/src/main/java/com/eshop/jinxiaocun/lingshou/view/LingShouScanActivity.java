@@ -75,18 +75,18 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     EditText et_barcode;
     @BindView(R.id.btn_add)
     Button btSell;//销售
-    @BindView(R.id.btn_delete)
-    Button btn_delete;//删除
-    @BindView(R.id.btn_modify_count)
-    Button btn_modify_count;//改数
+//    @BindView(R.id.btn_delete)
+//    Button btn_delete;//删除
+//    @BindView(R.id.btn_modify_count)
+//    Button btn_modify_count;//改数
     @BindView(R.id.tv_check_num)
     TextView tv_check_num;//总数
-    @BindView(R.id.ly_buttom1)
-    LinearLayout ly_buttom1;
-    @BindView(R.id.btn_yijia)
-    Button btn_yijia;//议价
-    @BindView(R.id.btn_zhekou)
-    Button btn_zhekou;//折扣
+//    @BindView(R.id.ly_buttom1)
+//    LinearLayout ly_buttom1;
+//    @BindView(R.id.btn_yijia)
+//    Button btn_yijia;//议价
+//    @BindView(R.id.btn_zhekou)
+//    Button btn_zhekou;//折扣
     @BindView(R.id.tv_total_num)
     TextView tv_total_num;//商品数
     @BindView(R.id.tv_order_num)
@@ -166,7 +166,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         tv_check_num.setText("总价：");
         tv_total_num.setText("商品数：");
         tv_order_num.setText("记录数：");
-        ly_buttom1.setVisibility(View.VISIBLE);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -224,15 +223,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }
             }
         });
-        setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
-        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
-        setHeaderTitle(R.id.tv_2, R.string.list_item_subNo, 180);
-//        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
-
-        setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
-        setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
-        setHeaderTitle(R.id.tv_5, R.string.list_item_VipPrice, 100);
-        setHeaderTitle(R.id.tv_6, R.string.list_item_Pici_Name, 100);
 
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
         mScanAdapter = new LingShouScanAdapter(mListData);
@@ -950,7 +940,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     }
 
-    @OnClick(R.id.btn_delete)
+    //@OnClick(R.id.btn_delete)
     void delete() {
         try {
             if(mScanAdapter.getItemClickPosition() == -1){
@@ -973,7 +963,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         return true;
     }
 
-    @OnClick(R.id.btn_zhekou)
+    //@OnClick(R.id.btn_zhekou)
     void btn_zhekou() {
         try {
             if(mScanAdapter.getItemClickPosition() == -1){
@@ -996,7 +986,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     }
 
-    @OnClick(R.id.btn_yijia)
+    //@OnClick(R.id.btn_yijia)
     void btn_yijia() {
         try {
             if(mScanAdapter.getItemClickPosition() == -1){
@@ -1018,7 +1008,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     }
 
-    @OnClick(R.id.btn_modify_count)
+    //@OnClick(R.id.btn_modify_count)
     void modifyCount() {
         if(mScanAdapter.getItemClickPosition() == -1){
             ToastUtils.showShort("请选择商品");

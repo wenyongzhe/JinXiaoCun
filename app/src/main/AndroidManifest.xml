@@ -258,6 +258,10 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:configChanges="orientation|keyboardHidden" />
 
+        <activity android:name="com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name="com.eshop.jinxiaocun.widget.SaleManDialog"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:configChanges="orientation|keyboardHidden" />

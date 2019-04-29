@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +38,9 @@ import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
+import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,11 +55,11 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     @BindView(R.id.et_barcode)
     EditText et_barcode;
     @BindView(R.id.btn_add)
-    Button btSell;//销售
+    ImageView btSell;//销售
     @BindView(R.id.btn_delete)
-    Button btn_delete;//删除
+    ImageView btn_delete;//删除
     @BindView(R.id.btn_modify_count)
-    Button btn_modify_count;//改数
+    ImageView btn_modify_count;//改数
     @BindView(R.id.tv_check_num)
     TextView tv_check_num;//总数
     @BindView(R.id.ly_buttom1)
@@ -126,7 +129,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
         mLinearLayout.addView(mView, 0, params);
         ButterKnife.bind(this);
-        btSell.setText(R.string.bt_sell);
+        //btSell.setText(R.string.bt_sell);
 
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -185,9 +188,10 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             GetClassPluResult item = mGetClassPluResult;
 //            if( !canModifyPrice(item))return;
             if(!item.getEnable_discount().equals("1")){
-                ToastUtils.showShort("此商品不允许打折。");
+                /*ToastUtils.showShort("此商品不允许打折。");
+                return;*/
             }
-            Intent intent = new Intent(this, DanPinZheKouDialog.class);
+            Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
             intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
             intent.putExtra("limit",Config.danbiZheKoulimit);
             startActivityForResult(intent,100);
@@ -196,6 +200,19 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 
         }
 
+    }
+
+    @OnClick(R.id.btn_modify_count)
+    void modifyCount() {
+        if(mScanAdapter.getItemClickPosition() == -1){
+            ToastUtils.showShort("请选择商品");
+            return;
+        }
+        GetClassPluResult mGetClassPluResult = mListData.get(itemClickPosition);
+        Intent intent = new Intent();
+        intent.putExtra("countN", mGetClassPluResult.getSale_qnty());
+        intent.setClass(this, ModifyCountDialog.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -225,13 +242,34 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
+                String shuliang =  data.getStringExtra("count");
                 GetClassPluResult mClass = mListData.get(itemClickPosition);
 //                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
+                if(shuliang.equals("0")){
+                    mListData.remove(itemClickPosition);
+                    reflashList();
+                    return;
+                }
                 mClass.setSale_price(zhekou);
+                if(shuliang!=null && !shuliang.equals("")){
+                    mClass.setSale_qnty(shuliang);
+                }
                 mClass.setHasYiJia(true);
                 reflashList();
                 break;
+            case RESULT_OK:
+                String mCount =  data.getStringExtra("countN");
+                GetClassPluResult item = getSelectObject();
+                item.setSale_qnty(mCount);
+                reflashList();
+                break;
         }
+    }
+
+    private GetClassPluResult getSelectObject(){
+        int itemClickPosition = mScanAdapter.getItemClickPosition();
+        GetClassPluResult item = mListData.get(itemClickPosition);
+        return item;
     }
 
     private void reflashList(){
@@ -339,6 +377,20 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         startActivity(mIntent);
         finish();
         //startActivityForResult(mIntent,300);
+    }
+
+    @OnClick(R.id.btn_delete)
+    void delete() {
+        try {
+            if(mScanAdapter.getItemClickPosition() == -1){
+                ToastUtils.showShort("请选择商品");
+                return;
+            }
+            mListData.remove(itemClickPosition);
+            reflashList();
+        }catch (Exception e){
+
+        }
 
     }
 }

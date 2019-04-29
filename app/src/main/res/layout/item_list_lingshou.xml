@@ -10,6 +10,7 @@
 
         <TextView
             android:id="@+id/item_name"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             style="@style/TextView_Grey"
@@ -31,7 +32,7 @@
         android:layout_width="fill_parent">
         <TextView
             android:id="@+id/sale_qnty"
-            android:layout_width="100dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:gravity="center"
             style="@style/TextView_Grey"

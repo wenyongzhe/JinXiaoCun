@@ -618,6 +618,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                         case R.id.id_2:
                             btn_zhengdanzhekou();
                             break;
+                        case R.id.id_3:
                     }
                     mWindow.dismiss();
                 }

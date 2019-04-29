@@ -48,23 +48,16 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         }
         TextView item_name = ViewHolderUtils.get(convertView, R.id.item_name);
         TextView item_no = ViewHolderUtils.get(convertView, R.id.item_no);
-        TextView item_subno = ViewHolderUtils.get(convertView, R.id.item_subno);
         TextView sale_price = ViewHolderUtils.get(convertView, R.id.sale_price);
         TextView sale_qnty = ViewHolderUtils.get(convertView, R.id.sale_qnty);
-        TextView sale_beforprice = ViewHolderUtils.get(convertView, R.id.sale_beforprice);
-        TextView list_item_Pici_Name = ViewHolderUtils.get(convertView, R.id.list_item_Pici_Name);
+        TextView sale_total = ViewHolderUtils.get(convertView, R.id.sale_total);
 
-        sale_qnty.setText(listInfo.get(position).getSale_qnty());
-        sale_price.setText(listInfo.get(position).getSale_price());
+        sale_qnty.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
+        sale_price.setText("￥"+listInfo.get(position).getSale_price());
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
-        sale_beforprice.setText(listInfo.get(position).getVip_price());
-        if(Integer.decode(listInfo.get(position).getEnable_batch()) != 1){
-            list_item_Pici_Name.setText("非批次商品");
-        }else{
-            list_item_Pici_Name.setText(listInfo.get(position).getItem_barcode());
-        }
-        item_subno.setText(listInfo.get(position).getItem_subno());
+        sale_total.setText("￥"+Float.parseFloat(listInfo.get(position).getSale_qnty())*
+                Float.parseFloat(listInfo.get(position).getSale_price())+"");
         return super.getView(position,convertView,parent);
     }
 

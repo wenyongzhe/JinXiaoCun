@@ -162,14 +162,6 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             }
         });
 
-        setHeaderTitle(R.id.tv_0, R.string.list_item_ProdName, 180);
-        setHeaderTitle(R.id.tv_1, R.string.list_item_BarCode, 180);
-        setHeaderTitle(R.id.tv_2, R.string.list_item_subNo, 180);
-        setHeaderTitle(R.id.tv_3, R.string.list_item_CountN5, 100);
-        setHeaderTitle(R.id.tv_4, R.string.list_item_salePrice, 100);
-        setHeaderTitle(R.id.tv_5, R.string.list_item_VipPrice, 100);
-        setHeaderTitle(R.id.tv_6, R.string.list_item_Pici_Name, 100);
-
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
         mScanAdapter.notifyDataSetChanged();

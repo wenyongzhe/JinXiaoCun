@@ -380,13 +380,13 @@ public class MyUtils {
     }
 
     public final static String formatFlowNo(String flowno){
-        flowno = String.format("%05d", Integer.decode(flowno)+1);
-        String tempBranch_no = Config.branch_no;
-        int ff = Config.branch_no.length();
-        if(Config.branch_no.length()>4){
-            tempBranch_no = tempBranch_no.substring(0,4);
+        flowno = String.format("%04d", Integer.decode(flowno)+1);
+        String tempBranch_no = Config.posid;
+        int ff = Config.posid.length();
+        if(Config.posid.length()>2){
+            tempBranch_no = tempBranch_no.substring(0,2);
         }
-        flowno = tempBranch_no.trim()+Config.posid.trim()+DateUtility.getCurrentDateYYMMdd().trim() + flowno.trim();
+        flowno = tempBranch_no.trim()+DateUtility.getCurrentDateYYYYMMdd().trim() + flowno.trim();
         return flowno;
     }
 

@@ -3,7 +3,9 @@ package com.eshop.jinxiaocun.utils;
 import android.os.Environment;
 
 import com.eshop.jinxiaocun.db.DBHelper;
+import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Config {
@@ -151,5 +153,7 @@ public class Config {
         PD,//盘点批次号
         CR,//盘点单号
     }
+
+    public static ArrayList<MemberCheckResultItem> memberCheckList;
 
 }

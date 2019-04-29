@@ -555,6 +555,7 @@ public class LingShouScanImp implements ILingshouScan {
         VipPayBean mVipPayBean = new VipPayBean();
         VipPayBean.VipPayJsonData mVipPayJsonData = mVipPayBean.getJsonData();
         mVipPayJsonData.setAs_vipNo(name);
+        mVipPayJsonData.setAs_type(as_type);
         mVipPayJsonData.setAs_card_pass(pass);
         mVipPayJsonData.setOper_id(Config.UserName);
         mVipPayJsonData.setAs_branchNo(Config.branch_no);

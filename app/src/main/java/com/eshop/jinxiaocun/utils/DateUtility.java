@@ -408,6 +408,11 @@ public class DateUtility {
         return sdf.format(new Date());
     }
 
+    public static String getCurrentDateYYYYMMdd() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(new Date());
+    }
+
     public static String getCurrentDateYYMMdd() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         return sdf.format(new Date());

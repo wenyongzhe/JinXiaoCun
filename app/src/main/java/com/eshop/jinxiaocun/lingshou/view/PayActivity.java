@@ -33,6 +33,7 @@ import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
@@ -280,8 +281,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 break;
             case Config.MESSAGE_VIP_PAY_RESULT:
                 mVipPayBeanResult = (VipPayBeanResult)o;
-                setResult(Config.MESSAGE_VIP_PAY_RESULT);
-                finish();
+                //setResult(Config.MESSAGE_VIP_PAY_RESULT);
+                sellOk();
                 break;
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
@@ -340,24 +341,28 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 }
                 break;
             case Config.MESSAGE_SELL_SUB:
-                AlertUtil.showAlert(PayActivity.this, "提示", "结算处理完成",
-                        "确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                AlertUtil.dismissDialog();
-                                cancle();
-                            }
-                        },R.string.txt_print, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                AlertUtil.dismissDialog();
-                                cancle();
-                                Print_Ex();
-                            }
-                });
+                sellOk();
 //                printMs();
                 break;
         }
+    }
+
+    private void sellOk(){
+        AlertUtil.showAlert(PayActivity.this, "提示", "结算处理完成",
+                "确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                        cancle();
+                    }
+                },R.string.txt_print, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                        cancle();
+                        Print_Ex();
+                    }
+                });
     }
 
     private void cancle(){
@@ -388,7 +393,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 case 2:
                     if(memberData!=null&&memberData.size()>0){
                         MemberCheckResultItem mMemberCheckResultItem =  memberData.get(0);
-                        mLingShouScanImp.sellVipPay(FlowNo,"-1",
+                        mLingShouScanImp.sellVipPay(FlowNo,"1",
                                 mMemberCheckResultItem.getCardNo_TelNo(),
                                 mMemberCheckResultItem.getPassword(),
                                 money);
@@ -790,8 +795,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
-            mPlayFlowBean.setCard_no(1);
-            mPlayFlowBean.setVip_no(1);
+            mPlayFlowBean.setCard_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
+            mPlayFlowBean.setVip_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
             mPlayFlowBean.setCoin_no("RMB");
             mPlayFlowBean.setCoin_rate(1);
             mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额
@@ -819,6 +824,23 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
      */
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
+        String mes = "";
+        int shuliang = 0;
+        AidlUtil.getInstance().printText("门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n", 14, false, false);
+        AidlUtil.getInstance().printText("品名       数量    单价    金额\n", 14, false, false);
+
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
+            shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+            mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
+        }
+        AidlUtil.getInstance().printText(mes, 14, false, false);
+        mes = "数量：     "+shuliang+"\n总计：     "+money+"\n";
+        AidlUtil.getInstance().printText(mes, 14, false, false);
+        mes = "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
+        AidlUtil.getInstance().printText(mes, 14, false, false);
+        AidlUtil.getInstance().printText("谢谢惠顾,欢迎再次光临!\n", 14, false, false);
 
     }
 

@@ -426,7 +426,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }
                 break;
             case Config.MESSAGE_VIP_PAY_RESULT:
-                setPlayFlowBean(total+"","VIP");
+                //setPlayFlowBean(total+"","VIP");
+                finish();
                 break;
             case Config.JIE_ZHUANG:
                 ToastUtils.showShort(R.string.jiezhuang_ok);

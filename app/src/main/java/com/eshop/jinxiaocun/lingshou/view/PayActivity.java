@@ -340,7 +340,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                                         AlertUtil.dismissDialog();
                                     }
                                 });
-                        mHan.sendEmptyMessageDelayed(2,2000);
+                        mHan.sendEmptyMessageDelayed(3,2000);
                     }
                 }
                 break;
@@ -391,13 +391,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     break;
                 case 1:
 
-                 /*sunmi的摄像头扫码
+                  //sunmi的摄像头扫码
                     Intent intent = new Intent("com.summi.scan");
-                    intent.setPackage("com.sunmi.sunmiqrcodescanner");*/
+                    intent.setPackage("com.sunmi.sunmiqrcodescanner");
+                    startActivityForResult(intent, 1);
 
-
-                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
-                    startActivityForResult(intent, Config.REQ_QR_CODE);
+//                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+//                    startActivityForResult(intent, Config.REQ_QR_CODE);
                     //rtWzfQry();
                     break;
                 case 2:
@@ -410,6 +410,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     }else{
                         AlertUtil.showToast("没有会员信息");
                     }
+                    break;
+                case 3:
+                    rtWzfQry();
                     break;
             }
         }
@@ -687,8 +690,19 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             Iterator<HashMap<String, String>> it = result.iterator();
             while (it.hasNext()) {
                 HashMap<String, String> hashMap = it.next();
-                Log.i("sunmi", hashMap.get("TYPE"));//这个是扫码的类型
-                Log.i("sunmi", hashMap.get("VALUE"));//这个是扫码的结果
+                /*Log.i("sunmi", hashMap.get("TYPE"));//这个是扫码的类型
+                Log.i("sunmi", hashMap.get("VALUE"));//这个是扫码的结果*/
+
+                tempayway = "";
+                if(hashMap.get("VALUE").startsWith("28")){
+                    tempayway = "ZFB";
+                }else{
+                    tempayway = "WXZ";
+                }
+
+                temMoney = money+"";
+                mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
+                break;
             }
             return true;
         }

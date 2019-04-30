@@ -386,9 +386,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     mLingShouScanImp.sellSub(FlowNo);
                     break;
                 case 1:
-                    /*Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
-                    startActivityForResult(intent, Config.REQ_QR_CODE);*/
-                    rtWzfQry();
+                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);
+                    //rtWzfQry();
                     break;
                 case 2:
                     if(memberData!=null&&memberData.size()>0){

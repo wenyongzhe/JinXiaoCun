@@ -37,7 +37,6 @@ public class SaleManDialog extends Activity {
         txtPayMan.setFocusable(true);
         txtPayMan.setFocusableInTouchMode(true);
         txtPayMan.requestFocus();
-
         closeEditTextKeyboard();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);

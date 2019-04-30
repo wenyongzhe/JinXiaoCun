@@ -16,6 +16,10 @@ import com.eshop.jinxiaocun.R;
 
 public class YouHuiPopupWindow extends PopupWindow {
 
+    public TextView id_1;
+    public TextView id_2;
+    public TextView id_3;
+
     public interface OnPopupWindowClick {
         public void OnClick(int id);
     }
@@ -31,9 +35,9 @@ public class YouHuiPopupWindow extends PopupWindow {
         View contentView = LayoutInflater.from(context).inflate(R.layout.popu_window_youhui,
                 null, false);
 
-        TextView id_1 = contentView.findViewById(R.id.id_1);
-        TextView id_2 = contentView.findViewById(R.id.id_2);
-        TextView id_3 = contentView.findViewById(R.id.id_3);
+        id_1 = contentView.findViewById(R.id.id_1);
+        id_2 = contentView.findViewById(R.id.id_2);
+        id_3 = contentView.findViewById(R.id.id_3);
         id_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

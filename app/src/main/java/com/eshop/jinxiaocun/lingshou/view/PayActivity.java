@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.PopupWindowCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -100,6 +102,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private String FlowNo = "";
     private String memberId = "";
     private List<MemberCheckResultItem> memberData;
+    YouHuiPopupWindow mWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +111,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         View bottomView = this.getLayoutInflater().inflate(R.layout.activity_pay, null);
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
-        mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"",this);
+
+        mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"更多操作",this);
         btn_jiesuan = (Button) findViewById(R.id.btn_jiesuan);
         btn_jiesuan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,7 +262,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     public synchronized void onResume() {
         super.onResume();
     }
-
 
     VipPayBeanResult mVipPayBeanResult;
     @Override
@@ -427,10 +430,6 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         finish();
     }
 
-    @Override
-    public void onRightClick() {
-
-    }
 
     @OnClick(R.id.btn_moling)
     void btn_moling() {
@@ -877,6 +876,34 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     }
 
+    @Override
+    public void onRightClick() {
+        mWindow = new YouHuiPopupWindow(this, new YouHuiPopupWindow.OnPopupWindowClick() {
+            @Override
+            public void OnClick(int id) {
+                if(mWindow.isShowing()){
+                    switch (id){
+                        case R.id.id_1:
+                            btn_zhengdanquxiao();
+                            break;
+                        case R.id.id_2:
+                            btn_moling();
+                            break;
+                        case R.id.id_3:
+                            btn_yingyeyuan();
+                            break;
+                    }
+                    mWindow.dismiss();
+                }
+            }
+        });
+        mWindow.id_1.setText(getString(R.string.zhengdanquxiao));
+        mWindow.id_2.setText(getString(R.string.moling));
+        mWindow.id_3.setText(getString(R.string.yingyeyuan));
 
+        //根据指定View定位
+        PopupWindowCompat.showAsDropDown(mWindow,mMyActionBar.getTvRight(), 0, 0, Gravity.START);
+
+    }
 
 }

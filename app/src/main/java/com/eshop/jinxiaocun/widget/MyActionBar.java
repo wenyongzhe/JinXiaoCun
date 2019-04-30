@@ -8,12 +8,18 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
+
+import java.util.List;
 
 
 public final class MyActionBar extends LinearLayout {
@@ -27,6 +33,8 @@ public final class MyActionBar extends LinearLayout {
     private TextView tvRight;
     private View iconLeft;
     private View iconRight;
+    private Spinner mSpinner;
+    private Context context;
 
     public MyActionBar(Context context) {
         this(context, null);
@@ -34,6 +42,7 @@ public final class MyActionBar extends LinearLayout {
 
     public MyActionBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         init();
     }
 
@@ -51,6 +60,7 @@ public final class MyActionBar extends LinearLayout {
         tvRight = (TextView) contentView.findViewById(R.id.tv_actionbar_right);
         iconLeft = contentView.findViewById(R.id.iv_actionbar_left);
         iconRight = contentView.findViewById(R.id.v_actionbar_right);
+        mSpinner = contentView.findViewById(R.id.sp_actionbar_right);
         tvTitle.setText(Config.soft_name);
     }
 
@@ -199,5 +209,75 @@ public final class MyActionBar extends LinearLayout {
         }
     }
 
+    public void setData(String strTitle, int resIdLeft, String strLeft, int resIdRight, String strRight, List strSpinner, final ActionBarClickListener listener) {
+        if (!TextUtils.isEmpty(strTitle)) {
+            tvTitle.setText(strTitle);
+        } else {
+            tvTitle.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(strLeft)) {
+            tvLeft.setText(strLeft);
+            tvLeft.setVisibility(View.VISIBLE);
+        } else {
+            tvLeft.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(strRight)) {
+            tvRight.setText(strRight);
+            tvRight.setVisibility(View.VISIBLE);
+        } else {
+            tvRight.setVisibility(View.GONE);
+        }
+
+        if (strSpinner!=null&&strSpinner.size()>0) {
+            ArrayAdapter<String> mTuiHupoAdapter = new ArrayAdapter<>(context, R.layout.my_simple_spinner_item2, strSpinner);
+            mTuiHupoAdapter.setDropDownViewResource(R.layout.my_drop_down_item);
+            mSpinner.setAdapter(mTuiHupoAdapter);
+            mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+            mSpinner.setVisibility(View.VISIBLE);
+        } else {
+            mSpinner.setVisibility(View.GONE);
+        }
+
+        if (resIdLeft == 0) {
+            iconLeft.setVisibility(View.GONE);
+        } else {
+            iconLeft.setBackgroundResource(resIdLeft);
+            iconLeft.setVisibility(View.VISIBLE);
+        }
+
+        if (resIdRight == 0) {
+            iconRight.setVisibility(View.GONE);
+        } else {
+            iconRight.setBackgroundResource(resIdRight);
+            iconRight.setVisibility(View.VISIBLE);
+        }
+
+        if (listener != null) {
+            layLeft = findViewById(R.id.lay_actionbar_left);
+            layRight = findViewById(R.id.lay_actionbar_right);
+            layLeft.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onLeftClick();
+                }
+            });
+            layRight.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onRightClick();
+                }
+            });
+        }
+    }
 
 }

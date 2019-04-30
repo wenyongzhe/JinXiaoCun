@@ -54,7 +54,7 @@
 
         <RelativeLayout
             android:id="@+id/lay_actionbar_right"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="right"
@@ -81,6 +81,15 @@
                 android:singleLine="true"
                 android:text="@string/confirm"
                 android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/sp_actionbar_right"
+                android:layout_toLeftOf="@+id/v_actionbar_right"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"/>
+
         </RelativeLayout>
 
     </RelativeLayout>

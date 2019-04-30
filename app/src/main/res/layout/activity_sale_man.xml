@@ -42,7 +42,7 @@
         <EditText
             android:id="@+id/txtCountN"
             android:layout_width="match_parent"
-            style="@style/EditText_Black"
+            style="@style/EditText_Grey_Border"
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:maxLength="6"

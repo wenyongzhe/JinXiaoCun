@@ -46,6 +46,7 @@ import com.google.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -386,6 +387,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     mLingShouScanImp.sellSub(FlowNo);
                     break;
                 case 1:
+
+                 /*sunmi的摄像头扫码
+                    Intent intent = new Intent("com.summi.scan");
+                    intent.setPackage("com.sunmi.sunmiqrcodescanner");*/
+
+
                     Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
                     startActivityForResult(intent, Config.REQ_QR_CODE);
                     //rtWzfQry();
@@ -672,6 +679,23 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         return false;
     }
 
+    private boolean sunmiScan(int requestCode, int resultCode, Intent data){
+        if (requestCode == 1 && data != null) {
+            Bundle bundle = data.getExtras();
+            ArrayList<HashMap<String, String>> result = (ArrayList<HashMap<String, String>>) bundle
+                    .getSerializable("data");
+
+            Iterator<HashMap<String, String>> it = result.iterator();
+            while (it.hasNext()) {
+                HashMap<String, String> hashMap = it.next();
+                Log.i("sunmi", hashMap.get("TYPE"));//这个是扫码的类型
+                Log.i("sunmi", hashMap.get("VALUE"));//这个是扫码的结果
+            }
+            return true;
+        }
+        return false;
+    }
+
     String code;
     String tempayway;
     String temMoney;
@@ -679,6 +703,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         double temprice;
+        //sunmi摄像头扫码
+        if(sunmiScan(requestCode,resultCode,data)){
+            return;
+        }
+
         switch (resultCode){
             case Config.MESSAGE_PAY_MAN:
                 saleMan = data.getStringExtra("PayMan");

@@ -118,6 +118,7 @@ public class Config {
     public static final String DANJUMAINBEANRESULTITEM ="DanJuMainBeanResultItem";
     public static final String BILLGLIDENO ="billGlideNO";
     public static final String LINSHOU ="LinShou";
+    public static final String LINSHOU_MAIN ="LinShou_main";
     //门店组
     public static String ShopGroup = "";
     //记录连接的蓝牙地址

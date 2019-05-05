@@ -300,7 +300,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             }
         }
         for(int i=0; i<mGetClassPluResultList.size(); i++){
-            mGetClassPluResultList.get(i).sale_price_beforModify = mGetClassPluResultList.get(i).getSale_price();
+            mGetClassPluResultList.get(i).setSale_price_beforModify(mGetClassPluResultList.get(i).getSale_price());
         }
         mListData.addAll(mGetClassPluResultList);
     }

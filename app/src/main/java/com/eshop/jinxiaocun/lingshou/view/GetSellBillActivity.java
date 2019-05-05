@@ -7,11 +7,19 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.BaseScanActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetSellBillActivity extends BaseScanActivity {
 
     private GridLayout gv_bill_main;
+    private List<GetClassPluResult> mListMainData = new ArrayList<>();
+    private List<GetClassPluResult> mListDetalData = new ArrayList<>();
+    private LingShouGetBillMainAdapter mGetBIllMainAdapter;
+    private LingShouScanAdapter mGetBIllDetailAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +41,8 @@ public class GetSellBillActivity extends BaseScanActivity {
 
     @Override
     protected void loadData() {
-
+        mGetBIllMainAdapter = new LingShouGetBillMainAdapter(mListMainData);
+        mGetBIllDetailAdapter = new LingShouScanAdapter(mListDetalData);
     }
 
     @Override

@@ -29,6 +29,8 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.db.BusinessBLL;
+import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
@@ -122,6 +124,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private String Pay_way2 = "";
     private boolean isVipPay = false;
     YouHuiPopupWindow mWindow;
+    private int goodTotal = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -436,7 +439,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             }
         }
         for(int i=0; i<mGetClassPluResultList.size(); i++){
-            mGetClassPluResultList.get(i).sale_price_beforModify = mGetClassPluResultList.get(i).getSale_price();
+            mGetClassPluResultList.get(i).setSale_price_beforModify(mGetClassPluResultList.get(i).getSale_price());
         }
         mListData.addAll(mGetClassPluResultList);
     }
@@ -619,6 +622,18 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             btn_zhengdanzhekou();
                             break;
                         case R.id.id_3:
+                            String time = System.currentTimeMillis()+"";
+                            GetBillMain mGetBillMain = new GetBillMain();
+                            mGetBillMain.setTimeNo(time);
+                            mGetBillMain.setTotal(total+"");
+                            mGetBillMain.setCount(goodTotal+"");
+                            BusinessBLL.getInstance().insertGuaDanMain(mGetBillMain);
+                            boolean ok = BusinessBLL.getInstance().insertGuaDanGoodsInfo(time,mListData);
+                            if(ok){
+                                ToastUtils.showShort(R.string.guadan_ok);
+                                finish();
+                            }
+                            break;
                     }
                     mWindow.dismiss();
                 }
@@ -835,9 +850,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     }
 
     private void reflashList(){
+        goodTotal = 0;
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
-        int goodTotal = 0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
@@ -1000,7 +1015,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("此商品不允许议价。");
             }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
-            intent.putExtra("oldPrice",Double.parseDouble(item.sale_price_beforModify));
+            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price_beforModify()));
             intent.putExtra("limit",Config.danbiYiJialimit);
             startActivityForResult(intent,200);
         }catch (Exception e){

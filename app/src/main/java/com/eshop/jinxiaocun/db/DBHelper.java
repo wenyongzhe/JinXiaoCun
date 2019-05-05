@@ -10,6 +10,7 @@ import com.eshop.jinxiaocun.base.bean.BillGlideNo;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.UpDetailBean;
 import com.eshop.jinxiaocun.base.bean.UpMainBean;
+import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -75,7 +76,13 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql);//执行sql语句
 
         //创建表结构  挂单取单
-        sql = "create table "+ Config.LINSHOU+"("+ "idno integer primary key autoincrement,"
+        sql = "create table "+ Config.LINSHOU_MAIN+"("+ "id integer primary key autoincrement,"
+                + cloumFile(GetBillMain.class) +")";
+        sqLiteDatabase.execSQL(sql);//执行sql语句
+
+        //创建表结构  挂单取单
+        sql = "create table "+ Config.LINSHOU+"("+ "id integer primary key autoincrement," +
+                "timeNo varchar(20),"
                 + cloumFile(GetClassPluResult.class) +")";
         sqLiteDatabase.execSQL(sql);//执行sql语句
     }

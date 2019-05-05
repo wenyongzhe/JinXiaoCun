@@ -241,7 +241,7 @@
     <string name="jiezhuang_ok">结转成功</string>
     <string name="save_member">保存会员号码</string>
     <string name="guadan" tools:ignore="ExtraTranslation">挂单</string>
-
+    <string name="guadan_ok">挂单成功</string>
     <!--打印-->
     <string name="recharge_success">充值成功</string>
     <string name="is_need_print">是否需要打印小票</string>

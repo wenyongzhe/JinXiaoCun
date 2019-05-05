@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent">
+    <LinearLayout
+    android:orientation="horizontal"
+    android:layout_height="@dimen/layout_margin30"
+    android:layout_width="fill_parent">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/TextView_Grey"
+            android:gravity="center"
+            android:maxLines="1"/>
+        <TextView
+            android:id="@+id/item_no"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            style="@style/TextView_Grey"
+            android:maxLines="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="@dimen/layout_margin30"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/sale_qnty"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            style="@style/TextView_Grey"
+            android:maxLines="1"/>
+        <!--售价-->
+        <TextView
+            android:id="@+id/sale_price"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            style="@style/TextView_Grey"
+            android:maxLines="1"/>
+        <!--总价-->
+        <TextView
+            android:id="@+id/sale_total"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            style="@style/TextView_Grey"
+            android:maxLines="1"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#dedede" />
+
+
+</LinearLayout>

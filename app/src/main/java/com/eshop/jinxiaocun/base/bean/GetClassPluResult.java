@@ -31,9 +31,9 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private String sale_qnty;//:1 //数量
     private boolean hasYiJia = false;//是否已经议价
     private String orderType;//保存本地时与单据类型绑定
-    public String Sheet_No;//保存本地时与单据号绑定
+    private String Sheet_No;//保存本地时与单据号绑定
     private int hasModifyPrice = 0;//0未修改过价格  1表示已修改价格
-    public String sale_price_beforModify;//改价前售价
+    private String sale_price_beforModify;//改价前售价
     private int order_qnty;//订单数量
 
     public int getHasModifyPrice() {

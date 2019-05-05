@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.bean.BillType;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
 import com.eshop.jinxiaocun.piandian.bean.PandianDetailBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -19,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 业务操作类
@@ -331,6 +333,74 @@ public class BusinessBLL {
         Config.DBHelper.commitTrans();
 
     }
+
+    //保存商品信息
+    public boolean insertGuaDanMain(GetBillMain data)throws SQLException{
+        try{
+            Field[] flds = data.getClass().getDeclaredFields();//私有字段
+            ContentValues values = new ContentValues();
+            for (Field fld : flds) {
+                if(fld.getName().equals("serialVersionUID"))
+                    continue;
+                if (fld.getName().equals("$change")) {
+                    continue;
+                }
+                Object value = ReflactUtility.getInstance().getFldValue(data, fld.getName());
+                if (value != null) {
+                    if(value instanceof String){
+                        values.put(fld.getName(),value.toString());
+                    }else if(value instanceof Integer){
+                        values.put(fld.getName(),MyUtils.convertToInt(value,0));
+                    }else if(value instanceof Float){
+                        values.put(fld.getName(),MyUtils.convertToFloat(value,0f));
+                    }else if(value instanceof Double){
+                        values.put(fld.getName(),MyUtils.convertToDouble(value,0d));
+                    }
+                }
+            }
+            Config.DBHelper.insert(Config.LINSHOU_MAIN,values);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    //保存商品信息
+    public boolean insertGuaDanGoodsInfo(String time,List<GetClassPluResult> data)throws SQLException{
+        try{
+            for(int i=0; i<data.size(); i++){
+                Field[] flds = data.get(i).getClass().getDeclaredFields();//私有字段
+                ContentValues values = new ContentValues();
+                for (Field fld : flds) {
+                    if(fld.getName().equals("serialVersionUID"))
+                        continue;
+                    if (fld.getName().equals("$change")) {
+                        continue;
+                    }
+                    Object value = ReflactUtility.getInstance().getFldValue(data.get(i), fld.getName());
+                    if (value != null) {
+                        if(value instanceof String){
+                            values.put(fld.getName(),value.toString());
+                        }else if(value instanceof Integer){
+                            values.put(fld.getName(),MyUtils.convertToInt(value,0));
+                        }else if(value instanceof Float){
+                            values.put(fld.getName(),MyUtils.convertToFloat(value,0f));
+                        }else if(value instanceof Double){
+                            values.put(fld.getName(),MyUtils.convertToDouble(value,0d));
+                        }
+                    }
+                }
+                values.put("timeNo",time);
+                Config.DBHelper.insert(Config.LINSHOU,values);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     //保存商品信息
     public boolean insertGoodsInfo(GetClassPluResult data)throws SQLException{
         try{

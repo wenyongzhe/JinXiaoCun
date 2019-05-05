@@ -159,10 +159,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         break;
                     case 2:
                         displayLayout(false);
-                        if(memberId.equals("")){
-                            Intent mIntent = new Intent(PayActivity.this, SaveMemberActivity.class);
-                            startActivityForResult(mIntent,200);
-                        }
+//                        if(memberId.equals("")){
+//                            Intent mIntent = new Intent(PayActivity.this, SaveMemberActivity.class);
+//                            startActivityForResult(mIntent,200);
+//                        }
                         break;
                 }
             }

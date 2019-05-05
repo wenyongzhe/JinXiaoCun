@@ -25,7 +25,9 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
+import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
+import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
@@ -131,6 +133,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         ButterKnife.bind(this);
         //btSell.setText(R.string.bt_sell);
 
+        mMyActionBar.setRightTitleAndStyle("\t\t\t",R.drawable.member_card);
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -361,9 +364,33 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     }
 
     @Override
+    public void onLeftClick() {
+        super.onLeftClick();
+        AlertUtil.showAlert(this,
+                R.string.dialog_title,
+                R.string.mess_back,
+                R.string.confirm,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                        finish();
+                    } },
+                R.string.cancel,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertUtil.dismissDialog();
+                    } }
+        );
+    }
+
+    @Override
     public void onRightClick() {
-        Intent mIntent = new Intent(this, QreShanpingActivity.class);
-        startActivityForResult(mIntent,100);
+//        Intent mIntent = new Intent(this, QreShanpingActivity.class);
+//        startActivityForResult(mIntent,100);
+        //结算完成时记录Config.mMemberInfo赋null
+        startActivity(new Intent(this, MemberCheckActivity.class));
     }
 
     @OnClick(R.id.btn_add)
@@ -392,5 +419,11 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Config.mMemberInfo=null;
     }
 }

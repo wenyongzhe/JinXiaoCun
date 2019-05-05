@@ -134,6 +134,9 @@ public class Config {
     public final static String logPath = Config.getSdCardPath() + "/"+download_dir+"/log/";
     public final static String logFilePath = Config.getSdCardPath() + "/"+download_dir+"/log/log.txt";
 
+    //结算后记得清空
+    public static MemberCheckResultItem mMemberInfo;
+
     public static String getSdCardPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
@@ -154,7 +157,5 @@ public class Config {
         PD,//盘点批次号
         CR,//盘点单号
     }
-
-    public static ArrayList<MemberCheckResultItem> memberCheckList;
 
 }

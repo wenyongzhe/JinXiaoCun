@@ -683,4 +683,136 @@ public class BusinessBLL {
         void progressUpdate(int progress ,int maxProgress,T module);
     }
 
+    //挂单主表
+    public List<GetBillMain> getGuaDanMain()throws SQLException{
+        List<GetBillMain> list = new ArrayList<>();
+        Cursor cursor = null;
+        try{
+            StringBuffer sbf = new StringBuffer();
+            sbf.append("select * from ");
+            sbf.append(Config.LINSHOU_MAIN);
+
+            cursor = Config.DBHelper.query(sbf.toString());
+            int count = cursor.getCount();
+            cursor.moveToFirst();
+            // 取出所有的列名
+            Field[] arrField = GetBillMain.class.getDeclaredFields();
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                GetBillMain module = new GetBillMain();
+                // 遍历有列
+                for (Field field : arrField) {
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
+                    if (field.getName().equals("$change")) {
+                        continue;
+                    }
+                    String columnName = field.getName();
+                    int columnIdx = cursor.getColumnIndex(columnName);
+                    if (columnIdx == -1) {
+                        continue;
+                    }
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Class<?> type = field.getType();
+                    if (type == String.class)
+                        field.set(module, cursor.getString(columnIdx));
+                    else if (type == int.class)
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx), 0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx), 0f));
+                }
+                list.add(module);
+                cursor.moveToNext();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+        }
+        return list;
+    }
+
+    //挂单明细
+    public List<GetClassPluResult> getGuaDanDetail(String time)throws SQLException{
+        List<GetClassPluResult> list = new ArrayList<>();
+        Cursor cursor = null;
+        try{
+            StringBuffer sbf = new StringBuffer();
+            sbf.append("select * from ");
+            sbf.append(Config.LINSHOU);
+            sbf.append(" where timeNo="+time);
+
+            cursor = Config.DBHelper.query(sbf.toString());
+            int count = cursor.getCount();
+            cursor.moveToFirst();
+            // 取出所有的列名
+            Field[] arrField = GetClassPluResult.class.getDeclaredFields();
+            // 遍历游标
+            for (int i = 0; i < count; i++) {
+                // 转化为moduleClass类的一个实例
+                GetClassPluResult module = new GetClassPluResult();
+                // 遍历有列
+                for (Field field : arrField) {
+                    if (field.isSynthetic()) {
+                        continue;
+                    }
+                    if (field.getName().equals("serialVersionUID")) {
+                        continue;
+                    }
+                    if (field.getName().equals("$change")) {
+                        continue;
+                    }
+                    String columnName = field.getName();
+                    int columnIdx = cursor.getColumnIndex(columnName);
+                    if (columnIdx == -1) {
+                        continue;
+                    }
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    Class<?> type = field.getType();
+                    if (type == String.class)
+                        field.set(module, cursor.getString(columnIdx));
+                    else if (type == int.class)
+                        field.set(module, MyUtils.convertToInt(cursor.getString(columnIdx), 0));
+                    else if (type == float.class)
+                        field.set(module, MyUtils.convertToFloat(cursor.getString(columnIdx), 0f));
+                }
+                list.add(module);
+                cursor.moveToNext();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+        }
+        return list;
+    }
+
+    //根据时间删除挂单
+    public int deleGuaDanMainDetail(String time)throws SQLException {
+        try{
+            if(!tableIsExist(Config.PANDIAN_DETAIL_GOODS))return 0;
+            String sql = "DELETE FROM "+Config.LINSHOU+" where timeNo=?";
+            Config.DBHelper.exeSql(sql, new String[]{time});
+
+            sql = "DELETE FROM "+Config.LINSHOU_MAIN+" where timeNo=?";
+            Config.DBHelper.exeSql(sql, new String[]{time});
+
+            return 1;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 }

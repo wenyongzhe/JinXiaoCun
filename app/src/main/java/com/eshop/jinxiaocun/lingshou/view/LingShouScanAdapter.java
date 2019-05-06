@@ -21,6 +21,9 @@ public class LingShouScanAdapter extends MyBaseAdapter {
 
     private List<GetClassPluResult> listInfo;
 
+    public void setListInfo(List<GetClassPluResult> listInfo) {
+        this.listInfo = listInfo;
+    }
 
     public LingShouScanAdapter(List<GetClassPluResult> listInfo) {
         this.listInfo = listInfo;

@@ -7,7 +7,7 @@
 
         <ListView
             android:id="@+id/listview_data"
-            android:layout_marginBottom="@dimen/layout_item_height_50"
+            android:layout_marginBottom="@dimen/layout_item_height_85"
             android:layout_width="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"

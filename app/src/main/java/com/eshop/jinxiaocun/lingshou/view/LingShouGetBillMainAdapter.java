@@ -10,16 +10,22 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.MyBaseAdapter;
+import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
 
 public class LingShouGetBillMainAdapter extends MyBaseAdapter {
 
-    private List<GetClassPluResult> listInfo;
+    private List<GetBillMain> listInfo;
 
 
-    public LingShouGetBillMainAdapter(List<GetClassPluResult> listInfo) {
+    public LingShouGetBillMainAdapter(List<GetBillMain> listInfo) {
+        this.listInfo = listInfo;
+    }
+
+    public void setListInfo(List<GetBillMain> listInfo) {
         this.listInfo = listInfo;
     }
 
@@ -49,12 +55,9 @@ public class LingShouGetBillMainAdapter extends MyBaseAdapter {
         TextView sale_qnty = ViewHolderUtils.get(convertView, R.id.sale_qnty);
         TextView sale_total = ViewHolderUtils.get(convertView, R.id.sale_total);
 
-        sale_qnty.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
-        sale_price.setText("￥"+listInfo.get(position).getSale_price());
-        item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
-        item_name.setText(listInfo.get(position).getItem_name());
-        sale_total.setText("￥"+Float.parseFloat(listInfo.get(position).getSale_qnty())*
-                Float.parseFloat(listInfo.get(position).getSale_price())+"");
+        item_name.setText(DateUtility.stampToDate(listInfo.get(position).getTimeNo()));
+        sale_price.setText("￥"+listInfo.get(position).getTotal());
+        sale_qnty.setText("数量："+listInfo.get(position).getCount());
         return super.getView(position,convertView,parent);
     }
 

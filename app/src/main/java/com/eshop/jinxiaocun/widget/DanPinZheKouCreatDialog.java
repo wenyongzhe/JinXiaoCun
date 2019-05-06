@@ -79,7 +79,7 @@ public class DanPinZheKouCreatDialog extends Activity {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
-                        tv_newprice.setText("￥"+MyUtils.formatDouble3(oldPrice*price/100));
+                        tv_newprice.setText("￥"+MyUtils.formatDouble2(oldPrice*price/100));
                     }
                 }catch (Exception e){
                 }

@@ -38,6 +38,7 @@ import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
@@ -134,6 +135,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
         money = initDouble(3,money);
         et_price.setText("￥"+money);
+        et_pay_money.setText(MyUtils.formatDouble2(money));
+        tv_pay_return.setText("0");
         sp_payway = (Spinner) findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
 
@@ -183,7 +186,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     tv_money = tv_money + 0.0000000000001;
                     if(tv_money>money){
                         double moneyTem = initDouble(3,tv_money-money);
-                        tv_pay_return.setText(moneyTem+"");
+                        tv_pay_return.setText(MyUtils.formatDouble2(moneyTem));
                     }else{
                         tv_pay_return.setText("");
                     }

@@ -496,7 +496,16 @@ public class MyUtils {
         // 保留两位小数
         nf.setMaximumFractionDigits(4);
         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
-        nf.setRoundingMode(RoundingMode.UP);
+        nf.setRoundingMode(RoundingMode.HALF_UP);
+        return nf.format(d);
+    }
+
+    public static String formatDouble2(double d) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        // 保留两位小数
+        nf.setMaximumFractionDigits(2);
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(RoundingMode.HALF_UP);
         return nf.format(d);
     }
 

@@ -302,6 +302,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             for(int j=0; j<mGetClassPluResultList.size(); j++){
                 if(mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())){
                     mGetClassPluResultList.remove(j);
+                    mListData.get(i).setSale_qnty((Integer.decode(mListData.get(i).getSale_qnty())+1)+"");
                     break;
                 }
             }

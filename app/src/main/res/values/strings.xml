@@ -223,6 +223,7 @@
     <string name="list_loading">正在刷新数据中 &#8230;</string>
     <string name="last_updata">上次更新： </string>
     <!--零售-->
+    <string name="bt_go_sell">去结算</string>
     <string name="bt_sell">结算</string>
     <string name="ok">确定</string>
     <string name="continue_save">继续保存</string>

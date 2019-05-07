@@ -76,6 +76,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     ImageButton ib_seach;
     @BindView(R.id.btn_vip)
     Button btn_vip;
+    @BindView(R.id.bt_next)
+    Button bt_next;
 
 
     private List<GetClassPluResult> mListData = new ArrayList<>();
@@ -302,8 +304,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         if ((totalStr.length() - totalStr.indexOf(".")) > 3) {
             totalStr = totalStr.substring(0, totalStr.indexOf(".") + 4);
         }
-        tv_check_num.setText("应收金额：" + totalStr);
-        tv_total_num.setText("商品数：" + goodTotal);
+        tv_check_num.setText("总金额：" + totalStr);
+        tv_total_num.setText(goodTotal+"");
         tv_order_num.setText("记录数：" + mListData.size());
     }
 
@@ -410,7 +412,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         startActivity(new Intent(this, MemberCheckActivity.class));
     }
 
-    @OnClick(R.id.btn_add)
+    @OnClick(R.id.bt_next)
     void sell() {
         if (mListData == null || mListData.size() == 0) {
             ToastUtils.showShort("请选择商品");

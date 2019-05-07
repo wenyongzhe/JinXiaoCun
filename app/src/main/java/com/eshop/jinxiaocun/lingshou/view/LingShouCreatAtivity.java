@@ -213,6 +213,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
             intent.putExtra("oldPrice", Double.parseDouble(item.getSale_price()));
             intent.putExtra("limit", Config.danbiZheKoulimit);
+            intent.putExtra("count", item.getSale_qnty());
             startActivityForResult(intent, 100);
         } catch (Exception e) {
             Log.e("", "");

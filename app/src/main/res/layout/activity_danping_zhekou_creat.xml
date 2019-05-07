@@ -27,8 +27,9 @@
             android:layout_marginRight="10dp"
             android:src="@drawable/delete"
             android:layout_alignParentEnd="true"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_centerVertical="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -43,14 +44,17 @@
             style="@style/TextView_Grey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="应收金额：" />
+            android:text="应收金额：￥" />
 
-        <TextView
-            android:id="@+id/tv_oldprice"
+        <EditText
+            android:id="@+id/et_oldprice"
             android:layout_width="match_parent"
+            style="@style/EditText_Black"
             android:layout_height="wrap_content"
             android:gravity="start|center"
+            android:maxLength="6"
             android:maxLines="1"
+            android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />
 
@@ -134,10 +138,12 @@
         <EditText
             android:id="@+id/tv_count"
             android:layout_width="match_parent"
+            style="@style/EditText_Black"
             android:layout_height="wrap_content"
             android:gravity="start|center"
+            android:maxLength="6"
             android:maxLines="1"
-            style="@style/EditText_Black"
+            android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />
 

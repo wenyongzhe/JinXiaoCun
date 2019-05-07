@@ -29,8 +29,8 @@ public class DanPinZheKouCreatDialog extends Activity {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
-    @BindView(R.id.tv_oldprice)
-    TextView tv_oldprice;
+    @BindView(R.id.et_oldprice)
+    EditText et_oldprice;
     @BindView(R.id.tv_newprice)
     TextView tv_newprice;
     @BindView(R.id.tv_count)
@@ -42,6 +42,7 @@ public class DanPinZheKouCreatDialog extends Activity {
     double oldPrice;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
+    private String mCount = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,9 @@ public class DanPinZheKouCreatDialog extends Activity {
         try {
             mSavediscount = getIntent().getStringExtra("Savediscount");
             mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
+            mCount = getIntent().getStringExtra("count");
+
+            tv_count.setText(mCount);
             txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
             txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
         }catch (Exception e){
@@ -68,7 +72,7 @@ public class DanPinZheKouCreatDialog extends Activity {
         txtCountN.setText(intent.getStringExtra("countN"));
 
         oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
-        tv_oldprice.setText("￥"+oldPrice);
+        et_oldprice.setText(""+oldPrice);
 
         txtCountN.addTextChangedListener(new TextWatcher() {
             @Override

@@ -16,9 +16,10 @@
             android:hint="@string/list_item_BarCode"
             android:layout_margin="10dp"
             style="@style/EditText_Grey_Border"
-            android:layout_width="305dp"
+            android:layout_width="fill_parent"
             android:layout_height="@dimen/layout_margin35"/>
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/ib_seach"
             android:background="@drawable/seach"
             android:layout_width="wrap_content"

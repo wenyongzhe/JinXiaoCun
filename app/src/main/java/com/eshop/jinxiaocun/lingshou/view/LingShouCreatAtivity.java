@@ -155,6 +155,13 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 return false;
             }
         });
+        et_barcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(LingShouCreatAtivity.this, QreShanpingActivity.class);
+                startActivityForResult(mIntent,100);
+            }
+        });
 
         ib_seach.setOnClickListener(new View.OnClickListener() {
             @Override

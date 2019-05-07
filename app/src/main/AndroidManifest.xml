@@ -14,21 +14,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- 扫描 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 扫描 -->
     <uses-permission android:name="android.permission.SERIAL_PORT" />
-    <uses-permission android:name="android.permission.VIBRATE" /><!-- 震动权限 -->
-    <!--Nfc-->
-    <uses-permission android:name="android.permission.NFC" />
-    <!--打印-->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
+    <!-- Nfc -->
+    <uses-permission android:name="android.permission.NFC" /> <!-- 打印 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <!--相机-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 摄像头权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -42,6 +37,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/nfc_tech_filter" />
+
         <activity android:name=".main.view.MainActivity" />
         <activity
             android:name=".pifaxiaoshou.view.XiaoShouDanListActivity"
@@ -57,8 +56,8 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".login.LoginActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,7 +78,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-                android:name=".lingshou.view.LingShouCreatAtivity"
+            android:name=".lingshou.view.LingShouCreatAtivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -168,191 +167,205 @@
             android:name=".piandian.view.SelectPandianGoodsListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".piandian.view.PandianManagerActivity"
+        <activity
+            android:name=".piandian.view.PandianManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".pifaxiaoshou.view.PifaManagerActivity"
+        <activity
+            android:name=".pifaxiaoshou.view.PifaManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".pifaxiaoshou.view.PifaChukuListActivity"
+        <activity
+            android:name=".pifaxiaoshou.view.PifaChukuListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".pifaxiaoshou.view.PifaChukuScanActivity"
+        <activity
+            android:name=".pifaxiaoshou.view.PifaChukuScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".pifaxiaoshou.view.PifaTuihuoListActivity"
+        <activity
+            android:name=".pifaxiaoshou.view.PifaTuihuoListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".pifaxiaoshou.view.PifaTuihuoScanActivity"
+        <activity
+            android:name=".pifaxiaoshou.view.PifaTuihuoScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".caigou.view.CaigouManagerActivity"
+        <activity
+            android:name=".caigou.view.CaigouManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".caigou.view.CaigouOrderListActivity"
+        <activity
+            android:name=".caigou.view.CaigouOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".caigou.view.CaigouOrderScanActivity"
+        <activity
+            android:name=".caigou.view.CaigouOrderScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".othermodel.view.SelectProviderListActivity"
+        <activity
+            android:name=".othermodel.view.SelectProviderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".othermodel.view.SelectWarehouseListActivity"
+        <activity
+            android:name=".othermodel.view.SelectWarehouseListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".caigou.view.CaigouRuCangListActivity"
+        <activity
+            android:name=".caigou.view.CaigouRuCangListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".caigou.view.CaigouRucangScanActivity"
+        <activity
+            android:name=".caigou.view.CaigouRucangScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.PeisongManagerActivity"
+        <activity
+            android:name=".peisong.view.PeisongManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.PeisongRukuListActivity"
+        <activity
+            android:name=".peisong.view.PeisongRukuListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.PeisongRukuScanActivity"
+        <activity
+            android:name=".peisong.view.PeisongRukuScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.PeisongChukuListActivity"
+        <activity
+            android:name=".peisong.view.PeisongChukuListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.PeisongChukuScanActivity"
+        <activity
+            android:name=".peisong.view.PeisongChukuScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.YaohuoOrderListActivity"
+        <activity
+            android:name=".peisong.view.YaohuoOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.YaohuoOrderScanActivity"
+        <activity
+            android:name=".peisong.view.YaohuoOrderScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name="com.eshop.jinxiaocun.zjPrinter.DeviceListActivity"
-                  android:label="@string/select_device"
-                  android:theme="@android:style/Theme.Dialog"
-                  android:configChanges="orientation|keyboardHidden" />
-
-        <activity android:name="com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:configChanges="orientation|keyboardHidden" />
-
-        <activity android:name="com.eshop.jinxiaocun.widget.DanPinZheKouDialog"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:configChanges="orientation|keyboardHidden" />
-
-        <activity android:name="com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:configChanges="orientation|keyboardHidden" />
-
-        <activity android:name="com.eshop.jinxiaocun.widget.SaleManDialog"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:configChanges="orientation|keyboardHidden" />
-
-        <activity android:name=".peisong.view.CiteOrderListActivity"
+        <activity
+            android:name=".zjPrinter.DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/select_device"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".widget.DanPinGaiJiaDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity
+            android:name=".widget.DanPinZheKouDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity
+            android:name=".widget.DanPinZheKouCreatDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity
+            android:name=".widget.SaleManDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity
+            android:name=".peisong.view.CiteOrderListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".piandian.view.CheckNoPandianGoodsListActivity"
+        <activity
+            android:name=".piandian.view.CheckNoPandianGoodsListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".peisong.view.ModifyGoodsInfoActivity"
+        <activity
+            android:name=".peisong.view.ModifyGoodsInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".widget.ModifyPriceDialog"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name="com.eshop.jinxiaocun.widget.SelectPayDialog"
-                  android:theme="@style/MyDialogStyleBottom"
-                  android:configChanges="orientation|keyboardHidden" />
-        <activity android:name="com.eshop.jinxiaocun.widget.ListviewDialog"
-                  android:theme="@style/MyDialogStyleBottom"
-                  android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name="com.google.zxing.activity.CaptureActivity"/>
+            android:name=".widget.SelectPayDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/MyDialogStyleBottom" />
         <activity
-            android:name="com.eshop.jinxiaocun.lingshou.view.VipPayActivity"/>
-        <activity
-            android:name="com.eshop.jinxiaocun.lingshou.view.PayActivity"/>
-
+            android:name=".widget.ListviewDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/MyDialogStyleBottom" />
+        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <activity android:name=".lingshou.view.VipPayActivity" />
+        <activity android:name=".lingshou.view.PayActivity" />
         <activity
             android:name=".widget.InputRemarksDialog"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".bluetoothprinter.view.SettingBluetoothActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".widget.ModifyGoodsPriceDialog"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".huiyuan.view.HuiyuanManagerActivity"
+        <activity
+            android:name=".huiyuan.view.HuiyuanManagerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.AddMemberActivity"
+        <activity
+            android:name=".huiyuan.view.AddMemberActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.MemberCheckActivity"
+        <activity
+            android:name=".huiyuan.view.MemberCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".lingshou.view.SaveMemberActivity"
+        <activity
+            android:name=".lingshou.view.SaveMemberActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.MemberRechargeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.ExpenseCheckActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.IntegralSubtractActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.IntegralExchangeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".huiyuan.view.IntegralExchangeGoodsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <receiver android:name="com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity$FinishReceiver"
-            android:exported="true"
-            android:enabled="true">
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                  <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TAG_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+        </activity>
+        <activity
+            android:name=".huiyuan.view.MemberRechargeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".huiyuan.view.ExpenseCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".huiyuan.view.IntegralSubtractActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".huiyuan.view.IntegralExchangeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".huiyuan.view.IntegralExchangeGoodsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <receiver
+            android:name=".lingshou.view.LingShouCreatAtivity$FinishReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

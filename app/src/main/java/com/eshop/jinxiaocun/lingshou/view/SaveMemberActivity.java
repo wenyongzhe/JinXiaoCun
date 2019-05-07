@@ -1,17 +1,27 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -20,6 +30,12 @@ public class SaveMemberActivity extends MemberCheckActivity {
 
     @BindView(R.id.bt_ok)
     Button bt_ok;//
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initData();
+    }
 
     @OnClick(R.id.bt_ok)
     public void onClickOK(){
@@ -46,5 +62,38 @@ public class SaveMemberActivity extends MemberCheckActivity {
     protected void initView() {
         super.initView();
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //当该Activity接收到NFC标签时，运行该方法
+        //调用工具方法，读取NFC数据
+        try {
+            String str = NfcUtils.readNFCFromTag(intent);
+            String stsr = NfcUtils.readNFCId(intent);
+            mEtSearch.setText(str);
+            onClickSearch();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initData() {
+        //nfc初始化设置
+        NfcUtils nfcUtils = new NfcUtils(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //开启前台调度系统
+        NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //关闭前台调度系统
+        NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
     }
 }

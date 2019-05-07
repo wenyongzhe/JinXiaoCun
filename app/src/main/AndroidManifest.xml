@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.eshop.jinxiaocun">
 
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
@@ -18,7 +19,8 @@
     <!-- 扫描 -->
     <uses-permission android:name="android.permission.SERIAL_PORT" />
     <uses-permission android:name="android.permission.VIBRATE" /><!-- 震动权限 -->
-
+    <!--Nfc-->
+    <uses-permission android:name="android.permission.NFC" />
     <!--打印-->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -342,6 +344,15 @@
         <activity android:name=".huiyuan.view.IntegralExchangeGoodsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <receiver android:name="com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity$FinishReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -25,7 +25,6 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
-import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
@@ -33,15 +32,14 @@ import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog;
-import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 
 import java.io.Serializable;
@@ -96,7 +94,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     private String Pay_way = "";
     private String Pay_way2 = "";
     private boolean isVipPay = false;
-
+    private FinishReceiver recevier;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,20 +103,25 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         setScanBroadCast();
     }
 
-    private void setScanBroadCast(){
+    private void setScanBroadCast() {
         Intent intent = new Intent("com.android.scanner.service_settings");
-        intent.putExtra("action_barcode_broadcast","com.android.server.scannerservice.broadcast");
+        intent.putExtra("action_barcode_broadcast", "com.android.server.scannerservice.broadcast");
         intent.putExtra("key_barcode_broadcast", "scannerdata");
         sendBroadcast(intent);
         IntentFilter intentFilter = new IntentFilter("com.android.server.scannerservice.broadcast");
-        registerReceiver(scanReceiver,intentFilter);
+        registerReceiver(scanReceiver, intentFilter);
+
+        recevier = new FinishReceiver();
+        IntentFilter intentFilter2 = new IntentFilter("com.example.mymessage");
+        //当网络发生变化的时候，系统广播会发出值为android.net.conn.CONNECTIVITY_CHANGE这样的一条广播
+        registerReceiver(recevier, intentFilter2);
     }
 
-    private BroadcastReceiver scanReceiver  = new BroadcastReceiver() {
+    private BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String barcode = intent.getStringExtra("scannerdata");
-            Log.e("","--"+barcode);
+            Log.e("", "--" + barcode);
             et_barcode.setText(barcode);
         }
     };
@@ -133,11 +136,11 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         ButterKnife.bind(this);
         //btSell.setText(R.string.bt_sell);
 
-        mMyActionBar.setRightTitleAndStyle("\t\t\t",R.drawable.member_card);
+        mMyActionBar.setRightTitleAndStyle("\t\t\t", R.drawable.member_card);
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(event !=null  && event.getAction() != KeyEvent.ACTION_DOWN){
+                if (event != null && event.getAction() != KeyEvent.ACTION_DOWN) {
                     return false;
                 }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
@@ -146,7 +149,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     mLingShouScanImp.getPLUInfo(v.getText().toString().trim());
                     /*隐藏软键盘*/
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if(inputMethodManager.isActive()){
+                    if (inputMethodManager.isActive()) {
                         inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                     }
                     return true;
@@ -159,7 +162,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(LingShouCreatAtivity.this, QreShanpingActivity.class);
-                startActivityForResult(mIntent,100);
+                startActivityForResult(mIntent, 100);
             }
         });
 
@@ -169,14 +172,14 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 mLingShouScanImp.getPLUInfo(et_barcode.getText().toString().trim());
                 /*隐藏软键盘*/
                 InputMethodManager inputMethodManager = (InputMethodManager) LingShouCreatAtivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(inputMethodManager.isActive()){
+                if (inputMethodManager.isActive()) {
                     inputMethodManager.hideSoftInputFromWindow(et_barcode.getApplicationWindowToken(), 0);
                 }
             }
         });
 
-        if((ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData") != null){
-            mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
+        if ((ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData") != null) {
+            mListData = (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
         }
         mScanAdapter = new LingShouScanAdapter(mListData);
         reflashList();
@@ -195,22 +198,22 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 
     void btn_zhekou(GetClassPluResult mGetClassPluResult) {
         try {
-            if(mScanAdapter.getItemClickPosition() == -1){
+            if (mScanAdapter.getItemClickPosition() == -1) {
                 ToastUtils.showShort("请选择商品");
                 return;
             }
             GetClassPluResult item = mGetClassPluResult;
 //            if( !canModifyPrice(item))return;
-            if(!item.getEnable_discount().equals("1")){
+            if (!item.getEnable_discount().equals("1")) {
                 /*ToastUtils.showShort("此商品不允许打折。");
                 return;*/
             }
             Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
-            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
-            intent.putExtra("limit",Config.danbiZheKoulimit);
-            startActivityForResult(intent,100);
-        }catch (Exception e){
-            Log.e("","");
+            intent.putExtra("oldPrice", Double.parseDouble(item.getSale_price()));
+            intent.putExtra("limit", Config.danbiZheKoulimit);
+            startActivityForResult(intent, 100);
+        } catch (Exception e) {
+            Log.e("", "");
 
         }
 
@@ -218,7 +221,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 
     @OnClick(R.id.btn_modify_count)
     void modifyCount() {
-        if(mScanAdapter.getItemClickPosition() == -1){
+        if (mScanAdapter.getItemClickPosition() == -1) {
             ToastUtils.showShort("请选择商品");
             return;
         }
@@ -255,24 +258,24 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 }
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
-                String zhekou =  data.getStringExtra("countN");
-                String shuliang =  data.getStringExtra("count");
+                String zhekou = data.getStringExtra("countN");
+                String shuliang = data.getStringExtra("count");
                 GetClassPluResult mClass = mListData.get(itemClickPosition);
 //                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
-                if(shuliang.equals("0")){
+                if (shuliang.equals("0")) {
                     mListData.remove(itemClickPosition);
                     reflashList();
                     return;
                 }
                 mClass.setSale_price(zhekou);
-                if(shuliang!=null && !shuliang.equals("")){
+                if (shuliang != null && !shuliang.equals("")) {
                     mClass.setSale_qnty(shuliang);
                 }
                 mClass.setHasYiJia(true);
                 reflashList();
                 break;
             case RESULT_OK:
-                String mCount =  data.getStringExtra("countN");
+                String mCount = data.getStringExtra("countN");
                 GetClassPluResult item = getSelectObject();
                 item.setSale_qnty(mCount);
                 reflashList();
@@ -280,47 +283,47 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         }
     }
 
-    private GetClassPluResult getSelectObject(){
+    private GetClassPluResult getSelectObject() {
         int itemClickPosition = mScanAdapter.getItemClickPosition();
         GetClassPluResult item = mListData.get(itemClickPosition);
         return item;
     }
 
-    private void reflashList(){
+    private void reflashList() {
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
         int goodTotal = 0;
-        for(int i=0; i<mListData.size(); i++){
+        for (int i = 0; i < mListData.size(); i++) {
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
-        String totalStr = total+"";
-        if((totalStr.length()-totalStr.indexOf("."))>3){
-            totalStr = totalStr.substring(0,totalStr.indexOf(".")+4);
+        String totalStr = total + "";
+        if ((totalStr.length() - totalStr.indexOf(".")) > 3) {
+            totalStr = totalStr.substring(0, totalStr.indexOf(".") + 4);
         }
-        tv_check_num.setText("应收金额："+totalStr);
-        tv_total_num.setText("商品数："+goodTotal);
-        tv_order_num.setText("记录数："+mListData.size());
+        tv_check_num.setText("应收金额：" + totalStr);
+        tv_total_num.setText("商品数：" + goodTotal);
+        tv_order_num.setText("记录数：" + mListData.size());
     }
 
-    private void addListData(){
-        for (int i=0; i<mListData.size(); i++){
-            for(int j=0; j<mGetClassPluResultList.size(); j++){
-                if(mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())){
+    private void addListData() {
+        for (int i = 0; i < mListData.size(); i++) {
+            for (int j = 0; j < mGetClassPluResultList.size(); j++) {
+                if (mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())) {
                     mGetClassPluResultList.remove(j);
-                    mListData.get(i).setSale_qnty((Integer.decode(mListData.get(i).getSale_qnty())+1)+"");
+                    mListData.get(i).setSale_qnty((Integer.decode(mListData.get(i).getSale_qnty()) + 1) + "");
                     break;
                 }
             }
         }
-        for(int i=0; i<mGetClassPluResultList.size(); i++){
+        for (int i = 0; i < mGetClassPluResultList.size(); i++) {
             mGetClassPluResultList.get(i).setSale_price_beforModify(mGetClassPluResultList.get(i).getSale_price());
         }
         mListData.addAll(mGetClassPluResultList);
     }
 
-    private void getPiCi(List<GetClassPluResult> mGetClassPluResult){
+    private void getPiCi(List<GetClassPluResult> mGetClassPluResult) {
         GoodsPiciInfoBean mGoodsPiciInfoBean = new GoodsPiciInfoBean();
         mGoodsPiciInfoBean.JsonData.as_branchNo = Config.branch_no;
         mGoodsPiciInfoBean.JsonData.as_posid = Config.posid;
@@ -329,7 +332,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     }
 
     @Override
-    public void handleResule(int flag,Object o) {
+    public void handleResule(int flag, Object o) {
         Intent intent;
         switch (flag) {
             case Config.MESSAGE_OK:
@@ -349,27 +352,27 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 reflashList();
                 break;
             case Config.MESSAGE_GET_OPT_AUTH:
-                mGetOptAuthResult = (GetOptAuthResult)o;
+                mGetOptAuthResult = (GetOptAuthResult) o;
                 break;
             case Config.MESSAGE_GOODS_INFOR:
-                mGetClassPluResultList = (List<GetClassPluResult>)o;
-                if(mGetClassPluResultList!=null && mGetClassPluResultList.size()==0){
-                    AlertUtil.showAlert(LingShouCreatAtivity.this,"提示", "没有商品");
+                mGetClassPluResultList = (List<GetClassPluResult>) o;
+                if (mGetClassPluResultList != null && mGetClassPluResultList.size() == 0) {
+                    AlertUtil.showAlert(LingShouCreatAtivity.this, "提示", "没有商品");
                     return;
                 }
-                if(mGetClassPluResultList!=null && mGetClassPluResultList.size()>1){
+                if (mGetClassPluResultList != null && mGetClassPluResultList.size() > 1) {
                     intent = new Intent(this, QreShanpingActivity.class);
-                    intent.putExtra("barcode",et_barcode.getText().toString());
-                    startActivityForResult(intent,100);
-                }else{
-                    if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                    intent.putExtra("barcode", et_barcode.getText().toString());
+                    startActivityForResult(intent, 100);
+                } else {
+                    if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
                         getPiCi(mGetClassPluResultList);
-                    }else{
+                    } else {
                         mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
                         addListData();
-                    //reflashList();
+                        //reflashList();
                     }
-                   // setSaleFlowBean();
+                    // setSaleFlowBean();
                 }
                 break;
         }
@@ -387,13 +390,15 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     public void onClick(View view) {
                         AlertUtil.dismissDialog();
                         finish();
-                    } },
+                    }
+                },
                 R.string.cancel,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         AlertUtil.dismissDialog();
-                    } }
+                    }
+                }
         );
     }
 
@@ -407,27 +412,26 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 
     @OnClick(R.id.btn_add)
     void sell() {
-        if(mListData==null ||mListData.size()==0){
+        if (mListData == null || mListData.size() == 0) {
             ToastUtils.showShort("请选择商品");
             return;
         }
-        Intent mIntent = new Intent(this,LingShouScanActivity.class);
+        Intent mIntent = new Intent(this, LingShouScanActivity.class);
         mIntent.putExtra("mListData", (Serializable) mListData);
         startActivity(mIntent);
-        finish();
         //startActivityForResult(mIntent,300);
     }
 
     @OnClick(R.id.btn_delete)
     void delete() {
         try {
-            if(mScanAdapter.getItemClickPosition() == -1){
+            if (mScanAdapter.getItemClickPosition() == -1) {
                 ToastUtils.showShort("请选择商品");
                 return;
             }
             mListData.remove(itemClickPosition);
             reflashList();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -436,6 +440,18 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Config.mMemberInfo=null;
+        Config.mMemberInfo = null;
+        unregisterReceiver(recevier);
     }
+
+    public class FinishReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() == "com.example.mymessage") {
+                finish();
+            }
+        }
+    }
+
+
 }

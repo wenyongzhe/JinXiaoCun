@@ -28,6 +28,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
+import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
@@ -425,6 +426,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.JIE_ZHUANG:
                 ToastUtils.showShort(R.string.jiezhuang_ok);
                 finish();
+                sendBroad();
                 break;
         }
     }
@@ -632,6 +634,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             if(ok){
                                 ToastUtils.showShort(R.string.guadan_ok);
                                 finish();
+                                sendBroad();
                             }
                             break;
                     }
@@ -642,6 +645,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         //根据指定View定位
         PopupWindowCompat.showAsDropDown(mWindow,mMyActionBar.getTvRight(), 0, 0, Gravity.START);
 
+    }
+
+    private void sendBroad(){
+        Intent intent = new Intent();
+        intent.setAction("com.example.mymessage");
+        sendBroadcast(intent);//发送标准广播
+        sendOrderedBroadcast(intent,null);//发送有序广播
     }
 
     void btn_zhengdanzhekou() {
@@ -807,6 +817,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.RESULT_PAY_CANCLE:
                 finish();
+                sendBroad();
                 break;
 
 
@@ -1055,4 +1066,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         }
     };
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -409,7 +409,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
 //        Intent mIntent = new Intent(this, QreShanpingActivity.class);
 //        startActivityForResult(mIntent,100);
         //结算完成时记录Config.mMemberInfo赋null
-        startActivity(new Intent(this, MemberCheckActivity.class));
+        startActivity(new Intent(this, SaveMemberActivity.class));
     }
 
     @OnClick(R.id.bt_next)

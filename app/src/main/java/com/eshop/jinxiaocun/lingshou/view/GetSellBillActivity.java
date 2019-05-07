@@ -117,6 +117,10 @@ public class GetSellBillActivity extends BaseScanActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_get_bill){
+            if(mGetBIllMainAdapter.getItemClickPosition()==-1){
+                AlertUtil.showToast("请选择单据");
+                return;
+            }
             Intent mIntent = new Intent(this,LingShouCreatAtivity.class);
             mIntent.putExtra("mListData", (Serializable) mListDetalData);
             startActivity(mIntent);

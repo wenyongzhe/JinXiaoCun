@@ -118,7 +118,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
                 AlertUtil.dismissProgressDialog();
                 data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
-                    Config.mMemberInfo=data.get(0);//记录最近一次会员信息  供销售结算时使用
+                    //Config.mMemberInfo=data.get(0);//记录最近一次会员信息  供销售结算时使用
                     refreshUIByData(data.get(0));
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");

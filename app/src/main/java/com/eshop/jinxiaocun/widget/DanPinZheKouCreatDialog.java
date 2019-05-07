@@ -56,9 +56,9 @@ public class DanPinZheKouCreatDialog extends Activity {
         }catch (Exception e){
         }
 
-        txtCountN.setFocusable(true);
-        txtCountN.setFocusableInTouchMode(true);
-        txtCountN.requestFocus();
+//        txtCountN.setFocusable(true);
+//        txtCountN.setFocusableInTouchMode(true);
+//        txtCountN.requestFocus();
 
         Intent intent = getIntent();
         limit = intent.getDoubleExtra("limit",0.000)*100;

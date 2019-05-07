@@ -27,10 +27,13 @@ public class SaveMemberActivity extends MemberCheckActivity {
             AlertUtil.showToast("请查询会员号");
             return;
         }
-        Intent mIntent = new Intent();
+       /* Intent mIntent = new Intent();
         mIntent.putExtra("memberId",mTvCardNumber.getText().toString().trim());
         mIntent.putExtra("data", (Serializable) data);
-        setResult(Config.SAVE_MEMBER_ID,mIntent);
+        setResult(Config.SAVE_MEMBER_ID,mIntent);*/
+        if (data != null && data.size()>0) {
+            Config.mMemberInfo=data.get(0);//记录最近一次会员信息  供销售结算时使用
+        }
         finish();
     }
 

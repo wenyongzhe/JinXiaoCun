@@ -263,6 +263,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou = data.getStringExtra("countN");
                 String shuliang = data.getStringExtra("count");
+                String price = data.getStringExtra("price");
                 GetClassPluResult mClass = mListData.get(itemClickPosition);
 //                temprice = Double.valueOf(mClass.getSale_price()) * Double.valueOf(zhekou);
                 if (shuliang.equals("0")) {

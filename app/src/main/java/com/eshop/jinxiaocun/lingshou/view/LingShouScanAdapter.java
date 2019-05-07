@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.MyBaseAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
@@ -59,8 +60,8 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         sale_price.setText("售价￥"+Float.parseFloat(listInfo.get(position).getSale_price()));
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
-        sale_total.setText("合计￥"+Float.parseFloat(listInfo.get(position).getSale_qnty())*
-                Float.parseFloat(listInfo.get(position).getSale_price())+"");
+        sale_total.setText("合计￥"+ MyUtils.formatFloat2(Float.parseFloat(listInfo.get(position).getSale_qnty())*
+                Float.parseFloat(listInfo.get(position).getSale_price()))+"");
         return super.getView(position,convertView,parent);
     }
 

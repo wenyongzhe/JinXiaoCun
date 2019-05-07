@@ -65,7 +65,7 @@ public class DanPinZheKouCreatDialog extends Activity {
 //        txtCountN.requestFocus();
 
         Intent intent = getIntent();
-        limit = intent.getDoubleExtra("limit",0.000)*100;
+        limit = intent.getDoubleExtra("limit",0.00)*100;
         if(limit !=-1){
             txtCountN.setHint("最低折扣："+limit);
         }
@@ -84,6 +84,9 @@ public class DanPinZheKouCreatDialog extends Activity {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
                         tv_newprice.setText("￥"+MyUtils.formatDouble2(oldPrice*price/100));
+                    }
+                    if(price==0){
+                        tv_newprice.setText("￥0");
                     }
                 }catch (Exception e){
                 }
@@ -155,6 +158,7 @@ public class DanPinZheKouCreatDialog extends Activity {
             Intent intent = new Intent();
             intent.putExtra("countN",tv_newprice.getText().toString().trim().replace("￥",""));
             intent.putExtra("count",tv_count.getText().toString().trim());
+            intent.putExtra("price",et_oldprice.getText().toString().trim());
             setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
             finish();
         }else {

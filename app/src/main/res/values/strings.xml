@@ -248,5 +248,8 @@
     <string name="is_need_print">是否需要打印小票</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="select_goods_title">已选兑换商品</string>
+    <string name="select_goods">选好了</string>
+    <string name="no_select_goods">没选好</string>
 
 </resources>

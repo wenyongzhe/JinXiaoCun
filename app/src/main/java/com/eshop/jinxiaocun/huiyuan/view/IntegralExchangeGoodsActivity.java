@@ -42,6 +42,7 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
     private List<IntegralExchangeGoodsResultItem> mDatas = new ArrayList<>();
     private IntegralExchangeGoodsResultItem mSelectGoods;
     private float mIntegral;
+    private float mAllSelectIntegral=0;
 
     @Override
     protected int getLayoutId() {
@@ -114,7 +115,52 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
         return true;
     }
 
+    //按返回键时的处理
     private void returnActivity(){
+        final List<IntegralExchangeGoodsResultItem> selectDatas = new ArrayList<>();
+        for (IntegralExchangeGoodsResultItem info : mDatas) {
+            if(info.isSelect()){
+                mAllSelectIntegral +=(info.getJiFen()*info.getSelectNum());
+                selectDatas.add(info);
+            }
+        }
+        if(selectDatas.size()>0){
+
+            AlertUtil.showAlert(this, R.string.select_goods_title, "是否选好了兑换商品？", R.string.select_goods,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if((mIntegral-mAllSelectIntegral)<0){
+                                AlertUtil.showToast("当前各种积分不足，请放弃部分礼品!");
+                                return;
+                            }
+
+                            AlertUtil.dismissDialog();
+                            Intent intent = new Intent();
+                            intent.putExtra("SelectDatas",(Serializable)selectDatas);
+                            setResult(RESULT_OK,intent);
+                            finish();
+                        }
+                    }, R.string.no_select_goods, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mAllSelectIntegral=0;
+                            AlertUtil.dismissDialog();
+                        }
+                    });
+        }else{
+            finish();
+        }
+
+    }
+
+    @Override
+    protected void onTopBarRightClick() {
+        selectGoods();
+    }
+
+    //选好了兑换商品
+    private void selectGoods(){
         float allSelectIntegral=0;
         List<IntegralExchangeGoodsResultItem> selectDatas = new ArrayList<>();
         for (IntegralExchangeGoodsResultItem info : mDatas) {
@@ -133,8 +179,12 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
             Intent intent = new Intent();
             intent.putExtra("SelectDatas",(Serializable)selectDatas);
             setResult(RESULT_OK,intent);
+            finish();
+        }else{
+            AlertUtil.showToast("当前还没有选择商品!");
         }
-        finish();
+
+
     }
 
     @Override
@@ -177,6 +227,9 @@ public class IntegralExchangeGoodsActivity extends CommonBaseActivity implements
             case Config.MESSAGE_OK:
                 AlertUtil.dismissProgressDialog();
                 mDatas = (List<IntegralExchangeGoodsResultItem>) o;
+                if(mDatas!=null && mDatas.size()>0){
+                    setTopToolBarRightTitleAndStyle("选好了",R.drawable.border_bg_primary);
+                }
                 mAdapter.setListInfo(mDatas);
                 break;
             case Config.MESSAGE_ERROR:

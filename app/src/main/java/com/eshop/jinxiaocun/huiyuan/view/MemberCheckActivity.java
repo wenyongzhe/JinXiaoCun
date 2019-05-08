@@ -58,6 +58,11 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
 
     @Override
     protected void initView() {
+        mApi = new MemberImp(this);
+        if(Config.mMemberInfo!=null){
+            refreshUIByData(Config.mMemberInfo);
+        }
+
         setTopToolBar("会员查询", R.mipmap.ic_left_light, "", 0, "");
         mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -80,10 +85,6 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
 
     @Override
     protected void initData() {
-        mApi = new MemberImp(this);
-        if(Config.mMemberInfo!=null){
-            refreshUIByData(Config.mMemberInfo);
-        }
     }
 
     private void refreshUIByData(MemberCheckResultItem data) {

@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -39,6 +40,8 @@ public class DanPinZheKouCreatDialog extends Activity {
     ImageView im_delet;
 
     double limit = -1;
+    double yijialimit = -1;
+
     double oldPrice;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
@@ -66,6 +69,13 @@ public class DanPinZheKouCreatDialog extends Activity {
 
         Intent intent = getIntent();
         limit = intent.getDoubleExtra("limit",0.00)*100;
+        yijialimit = intent.getDoubleExtra("yijialimit",0.00);
+        if(yijialimit == -1){
+            et_oldprice.setEnabled(false);
+        }
+        if(limit == -1){
+            txtCountN.setEnabled(false);
+        }
         if(limit !=-1){
             txtCountN.setHint("最低折扣："+limit);
         }
@@ -83,7 +93,8 @@ public class DanPinZheKouCreatDialog extends Activity {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
                     if(price>0){
-                        tv_newprice.setText("￥"+MyUtils.formatDouble2(oldPrice*price/100));
+                        double oldprice2 = Double.parseDouble(et_oldprice.getText().toString().trim());
+                        tv_newprice.setText("￥"+MyUtils.formatDouble2(oldprice2*price/100));
                     }
                     if(price==0){
                         tv_newprice.setText("￥0");
@@ -95,6 +106,30 @@ public class DanPinZheKouCreatDialog extends Activity {
             public void afterTextChanged(Editable editable) {
             }
         });
+        et_oldprice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    double price = Double.parseDouble(charSequence.toString().trim());
+                    double oldprice2 = Double.parseDouble(txtCountN.getText().toString().trim());
+                    if(price>0){
+                        tv_newprice.setText("￥"+MyUtils.formatDouble2(oldprice2*price/100));
+                    }
+                    if(price==0){
+                        tv_newprice.setText("￥0");
+                    }
+                }catch (Exception e){
+                    Log.e("","");
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
         txtCountN.setText("100");
         closeEditTextKeyboard();
 
@@ -147,6 +182,11 @@ public class DanPinZheKouCreatDialog extends Activity {
 
         if (Double.valueOf(txtCountN.getText().toString().trim())<limit) {
             MyUtils.showToast("后台设置折扣必须大于等于"+limit, this);
+            return;
+        }
+
+        if (Double.parseDouble(et_oldprice.getText().toString().trim())>oldPrice || (oldPrice-Double.parseDouble(et_oldprice.getText().toString().trim()))<yijialimit) {
+            MyUtils.showToast("请输入系统设置的金额！", this);
             return;
         }
 

@@ -24,7 +24,7 @@ public class Config {
     public static String DB_PASSWORD ="123456";
     public static String VersionName = "";
     public static int VersionCode = 1;
-
+    public static  String saleMan = "";
     public static String branch_no = "";//门店号
     public static String posid = "";
     public static String soft_name = "";//软件名称

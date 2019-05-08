@@ -35,6 +35,7 @@ import com.eshop.jinxiaocun.lingshou.bean.GetBillMain;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
@@ -54,6 +55,7 @@ import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.MoneyDialog;
+import com.eshop.jinxiaocun.widget.SaleManDialog;
 import com.eshop.jinxiaocun.widget.ZheKouDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.Command;
@@ -62,6 +64,7 @@ import com.google.zxing.activity.CaptureActivity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,6 +106,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     private double gaiJiaMoney = 0;
     private boolean hasGaiJia = false;
+    private boolean hasMoling = false;
     public final static int SELL = 110;
     public final static int SELL_DANPING_YIJIA = 111;
     public final static int SELL_ZHENDAN_YIJIA = 112;
@@ -126,12 +130,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private boolean isVipPay = false;
     YouHuiPopupWindow mWindow;
     private int goodTotal = 0;
+    List<GetSystemBeanResult.SystemJson> mSystemJson;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLinearLayout.setBackgroundColor(getResources().getColor(R.color.item_gray_line));
         setScanBroadCast();
+        mLingShouScanImp.getSystemInfo();
     }
 
 
@@ -162,7 +168,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         super.initView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View mView = this.getLayoutInflater().inflate(R.layout.activity_lingshou, null);
-        mMyActionBar.setData("零售",R.mipmap.ic_left_light,"",0,"更多优惠",this);
+        mMyActionBar.setData("结算",R.mipmap.ic_left_light,"",0,"更多优惠",this);
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
         ly_shanpingBarcode.setVisibility(View.GONE);
@@ -428,6 +434,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 finish();
                 sendBroad();
                 break;
+            case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
+                mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
+                break;
         }
     }
 
@@ -638,8 +647,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             }
                             break;
                         case R.id.id_4://抹零
+                            btn_moling();
                             break;
                         case R.id.id_5://营业员
+                            btn_yingyeyuan();
                             break;
                     }
                     mWindow.dismiss();
@@ -649,6 +660,61 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         //根据指定View定位
         PopupWindowCompat.showAsDropDown(mWindow,mMyActionBar.getTvRight(), 0, 0, Gravity.START);
 
+    }
+
+    void btn_yingyeyuan() {
+        try {
+            Intent intent = new Intent(this, SaleManDialog.class);
+            startActivityForResult(intent,200);
+        }catch (Exception e){
+        }
+    }
+
+    void btn_moling() {
+        try {
+            if(mSystemJson==null){
+                return;
+            }
+            if(hasMoling==true){
+                AlertUtil.showAlert(this,"提示","已抹零！");
+                return;
+            }
+
+            //0-实收，1- 抹去分 2- 抹去角分，3-元以后的四舍五入，4角以下四舍五入  PosAmtEndDec
+            String value = "0";
+            for(int i=0; i<mSystemJson.size(); i++){
+                if(mSystemJson.get(i).getName().equals("PosAmtEndDec")){
+                    value = mSystemJson.get(i).getValue();
+                }
+            }
+            switch (value){
+                case "0":
+                    break;
+                case "1":
+                    total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.DOWN));
+                    hasMoling = true;
+                    break;
+                case "2":
+                    total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.DOWN));
+                    break;
+                case "3":
+                    total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.HALF_UP));
+                    hasMoling = true;
+                    break;
+                case "4":
+                    total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.HALF_UP));
+                    hasMoling = true;
+                    break;
+            }
+
+            if(hasMoling==false){
+                AlertUtil.showAlert(this,"提示","不需要抹零！");
+                return;
+            }else{
+                tv_check_num.setText("总价："+total);
+            }
+        }catch (Exception e){
+        }
     }
 
     private void sendBroad(){
@@ -823,7 +889,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 finish();
                 sendBroad();
                 break;
-
+            case Config.MESSAGE_PAY_MAN:
+                Config.saleMan = data.getStringExtra("PayMan");
+                break;
 
 
         }

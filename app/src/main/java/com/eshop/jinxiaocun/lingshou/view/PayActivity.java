@@ -95,14 +95,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private int jiaoRmb = 0;
     private int fenRmb = 0;
     private double molingMoney = 0;
-    private static  String saleMan = "";
     private List<GetClassPluResult> mListData = new ArrayList<>();
     protected List<SaleFlowBean> mSaleFlowBeanList = new ArrayList<>();
     protected List<PlayFlowBean> mPlayFlowBeanList = new ArrayList<>();
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
     private String memberId = "";
-    private List<MemberCheckResultItem> memberData;
     YouHuiPopupWindow mWindow;
 
     @Override
@@ -113,7 +111,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
 
-        mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"更多操作",this);
+        mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"整单取消",this);
         btn_jiesuan = (Button) findViewById(R.id.btn_jiesuan);
         btn_jiesuan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +144,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         spinners.add("聚合支付");
 //        spinners.add("支付宝");
 //        spinners.add("微信");
-        spinners.add("会员卡");
+        if(Config.mMemberInfo != null){
+            spinners.add("会员卡");
+        }
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
@@ -355,6 +355,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private void sellOk(){
+        Config.mMemberInfo = null;
         AlertUtil.showAlert(PayActivity.this, "提示", "结算处理完成",
                 "确定", new View.OnClickListener() {
                     @Override
@@ -374,6 +375,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     private void cancle(){
         setResult(Config.RESULT_PAY_CANCLE);
+        Config.mMemberInfo = null;
         finish();
     }
 
@@ -404,8 +406,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     //rtWzfQry();
                     break;
                 case 2:
-                    if(memberData!=null&&memberData.size()>0){
-                        MemberCheckResultItem mMemberCheckResultItem =  memberData.get(0);
+                    if(Config.mMemberInfo!=null){
+                        MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
                         mLingShouScanImp.sellVipPay(FlowNo,"1",
                                 mMemberCheckResultItem.getCardNo_TelNo(),
                                 mMemberCheckResultItem.getPassword(),
@@ -704,7 +706,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 }
 
                 temMoney = money+"";
-                mLingShouScanImp.RtWzfPay(tempayway,code,FlowNo,temMoney,temMoney);
+                mLingShouScanImp.RtWzfPay(tempayway,hashMap.get("VALUE"),FlowNo,temMoney,temMoney);
                 break;
             }
             return true;
@@ -726,7 +728,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
         switch (resultCode){
             case Config.MESSAGE_PAY_MAN:
-                saleMan = data.getStringExtra("PayMan");
+                Config.saleMan = data.getStringExtra("PayMan");
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");
@@ -762,7 +764,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 break;
             case Config.SAVE_MEMBER_ID:
                 memberId = data.getStringExtra("memberId");
-                memberData =  (ArrayList<MemberCheckResultItem>) data.getSerializableExtra("data");
+                ArrayList<MemberCheckResultItem> menber = (ArrayList<MemberCheckResultItem>) data.getSerializableExtra("data");
+                Config.mMemberInfo =  menber.get(0);
                 break;
         }
     }
@@ -782,8 +785,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private void setSaleFlowBean(){
-        if(saleMan == null || saleMan.equals("")){
-            saleMan = "9999";
+        if(Config.saleMan == null || Config.saleMan.equals("")){
+            Config.saleMan = "9999";
         }
         mSaleFlowBeanList.clear();
         for(int i=0; i<mListData.size(); i++){
@@ -801,7 +804,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
             mSaleFlowBean.setSale_money(money);
             mSaleFlowBean.setSell_way("A");
-            mSaleFlowBean.setSale_man(saleMan);
+            mSaleFlowBean.setSale_man(Config.saleMan);
             mSaleFlowBean.setSpec_flag("");
             mSaleFlowBean.setSpec_sheet_no("");
             mSaleFlowBean.setPosid(Config.posid);
@@ -825,8 +828,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private void setPlayFlowBean(List<HashMap<String,String>> hashMap){
-        if(saleMan == null || saleMan.equals("")){
-            saleMan = "9999";
+        if(Config.saleMan == null || Config.saleMan.equals("")){
+            Config.saleMan = "9999";
         }
         for(int i=0; i<hashMap.size(); i++){
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();
@@ -840,12 +843,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
-            if(memberData==null){
+            if(Config.mMemberInfo==null){
                 mPlayFlowBean.setCard_no(1);
                 mPlayFlowBean.setVip_no(1);
             }else{
-                mPlayFlowBean.setCard_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
-                mPlayFlowBean.setVip_no(Integer.decode(memberData.get(0).getCardNo_TelNo()));
+                mPlayFlowBean.setCard_no(Integer.decode(Config.mMemberInfo.getCardNo_TelNo()));
+                mPlayFlowBean.setVip_no(Integer.decode(Config.mMemberInfo.getCardNo_TelNo()));
             }
             mPlayFlowBean.setCoin_no("RMB");
             mPlayFlowBean.setCoin_rate(1);
@@ -854,7 +857,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("");
             mPlayFlowBean.setOper_id(Config.UserName);
-            mPlayFlowBean.setSale_man(saleMan);
+            mPlayFlowBean.setSale_man(Config.saleMan);
             mPlayFlowBean.setShift_no("");
             mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
             mPlayFlowBean.setMemo("");
@@ -895,32 +898,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
     @Override
     public void onRightClick() {
-        mWindow = new YouHuiPopupWindow(this, new YouHuiPopupWindow.OnPopupWindowClick() {
-            @Override
-            public void OnClick(int id) {
-                if(mWindow.isShowing()){
-                    switch (id){
-                        case R.id.id_1:
-                            btn_zhengdanquxiao();
-                            break;
-                        case R.id.id_2:
-                            btn_moling();
-                            break;
-                        case R.id.id_3:
-                            btn_yingyeyuan();
-                            break;
-                    }
-                    mWindow.dismiss();
-                }
-            }
-        });
-        mWindow.id_1.setText(getString(R.string.zhengdanquxiao));
-        mWindow.id_2.setText(getString(R.string.moling));
-        mWindow.id_3.setText(getString(R.string.yingyeyuan));
-
-        //根据指定View定位
-        PopupWindowCompat.showAsDropDown(mWindow,mMyActionBar.getTvRight(), 0, 0, Gravity.START);
-
+        btn_zhengdanquxiao();
     }
 
 }

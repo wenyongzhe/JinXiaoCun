@@ -509,6 +509,15 @@ public class MyUtils {
         return nf.format(d);
     }
 
+    public static String formatDouble(int len, double d,RoundingMode mRoundingMode) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        // 保留两位小数
+        nf.setMaximumFractionDigits(len);
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(mRoundingMode);
+        return nf.format(d);
+    }
+
     public static String formatFloat2(float d) {
         NumberFormat nf = NumberFormat.getNumberInstance();
         // 保留两位小数

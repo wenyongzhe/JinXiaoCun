@@ -9,12 +9,14 @@ import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
 import com.eshop.jinxiaocun.db.DBHelper;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.CrashHandler;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
+import java.util.List;
 import java.util.Stack;
 
 public class Application extends android.app.Application{

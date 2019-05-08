@@ -206,14 +206,17 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             }
             GetClassPluResult item = mGetClassPluResult;
 //            if( !canModifyPrice(item))return;
-            if (!item.getEnable_discount().equals("1")) {
-                /*ToastUtils.showShort("此商品不允许打折。");
-                return;*/
-            }
             Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
             intent.putExtra("oldPrice", Double.parseDouble(item.getSale_price()));
-            intent.putExtra("limit", Config.danbiZheKoulimit);
             intent.putExtra("count", item.getSale_qnty());
+            if (!item.getEnable_discount().equals("1")) {
+                ToastUtils.showShort("此商品不允许打折。");
+                intent.putExtra("limit", Config.danbiZheKoulimit);
+            }
+            if(item.getChange_price().equals("1")){
+                ToastUtils.showShort("此商品不允许议价。");
+                intent.putExtra("yijialimit",Config.danbiYiJialimit);
+            }
             startActivityForResult(intent, 100);
         } catch (Exception e) {
             Log.e("", "");

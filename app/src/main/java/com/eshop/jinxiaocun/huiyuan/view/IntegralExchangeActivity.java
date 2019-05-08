@@ -120,6 +120,16 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
         mTvStatus.setText(data.getCardState());
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
     }
+    //全部设置为默认值
+    private void refreshViewValues() {
+        mEtSearch.setText("");
+        mTvCardNumber.setText("");
+        mTvName.setText("");
+        mTvSex.setText("");
+        mTvCardType.setText("");
+        mTvStatus.setText("");
+        mTvCurrentIntegral.setText("");
+    }
 
     private void refreshButtomUIByData(){
         mLine.setVisibility(View.VISIBLE);
@@ -234,9 +244,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
                 mLine.setVisibility(View.GONE);
                 mLAayoutSurplusIntegral.setVisibility(View.GONE);
                 mBtnExchangeGoods.setVisibility(View.GONE);
-                mTvCurrentIntegral.setText(mTvSurplusIntegral.getText().toString().trim());
-                mTvAllSelectIntegral.setText("0");
-                mTvSurplusIntegral.setText("0");
+                refreshViewValues();
                 mDatas.clear();
                 mAdapter.setListInfo(mDatas);
                 AlertUtil.dismissProgressDialog();

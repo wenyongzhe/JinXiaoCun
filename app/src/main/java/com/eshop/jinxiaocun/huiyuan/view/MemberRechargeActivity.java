@@ -1,6 +1,8 @@
 package com.eshop.jinxiaocun.huiyuan.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -227,20 +229,35 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
 
-                AlertUtil.showAlert(this, R.string.recharge_success, R.string.is_need_print,
-                        R.string.yes, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                AlertUtil.dismissDialog();
-                                print();
-                            }
-                        }, R.string.no, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                AlertUtil.dismissDialog();
-                                reSetViewValues();
-                            }
-                        });
+                if(AidlUtil.getInstance().isConnect()){
+                    AlertUtil.showAlert(this, R.string.recharge_success, R.string.is_need_print,
+                            R.string.yes, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    AlertUtil.dismissDialog();
+                                    print();
+                                }
+                            }, R.string.no, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    AlertUtil.dismissDialog();
+                                    reSetViewValues();
+                                }
+                            });
+                }else{
+                    AlertDialog dialog = new AlertDialog.Builder(this).create();
+                    dialog.setTitle("温馨提示");
+                    dialog.setMessage("未连接打印机！");
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            reSetViewValues();
+                        }
+                    });
+                    dialog.show();
+                }
 
                 break;
             case Config.RESULT_FAIL:

@@ -182,12 +182,20 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="格式为xxxx-xx-xx(范围1900-01-01~2299-01-01)"
+            android:textSize="10sp"
+            android:textColor="@color/red"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_35"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -205,7 +213,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:inputType="date"
-                android:hint="格式为xxxx-xx-xx或xxxx/xx/xx"
+                android:hint="格式为xxxx-xx-xx"
                 android:gravity="center_vertical" />
 
         </LinearLayout>

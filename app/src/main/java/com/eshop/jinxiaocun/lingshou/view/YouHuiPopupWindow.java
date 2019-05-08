@@ -19,6 +19,8 @@ public class YouHuiPopupWindow extends PopupWindow {
     public TextView id_1;
     public TextView id_2;
     public TextView id_3;
+    public TextView id_4;
+    public TextView id_5;
 
     public interface OnPopupWindowClick {
         public void OnClick(int id);
@@ -38,6 +40,9 @@ public class YouHuiPopupWindow extends PopupWindow {
         id_1 = contentView.findViewById(R.id.id_1);
         id_2 = contentView.findViewById(R.id.id_2);
         id_3 = contentView.findViewById(R.id.id_3);
+        id_4 = contentView.findViewById(R.id.id_4);
+        id_5 = contentView.findViewById(R.id.id_5);
+
         id_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +56,18 @@ public class YouHuiPopupWindow extends PopupWindow {
             }
         });
         id_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnPopupWindowClick.OnClick(view.getId());
+            }
+        });
+        id_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnPopupWindowClick.OnClick(view.getId());
+            }
+        });
+        id_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mOnPopupWindowClick.OnClick(view.getId());

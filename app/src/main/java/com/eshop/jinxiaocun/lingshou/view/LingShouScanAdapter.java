@@ -57,7 +57,7 @@ public class LingShouScanAdapter extends MyBaseAdapter {
         TextView sale_total = ViewHolderUtils.get(convertView, R.id.sale_total);
 
         sale_qnty.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
-        sale_price.setText("售价￥"+Float.parseFloat(listInfo.get(position).getSale_price()));
+        sale_price.setText("售价￥"+MyUtils.formatFloat2(Float.parseFloat(listInfo.get(position).getSale_price())));
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());
         item_name.setText(listInfo.get(position).getItem_name());
         sale_total.setText("合计￥"+ MyUtils.formatFloat2(Float.parseFloat(listInfo.get(position).getSale_qnty())*

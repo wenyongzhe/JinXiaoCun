@@ -637,6 +637,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                                 sendBroad();
                             }
                             break;
+                        case R.id.id_4://抹零
+                            break;
+                        case R.id.id_5://营业员
+                            break;
                     }
                     mWindow.dismiss();
                 }
@@ -869,11 +873,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
-        String totalStr = total+"";
-        if((totalStr.length()-totalStr.indexOf("."))>3){
-            totalStr = totalStr.substring(0,totalStr.indexOf(".")+4);
-        }
-        tv_check_num.setText("应收金额："+totalStr);
+
+        tv_check_num.setText("应收金额："+MyUtils.formatDouble2(total));
         tv_total_num.setText("商品数："+goodTotal);
         tv_order_num.setText("记录数："+mListData.size());
     }

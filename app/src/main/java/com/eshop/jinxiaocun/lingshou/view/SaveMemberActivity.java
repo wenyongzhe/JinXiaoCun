@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -77,6 +79,8 @@ public class SaveMemberActivity extends MemberCheckActivity {
             e.printStackTrace();
         }
     }
+
+
 
     public void initData() {
         //nfc初始化设置

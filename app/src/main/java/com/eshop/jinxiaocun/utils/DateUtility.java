@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zwei on 2017/3/2.
@@ -593,6 +595,61 @@ public class DateUtility {
 
     }
 
+    /**
+     * 验证指定时间字符串格式输入是否正确
+     * @param timeStr 2019-05-07 08:02:02  范围到1900-01-01~2299-01-01
+     * @return true正确格式 反之不正确
+     */
+    public static boolean validDateTime(String timeStr) {
+        String format = "((19|20|21|22)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
+                + "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
+        Pattern pattern = Pattern.compile(format);
+        Matcher matcher = pattern.matcher(timeStr);
+        if (matcher.matches()) {
+            pattern = Pattern.compile("(\\d{4})-(\\d+)-(\\d+).*");
+            matcher = pattern.matcher(timeStr);
+            if (matcher.matches()) {
+                int y = Integer.valueOf(matcher.group(1));
+                int m = Integer.valueOf(matcher.group(2));
+                int d = Integer.valueOf(matcher.group(3));
+                if (d > 28) {
+                    Calendar c = Calendar.getInstance();
+                    c.set(y, m-1, 1);
+                    int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    return (lastDay >= d);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
+    /**
+     * 验证指定日期字符串格式输入是否正确
+     * @param timeStr 2019-05-07  范围到1900-01-01~2299-01-01
+     * @return true正确格式 反之不正确
+     */
+    public static boolean validDate(String timeStr) {
+        String format = "((19|20|21|22)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
+        Pattern pattern = Pattern.compile(format);
+        Matcher matcher = pattern.matcher(timeStr);
+        if (matcher.matches()) {
+            pattern = Pattern.compile("(\\d{4})-(\\d+)-(\\d+).*");
+            matcher = pattern.matcher(timeStr);
+            if (matcher.matches()) {
+                int y = Integer.valueOf(matcher.group(1));
+                int m = Integer.valueOf(matcher.group(2));
+                int d = Integer.valueOf(matcher.group(3));
+                if (d > 28) {
+                    Calendar c = Calendar.getInstance();
+                    c.set(y, m-1, 1);
+                    int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    return (lastDay >= d);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
 }

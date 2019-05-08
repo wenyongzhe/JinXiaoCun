@@ -183,7 +183,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         if ((ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData") != null) {
             mListData = (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
         }
-        mScanAdapter = new LingShouScanAdapter(mListData);
+        mScanAdapter = new LingShouCreatAdapter(mListData);
         reflashList();
         mListview.setAdapter(mScanAdapter);
         mScanAdapter.notifyDataSetChanged();

@@ -87,6 +87,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 //    Button btn_modify_count;//改数
     @BindView(R.id.tv_check_num)
     TextView tv_check_num;//总数
+    @BindView(R.id.tv_yingyeyuan)
+    TextView tv_yingyeyuan;
 //    @BindView(R.id.ly_buttom1)
 //    LinearLayout ly_buttom1;
 //    @BindView(R.id.btn_yijia)
@@ -97,6 +99,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     TextView tv_total_num;//商品数
     @BindView(R.id.tv_order_num)
     TextView tv_order_num;//记录数
+    @BindView(R.id.tv_moling_money)
+    TextView tv_moling_money;
+    @BindView(R.id.tv_youhui_money)
+    TextView tv_youhui_money;
     @BindView(R.id.ib_seach)
     ImageButton ib_seach;
     @BindView(R.id.btn_vip)
@@ -172,11 +178,13 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mLinearLayout.addView(mView,0,params);
         ButterKnife.bind(this);
         ly_shanpingBarcode.setVisibility(View.GONE);
-        btSell.setText(R.string.bt_sell);
-        tv_check_num.setText("总价：");
-        tv_total_num.setText("商品数：");
+        btSell.setText(R.string.bt_sell_infor);
+        tv_check_num.setText("应收：");
+        tv_total_num.setText("0");
         tv_order_num.setText("记录数：");
-
+        tv_yingyeyuan.setText("营业员："+Config.UserName);
+        tv_moling_money.setText("抹零：￥0");
+        //tv_youhui_money.setText("已优惠：￥0");
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -711,7 +719,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 AlertUtil.showAlert(this,"提示","不需要抹零！");
                 return;
             }else{
-                tv_check_num.setText("总价："+total);
+                tv_check_num.setText("应收："+total);
             }
         }catch (Exception e){
         }
@@ -942,8 +950,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
 
-        tv_check_num.setText("应收金额："+MyUtils.formatDouble2(total));
-        tv_total_num.setText("商品数："+goodTotal);
+        tv_check_num.setText("应收："+MyUtils.formatDouble2(total));
+        tv_total_num.setText(""+goodTotal);
         tv_order_num.setText("记录数："+mListData.size());
     }
 

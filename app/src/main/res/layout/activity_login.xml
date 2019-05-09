@@ -96,7 +96,7 @@
 
             <CheckBox
                 android:id="@+id/cb_show_psw"
-                android:theme="@style/My_CheckBox"
+                style="@style/My_CheckBox"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"

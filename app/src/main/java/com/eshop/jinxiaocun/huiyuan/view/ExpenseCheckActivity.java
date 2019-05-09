@@ -94,6 +94,11 @@ public class ExpenseCheckActivity extends CommonBaseActivity implements INetWorR
 
     }
 
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
+    }
+
     @OnClick(R.id.iv_search)
     public void onClickSearch(){
         if (TextUtils.isEmpty(mEtSearch.getText().toString().trim())) {

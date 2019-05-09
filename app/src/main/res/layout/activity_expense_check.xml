@@ -10,28 +10,38 @@
         android:layout_height="@dimen/layout_item_height_35"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/edittext_border_bg"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_search"
-            style="@style/EditText_Grey"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="1dp"
-            android:background="@null"
-            android:hint="请输入会员ID"
-            android:inputType="number"
-            android:imeOptions="actionSearch"
-            android:gravity="center_vertical" />
+            android:background="@drawable/edittext_border_bg2"
+            android:orientation="horizontal"
+            >
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray_holo_dark"
-            />
+            <EditText
+                android:id="@+id/et_search"
+                style="@style/EditText_Grey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:background="@null"
+                android:hint="会员卡号/手机号/姓名"
+                android:imeOptions="actionSearch"
+                android:gravity="center_vertical" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_close"
+                />
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/iv_search"
@@ -39,10 +49,18 @@
             android:layout_height="match_parent"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:src="@drawable/seach"
+            android:src="@drawable/icon_search"
             />
 
     </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/line_grey1"
+        />
 
 
     <LinearLayout
@@ -70,7 +88,13 @@
             android:gravity="center_vertical" />
 
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/line_grey"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/layout_item_height_35"
@@ -96,13 +120,17 @@
             android:gravity="center_vertical" />
 
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/line_grey1"
+        />
     <ListView
         android:id="@+id/lv_expense_info"
         android:layout_width="match_parent"
         android:divider="@color/divider"
         android:dividerHeight="1dip"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:listSelector="#00000000"

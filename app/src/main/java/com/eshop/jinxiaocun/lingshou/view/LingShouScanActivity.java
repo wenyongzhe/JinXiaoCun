@@ -111,6 +111,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     LinearLayout ly_shanpingBarcode;
 
     private double gaiJiaMoney = 0;
+    private double youhuiMoney = 0;
     private boolean hasGaiJia = false;
     private boolean hasMoling = false;
     public final static int SELL = 110;
@@ -124,6 +125,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     protected List<PlayFlowBean> mPlayFlowBeanList;
     private String FlowNo = "";
     private Double total = 0.00;
+    private Double molingMoney = 0.00;
     private List<GetPluPriceBeanResult> mGetPluPriceBeanResult;
     private List<GetClassPluResult> mGetClassPluResultList;
     private Double change = 0.0;
@@ -182,7 +184,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         tv_check_num.setText("应收：");
         tv_total_num.setText("0");
         tv_order_num.setText("记录数：");
-        tv_yingyeyuan.setText("营业员："+Config.UserName);
+        tv_yingyeyuan.setText("营业员："+Config.saleMan);
         tv_moling_money.setText("抹零：￥0");
         //tv_youhui_money.setText("已优惠：￥0");
         et_barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -243,9 +245,26 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         });
 
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
+        reflashVipPrice();
         mScanAdapter = new LingShouScanAdapter(mListData);
         mListview.setAdapter(mScanAdapter);
         reflashList();
+    }
+
+    private void reflashVipPrice(){
+        boolean has = false;
+        if(Config.mMemberInfo!=null){
+            for(int i=0; i<mListData.size(); i++){
+                GetClassPluResult mGetClassPluResult = mListData.get(i);
+                if(Float.parseFloat(mGetClassPluResult.getSale_price())>Float.parseFloat(mGetClassPluResult.getVip_price())){
+                    mGetClassPluResult.setSale_price(mGetClassPluResult.getVip_price());
+                    if(!has){
+                        AlertUtil.showToast("已更新部分商品为会员价。");
+                        has = true;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -680,6 +699,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     void btn_moling() {
         try {
+            molingMoney = total;
             if(mSystemJson==null){
                 return;
             }
@@ -700,17 +720,21 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     break;
                 case "1":
                     total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.DOWN));
+                    molingMoney -= total;
                     hasMoling = true;
                     break;
                 case "2":
                     total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.DOWN));
+                    molingMoney -= total;
                     break;
                 case "3":
                     total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.HALF_UP));
+                    molingMoney -= total;
                     hasMoling = true;
                     break;
                 case "4":
                     total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.HALF_UP));
+                    molingMoney -= total;
                     hasMoling = true;
                     break;
             }
@@ -720,6 +744,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 return;
             }else{
                 tv_check_num.setText("应收："+total);
+                tv_moling_money.setText("抹零：￥"+molingMoney);
             }
         }catch (Exception e){
         }
@@ -944,15 +969,24 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         goodTotal = 0;
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
+        double befor_youhui_money = 0.0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            befor_youhui_money += (Double.parseDouble(mGetClassPluResult.getSale_price_beforModify()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
+        }
+        if(befor_youhui_money>total){
+            youhuiMoney = befor_youhui_money-total;
+        }
 
         tv_check_num.setText("应收："+MyUtils.formatDouble2(total));
         tv_total_num.setText(""+goodTotal);
         tv_order_num.setText("记录数："+mListData.size());
+        tv_youhui_money.setText("已优惠："+MyUtils.formatDouble2(youhuiMoney));
     }
 
     private void setSaleTemData(){
@@ -1040,6 +1074,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mIntent.putExtra("mListData", (Serializable) mListData);
         mIntent.putExtra("money",total);
         mIntent.putExtra("FlowNo",FlowNo);
+        mIntent.putExtra("molingMoney",molingMoney);
+        mIntent.putExtra("youhuiMoney",youhuiMoney);
         startActivityForResult(mIntent,300);
 
     }

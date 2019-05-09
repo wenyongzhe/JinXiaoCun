@@ -95,12 +95,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     private int jiaoRmb = 0;
     private int fenRmb = 0;
     private double molingMoney = 0;
+    private double youhuiMoney = 0;
     private List<GetClassPluResult> mListData = new ArrayList<>();
     protected List<SaleFlowBean> mSaleFlowBeanList = new ArrayList<>();
     protected List<PlayFlowBean> mPlayFlowBeanList = new ArrayList<>();
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
     private String memberId = "";
+
     YouHuiPopupWindow mWindow;
 
     @Override
@@ -119,8 +121,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 btn_jiesuan();
             }
         });
-        money = getIntent().getDoubleExtra("money",0.00);
+        money = getIntent().getDoubleExtra("money",0.0);
         FlowNo = getIntent().getStringExtra("FlowNo");
+        molingMoney = getIntent().getDoubleExtra("molingMoney",0.0);
+        youhuiMoney = getIntent().getDoubleExtra("youhuiMoney",0.0);
+
         mListData =  (ArrayList<GetClassPluResult>) getIntent().getSerializableExtra("mListData");
 
 //        money = initDouble(3,money);
@@ -888,6 +893,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
         }
         mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";
+        mes += "抹零：     "+molingMoney+"\n优惠：     "+youhuiMoney+"\n";
         mes += "-------------------------------\n";
         mes += "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
         mes += "谢谢惠顾,欢迎再次光临!\n";

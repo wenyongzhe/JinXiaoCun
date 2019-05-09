@@ -54,10 +54,10 @@
                 android:id="@+id/tv_check_num"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/gray"
-                android:textSize="15dp"/>
+                android:textSize="13dp"/>
 
             <TextView
                 android:id="@+id/tv_moling_money"
@@ -66,7 +66,7 @@
                 android:layout_weight="4"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/gray"
-                android:textSize="15dp"/>
+                android:textSize="13dp"/>
             <TextView
                 android:id="@+id/tv_youhui_money"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:layout_weight="4"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/gray"
-                android:textSize="15dp"/>
+                android:textSize="13dp"/>
 
             <TextView
                 android:visibility="gone"

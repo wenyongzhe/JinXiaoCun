@@ -924,6 +924,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.MESSAGE_PAY_MAN:
                 Config.saleMan = data.getStringExtra("PayMan");
+                tv_yingyeyuan.setText("营业员："+Config.saleMan);
                 break;
 
 

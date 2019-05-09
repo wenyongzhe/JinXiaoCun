@@ -13,6 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DensityUtil;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -21,11 +24,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SaleManDialog extends Activity {
+public class SaleManDialog extends Activity implements INetWorResult {
 
     @BindView(R.id.txtCountN)
     EditText txtPayMan;
     Double total;
+    private ILingshouScan mLingShouScanImp;
+    String countN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class SaleManDialog extends Activity {
         localLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(localLayoutParams);
         mH.sendEmptyMessageDelayed(2,300);
+        mLingShouScanImp = new LingShouScanImp(this);
     }
 
     Handler mH = new Handler(){
@@ -73,11 +79,16 @@ public class SaleManDialog extends Activity {
     @OnClick(R.id.btn_ok)
     void OnOk()
     {
-        String countN = txtPayMan.getText().toString().trim();
+        countN = txtPayMan.getText().toString().trim();
         if (countN.equals("")) {
             MyUtils.showToast("请输入营业员！", this);
             return;
         }
+
+        mLingShouScanImp.checkSaleman(countN);
+    }
+
+    private void checkOK(){
 
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(SaleManDialog.this.getCurrentFocus().getWindowToken(),
@@ -98,5 +109,19 @@ public class SaleManDialog extends Activity {
         Intent intent = new Intent();
         setResult(RESULT_CANCELED, intent);
         finish();
+    }
+
+    @Override
+    public void handleResule(int flag, Object o) {
+        Intent intent;
+        switch (flag) {
+            case Config.YING_YE_YUAN:
+                AlertUtil.showToast("已保存营业员！");
+                checkOK();
+                break;
+            case Config.MESSAGE_ERROR:
+                AlertUtil.showToast(countN+"营业员不存在,请检查！");
+                break;
+        }
     }
 }

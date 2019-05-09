@@ -2,6 +2,7 @@ package com.eshop.jinxiaocun.lingshou.presenter;
 
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
+import com.eshop.jinxiaocun.lingshou.bean.CheckSaleManBean;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 
 import java.util.List;
@@ -24,4 +25,5 @@ public interface ILingshouScan {
     public void sellVipPay(String flowno,String as_type,String name, String password,Double money);
     public void getSystemInfo();//8.1参数（抹零，卡密码，四舍五入等）
     public void saletemp(List mListData);//1.15 销售预售/结转
+    public void checkSaleman(String mSaleman);
 }

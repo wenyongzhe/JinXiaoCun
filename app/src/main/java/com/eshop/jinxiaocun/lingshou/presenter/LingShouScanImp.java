@@ -10,6 +10,7 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.CheckSaleManBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthBean;
@@ -646,6 +647,35 @@ public class LingShouScanImp implements ILingshouScan {
         public void handleResultJson(String status, String Msg, String jsonData) {
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.JIE_ZHUANG,null);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,null);
+            }
+        }
+    }
+
+    @Override
+    public void checkSaleman(String mAs_saleId) {
+        CheckSaleManBean mCheckSaleManBean = new CheckSaleManBean();
+        mCheckSaleManBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mCheckSaleManBean.getJsonData().setAs_saleId(mAs_saleId);
+        Map map = ReflectionUtils.obj2Map(mCheckSaleManBean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CheckSalemanInterface());
+    }
+
+    class CheckSalemanInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+        }
+
+        @Override
+        public void handleResult(Response event,String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.YING_YE_YUAN,null);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,null);
             }

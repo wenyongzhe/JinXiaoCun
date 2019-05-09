@@ -97,6 +97,11 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
     }
 
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
+    }
+
     //搜索
     @OnClick(R.id.iv_search)
     public void onClickSearch() {

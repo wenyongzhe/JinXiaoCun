@@ -13,7 +13,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="新增会员"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -24,7 +25,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="会员查询"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -34,7 +36,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="会员充值"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -44,7 +47,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="消费查询"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -54,7 +58,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="积分冲减"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -64,7 +69,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="15dp"
         android:text="积分兑换"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />

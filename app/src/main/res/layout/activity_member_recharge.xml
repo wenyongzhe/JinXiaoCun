@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/edittext_border_bg1"
+            android:background="@drawable/edittext_border_bg2"
             android:orientation="horizontal"
             >
 
@@ -70,7 +70,7 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextView_Grey"
+            style="@style/TextView_Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
@@ -102,7 +102,7 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextView_Grey"
+            style="@style/TextView_Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
@@ -133,7 +133,7 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextView_Grey"
+            style="@style/TextView_Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
@@ -230,11 +230,10 @@
         android:layout_height="@dimen/layout_item_height_35"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextView_Grey"
+            style="@style/TextView_Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"

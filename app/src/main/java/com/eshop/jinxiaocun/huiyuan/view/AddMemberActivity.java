@@ -112,6 +112,11 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         mEtRemarks.setText("");
     }
 
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
+    }
+
     //搜索
     @OnClick(R.id.iv_search)
     public void onClickSearch() {

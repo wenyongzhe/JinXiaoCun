@@ -155,6 +155,11 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         mTvAllRechargeMoney.setText("");
     }
 
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
+    }
+
     //点击搜索按钮
     @OnClick(R.id.iv_search)
     public void onClickSearch(){

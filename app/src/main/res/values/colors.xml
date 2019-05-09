@@ -28,6 +28,8 @@
     <color name="blue_theme">#009f98</color>
     <color name="bg_login_logon">#D5D3D4</color>
     <color name="line">#B4B4B4</color>
+    <color name="line_grey">#AAAAAA</color>
+    <color name="line_grey1">#F5F4F9</color>
     <color name="line_blue">#3A74D9</color>
     <color name="bg_grey1">#C3C3C3</color>
     <color name="bg_grey2">#EBEBEB</color>
@@ -52,6 +54,10 @@
     <color name="button_green">#01c676</color>
     <color name="gray">#ff606060</color>
     <color name="alpha_blue">#b6bec9</color>
+    <color name="top_bar_bg">#15D0DD</color>
+
+    <color name="button_bg">@color/top_bar_bg</color>
+
     <!-- 透明 -->
     <color name="transparent">#00000000</color>
     <!-- 浅灰 -->

@@ -15,6 +15,7 @@
             android:id="@+id/et_barcode"
             android:hint="@string/list_item_BarCode"
             android:layout_margin="10dp"
+            android:cursorVisible="false"
             style="@style/EditText_Grey_Border"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/layout_margin35"/>

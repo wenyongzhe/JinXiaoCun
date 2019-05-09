@@ -196,7 +196,7 @@
     <Button
         android:layout_marginTop="100dp"
         android:id="@+id/bt_ok"
-        android:text="@string/save_member"
+        android:text="@string/ok"
         android:textColor="@color/white"
         style="@style/Button_blue"
         android:layout_gravity="center"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#5976ab</color>
+    <color name="colorPrimary">#15D0DD</color>
+    <color name="colorPrimaryDark">#15D0DD</color>
     <color name="colorAccent">#FF4081</color>
 
     <!-- 紫色 -->
@@ -44,7 +44,7 @@
     <color name="grey_pressed">#5c5c5c</color>
     <color name="bg_spinner1">#ccb6bec9</color>
     <color name="black">#ff000000</color>
-    <color name="primary">#5976ab</color>
+    <color name="primary">#15D0DD</color>
     <color name="primary_dark">#303F9F</color>
     <color name="accent">#FF4081</color>
     <color name="black_dft">#3c3c3c</color>

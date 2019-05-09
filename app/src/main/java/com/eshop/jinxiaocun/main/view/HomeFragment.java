@@ -46,8 +46,8 @@ public class HomeFragment extends BaseFragment {
             //R.drawable.cgd,
 //            R.drawable.xsdj,
             R.drawable.kssk,
-            R.drawable.spgl,
-            R.drawable.spgl,
+            R.drawable.menber,
+            R.drawable.xsqd,
             R.drawable.kcgl
             //R.drawable.tbgl,
             //R.drawable.pdgl,

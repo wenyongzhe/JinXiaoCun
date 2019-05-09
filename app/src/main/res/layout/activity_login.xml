@@ -96,6 +96,9 @@
 
             <CheckBox
                 android:id="@+id/cb_show_psw"
+                android:theme="@style/My_CheckBox"
+                android:textColor="@color/white"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="显示"
@@ -122,9 +125,10 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/Button_dark"
-                android:background="@drawable/signin"
+                android:background="@color/white"
                 android:layout_width="256dp"
                 android:layout_height="46dp"
+                android:text="@string/login_text"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 />
@@ -132,10 +136,11 @@
             <Button
                 android:id="@+id/btn_systemset"
                 style="@style/Button_dark"
-                android:background="@drawable/setup"
+                android:background="@color/white"
                 android:layout_width="256dp"
                 android:layout_height="46dp"
                 android:layout_gravity="center"
+                android:text="@string/setting"
                 android:layout_marginTop="20dp"
                 />
             <Button

@@ -73,15 +73,15 @@ public class TwoListDetailAdapter extends BaseAdapter {
         mViewHolder.tvTitle.setText(listInfo.get(position).getItem_name());
         mViewHolder.tv_message.setText(listInfo.get(position).getItem_no());
         mViewHolder.tv_price.setText(listInfo.get(position).getSale_price()+Application.mContext.getString(R.string.yuan));
+        mViewHolder.tv_num.setText(listInfo.get(position).getSale_qnty());
 
         mViewHolder.iv_plus.setOnClickListener(new View.OnClickListener() {
             int id = position;
             @Override
             public void onClick(View view) {
-                ViewHolderImageView mViewHolderImageView = (ViewHolderImageView) view.getTag();
-                int mun = Integer.decode(mViewHolderImageView.tv_num.getText().toString())+1;
-                mViewHolderImageView.tv_num.setText(mun + "");
-                mViewHolderImageView.count = mun;
+                int mun = Integer.decode(listInfo.get(id).getSale_qnty())+1;
+                listInfo.get(id).setSale_qnty(mun+"");
+                notifyDataSetChanged();
             }
         });
         mViewHolder.iv_minus.setOnClickListener(new View.OnClickListener() {

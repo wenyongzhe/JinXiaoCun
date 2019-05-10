@@ -48,6 +48,10 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     TextView mTvCardNumber;
     @BindView(R.id.tv_name)
     TextView mTvName;
+    @BindView(R.id.tv_sex)
+    TextView mTvSex;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
     @BindView(R.id.tv_status)
     TextView mTvStatus;
     @BindView(R.id.tv_current_integral)
@@ -122,6 +126,8 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());
+        mTvSex.setText(data.getVip_sex());
+        mTvType.setText(data.getCardType());
         mTvStatus.setText(data.getCardState());
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
     }
@@ -130,10 +136,17 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
     private void reSetViewValues(){
         mTvCardNumber.setText("");
         mTvName.setText("");
+        mTvSex.setText("");
+        mTvType.setText("");
         mTvStatus.setText("");
         mTvCurrentIntegral.setText("");
         mEtSubtractIntegral.setText("");
         mEtRemarks.setText("");
+    }
+
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
     }
 
     //点击搜索按钮

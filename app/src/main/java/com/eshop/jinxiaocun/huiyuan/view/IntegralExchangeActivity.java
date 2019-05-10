@@ -58,8 +58,6 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     TextView mTvCurrentIntegral;//卡的当前积分
     @BindView(R.id.lv_exchange_goods)
     ListView mListView;
-    @BindView(R.id.view_line)
-    View mLine;
     @BindView(R.id.ll_surplus_integral)
     LinearLayout mLAayoutSurplusIntegral;
     @BindView(R.id.tv_all_select_integal)
@@ -83,6 +81,7 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     @Override
     protected void initView() {
         setTopToolBar("积分兑换", R.mipmap.ic_left_light,"",0,"");
+        setTopToolBarRightTitleAndStyle("礼品",R.drawable.border_bg_primary);
         mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -132,7 +131,6 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
     }
 
     private void refreshButtomUIByData(){
-        mLine.setVisibility(View.VISIBLE);
         mLAayoutSurplusIntegral.setVisibility(View.VISIBLE);
         mBtnExchangeGoods.setVisibility(View.VISIBLE);
 
@@ -147,8 +145,18 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
 
     }
 
+    @OnClick(R.id.iv_close)
+    public void onClickClose(){
+        mEtSearch.setText("");
+    }
+
+    @Override
+    protected void onTopBarRightClick() {
+        onClickLookExchangeGoods();
+    }
+
     //查询兑换商品
-    @OnClick(R.id.tv_exchange_goods)
+   // @OnClick(R.id.tv_exchange_goods)
     public void onClickLookExchangeGoods(){
         if (TextUtils.isEmpty(mTvCardNumber.getText().toString().trim())) {
             AlertUtil.showToast("请查询会员卡信息，再查询兑换商品信息");
@@ -241,7 +249,6 @@ public class IntegralExchangeActivity extends CommonBaseActivity implements INet
                 AlertUtil.showToast(o.toString());
                 break;
             case Config.RESULT_SUCCESS:
-                mLine.setVisibility(View.GONE);
                 mLAayoutSurplusIntegral.setVisibility(View.GONE);
                 mBtnExchangeGoods.setVisibility(View.GONE);
                 refreshViewValues();

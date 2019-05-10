@@ -88,73 +88,58 @@ public class NfcUtils {
 
     // 读卡
 //    String resolveIntent(Intent intent) {
-//        String action = intent.getAction();
-//        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+//        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action))
+//        {
+//            // 3) Get an instance of the TAG from the NfcAdapter
 //            Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-//            MifareClassic mfc = MifareClassic.get(tagFromIntent);
-//            MifareClassCard mifareClassCard = null;
-//            String authKey = "a2xQ61";//这是卡片的1扇区的密码（实际根据自己的卡片所设置的扇区和密码）
-//            try {
-//                mfc.connect();
-//                boolean auth = false;
-//                int secCount = mfc.getSectorCount();
-//                mifareClassCard = new MifareClassCard(secCount);
-//                int bCount = 0;
-//                int bIndex = 0;
-//                //连接NFC卡后到开始循环读取扇区
-//                for (int j = 0; j < secCount; j++) {
-//                    MifareSector mifareSector = new MifareSector();
-//                    mifareSector.sectorIndex = j;
-//                    if (j == 1 && !TextUtils.isEmpty(authKey)) {
-//                        auth = mfc.authenticateSectorWithKeyA(j, hexStringToByte(str2HexStr(authKey)));//需用str2HexStr方法 将服务器传的卡密码string转16进制
-//                    } else {
-//                        auth = mfc.authenticateSectorWithKeyA(j, MifareClassic.KEY_DEFAULT);//默认密码
+//            // 4) Get an instance of the Mifare classic card from this TAG
+//            // intent
+//            mfc = MifareClassic.get(tagFromIntent);
+//            if(mfc!=null)
+//                09
+//            {
+//                10
+//                Toast.makeText(this, "检测到卡片,读卡中。。。", Toast.LENGTH_SHORT).show();
+//                11
+//                try
+//                12
+//                {
+//                    13
+//                    mfc.connect();
+//                    14
+//                    boolean auth = false;
+//                    15
+//                    auth = mfc.authenticateSectorWithKeyA(15, "passwo".getBytes());//验证密码
+//                    16
+//                    if (auth)
+//                        17
+//                    {
+//                        18
+//                        card_number_edittext.setText(new String(mfc.readBlock(60)));//读取M1卡的第60块即15扇区第0块
+//                        19
+//                        password_edittext.requestFocus();
+//                        20
 //                    }
-//                    if (j >= 2) { //这里因为我只需要1扇区的，所以后面直接break了的遍历直接break了
-//                        break;
+//                    21
+//                } catch (Exception e)
+//                22
+//                {
+//                    23
+//                    if(BuildConfig.DEBUG)
+//                        24
+//                    {
+//                        25
+//                        e.printStackTrace();
+//                        26
 //                    }
-//                    mifareSector.authorized = auth;
-//                    if (auth) {
-//                        bCount = mfc.getBlockCountInSector(j);
-//                        bCount = Math.min(bCount, MifareSector.BLOCKCOUNT);
-//                        bIndex = mfc.sectorToBlock(j);
-//                        for (int i = 0; i < bCount; i++) {
-//                            byte[] data = mfc.readBlock(bIndex);
-//                            MifareBlock mifareBlock = new MifareBlock(data);
-//                            mifareBlock.blockIndex = bIndex;
-//                            bIndex++;
-//                            mifareSector.blocks[i] = mifareBlock;
+//                    27
 //
-//                        }
-//                        mifareClassCard.setSector(mifareSector.sectorIndex, mifareSector);
-//                    } else {
-//                    }
+//                    28
 //                }
-//                ArrayList<String> blockData = new ArrayList<String>();
-//                int blockIndex = 0;
-//                //遍历每个扇区及对应的区块
-//                for (int i = 0; i < secCount; i++) {
-//                    MifareSector mifareSector = mifareClassCard.getSector(i);
-//                    for (int j = 0; j < MifareSector.BLOCKCOUNT; j++) {
-//                        MifareBlock mifareBlock = mifareSector.blocks[j];
-//                        byte[] data = mifareBlock.getData();
-//                        if (i == 1 && j == 0) {//我使用的卡内数据 写在1扇区 0块 ,拿到所需值返回即可
-////                            Log.e("扇区：" + blockIndex, "" + new String(data).trim());
-//                            return new String(data).trim();
-//                        }
-//                        blockData.add("Block " + blockIndex++ + " : "
-//                                + Converter.getHexString(data, data.length));
-//                    }
-//                }
-//            } catch (IOException e) {
-//                Log.e("IOException", e.toString());
-//            } finally {
-//                if (mifareClassCard != null) {
-//                    mifareClassCard.debugPrint();
-//                }
+//                29
 //            }
+//            30
 //        }// End of method
-//        return "";
 //    }
 
     public static byte[] hexStringToByte(String hex) {

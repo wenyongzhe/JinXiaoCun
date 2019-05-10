@@ -53,7 +53,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected TextView mTvZje;//总金额
 
 
-    protected BarcodeScan mBarcodeScan;//扫描控制
+//    protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();
     protected abstract boolean scanBefore();//扫描前
     protected abstract void scanResultData(String barcode);//扫描返回的数据
@@ -77,12 +77,12 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void initView() {
         super.initView();
-        try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
-        }catch (Exception e){
-            Log.e("",e.getMessage());
-        }
+//        try {
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
+//        }catch (Exception e){
+//            Log.e("",e.getMessage());
+//        }
     }
 
     @Override
@@ -93,12 +93,12 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
-        try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
-        }catch (Exception e){
-            Log.e("",e.getMessage());
-        }
+//        try {
+//            mBarcodeScan = new BarcodeScan(this);
+//            mBarcodeScan.open();
+//        }catch (Exception e){
+//            Log.e("",e.getMessage());
+//        }
     }
 
     /*
@@ -254,9 +254,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
-        }
+//        if(mBarcodeScan!=null){
+//            mBarcodeScan.close();
+//        }
         unregisterReceiver(mScanDataReceiver);
     }
 

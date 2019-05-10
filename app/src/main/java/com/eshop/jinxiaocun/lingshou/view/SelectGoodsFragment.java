@@ -174,15 +174,15 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     public class DetailListListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            try {
-                selectList.add(mDetaillistTemp.get(i-1));
-                Intent mIntent = new Intent();
-                mIntent.putExtra("SelectList", (Serializable) selectList);
-                getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
-                getActivity().finish();
-            }catch (Exception e){
-                Log.e("--",""+e.getMessage());
-            }
+//            try {
+//                selectList.add(mDetaillistTemp.get(i-1));
+//                Intent mIntent = new Intent();
+//                mIntent.putExtra("SelectList", (Serializable) selectList);
+//                getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
+//                getActivity().finish();
+//            }catch (Exception e){
+//                Log.e("--",""+e.getMessage());
+//            }
 
         }
     }

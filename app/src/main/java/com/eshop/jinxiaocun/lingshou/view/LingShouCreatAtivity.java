@@ -255,13 +255,19 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         switch (resultCode) {
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+                /*返回变成多个商品，暂时不判断批次
                 if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
                     getPiCi(mGetClassPluResultList);
                 } else {
                     mGetClassPluResultList.get(0).setItem_barcode("");
                     addListData();
                     reflashList();
+                }*/
+                for(int i=0; i<mGetClassPluResultList.size(); i++){
+                    mGetClassPluResultList.get(i).setItem_barcode("");
                 }
+                addListData();
+                reflashList();
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou = data.getStringExtra("countN");
@@ -318,8 +324,10 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         for (int i = 0; i < mListData.size(); i++) {
             for (int j = 0; j < mGetClassPluResultList.size(); j++) {
                 if (mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())) {
+                    int qnty1 = Integer.decode(mListData.get(i).getSale_qnty());
+                    int qnty2 = Integer.decode(mGetClassPluResultList.get(j).getSale_qnty());
+                    mListData.get(i).setSale_qnty(qnty1+qnty2 + "");
                     mGetClassPluResultList.remove(j);
-                    mListData.get(i).setSale_qnty((Integer.decode(mListData.get(i).getSale_qnty()) + 1) + "");
                     break;
                 }
             }

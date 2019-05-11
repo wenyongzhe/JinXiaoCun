@@ -35,6 +35,7 @@ public class GetClassPluResult extends ListBean implements Serializable{
     private int hasModifyPrice = 0;//0未修改过价格  1表示已修改价格
     private String sale_price_beforModify;//改价前售价
     private int order_qnty;//订单数量
+    private int zhekou = -1;//折扣
 
     public int getHasModifyPrice() {
         return hasModifyPrice;
@@ -69,6 +70,14 @@ public class GetClassPluResult extends ListBean implements Serializable{
 
     public String getItem_name() {
         return item_name;
+    }
+
+    public int getZhekou() {
+        return zhekou;
+    }
+
+    public void setZhekou(int zhekou) {
+        this.zhekou = zhekou;
     }
 
     public void setItem_name(String item_name) {

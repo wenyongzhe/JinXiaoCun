@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DensityUtil;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 public class DanPinZheKouCreatDialog extends Activity {
 
     @BindView(R.id.txtCountN)
-    EditText txtCountN;
+    EditText et_value;
     @BindView(R.id.et_oldprice)
     EditText et_oldprice;
     @BindView(R.id.tv_newprice)
@@ -46,6 +47,7 @@ public class DanPinZheKouCreatDialog extends Activity {
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
     private String mCount = "1";
+    private GetClassPluResult mGetClassPluResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +58,11 @@ public class DanPinZheKouCreatDialog extends Activity {
             mSavediscount = getIntent().getStringExtra("Savediscount");
             mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
             mCount = getIntent().getStringExtra("count");
+            mGetClassPluResult = (GetClassPluResult) getIntent().getSerializableExtra("GetClassPluResult");
 
             tv_count.setText(mCount);
-            txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
-            txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
+            et_value.setHintTextColor(getResources().getColor(R.color.mid_gray));
+            et_value.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
         }catch (Exception e){
         }
 
@@ -74,17 +77,17 @@ public class DanPinZheKouCreatDialog extends Activity {
             et_oldprice.setEnabled(false);
         }
         if(limit == -1){
-            txtCountN.setEnabled(false);
+            et_value.setEnabled(false);
         }
         if(limit !=-1){
-            txtCountN.setHint("最低折扣："+limit);
+            et_value.setHint("最低折扣："+limit);
         }
-        txtCountN.setText(intent.getStringExtra("countN"));
+        et_value.setText(intent.getStringExtra("countN"));
 
-        oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
-        et_oldprice.setText(""+oldPrice);
+        et_oldprice.setText(""+MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())));
+        oldPrice = Double.parseDouble(MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())));
 
-        txtCountN.addTextChangedListener(new TextWatcher() {
+        et_value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -114,7 +117,7 @@ public class DanPinZheKouCreatDialog extends Activity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     double price = Double.parseDouble(charSequence.toString().trim());
-                    double oldprice2 = Double.parseDouble(txtCountN.getText().toString().trim());
+                    double oldprice2 = Double.parseDouble(et_value.getText().toString().trim());
                     if(price>0){
                         tv_newprice.setText("￥"+MyUtils.formatDouble2(oldprice2*price/100));
                     }
@@ -130,7 +133,12 @@ public class DanPinZheKouCreatDialog extends Activity {
             }
         });
 
-        txtCountN.setText("100");
+        int zhekou = mGetClassPluResult.getZhekou();
+        if(zhekou<0){
+            et_value.setText("100");
+        }else{
+            et_value.setText(zhekou+"");
+        }
         closeEditTextKeyboard();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);
@@ -145,11 +153,11 @@ public class DanPinZheKouCreatDialog extends Activity {
         localLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(localLayoutParams);
         mH.sendEmptyMessageDelayed(2,300);
-        txtCountN.selectAll();
+        et_value.selectAll();
     }
 
     private void closeEditTextKeyboard() {
-        MyUtils.closeKeyboard(this, txtCountN);
+        MyUtils.closeKeyboard(this, et_value);
     }
 
     @OnClick(R.id.im_delet)
@@ -165,7 +173,7 @@ public class DanPinZheKouCreatDialog extends Activity {
     @OnClick(R.id.btn_ok)
     void OnOk()
     {
-        if (txtCountN.getText().toString().trim().equals("")) {
+        if (et_value.getText().toString().trim().equals("")) {
             MyUtils.showToast("请输入折扣！", this);
             return;
         }
@@ -175,12 +183,12 @@ public class DanPinZheKouCreatDialog extends Activity {
             return;
         }
 
-        if (txtCountN.getText().toString().trim().equals("0")) {
+        if (et_value.getText().toString().trim().equals("0")) {
             MyUtils.showToast("请输入大于0的折扣！", this);
             return;
         }
 
-        if (Double.valueOf(txtCountN.getText().toString().trim())<limit) {
+        if (Double.valueOf(et_value.getText().toString().trim())<limit) {
             MyUtils.showToast("后台设置折扣必须大于等于"+limit, this);
             return;
         }
@@ -190,7 +198,13 @@ public class DanPinZheKouCreatDialog extends Activity {
             return;
         }
 
-        String countN = txtCountN.getText().toString().trim();
+        if(!et_oldprice.getText().toString().trim().equals(MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())))){
+            if(Integer.decode(et_value.getText().toString())<100){
+                MyUtils.showToast("折扣与议价不能同时优惠！", this);
+                return;
+            }
+        }
+        String countN = et_value.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(DanPinZheKouCreatDialog.this.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
@@ -199,6 +213,8 @@ public class DanPinZheKouCreatDialog extends Activity {
             intent.putExtra("countN",tv_newprice.getText().toString().trim().replace("￥",""));
             intent.putExtra("count",tv_count.getText().toString().trim());
             intent.putExtra("price",et_oldprice.getText().toString().trim());
+            mGetClassPluResult.setZhekou(Integer.decode(et_value.getText().toString()));
+            intent.putExtra("zhekou",Integer.decode(et_value.getText().toString()));
             setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
             finish();
         }else {

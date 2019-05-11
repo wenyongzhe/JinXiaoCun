@@ -216,6 +216,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
             intent.putExtra("oldPrice", Double.parseDouble(item.getSale_price()));
             intent.putExtra("count", item.getSale_qnty());
+            intent.putExtra("GetClassPluResult",item);
             if (!item.getEnable_discount().equals("1")) {
                 ToastUtils.showShort("此商品不允许打折。");
                 intent.putExtra("limit", Config.danbiZheKoulimit);
@@ -286,7 +287,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 reflashList();
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
-                String zhekou = data.getStringExtra("countN");
+                String newPrice = data.getStringExtra("countN");
+                int zhekou = data.getIntExtra("zhekou",100);
                 String shuliang = data.getStringExtra("count");
                 String price = data.getStringExtra("price");
                 GetClassPluResult mClass = mListData.get(itemClickPosition);
@@ -296,7 +298,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     reflashList();
                     return;
                 }
-                mClass.setSale_price(zhekou);
+                mClass.setZhekou(zhekou);
+                mClass.setSale_price(newPrice);
                 if (shuliang != null && !shuliang.equals("")) {
                     mClass.setSale_qnty(shuliang);
                 }

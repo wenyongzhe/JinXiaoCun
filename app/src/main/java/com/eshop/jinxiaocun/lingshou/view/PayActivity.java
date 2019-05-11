@@ -790,8 +790,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private void setSaleFlowBean(){
-        if(Config.saleMan == null || Config.saleMan.equals("")){
-            Config.saleMan = "9999";
+        if(Config.saleMan == null ){
+            Config.saleMan = "";
         }
         mSaleFlowBeanList.clear();
         for(int i=0; i<mListData.size(); i++){
@@ -833,8 +833,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private void setPlayFlowBean(List<HashMap<String,String>> hashMap){
-        if(Config.saleMan == null || Config.saleMan.equals("")){
-            Config.saleMan = "9999";
+        if(Config.saleMan == null){
+            Config.saleMan = "";
         }
         for(int i=0; i<hashMap.size(); i++){
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();

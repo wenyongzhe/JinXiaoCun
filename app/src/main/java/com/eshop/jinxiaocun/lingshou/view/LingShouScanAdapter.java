@@ -60,6 +60,9 @@ public class LingShouScanAdapter extends MyBaseAdapter {
 
         sale_qnty.setText(listInfo.get(position).getSale_qnty()+listInfo.get(position).getUnit_no());
         sale_price.setText("售价￥"+MyUtils.formatFloat2(Float.parseFloat(listInfo.get(position).getSale_price())));
+        if( listInfo.get(position).getSale_price_beforModify().equals(listInfo.get(position).getSale_price())){
+            sale_price_old.setVisibility(View.INVISIBLE);
+        }
         sale_price_old.setText("原价￥"+MyUtils.formatFloat2(Float.parseFloat(listInfo.get(position).getSale_price_beforModify())));
         sale_price_old.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
         item_no.setText(listInfo.get(position).getItem_no()==null?"":listInfo.get(position).getItem_no());

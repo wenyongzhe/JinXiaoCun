@@ -745,6 +745,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 case "2":
                     total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.DOWN));
                     molingMoney -= total;
+                    hasMoling = true;
                     break;
                 case "3":
                     total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.HALF_UP));
@@ -763,7 +764,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 return;
             }else{
                 tv_check_num.setText("应收："+total);
-                tv_moling_money.setText("抹零：￥"+molingMoney);
+                tv_moling_money.setText("抹零：￥"+MyUtils.formatDouble2(molingMoney));
             }
         }catch (Exception e){
         }

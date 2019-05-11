@@ -330,7 +330,8 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
-                  <data android:mimeType="text/plain" />
+                  
+                <data android:mimeType="text/plain" />
             </intent-filter>
 
             <meta-data
@@ -366,6 +367,11 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".zjPrinter.PrinterSettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
     </application>
 
 </manifest>

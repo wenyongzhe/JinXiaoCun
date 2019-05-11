@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.huiyuan.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,6 +29,7 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.zjPrinter.PrinterSettingActivity;
 
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     @Override
     protected void initView() {
         setTopToolBar("会员充值",R.mipmap.ic_left_light,"",0,"");
+        setTopToolBarRightTitleAndStyle("\t\t\t",R.drawable.icon_printer);
         mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -170,6 +173,11 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString());
         hideSoftInput();
+    }
+
+    @Override
+    protected void onTopBarRightClick() {
+        startActivity(new Intent(this, PrinterSettingActivity.class));
     }
 
     //充值

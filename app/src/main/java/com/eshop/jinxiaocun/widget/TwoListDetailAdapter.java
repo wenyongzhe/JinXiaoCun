@@ -21,10 +21,38 @@ import java.util.List;
 public class TwoListDetailAdapter extends BaseAdapter {
 
     private List<GetClassPluResult> listInfo;
+    private List<GetClassPluResult> selectList;
 
-
-    public TwoListDetailAdapter(List<GetClassPluResult> listInfo) {
+    public TwoListDetailAdapter(List<GetClassPluResult> listInfo,List<GetClassPluResult> selectList) {
         this.listInfo = listInfo;
+        this.selectList = selectList;
+        clearData();
+        initData();
+
+    }
+
+    private void initData(){
+        for(int j=0; j<listInfo.size(); j++){
+            GetClassPluResult mGetClassPluResult = listInfo.get(j);
+            for(int k=0; k<selectList.size(); k++){
+                GetClassPluResult mGetClassPluResult2 = selectList.get(k);
+                if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
+                    mGetClassPluResult.setSale_qnty(mGetClassPluResult2.getSale_qnty());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void clearData(){
+        for(int k=0; k<listInfo.size(); k++){
+            GetClassPluResult mGetClassPluResult2 = listInfo.get(k);
+            mGetClassPluResult2.setSale_qnty("0");
+        }
+    }
+
+    public List<GetClassPluResult> getSelectList() {
+        return selectList;
     }
 
     @Override
@@ -67,31 +95,87 @@ public class TwoListDetailAdapter extends BaseAdapter {
         }else{
             mViewHolder = (ViewHolder) convertView.getTag();
         }
+        if(listInfo.get(position).getSale_qnty().equals("0")){
+            mViewHolder.tv_num.setVisibility(View.INVISIBLE);
+            mViewHolder.iv_plus.setVisibility(View.INVISIBLE);
+            mViewHolder.iv_minus.setVisibility(View.INVISIBLE);
+        }else {
+            mViewHolder.tv_num.setVisibility(View.VISIBLE);
+            mViewHolder.iv_plus.setVisibility(View.VISIBLE);
+            mViewHolder.iv_minus.setVisibility(View.VISIBLE);
+        }
 
         mViewHolder.tvTitle.setSelected(true);
         mViewHolder.tv_message.setSelected(true);
         mViewHolder.tvTitle.setText(listInfo.get(position).getItem_name());
         mViewHolder.tv_message.setText(listInfo.get(position).getItem_no());
         mViewHolder.tv_price.setText(listInfo.get(position).getSale_price()+Application.mContext.getString(R.string.yuan));
+        for(int j=0; j<listInfo.size(); j++){
+            GetClassPluResult mGetClassPluResult = listInfo.get(j);
+            for(int k=0; k<selectList.size(); k++){
+                GetClassPluResult mGetClassPluResult2 = selectList.get(k);
+                if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
+                    mGetClassPluResult.setSale_qnty(mGetClassPluResult2.getSale_qnty());
+                    break;
+                }
+            }
+        }
         mViewHolder.tv_num.setText(listInfo.get(position).getSale_qnty());
 
         mViewHolder.iv_plus.setOnClickListener(new View.OnClickListener() {
             int id = position;
             @Override
             public void onClick(View view) {
-                int mun = Integer.decode(listInfo.get(id).getSale_qnty())+1;
-                listInfo.get(id).setSale_qnty(mun+"");
+                GetClassPluResult mGetClassPluResult2 = listInfo.get(id);
+                int mun = Integer.decode(mGetClassPluResult2.getSale_qnty())+1;
+                if(mun==1){
+                    mGetClassPluResult2.setSale_qnty(mun+"");
+                    selectList.add(mGetClassPluResult2);
+                }else if(mun>1){
+                    for(int j=0; j<selectList.size(); j++) {
+                        GetClassPluResult mGetClassPluResult = selectList.get(j);
+                        if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
+                            int mun2 = Integer.decode(mGetClassPluResult.getSale_qnty())+1;
+                            mGetClassPluResult.setSale_qnty(mun2+"");
+                        }
+                    }
+                }
                 notifyDataSetChanged();
             }
         });
         mViewHolder.iv_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ViewHolderImageView mViewHolderImageView = (ViewHolderImageView) view.getTag();
-                mViewHolderImageView.tv_num.setText("3");
+                GetClassPluResult mGetClassPluResult2 = listInfo.get(position);
+                int mun = Integer.decode(mGetClassPluResult2.getSale_qnty())-1;
+                if(mun<1){
+                    mGetClassPluResult2.setSale_qnty("0");
+                    for(int i=0; i<selectList.size(); i++){
+                        if(mGetClassPluResult2.getItem_no().equals(selectList.get(i).getItem_no())){
+                            selectList.remove(i);
+                            break;
+                        }
+                    }
+                }else if(mun>0){
+                    for(int j=0; j<selectList.size(); j++) {
+                        GetClassPluResult mGetClassPluResult = selectList.get(j);
+                        if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
+                            int mun2 = Integer.decode(mGetClassPluResult.getSale_qnty())-1;
+                            mGetClassPluResult.setSale_qnty(mun2+"");
+                        }
+                    }
+                }
+                notifyDataSetChanged();
             }
         });
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewHolder mViewHolder = (ViewHolder) view.getTag();
+                mViewHolder.iv_plus.performClick();
+            }
+        });
         return convertView;
     }
 

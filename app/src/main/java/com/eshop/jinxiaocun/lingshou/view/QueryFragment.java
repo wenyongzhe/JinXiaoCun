@@ -160,7 +160,7 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
                             selectList.add(mListData.get(i-1));
                             Intent mIntent = new Intent();
                             mIntent.putExtra("SelectList", (Serializable) selectList);
-                            getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
+                            getActivity().setResult(Config.RESULT_SELECT_GOODS_QUERY,mIntent);
                             getActivity().finish();
                         }catch (Exception e){
 

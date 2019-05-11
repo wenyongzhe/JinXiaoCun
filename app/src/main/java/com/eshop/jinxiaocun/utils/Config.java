@@ -72,6 +72,7 @@ public class Config {
     public final static int MESSAGE_INTENT_ZHEKOU = 29;
     public final static int MESSAGE_INTENT_YIJIA = 30;
     public final static int RESULT_SELECT_GOODS = 200;
+    public final static int RESULT_SELECT_GOODS_QUERY = 201;
     public final static int MESSAGE_GET_PAY_MODE = 31;
     public final static int MESSAGE_GET_OPT_AUTH = 32;
     public final static int MESSAGE_BILL_DISCOUNT = 33;

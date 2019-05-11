@@ -66,13 +66,13 @@
             android:id="@+id/iv_plus"
             android:background="@drawable/plus_72px"
             android:layout_gravity="center_horizontal"
-            android:layout_width="18dp"
-            android:layout_height="18dp" />
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
         <TextView
             android:id="@+id/tv_num"
             android:layout_gravity="center_horizontal"
             android:text="0"
-            android:textSize="13sp"
+            android:textSize="22sp"
             android:textColor="@color/blue_theme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -80,7 +80,7 @@
             android:id="@+id/iv_minus"
             android:background="@drawable/minus_72px"
             android:layout_gravity="center_horizontal"
-            android:layout_width="18dp"
-            android:layout_height="18dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </LinearLayout>
 </LinearLayout>

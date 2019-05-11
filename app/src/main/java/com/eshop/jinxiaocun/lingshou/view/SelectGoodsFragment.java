@@ -31,6 +31,8 @@ import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class SelectGoodsFragment extends BaseListFragment implements INetWorResult {
+
+    private Button bt_ok;
     private LinearLayout lyButton;
     private List<DanJuMainBeanResult> mListData;
     private List<QryClassResult> mQryClassResult;
@@ -65,12 +67,29 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mQryClassResult = new ArrayList<QryClassResult>();
         mGetClassPluResult = new ArrayList<GetClassPluResult>();
-        selectList = new ArrayList<GetClassPluResult>();
+        selectList = (List<GetClassPluResult>) getActivity().getIntent().getSerializableExtra("selectList");
+        if(selectList == null){
+            selectList = new ArrayList<GetClassPluResult>();
+        }
         mISelectGoods = new SelectGoodsImp(this);
         View v = inflater.inflate(R.layout.selectgoods_fragment, null);
         mTwoListView = v.findViewById(R.id.twlist);
         lyButton = v.findViewById(R.id.ly_buttonContain);
-
+        bt_ok = v.findViewById(R.id.bt_ok);
+        bt_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    //selectList.addAll(mTwoListView.getSelectList());
+                    Intent mIntent = new Intent();
+                    mIntent.putExtra("SelectList", (Serializable) selectList);
+                    getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
+                    getActivity().finish();
+                }catch (Exception e){
+                    Log.e("--",""+e.getMessage());
+                }
+            }
+        });
         loadData();
         return v;
     }
@@ -129,7 +148,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
                     }else{
                         mDetaillistTemp.addAll(mGetClassPluResult);
                     }
-                    mTwoListView.setDetailListBean(mDetaillistTemp,new DetailListListener());
+                    mTwoListView.setDetailListBean(mDetaillistTemp,selectList,new DetailListListener());
                     break;
 
             }

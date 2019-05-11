@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -164,6 +165,12 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(LingShouCreatAtivity.this, QreShanpingActivity.class);
+                if(mGetClassPluResultList!=null){
+
+                    mGetClassPluResultList.clear();
+                    mGetClassPluResultList.addAll(mListData);
+                }
+                mIntent.putExtra("selectList", (Serializable) mGetClassPluResultList);
                 startActivityForResult(mIntent, 100);
             }
         });
@@ -263,6 +270,15 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     addListData();
                     reflashList();
                 }*/
+                for(int i=0; i<mGetClassPluResultList.size(); i++){
+                    mGetClassPluResultList.get(i).setItem_barcode("");
+                }
+                mListData.clear();
+                addListData();
+                reflashList();
+                break;
+            case Config.RESULT_SELECT_GOODS_QUERY:
+                mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
                 for(int i=0; i<mGetClassPluResultList.size(); i++){
                     mGetClassPluResultList.get(i).setItem_barcode("");
                 }

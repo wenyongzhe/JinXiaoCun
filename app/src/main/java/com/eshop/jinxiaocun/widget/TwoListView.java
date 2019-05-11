@@ -93,12 +93,19 @@ public class TwoListView extends LinearLayout {
     private void loadData() {
     }
 
-    public void setDetailListBean(List<GetClassPluResult> detailListBean, AdapterView.OnItemClickListener listener) {
+    public void setDetailListBean(List<GetClassPluResult> detailListBean, List<GetClassPluResult> selectList,AdapterView.OnItemClickListener listener) {
         this.detailListBean = detailListBean;
-        mTwoListDetailAdapter = new TwoListDetailAdapter(detailListBean);
+        mTwoListDetailAdapter = new TwoListDetailAdapter(detailListBean,selectList);
         mListViewDetail.setAdapter(mTwoListDetailAdapter);
         mListViewDetail.setOnItemClickListener(listener);
         mTwoListDetailAdapter.notifyDataSetChanged();
+    }
+
+    public List<GetClassPluResult> getSelectList(){
+        if(mTwoListDetailAdapter!=null){
+            return mTwoListDetailAdapter.getSelectList();
+        }
+        return null;
     }
 
     public void setMainListBean(List<QryClassResult> mainListBean, AdapterView.OnItemClickListener listener) {

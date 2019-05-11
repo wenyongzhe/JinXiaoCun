@@ -67,7 +67,7 @@
     </style>
 
     <style name="Button_dark">
-        <item name="android:background">@color/button_dark</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/gray</item>
         <item name="android:textSize">@dimen/txt_size16</item>
         <item name="android:paddingLeft">10dp</item>

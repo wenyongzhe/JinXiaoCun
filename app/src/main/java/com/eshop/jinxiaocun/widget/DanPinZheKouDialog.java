@@ -16,9 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DensityUtil;
 import com.eshop.jinxiaocun.utils.MyUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +39,7 @@ public class DanPinZheKouDialog extends Activity {
     double oldPrice;
     private String mSavediscount = "1";
     private String mLimitdiscount = "1";
+    private List<GetClassPluResult> mGetClassPluResultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class DanPinZheKouDialog extends Activity {
         try {
             mSavediscount = getIntent().getStringExtra("Savediscount");
             mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
+            mGetClassPluResultList = (List<GetClassPluResult>) getIntent().getSerializableExtra("GetClassPluResult");
             txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
             txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
         }catch (Exception e){
@@ -59,7 +64,7 @@ public class DanPinZheKouDialog extends Activity {
         if(limit !=-1){
             txtCountN.setHint("最低折扣："+limit);
         }
-        txtCountN.setText(intent.getStringExtra("countN"));
+        txtCountN.setText(intent.getStringExtra("zhekou"));
 
         oldPrice = getIntent().getDoubleExtra("oldPrice",0.0);
         tv_oldprice.setText("￥"+oldPrice);
@@ -82,7 +87,6 @@ public class DanPinZheKouDialog extends Activity {
             public void afterTextChanged(Editable editable) {
             }
         });
-        txtCountN.setText("100");
         closeEditTextKeyboard();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);
@@ -129,6 +133,7 @@ public class DanPinZheKouDialog extends Activity {
         if(!TextUtils.isEmpty(countN)){
             Intent intent = new Intent();
             intent.putExtra("countN",tv_newprice.getText().toString().trim().replace("￥",""));
+            intent.putExtra("zhekou",txtCountN.getText().toString().trim());
             setResult(Config.MESSAGE_INTENT_ZHEKOU, intent);
             finish();
         }else {

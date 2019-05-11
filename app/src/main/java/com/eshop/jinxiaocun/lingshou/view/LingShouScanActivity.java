@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.PopupWindowCompat;
 import android.util.Log;
@@ -110,6 +111,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @BindView(R.id.ly_shanpingBarcode)
     LinearLayout ly_shanpingBarcode;
 
+    private String zhekouAll = "100";
+    private String gaijiaAll;
     private double gaiJiaMoney = 0;
     private double youhuiMoney = 0;
     private boolean hasGaiJia = false;
@@ -641,6 +644,22 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     @Override
     public void onLeftClick() {
+        if(hasGaiJia){
+            AlertUtil.showAlert(this, "提示", "已做折扣优惠会丢失，是否退出？",
+                    "退出", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            AlertUtil.dismissDialog();
+                        }
+                    }, R.string.cancel, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AlertUtil.dismissDialog();
+                        }
+                    });
+            return;
+        }
         finish();
     }
 
@@ -759,7 +778,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
 
     void btn_zhengdanzhekou() {
         try {
-            if(hasGaiJia == true || hasDanPingGaiJia()){
+            /*if(hasGaiJia == true || hasDanPingGaiJia()){
                 AlertUtil.showAlert(this, "提示",
                         "已经修改过价格。", "确定", new View.OnClickListener() {
                             @Override
@@ -768,10 +787,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                             }
                         });
                 return;
-            }
+            }*/
             Intent intent = new Intent(this, DanPinZheKouDialog.class);
             intent.putExtra("oldPrice",total);
             intent.putExtra("limit",Config.zhendanZheKoulimit);
+            intent.putExtra("zhekou",zhekouAll);
+            intent.putExtra("GetClassPluResult", (Serializable) mListData);
             startActivityForResult(intent,200);
         }catch (Exception e){
             Log.e("","");
@@ -837,10 +858,12 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_INTENT_ZHEKOU:
                 hasGaiJia = true;
                 if(requestCode==200){
-                    String zhekou =  data.getStringExtra("countN");
-                    gaiJiaMoney = total-Double.valueOf(zhekou);
+                    String gaijia2 =  data.getStringExtra("countN");
+                    zhekouAll =  data.getStringExtra("zhekou");
+                    gaiJiaMoney = total-Double.valueOf(gaijia2);
                     hasGaiJia = true;
-                    reflashGaiJiaItemPrice();
+                    reflashZheKouItemPrice();
+                    mScanAdapter.notifyDataSetChanged();
                 }else{
                     String zhekou =  data.getStringExtra("countN");
                     GetClassPluResult mClass = getSelectObject();
@@ -940,6 +963,24 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             itemPrice =  initDouble(4,itemPrice);
             mGetClassPluResult.setSale_price(itemPrice+"");
             tempmoney += itemPrice;
+        }
+        setSaleFlowBean();//销售流水
+        total = total-gaiJiaMoney;
+        reflashList();
+    }
+
+    private void reflashZheKouItemPrice(){
+        double tempmoney = 0;
+        for(int i=0; i<mListData.size(); i++){
+            GetClassPluResult mGetClassPluResult = mListData.get(i);
+            if(!mGetClassPluResult.isHasYiJia()){
+                mGetClassPluResult.setHasYiJia(true);
+                String itemPrice = mGetClassPluResult.getSale_price();
+                Double itemPriceDouble =Double.parseDouble(itemPrice);
+                itemPrice = MyUtils.formatDouble2(itemPriceDouble*Double.parseDouble(zhekouAll)/100);
+                mGetClassPluResult.setSale_price(itemPrice);
+                tempmoney += Double.parseDouble(itemPrice);
+            }
         }
         setSaleFlowBean();//销售流水
         total = total-gaiJiaMoney;
@@ -1183,8 +1224,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
-            finish();
-            return true;
+            onLeftClick();
+            return false;
         }
         return super.onKeyDown(keyCode, event);
     }

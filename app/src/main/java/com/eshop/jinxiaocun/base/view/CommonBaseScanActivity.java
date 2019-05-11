@@ -180,7 +180,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     }
 
     public void setHeaderTitle(int tv_id, int title, int width){
-        TextView textView=this.findViewById(tv_id);
+        TextView textView= (TextView) this.findViewById(tv_id);
         textView.setWidth(CommonUtility.dip2px(this,width));
         textView.setText(getResources().getString(title));
         textView.setGravity(Gravity.CENTER);

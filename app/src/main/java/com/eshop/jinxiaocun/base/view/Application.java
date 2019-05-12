@@ -56,6 +56,27 @@ public class Application extends android.app.Application{
         Config.IP = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_SERVERURL,Config.IP);
         Config.IP_POIN = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_SERVERPORT,Config.IP_POIN);
 
+        //打印配置
+        Config.mPrintSize =ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINT_SIZE,Config.mPrintSize);
+        Config.mPrintNumber =ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINT_NUMBER,Config.mPrintNumber);
+        Config.mPrintOrderName =ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINT_ORDER_NAME,Config.mPrintOrderName);
+        Config.mPrintPageHeader =ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINT_PAGE_HEADER,Config.mPrintPageHeader);
+        Config.mPrintPageFoot =ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINT_PAGE_FOOT,Config.mPrintPageFoot);
+        Config.isPrinterCardNo = ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINTER_CARD_NO,Config.isPrinterCardNo);
+        Config.isPrinterUserName = ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINTER_USER_NAME,Config.isPrinterUserName);
+        Config.isPrinterUserTel = ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINTER_USER_TEL,Config.isPrinterUserTel);
+        Config.isPrinterCashier = ConfigureParamSP.getInstance().getValue(this,
+                ConfigureParamSP.KEY_PRINTER_CASHIER,Config.isPrinterCashier);
+
+
         FileUtils.createOrExistsDir(Config.updateFile);
         FileUtils.createOrExistsDir(Config.databasePath);
         FileUtils.createOrExistsDir(Config.crashPath);

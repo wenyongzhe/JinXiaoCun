@@ -67,12 +67,12 @@
                 android:layout_height="match_parent"
                 android:background="@color/line_grey"
                 />
-            <TextView
-                style="@style/TextView_Black"
+            <Spinner
+                android:id="@+id/sp_print_size"
+                style="@style/SpinnerStyle"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="58"
                 />
 
         </LinearLayout>
@@ -103,11 +103,12 @@
                 android:background="@color/line_grey"
                 />
             <TextView
+                android:id="@+id/tv_print_number"
                 style="@style/TextView_Black"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="5"
+                android:text="1"
                 />
 
         </LinearLayout>
@@ -147,12 +148,12 @@
                 android:background="@color/line_grey"
                 />
             <TextView
+                android:id="@+id/tv_print_order_name"
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="欢迎光临"
                 />
 
         </LinearLayout>
@@ -182,12 +183,12 @@
                 android:background="@color/line_grey"
                 />
             <TextView
+                android:id="@+id/tv_print_page_header"
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="谢谢惠顾！"
                 />
 
         </LinearLayout>
@@ -217,19 +218,27 @@
                 android:background="@color/line_grey"
                 />
             <TextView
+                android:id="@+id/tv_print_page_foot"
                 style="@style/TextView_Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="欢迎光临，谢谢惠顾！"
                 />
 
         </LinearLayout>
 
     </LinearLayout>
 
-
+    <TextView
+        style="@style/TextView_Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="可选择显示打印的字段"
+        android:textSize="@dimen/txt_size18"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -242,6 +251,7 @@
         >
 
         <CheckBox
+            android:id="@+id/cb_printer_card_no"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_40"
             android:layout_marginLeft="5dp"
@@ -254,6 +264,7 @@
             android:background="@color/line_grey"
             />
         <CheckBox
+            android:id="@+id/cb_printer_user_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_40"
             android:layout_marginLeft="5dp"
@@ -266,6 +277,7 @@
             android:background="@color/line_grey"
             />
         <CheckBox
+            android:id="@+id/cb_printer_user_tel"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_40"
             android:layout_marginLeft="5dp"
@@ -278,6 +290,7 @@
             android:background="@color/line_grey"
             />
         <CheckBox
+            android:id="@+id/cb_printer_cashier"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_40"
             android:layout_marginLeft="5dp"
@@ -288,6 +301,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_print_preview"
         style="@style/Button_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

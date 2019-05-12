@@ -127,6 +127,18 @@ public class Config {
     //记录连接的蓝牙地址
     public static String BluetoothAddress = "";
 
+    public static String mPrintSize = "58";//打印的尺寸
+    public static String mPrintNumber = "1";//打印的份数
+    public static String mPrintOrderName = "";//打印的单据名称
+    public static String mPrintPageHeader = "";//打印的页眉
+    public static String mPrintPageFoot = "欢迎光临，谢谢惠顾！";//打印的页脚
+    public static boolean isPrinterCardNo;//是否打印卡号
+    public static boolean isPrinterUserName;//是否打印客户姓名
+    public static boolean isPrinterUserTel;//是否打印客户联系方式
+    public static boolean isPrinterCashier;//是否打印收银员
+
+
+
     //下载文件路径
     public static final String download_dir = "eshop";
     public static String DB_URL ="jdbc:jtds:sqlserver://" + Config.IP + Config.IP_POIN + Config.DB_NAME + ";charset=UTF-8;";

@@ -9,6 +9,19 @@ public class ConfigureParamSP {
 	public final static String KEY_SERVERURL = "ServerUrl";
 	public final static String KEY_SERVERPORT = "ServerPORT";
 	public final static String KEY_BLUETOOTHADDRESS = "BluetoothAddress";
+	public final static String KEY_IMMEDIATELY_PRINTER = "immediatelyPrinter";//保存后打印
+
+	public final static String KEY_PRINT_SIZE = "PrintSize";//打印尺寸
+	public final static String KEY_PRINT_NUMBER = "PrintNumber";//打印份数
+	public final static String KEY_PRINT_ORDER_NAME = "PrintOrderName";//打印单据名称
+	public final static String KEY_PRINT_PAGE_HEADER = "PrintPageHeader";//打印页眉
+	public final static String KEY_PRINT_PAGE_FOOT = "PrintPageFoot";//打印页脚
+
+	public final static String KEY_PRINTER_CARD_NO = "printerCardNo";//打印卡号
+	public final static String KEY_PRINTER_USER_NAME = "printerUserName";//打印客户姓名
+	public final static String KEY_PRINTER_USER_TEL = "printerUserTel";//打印客户联系方式
+	public final static String KEY_PRINTER_CASHIER = "printerCashier";//打印收银员
+
 	private static ConfigureParamSP instance;
 	public static ConfigureParamSP getInstance() {
 		if (null == instance) {

@@ -126,6 +126,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 finish();
                 Intent mIntent = new Intent(SystemSettingActivity.this,LoginActivity.class);
                 startActivity(mIntent);
+                Config.hasSaveIP = true;
                 break;
 
             case R.id.btn_blue:

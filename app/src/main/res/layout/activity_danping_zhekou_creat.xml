@@ -54,6 +54,7 @@
             android:gravity="start|center"
             android:maxLength="6"
             android:maxLines="1"
+            android:selectAllOnFocus="true"
             android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />
@@ -84,6 +85,7 @@
             android:gravity="start|center"
             android:maxLength="6"
             android:maxLines="1"
+            android:selectAllOnFocus="true"
             android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />
@@ -143,6 +145,7 @@
             android:gravity="start|center"
             android:maxLength="6"
             android:maxLines="1"
+            android:selectAllOnFocus="true"
             android:inputType="number|numberDecimal"
             android:textColor="@color/dialogcolor"
             android:textSize="14sp" />

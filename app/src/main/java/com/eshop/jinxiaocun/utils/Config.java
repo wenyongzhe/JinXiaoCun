@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class Config {
 
+    public static boolean hasSaveIP = false;
     public static String UserCode = "";
     public static String UserName = "1001";
     public static String PassWord ="1001";
@@ -93,7 +94,7 @@ public class Config {
     public final static int JIE_ZHUANG = 48;
     public final static int SAVE_MEMBER_ID = 49;
     public final static int YING_YE_YUAN = 50;
-
+    public final static int PICHI_SELECT_DIALOG = 51;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

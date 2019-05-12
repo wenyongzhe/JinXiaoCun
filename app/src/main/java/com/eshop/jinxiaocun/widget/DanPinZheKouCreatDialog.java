@@ -10,6 +10,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -87,6 +89,30 @@ public class DanPinZheKouCreatDialog extends Activity {
         et_oldprice.setText(""+MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())));
         oldPrice = Double.parseDouble(MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())));
 
+        et_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+           @Override
+           public void onFocusChange(View view, boolean b) {
+               if(b){
+                   et_value.selectAll();
+               }
+           }
+        });
+        et_oldprice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    et_oldprice.selectAll();
+                }
+            }
+        });
+        tv_count.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    tv_count.selectAll();
+                }
+            }
+        });
         et_value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

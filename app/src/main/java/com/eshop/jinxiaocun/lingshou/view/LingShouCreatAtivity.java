@@ -42,6 +42,7 @@ import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
+import com.eshop.jinxiaocun.widget.PiChiDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -263,20 +264,26 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         switch (resultCode) {
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-                /*返回变成多个商品，暂时不判断批次
-                if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
-                    getPiCi(mGetClassPluResultList);
-                } else {
-                    mGetClassPluResultList.get(0).setItem_barcode("");
+
+               /* if(mGetClassPluResultList.size()==1){
+                    //一个商品判断批次，返回变成多个商品，暂时不判断批次
+                    if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
+                        getPiCi(mGetClassPluResultList);
+                    } else {
+                        mGetClassPluResultList.get(0).setItem_barcode("");
+                        addListData();
+                        reflashList();
+                    }
+                }else{*/
+                    for(int i=0; i<mGetClassPluResultList.size(); i++){
+                        mGetClassPluResultList.get(i).setItem_barcode("");
+                    }
+                    mListData.clear();
                     addListData();
                     reflashList();
-                }*/
-                for(int i=0; i<mGetClassPluResultList.size(); i++){
-                    mGetClassPluResultList.get(i).setItem_barcode("");
-                }
-                mListData.clear();
-                addListData();
-                reflashList();
+                //}
+
+
                 break;
             case Config.RESULT_SELECT_GOODS_QUERY:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
@@ -312,6 +319,15 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 item.setSale_qnty(mCount);
                 reflashList();
                 break;
+            case Config.PICHI_SELECT_DIALOG:
+                GoodsPiciInfoBeanResult mGoodsPiciInfoBeanResult = (GoodsPiciInfoBeanResult) data.getSerializableExtra("pichi");
+                GetClassPluResult mGetClassPluResult = mListData.get(mListData.size() - 1);
+                mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.getItem_barcode());
+                mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.getProduce_date());
+                mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.getValid_date());
+                reflashList();
+                break;
+
         }
     }
 
@@ -379,11 +395,16 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 break;
             case Config.MESSAGE_PICI:
                 List<GoodsPiciInfoBeanResult> mGoodsPiciInfoBeanResult = (List<GoodsPiciInfoBeanResult>) o;
-                GetClassPluResult mGetClassPluResult = mListData.get(mListData.size() - 1);
-                mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.get(0).getItem_barcode());
-                mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.get(0).getProduce_date());
-                mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
-                reflashList();
+                if(mGoodsPiciInfoBeanResult.size()>1){
+                    Intent mIntent = new Intent(LingShouCreatAtivity.this, PiChiDialog.class);
+                    startActivityForResult(mIntent,0);
+                }else{
+                    GetClassPluResult mGetClassPluResult = mListData.get(mListData.size() - 1);
+                    mGetClassPluResult.setItem_barcode(mGoodsPiciInfoBeanResult.get(0).getItem_barcode());
+                    mGetClassPluResult.setProduce_date(mGoodsPiciInfoBeanResult.get(0).getProduce_date());
+                    mGetClassPluResult.setValid_date(mGoodsPiciInfoBeanResult.get(0).getValid_date());
+                    reflashList();
+                }
                 break;
             case Config.MESSAGE_GET_OPT_AUTH:
                 mGetOptAuthResult = (GetOptAuthResult) o;
@@ -487,5 +508,13 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         }
     }
 
+    //接收条码
+    @Override
+    protected void scanData(String barcode) {
+        if(et_barcode!=null && et_barcode.getText().toString().trim().equals("")){
+            et_barcode.setText(barcode);
+        }
+        mLingShouScanImp.getPLUInfo(barcode);
+    }
 
 }

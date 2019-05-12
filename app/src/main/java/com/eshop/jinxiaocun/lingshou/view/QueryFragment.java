@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,6 +25,7 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.QryClassResult;
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseListFragment;
 import com.eshop.jinxiaocun.lingshou.presenter.IQueryGoods;
 import com.eshop.jinxiaocun.lingshou.presenter.QueryGoodsImp;
@@ -34,6 +36,7 @@ import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.FinishListAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.XiaoshouDanListAdapter;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
 import java.io.Serializable;
@@ -77,6 +80,10 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
         ib_seach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(TextUtils.isEmpty(et_query.getText().toString().trim())){
+                    AlertUtil.showToast("条码不能为空！", Application.mContext);
+                    return;
+                }
                 mQueryGoods.getPLULikeInfo(et_query.getText().toString().trim(),0);
                 /*隐藏软键盘*/
                 InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -92,7 +99,9 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mQueryGoods.getPLULikeInfo(charSequence.toString(),0);
+                if(!TextUtils.isEmpty(charSequence.toString())){
+                    mQueryGoods.getPLULikeInfo(charSequence.toString(),0);
+                }
             }
 
             @Override

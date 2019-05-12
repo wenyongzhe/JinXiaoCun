@@ -511,7 +511,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     //接收条码
     @Override
     protected void scanData(String barcode) {
-        if(et_barcode!=null && et_barcode.getText().toString().trim().equals("")){
+        if(et_barcode!=null ){
+            et_barcode.selectAll();
             et_barcode.setText(barcode);
         }
         mLingShouScanImp.getPLUInfo(barcode);

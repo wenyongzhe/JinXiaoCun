@@ -33,7 +33,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 
     protected UpMainBean mUpMainBean;
     protected List<UpDetailBean> mUpDetailBeanList;
-//    protected BarcodeScan mBarcodeScan;//扫描控制
+    protected BarcodeScan mBarcodeScan;//扫描控制
     protected boolean newSheet = true;
     protected String sheet_no = "";
     protected DanJuMainBeanResultItem mDanJuMainBeanResultItem;
@@ -62,8 +62,8 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         scanDataIntentFilter.addAction(ACTION_DATA_CODE_RECEIVED);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-//            mBarcodeScan = new BarcodeScan(this);
-//            mBarcodeScan.open();
+            mBarcodeScan = new BarcodeScan(this);
+            mBarcodeScan.open();
 
             mDecoderHelper = DecoderHelper.getInstance(this);
             mDecoderHelper.setDecoderHelperListeners(this);
@@ -207,9 +207,9 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected void onDestroy() {
         super.onDestroy();
         //mBarcodeScan.stop();
-//        if(mBarcodeScan!=null){
-//            mBarcodeScan.close();
-//        }
+        if(mBarcodeScan!=null){
+            mBarcodeScan.close();
+        }
         unregisterReceiver(mScanDataReceiver);
     }
 

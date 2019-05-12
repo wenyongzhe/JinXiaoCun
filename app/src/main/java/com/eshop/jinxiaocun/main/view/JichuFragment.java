@@ -16,6 +16,7 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseFragment;
 import com.eshop.jinxiaocun.caigou.view.CaigouManagerActivity;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
+import com.eshop.jinxiaocun.login.LoginActivity;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.main.adapter.MenuAdapter;
 import com.eshop.jinxiaocun.peisong.view.PeisongManagerActivity;
@@ -23,6 +24,8 @@ import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ConfigureParamSP;
+import com.eshop.jinxiaocun.widget.PassWordDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,11 +72,14 @@ public class JichuFragment extends BaseFragment {
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent();
-
         switch (i){
             case 0:
-                intent.setClass(getActivity(), SystemSettingActivity.class);
+                Intent intent = new Intent();
+                if(Config.CHECK_PASSWORD &&  ConfigureParamSP.getInstance().getValue(getActivity(),ConfigureParamSP.KEY_HASSAVEIP,false)){
+                    intent.setClass(getActivity(), PassWordDialog.class);
+                }else{
+                    intent.setClass(getActivity(), SystemSettingActivity.class);
+                }
                 startActivity(intent);
                 break;
         }

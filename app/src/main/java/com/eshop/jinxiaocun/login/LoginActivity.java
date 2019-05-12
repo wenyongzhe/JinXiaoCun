@@ -25,7 +25,9 @@ import com.eshop.jinxiaocun.main.view.MainActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.PassWordDialog;
 
 
 import butterknife.BindView;
@@ -167,7 +169,11 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
     @OnClick(R.id.btn_systemset)
     public void OnSysemSet(){
         Intent intent = new Intent();
-        intent.setClass(LoginActivity.this, SystemSettingActivity.class);
+        if(Config.CHECK_PASSWORD &&  ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_HASSAVEIP,false)){
+            intent.setClass(LoginActivity.this, PassWordDialog.class);
+        }else{
+            intent.setClass(LoginActivity.this, SystemSettingActivity.class);
+        }
         startActivity(intent);
     }
 

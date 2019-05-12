@@ -11,6 +11,8 @@ import java.util.HashMap;
 public class Config {
 
     public static boolean hasSaveIP = false;
+    public static boolean CHECK_PASSWORD = true;
+    public static String SETTING_PASSWORD = "123456";
     public static String UserCode = "";
     public static String UserName = "1001";
     public static String PassWord ="1001";

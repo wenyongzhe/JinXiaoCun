@@ -257,6 +257,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
+            android:name=".widget.PassWordDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity
             android:name=".widget.PiChiDialog"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />

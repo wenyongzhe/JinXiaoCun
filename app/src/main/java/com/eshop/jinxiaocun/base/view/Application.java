@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
 import com.eshop.jinxiaocun.db.DBHelper;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
+import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
@@ -85,6 +86,9 @@ public class Application extends android.app.Application{
 
         //sunmi机器打印机，通过aidl方式链接，初始化打印机
         AidlUtil.getInstance().connectPrinterService(this);
+        //设备类型
+        Config.DEVICE_TYPE = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_DEVICE_TYPE,1);
+
 
     }
 

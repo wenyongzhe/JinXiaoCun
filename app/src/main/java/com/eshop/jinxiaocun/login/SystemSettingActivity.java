@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,13 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
     @BindView(R.id.btn_blue)
     Button btn_blue;
+
+    @BindView(R.id.rg_button)
+    RadioGroup rg_button;
+    @BindView(R.id.rb_phone)
+    RadioButton rb_phone;
+    @BindView(R.id.rb_summi)
+    RadioButton rb_summi;
 
     public static final int REQUEST_CONNECT_DEVICE = 1;
     public static final int REQUEST_ENABLE_BT = 2;
@@ -92,6 +101,32 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
         closeEditTextKeyboard();
 
+       rg_button = (RadioGroup) findViewById(R.id.rg_button);
+        rb_phone = findViewById(R.id.rb_phone);
+        rb_summi = findViewById(R.id.rb_summi);
+
+        if(Config.DEVICE_TYPE==1){
+            rg_button.check(rb_phone.getId());
+        }else if(Config.DEVICE_TYPE==2){
+            rg_button.check(rb_summi.getId());
+        }else{
+            rg_button.check(rb_phone.getId());
+        }
+        rg_button.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // 获取选中的RadioButton的id
+                int id = group.getCheckedRadioButtonId();
+                if(id == rb_phone.getId()){
+                    Config.DEVICE_TYPE = 1;
+                    ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_DEVICE_TYPE, 1);
+                }else{
+                    Config.DEVICE_TYPE = 2;
+                    ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_DEVICE_TYPE, 2);
+                }
+            }
+        });
 
 
     }

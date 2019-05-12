@@ -101,6 +101,9 @@ public class QueryFragment extends BaseListFragment implements INetWorResult {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!TextUtils.isEmpty(charSequence.toString())){
                     mQueryGoods.getPLULikeInfo(charSequence.toString(),0);
+                }else{
+                    mListData.clear();
+                    mDanJuAdapter.notifyDataSetChanged();
                 }
             }
 

@@ -11,6 +11,7 @@ public class ConfigureParamSP {
 	public final static String KEY_BLUETOOTHADDRESS = "BluetoothAddress";
 	public final static String KEY_IMMEDIATELY_PRINTER = "immediatelyPrinter";//保存后打印
 	public final static String KEY_HASSAVEIP = "hasSaveIP";
+	public final static String KEY_DEVICE_TYPE = "device_type";
 
 	public final static String KEY_PRINT_SIZE = "PrintSize";//打印尺寸
 	public final static String KEY_PRINT_NUMBER = "PrintNumber";//打印份数

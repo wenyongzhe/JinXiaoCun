@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.CommonUtility;
+import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import butterknife.BindView;
@@ -53,7 +54,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected TextView mTvZje;//总金额
 
 
-//    protected BarcodeScan mBarcodeScan;//扫描控制
+    protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();
     protected abstract boolean scanBefore();//扫描前
     protected abstract void scanResultData(String barcode);//扫描返回的数据
@@ -77,12 +78,14 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void initView() {
         super.initView();
-//        try {
-//            mBarcodeScan = new BarcodeScan(this);
-//            mBarcodeScan.open();
-//        }catch (Exception e){
-//            Log.e("",e.getMessage());
-//        }
+        try {
+            if(Config.DEVICE_TYPE != 1){
+                mBarcodeScan = new BarcodeScan(this);
+                mBarcodeScan.open();
+            }
+        }catch (Exception e){
+            Log.e("",e.getMessage());
+        }
     }
 
     @Override
@@ -254,9 +257,11 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if(mBarcodeScan!=null){
-//            mBarcodeScan.close();
-//        }
+        if(Config.DEVICE_TYPE != 1){
+            if(mBarcodeScan!=null){
+                mBarcodeScan.close();
+            }
+        }
         unregisterReceiver(mScanDataReceiver);
     }
 

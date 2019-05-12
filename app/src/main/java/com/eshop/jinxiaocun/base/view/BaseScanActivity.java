@@ -62,8 +62,10 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         scanDataIntentFilter.addAction(ACTION_DATA_CODE_RECEIVED);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+            if(Config.DEVICE_TYPE != 1){
+                mBarcodeScan = new BarcodeScan(this);
+                mBarcodeScan.open();
+            }
 
             mDecoderHelper = DecoderHelper.getInstance(this);
             mDecoderHelper.setDecoderHelperListeners(this);
@@ -207,9 +209,16 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
     protected void onDestroy() {
         super.onDestroy();
         //mBarcodeScan.stop();
-        if(mBarcodeScan!=null){
-            mBarcodeScan.close();
+        try {
+            if(Config.DEVICE_TYPE != 1){
+                if(mBarcodeScan!=null){
+                    mBarcodeScan.close();
+                }
+            }
+        }catch (Exception e){
+
         }
+
         unregisterReceiver(mScanDataReceiver);
     }
 

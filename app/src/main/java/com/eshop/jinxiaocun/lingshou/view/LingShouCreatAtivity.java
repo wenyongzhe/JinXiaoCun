@@ -38,6 +38,7 @@ import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog;
@@ -346,7 +347,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
             goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
         }
-        String totalStr = total + "";
+        String totalStr = MyUtils.formatDouble2(total) + "";
         if ((totalStr.length() - totalStr.indexOf(".")) > 3) {
             totalStr = totalStr.substring(0, totalStr.indexOf(".") + 4);
         }

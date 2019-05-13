@@ -104,12 +104,12 @@ public class NfcUtils {
                 mfc.connect();
                 boolean auth = false;
 
-                int bCount = mfc.getBlockCountInSector(1);
-                int bIndex = mfc.sectorToBlock(1);
-                auth = mfc.authenticateSectorWithKeyA(1,MifareClassic.KEY_DEFAULT);//验证密码
+                int bCount = mfc.getBlockCountInSector(2);
+                int bIndex = mfc.sectorToBlock(2);
+                auth = mfc.authenticateSectorWithKeyA(2,MifareClassic.KEY_DEFAULT);//验证密码
                 if (auth){
                     byte[] data = mfc.readBlock(bIndex);
-                    String ms = new String(mfc.readBlock(1));
+                    String ms = ByteArrayToHexString(data);
                     Log.e("mfc",ms);
                 }
             } catch (Exception e){

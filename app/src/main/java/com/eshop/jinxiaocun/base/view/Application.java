@@ -88,7 +88,7 @@ public class Application extends android.app.Application{
         AidlUtil.getInstance().connectPrinterService(this);
         //设备类型
         Config.DEVICE_TYPE = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_DEVICE_TYPE,1);
-
+        Config.initAscallMap();
 
     }
 

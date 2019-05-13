@@ -177,4 +177,10 @@ public class Config {
         CR,//盘点单号
     }
 
+    public static HashMap<String,String> ascallMap = new HashMap<>();
+    public static void initAscallMap(){
+        for(int i=0; i<10;i++){
+            ascallMap.put((48+i)+"",String.valueOf(i));
+        }
+    }
 }

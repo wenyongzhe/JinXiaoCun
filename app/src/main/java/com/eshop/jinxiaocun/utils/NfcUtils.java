@@ -17,6 +17,10 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.eshop.jinxiaocun.BuildConfig;
+import com.eshop.jinxiaocun.base.view.Application;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -87,60 +91,34 @@ public class NfcUtils {
     }
 
     // 读卡
-//    String resolveIntent(Intent intent) {
-//        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action))
-//        {
-//            // 3) Get an instance of the TAG from the NfcAdapter
-//            Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-//            // 4) Get an instance of the Mifare classic card from this TAG
-//            // intent
-//            mfc = MifareClassic.get(tagFromIntent);
-//            if(mfc!=null)
-//                09
-//            {
-//                10
-//                Toast.makeText(this, "检测到卡片,读卡中。。。", Toast.LENGTH_SHORT).show();
-//                11
-//                try
-//                12
-//                {
-//                    13
-//                    mfc.connect();
-//                    14
-//                    boolean auth = false;
-//                    15
-//                    auth = mfc.authenticateSectorWithKeyA(15, "passwo".getBytes());//验证密码
-//                    16
-//                    if (auth)
-//                        17
-//                    {
-//                        18
-//                        card_number_edittext.setText(new String(mfc.readBlock(60)));//读取M1卡的第60块即15扇区第0块
-//                        19
-//                        password_edittext.requestFocus();
-//                        20
-//                    }
-//                    21
-//                } catch (Exception e)
-//                22
-//                {
-//                    23
-//                    if(BuildConfig.DEBUG)
-//                        24
-//                    {
-//                        25
-//                        e.printStackTrace();
-//                        26
-//                    }
-//                    27
-//
-//                    28
-//                }
-//                29
-//            }
-//            30
-//        }// End of method
-//    }
+    static MifareClassic mfc;
+    public static void resolveIntent(Intent intent) {
+            // 3) Get an instance of the TAG from the NfcAdapter
+        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        // 4) Get an instance of the Mifare classic card from this TAG
+        // intent
+        mfc = MifareClassic.get(tagFromIntent);
+        if(mfc!=null){
+            Toast.makeText(Application.mContext, "检测到卡片,读卡中。。。", Toast.LENGTH_SHORT).show();
+            try{
+                mfc.connect();
+                boolean auth = false;
+
+                int bCount = mfc.getBlockCountInSector(1);
+                int bIndex = mfc.sectorToBlock(1);
+                auth = mfc.authenticateSectorWithKeyA(1,MifareClassic.KEY_DEFAULT);//验证密码
+                if (auth){
+                    byte[] data = mfc.readBlock(bIndex);
+                    String ms = new String(mfc.readBlock(1));
+                    Log.e("mfc",ms);
+                }
+            } catch (Exception e){
+                if(BuildConfig.DEBUG){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static byte[] hexStringToByte(String hex) {
         int len = (hex.length() / 2);

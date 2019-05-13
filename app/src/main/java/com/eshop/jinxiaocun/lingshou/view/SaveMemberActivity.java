@@ -56,6 +56,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
         //当该Activity接收到NFC标签时，运行该方法
         //调用工具方法，读取NFC数据
         try {
+            NfcUtils.resolveIntent(intent);
             String str = NfcUtils.readNFCFromTag(intent);
             mEtSearch.setText(str);
             onClickSearch();

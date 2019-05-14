@@ -97,7 +97,7 @@ public class GetSellBillActivity extends BaseScanActivity implements View.OnClic
 
     @Override
     public void onLeftClick() {
-
+        finish();
     }
 
     @Override

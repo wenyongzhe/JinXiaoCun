@@ -20,26 +20,29 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="left"
                 android:paddingRight="10dp"
-                android:text="应收金额"
+                android:text="应付金额"
                 android:textColor="@color/black"
-                android:textSize="@dimen/txt_size22"/>
+                android:textSize="@dimen/txt_size35"/>
 
             <TextView
                 android:id="@+id/et_price"
-                style="@style/EditText_Grey_Border"
-                android:layout_width="fill_parent"
+                style="@style/TextView_Black"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="right"
                 android:imeOptions="actionSend"
                 android:text="￥50"
-                android:textSize="@dimen/txt_size22"
+                android:textColor="@color/text_red"
+                android:textSize="@dimen/txt_size35"
                 />
 
         </LinearLayout>
@@ -54,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:gravity="right"
+                android:gravity="left"
                 android:paddingRight="10dp"
                 android:text="支付方式"
                 android:textColor="@color/black"
@@ -65,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:gravity="left"/>
+                android:gravity="right"/>
 
         </LinearLayout>
 
@@ -80,7 +83,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="10dp"
                 android:text="付款金额￥"
                 android:textColor="@color/black"
@@ -95,7 +98,7 @@
                 android:lines="1"
                 android:textSize="@dimen/txt_size20"
                 android:inputType="number|numberDecimal"
-                android:gravity="left|center_vertical"/>
+                android:gravity="right|center_vertical"/>
 
         </LinearLayout>
         <LinearLayout
@@ -109,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="10dp"
                 android:text="找零￥"
                 android:textColor="@color/black"
@@ -122,7 +125,7 @@
                 android:layout_weight="2"
                 android:paddingLeft="10dp"
                 android:textSize="@dimen/txt_size20"
-                android:gravity="left|center_vertical"/>
+                android:gravity="right|center_vertical"/>
 
         </LinearLayout>
 

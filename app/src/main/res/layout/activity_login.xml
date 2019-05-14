@@ -125,7 +125,7 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/Button_dark"
-                android:background="@color/white"
+                android:background="@drawable/button"
                 android:layout_width="256dp"
                 android:layout_height="46dp"
                 android:text="@string/login_text"
@@ -136,7 +136,7 @@
             <Button
                 android:id="@+id/btn_systemset"
                 style="@style/Button_dark"
-                android:background="@color/white"
+                android:background="@drawable/button"
                 android:layout_width="256dp"
                 android:layout_height="46dp"
                 android:layout_gravity="center"

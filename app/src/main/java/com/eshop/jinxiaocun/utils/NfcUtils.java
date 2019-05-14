@@ -92,14 +92,14 @@ public class NfcUtils {
 
     // 读卡
     static MifareClassic mfc;
-    public static void resolveIntent(Intent intent) {
+    public static String resolveIntent(Intent intent) {
             // 3) Get an instance of the TAG from the NfcAdapter
         Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         // 4) Get an instance of the Mifare classic card from this TAG
         // intent
         mfc = MifareClassic.get(tagFromIntent);
         if(mfc!=null){
-            Toast.makeText(Application.mContext, "检测到卡片,读卡中。。。", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Application.mContext, "检测到卡片,读卡中。。。", Toast.LENGTH_SHORT).show();
             try{
                 mfc.connect();
                 boolean auth = false;
@@ -109,15 +109,17 @@ public class NfcUtils {
                 auth = mfc.authenticateSectorWithKeyA(2,MifareClassic.KEY_DEFAULT);//验证密码
                 if (auth){
                     byte[] data = mfc.readBlock(bIndex);
-                    String ms = ByteArrayToHexString(data);
-                    Log.e("mfc",ms);
+                    String ms = ByteArrayToListString(data);
+                    return ms;
                 }
             } catch (Exception e){
                 if(BuildConfig.DEBUG){
                     e.printStackTrace();
                 }
+                return "";
             }
         }
+        return "";
     }
 
     public static byte[] hexStringToByte(String hex) {
@@ -189,6 +191,25 @@ public class NfcUtils {
             out += hex[i];
             i = in & 0x0f;
             out += hex[i];
+        }
+        return out;
+    }
+
+    /**
+     * 将字节数组转换字符数组
+     */
+    private static String ByteArrayToListString(byte[] inarray) {
+        int i, j, in;
+        String out = "";
+
+        for (j = 0; j < inarray.length; ++j) {
+            in = (int) inarray[j];
+            if(in != 0){
+                i = (in >> 4) & 0x0f;
+                out += ((in-48)+"");
+            }else{
+                return out;
+            }
         }
         return out;
     }

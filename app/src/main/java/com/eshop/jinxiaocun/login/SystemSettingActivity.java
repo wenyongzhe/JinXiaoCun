@@ -128,7 +128,11 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-
+        if(Config.DEVICE_TYPE == 1){
+            rg_button.check(R.id.rb_phone);
+        }else{
+            rg_button.check(R.id.rb_summi);
+        }
     }
 
     @Override

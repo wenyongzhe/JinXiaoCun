@@ -9,9 +9,12 @@
     <dimen name="layout_margin45">45dp</dimen>
     <dimen name="layout_margin35">35dp</dimen>
     <dimen name="layout_margin30">30dp</dimen>
+    <dimen name="layout_margin10">10dp</dimen>
+    <dimen name="layout_margin11">11dp</dimen>
+    <dimen name="layout_margin12">12dp</dimen>
+    <dimen name="layout_margin14">14dp</dimen>
     <dimen name="layout_margin15">15dp</dimen>
     <dimen name="layout_margin20">20dp</dimen>
-    <dimen name="layout_margin10">10dp</dimen>
     <dimen name="layout_margin5">5dp</dimen>
     <dimen name="layout_margin3">3dp</dimen>
     <dimen name="layout_margin0">0dp</dimen>

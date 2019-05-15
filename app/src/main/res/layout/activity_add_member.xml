@@ -186,7 +186,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:paddingLeft="10dp"
-            android:background="@drawable/edittext_border_bg"
             android:orientation="horizontal">
 
             <TextView
@@ -197,32 +196,42 @@
                 android:text="性别:"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/et_sex"
-                style="@style/EditText_Grey_Border"
-                android:layout_width="0dp"
+            <RadioGroup
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@null"
-                android:layout_weight="1"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+
+                <RadioButton
+                    android:id="@+id/rb_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/select_checkbox"
+                    android:layout_marginLeft="30dp"
+                    android:paddingRight="10dp"
+                    android:text="男"
+                    android:gravity="center_vertical" />
+                <RadioButton
+                    android:id="@+id/rb_women"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:paddingRight="10dp"
+                    android:button="@drawable/select_checkbox"
+                    android:text="女"
+                    android:gravity="center_vertical" />
+
+            </RadioGroup>
+
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="格式为xxxx-xx-xx(范围1900-01-01~2299-01-01)"
-            android:textSize="10sp"
-            android:textColor="@color/red"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_item_height_35"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:paddingLeft="10dp"
             android:background="@drawable/edittext_border_bg"
@@ -236,9 +245,9 @@
                 android:text="生日:"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/et_birthday"
-                style="@style/EditText_Grey_Border"
+            <TextView
+                android:id="@+id/tv_birthday"
+                style="@style/TextView_DateTime"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

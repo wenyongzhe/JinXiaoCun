@@ -1,12 +1,16 @@
 package com.eshop.jinxiaocun.huiyuan.view;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -20,7 +24,9 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,10 +51,12 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
     EditText mEtPhoneNumber;
     @BindView(R.id.et_card_type)
     EditText mEtCardType;
-    @BindView(R.id.et_sex)
-    EditText mEtSex;
-    @BindView(R.id.et_birthday)
-    EditText mEtBirthday;
+    @BindView(R.id.rb_man)
+    RadioButton mRbMan;
+    @BindView(R.id.rb_women)
+    RadioButton mRbWomen;
+    @BindView(R.id.tv_birthday)
+    TextView mTvBirthday;
     @BindView(R.id.et_remarks)
     EditText mEtRemarks;
 
@@ -95,8 +103,12 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         mEtName.setText(info.getCardName());
         mEtPhoneNumber.setText(info.getMobile());
         mEtCardType.setText(info.getCardType());
-        mEtSex.setText(info.getVip_sex());
-        mEtBirthday.setText(info.getBirthDay());
+        if("男".equals(info.getVip_sex())){
+            mRbMan.setChecked(true);
+        }else{
+            mRbWomen.setChecked(true);
+        }
+        mTvBirthday.setText(info.getBirthDay());
         mEtRemarks.setText(info.getMemo());
     }
 
@@ -107,14 +119,29 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         mEtName.setText("");
         mEtPhoneNumber.setText("");
         mEtCardType.setText("");
-        mEtSex.setText("");
-        mEtBirthday.setText("");
+        mRbMan.setChecked(true);
+        mRbWomen.setChecked(true);
+        mTvBirthday.setText("");
         mEtRemarks.setText("");
     }
 
     @OnClick(R.id.iv_close)
     public void onClickClose(){
         mEtSearch.setText("");
+    }
+
+    //设置生日
+    @OnClick(R.id.tv_birthday)
+    public void onClickBrithday(){
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);//获取日期格式器对象
+        //生成一个DatePickerDialog对象，并显示。显示的DatePickerDialog控件可以选择年月日，并设置
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddMemberActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                mTvBirthday.setText(year+"-"+(month+1)+"-"+dayOfMonth);
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 
     //搜索
@@ -161,20 +188,16 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
             return;
         }
 
-        if(TextUtils.isEmpty(mEtSex.getText().toString().trim())){
+        if(!mRbMan.isChecked() && !mRbWomen.isChecked()){
             AlertUtil.showToast("请输入性别！");
             return;
         }
 
-        if(TextUtils.isEmpty(mEtBirthday.getText().toString().trim())){
+        if(TextUtils.isEmpty(mTvBirthday.getText().toString().trim())){
             AlertUtil.showToast("请输入生日！");
             return;
         }
 
-        if(!DateUtility.validDate(mEtBirthday.getText().toString().trim())){
-            AlertUtil.showToast("请输入正确的生日日期");
-            return;
-        }
 
         AlertUtil.showNoButtonProgressDialog(this,"正在激活新会员，请稍后...");
         AddMemberBean bean = new AddMemberBean();
@@ -185,8 +208,8 @@ public class AddMemberActivity extends CommonBaseActivity implements INetWorResu
         bean.JsonData.Mobile = mEtPhoneNumber.getText().toString().trim();
         bean.JsonData.Tel = "";
         bean.JsonData.MemberType = cardTypeId;
-        bean.JsonData.Sex = mEtSex.getText().toString().trim();
-        bean.JsonData.BirthDay = mEtBirthday.getText().toString().trim();
+        bean.JsonData.Sex = mRbMan.isChecked()?"男":"女";
+        bean.JsonData.BirthDay = mTvBirthday.getText().toString().trim();
         bean.JsonData.Memo = mEtRemarks.getText().toString().trim();
 
         mApi.addMemberData(bean);

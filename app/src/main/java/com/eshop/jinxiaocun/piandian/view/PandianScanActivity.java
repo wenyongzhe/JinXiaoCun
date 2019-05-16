@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.piandian.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,7 +12,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +42,7 @@ import com.eshop.jinxiaocun.piandian.bean.UploadRecordHeadDataEntity;
 import com.eshop.jinxiaocun.piandian.presenter.IPandian;
 import com.eshop.jinxiaocun.piandian.presenter.PandianImp;
 import com.eshop.jinxiaocun.utils.AndroidWakeLock;
+import com.eshop.jinxiaocun.utils.HexStringUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -56,6 +57,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -1110,25 +1112,43 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             Awl.WakeLock();
             switch (inventoryFlag) {
                 case 0:// 单步
-                {
-                    String strUII = mReader.inventorySingleTag();
-                    if (!TextUtils.isEmpty(strUII)) {
-                        String strEPC = mReader.convertUiiToEPC(strUII);
-                        addEPCToList(strEPC, "N/A");
-
-                       /* SimpleRFIDEntity entity = mReader.readData("00000000",
+//                {
+//                    String strUII = mReader.inventorySingleTag();
+//                    if (!TextUtils.isEmpty(strUII)) {
+//                        String strEPC = mReader.convertUiiToEPC(strUII);
+//                        addEPCToList(strEPC, "N/A");
+//
+////                        SimpleRFIDEntity entityUSER = mReader.readData("00000000",
+////                                BankEnum.valueOf("USER"),
+////                                Integer.parseInt("0"),
+////                                Integer.parseInt("8"));
+////                        if(entityUSER==null){
+////                            return;
+////                        }
+//
+//
+//                    } else {
+//                        ToastUtils.showLong( R.string.uhf_msg_inventory_fail);
+////					mContext.playSound(2);
+//                    }
+//                }
+                    String singleTag =mReader.inventorySingleTag();
+                    if (!TextUtils.isEmpty(singleTag)) {
+                        //读取USER区 16进制字符串
+                        SimpleRFIDEntity entityUSER = mReader.readData("00000000",
                                 BankEnum.valueOf("USER"),
                                 Integer.parseInt("0"),
-                                Integer.parseInt("5"));
-                        if(entity==null){
+                                Integer.parseInt("8"));
+                        if(entityUSER==null){
+                            ToastUtils.showLong(R.string.uhf_msg_inventory_fail);
                             return;
-                        }*/
-
-                    } else {
-                        ToastUtils.showLong( R.string.uhf_msg_inventory_fail);
-//					mContext.playSound(2);
+                        }
+                        //16进制直接转换成为字符串 然后搜索
+                        addUserToList(HexStringUtil.hexStr2Str(entityUSER.getData()));
+                    }else {
+                        ToastUtils.showLong( R.string.uhf_msg_inventory_open_fail);
                     }
-                }
+
                 break;
                 case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
                 {
@@ -1200,31 +1220,46 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             getInforFlag = true;
             while (loopFlag) {
                 while (getInforFlag){
-                    res = mReader.readTagFromBuffer();
-                    if (res != null) {
-                        strTid = res[0];
-                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
-                            strResult = strTid ;
-                        } else {
-                            strResult = "";
-                        }
-                        //Log.i("data","EPC:"+res[1]+"|"+strResult);
+//                    res = mReader.readTagFromBuffer();
+//                    if (res != null) {
+//                        strTid = res[0];
+//                        if (strTid.length() != 0 && !strTid.equals("0000000" +"000000000") && !strTid.equals("000000000000000000000000")) {
+//                            strResult = strTid ;
+//                        } else {
+//                            strResult = "";
+//                        }
+//                        //Log.i("data","EPC:"+res[1]+"|"+strResult);
+//                        Message msg = handler.obtainMessage();
+//                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
+//                        getInforFlag = false;
+//                        handler.sendMessage(msg);
+//                    }
+
+                    //读取USER区 16进制字符串
+                    SimpleRFIDEntity entityUSER = mReader.readData("00000000",
+                            BankEnum.valueOf("USER"),
+                            Integer.parseInt("0"),
+                            Integer.parseInt("8"));
+                    if(entityUSER!=null){
                         Message msg = handler.obtainMessage();
-                        msg.obj = strResult + "@" + mReader.convertUiiToEPC(res[1]).substring(0,10) + "@" + res[2];
+                        msg.obj = HexStringUtil.hexStr2Str(entityUSER.getData());
                         getInforFlag = false;
                         handler.sendMessage(msg);
                     }
+
                 }
             }
         }
     }
 
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            String result = msg.obj + "";
-            String[] strs = result.split("@");
-            addEPCToList(strs[0], strs[1]);
+//            String result = msg.obj + "";
+//            String[] strs = result.split("@");
+//            addEPCToList(strs[0], strs[1]);
+            addUserToList(MyUtils.convertToString(msg.obj,""));
             playSound(1);
         }
     };
@@ -1234,6 +1269,17 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             //精准查询接口的
             epcBarCode = str1;
             mQueryGoodsApi.getPLUInfo(str1);
+        }else{
+            getInforFlag = true;
+        }
+    }
+
+    //读取取User区的子码 后进行搜索
+    private void addUserToList(String dataStr) {
+        if(!TextUtils.isEmpty(dataStr)){
+            //精准查询接口的
+            epcBarCode = dataStr;
+            mQueryGoodsApi.getPLUInfo(dataStr);
         }else{
             getInforFlag = true;
         }

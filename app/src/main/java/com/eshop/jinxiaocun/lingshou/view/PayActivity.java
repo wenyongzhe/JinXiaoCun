@@ -45,6 +45,7 @@ import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
+import com.eshop.jinxiaocun.zjPrinter.PrinterSettingActivity;
 import com.google.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -113,7 +114,14 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLinearLayout.addView(bottomView,-1,params);
         ButterKnife.bind(this);
 
-        mMyActionBar.setData("支付订单",R.mipmap.ic_left_light,"",0,"整单取消",this);
+        mMyActionBar.setData("支付订单", R.mipmap.ic_left_light, "", R.drawable.icon_printer,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(PayActivity.this, PrinterSettingActivity.class));
+                    }
+                },"整单取消", this);
+
         btn_jiesuan = (Button) findViewById(R.id.btn_jiesuan);
         btn_jiesuan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -906,5 +914,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     public void onRightClick() {
         btn_zhengdanquxiao();
     }
+
+//    @Override
+//    protected void onTopBarRightClick() {
+//        startActivity(new Intent(this, PrinterSettingActivity.class));
+//    }
 
 }

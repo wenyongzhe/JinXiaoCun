@@ -209,6 +209,13 @@ public final class MyActionBar extends LinearLayout {
         }
     }
 
+    public void setData(String strTitle, int resIdLeft, String strLeft, int resIdRight,View.OnClickListener resIdRightClick, String strRight, final ActionBarClickListener listener) {
+        setData(strTitle,resIdLeft,strLeft,resIdRight,strRight,listener);
+        if(resIdRightClick!=null && resIdRight!=0){
+            iconRight.setOnClickListener(resIdRightClick);
+        }
+    }
+
     public void setData(String strTitle, int resIdLeft, String strLeft, int resIdRight, String strRight, List strSpinner, final ActionBarClickListener listener) {
         if (!TextUtils.isEmpty(strTitle)) {
             tvTitle.setText(strTitle);

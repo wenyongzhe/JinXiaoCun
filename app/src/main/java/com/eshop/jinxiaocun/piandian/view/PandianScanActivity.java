@@ -1143,6 +1143,9 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                             ToastUtils.showLong(R.string.uhf_msg_inventory_fail);
                             return;
                         }
+                        if(TextUtils.isEmpty(entityUSER.getData())){
+                            return;
+                        }
                         //16进制直接转换成为字符串 然后搜索
                         addUserToList(HexStringUtil.hexStr2Str(entityUSER.getData()));
                     }else {
@@ -1240,7 +1243,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                             BankEnum.valueOf("USER"),
                             Integer.parseInt("0"),
                             Integer.parseInt("8"));
-                    if(entityUSER!=null){
+                    if(entityUSER!=null && !TextUtils.isEmpty(entityUSER.getData())){
                         Message msg = handler.obtainMessage();
                         msg.obj = HexStringUtil.hexStr2Str(entityUSER.getData());
                         getInforFlag = false;

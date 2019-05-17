@@ -136,10 +136,10 @@ public class Config {
     public static String mPrintOrderName = "";//打印的单据名称
     public static String mPrintPageHeader = "";//打印的页眉
     public static String mPrintPageFoot = "欢迎光临，谢谢惠顾！";//打印的页脚
-    public static boolean isPrinterCardNo;//是否打印卡号
-    public static boolean isPrinterUserName;//是否打印客户姓名
-    public static boolean isPrinterUserTel;//是否打印客户联系方式
-    public static boolean isPrinterCashier;//是否打印收银员
+    public static boolean isPrinterCardNo = true;//是否打印卡号
+    public static boolean isPrinterUserName = true;//是否打印客户姓名
+    public static boolean isPrinterUserTel = true;//是否打印客户联系方式
+    public static boolean isPrinterCashier = true;//是否打印收银员
 
 
 

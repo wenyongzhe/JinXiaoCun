@@ -4,9 +4,9 @@ import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
@@ -31,14 +31,14 @@ public class PrinterSettingActivity extends CommonBaseActivity {
     @BindView(R.id.sp_print_size)
     Spinner mSpPrintSize;
     @BindView(R.id.tv_print_number)
-    TextView mTvPrintNumber;
+    EditText mEtPrintNumber;
 
     @BindView(R.id.tv_print_order_name)
-    TextView mTvPrintOrderName;
+    EditText mEtPrintOrderName;
     @BindView(R.id.tv_print_page_header)
-    TextView mTvPrintPageHeader;
+    EditText mEtPrintPageHeader;
     @BindView(R.id.tv_print_page_foot)
-    TextView mTvPrintPageFoot;
+    EditText mEtPrintPageFoot;
 
     @BindView(R.id.cb_printer_card_no)
     CheckBox mCbPrinterCardNo;
@@ -92,10 +92,10 @@ public class PrinterSettingActivity extends CommonBaseActivity {
             }
         }
 
-        mTvPrintNumber.setText(Config.mPrintNumber);
-        mTvPrintOrderName.setText(Config.mPrintOrderName);
-        mTvPrintPageHeader.setText(Config.mPrintPageHeader);
-        mTvPrintPageFoot.setText(Config.mPrintPageFoot);
+        mEtPrintNumber.setText(Config.mPrintNumber);
+        mEtPrintOrderName.setText(Config.mPrintOrderName);
+        mEtPrintPageHeader.setText(Config.mPrintPageHeader);
+        mEtPrintPageFoot.setText(Config.mPrintPageFoot);
 
         isPrinterCardNo = Config.isPrinterCardNo;
         isPrinterUserName = Config.isPrinterUserName;
@@ -147,41 +147,48 @@ public class PrinterSettingActivity extends CommonBaseActivity {
 
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINT_SIZE,mPrintSizeDatas.get(mSpPrintSize.getSelectedItemPosition()));
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINT_NUMBER,
-                TextUtils.isEmpty(mTvPrintNumber.getText().toString().trim())?""
-                        :mTvPrintNumber.getText().toString().trim());
+                TextUtils.isEmpty(mEtPrintNumber.getText().toString().trim())?""
+                        : mEtPrintNumber.getText().toString().trim());
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINT_ORDER_NAME,
-                TextUtils.isEmpty(mTvPrintOrderName.getText().toString().trim())?""
-                        :mTvPrintOrderName.getText().toString().trim());
+                TextUtils.isEmpty(mEtPrintOrderName.getText().toString().trim())?""
+                        : mEtPrintOrderName.getText().toString().trim());
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINT_PAGE_HEADER,
-                TextUtils.isEmpty(mTvPrintPageHeader.getText().toString().trim())?""
-                        :mTvPrintPageHeader.getText().toString().trim());
+                TextUtils.isEmpty(mEtPrintPageHeader.getText().toString().trim())?""
+                        : mEtPrintPageHeader.getText().toString().trim());
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINT_PAGE_FOOT,
-                TextUtils.isEmpty(mTvPrintPageFoot.getText().toString().trim())?""
-                        :mTvPrintPageFoot.getText().toString().trim());
+                TextUtils.isEmpty(mEtPrintPageFoot.getText().toString().trim())?""
+                        : mEtPrintPageFoot.getText().toString().trim());
 
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINTER_CARD_NO,isPrinterCardNo);
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINTER_USER_NAME,isPrinterUserName);
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINTER_USER_TEL,isPrinterUserTel);
+
         ConfigureParamSP.getInstance().saveValue(PrinterSettingActivity.this,
                 ConfigureParamSP.KEY_PRINTER_CASHIER,isPrinterCashier);
 
         Config.mPrintSize = mPrintSizeDatas.get(mSpPrintSize.getSelectedItemPosition());
-        Config.mPrintNumber = TextUtils.isEmpty(mTvPrintNumber.getText().toString().trim())?""
-                :mTvPrintNumber.getText().toString().trim();
-        Config.mPrintOrderName = TextUtils.isEmpty(mTvPrintOrderName.getText().toString().trim())?""
-                :mTvPrintOrderName.getText().toString().trim();
-        Config.mPrintPageHeader = TextUtils.isEmpty(mTvPrintPageHeader.getText().toString().trim())?""
-                :mTvPrintPageHeader.getText().toString().trim();
-        Config.mPrintPageFoot = TextUtils.isEmpty(mTvPrintPageFoot.getText().toString().trim())?""
-                :mTvPrintPageFoot.getText().toString().trim();
+        Config.mPrintNumber = TextUtils.isEmpty(mEtPrintNumber.getText().toString().trim())?""
+                : mEtPrintNumber.getText().toString().trim();
+        Config.mPrintOrderName = TextUtils.isEmpty(mEtPrintOrderName.getText().toString().trim())?""
+                : mEtPrintOrderName.getText().toString().trim();
+        Config.mPrintPageHeader = TextUtils.isEmpty(mEtPrintPageHeader.getText().toString().trim())?""
+                : mEtPrintPageHeader.getText().toString().trim();
+        Config.mPrintPageFoot = TextUtils.isEmpty(mEtPrintPageFoot.getText().toString().trim())?""
+                : mEtPrintPageFoot.getText().toString().trim();
         Config.isPrinterCardNo = isPrinterCardNo ;
         Config.isPrinterUserName = isPrinterUserName;
         Config.isPrinterUserTel = isPrinterUserTel;
@@ -297,7 +304,7 @@ public class PrinterSettingActivity extends CommonBaseActivity {
 
 
         AidlUtil.getInstance().printText("-------------------------",30f,false,false);
-        String pageFoot = mTvPrintPageFoot.getText().toString().trim();
+        String pageFoot = mEtPrintPageFoot.getText().toString().trim();
         if(MyUtils.length(pageFoot)<maxLength){
             int beginLength = (maxLength-MyUtils.length(pageFoot))>>1;
             int endLength=beginLength;

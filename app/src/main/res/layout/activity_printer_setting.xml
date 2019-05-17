@@ -102,9 +102,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/line_grey"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/tv_print_number"
-                style="@style/TextView_Black"
+                android:background="@null"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -147,9 +147,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/line_grey"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/tv_print_order_name"
-                style="@style/TextView_Black"
+                android:background="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -182,9 +182,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/line_grey"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/tv_print_page_header"
-                style="@style/TextView_Black"
+                android:background="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -217,9 +217,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/line_grey"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/tv_print_page_foot"
-                style="@style/TextView_Black"
+                android:background="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

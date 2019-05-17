@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.PopupWindowCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +38,7 @@ import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
@@ -890,23 +892,47 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
      */
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex() {
-        int shuliang = 0;
-        String mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
-        mes += "品名      数量    单价    金额\n";
-        mes += "-------------------------------\n";
-        for(int i=0; i<mListData.size(); i++){
-            GetClassPluResult mGetClassPluResult = mListData.get(i);
-            Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-            shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
-            mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
-        }
-        mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";
-        mes += "抹零：     "+molingMoney+"\n优惠：     "+youhuiMoney+"\n";
-        mes += "-------------------------------\n";
-        mes += "公司名称：XXXXX\n公司网址：www.xxx.xxx\n地址：深圳市xx区xx号\n电话：0755-XXXXXXXX\n服务专线：400-xxx-xxxx\n================================\n";
-        mes += "谢谢惠顾,欢迎再次光临!\n";
 
-        AidlUtil.getInstance().printText(mes, 24, false, false);
+        /*Config.mPrintSize = ;
+        Config.mPrintNumber ;
+        Config.mPrintOrderName = ;
+        Config.mPrintPageHeader = ;
+        Config.mPrintPageFoot = ;
+        Config.isPrinterCardNo =  ;
+        Config.isPrinterUserName = ;
+        Config.isPrinterUserTel = ;
+        Config.isPrinterCashier = ;*/
+
+        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
+            int shuliang = 0;
+            String mes = "";
+
+            if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
+            if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
+            if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
+            if(Config.mMemberInfo != null){
+                if(Config.isPrinterCardNo){mes += "会员卡号："+Config.mMemberInfo.getCardNo_TelNo()+"\n";}
+                if(Config.isPrinterUserName){mes += "会员姓名："+Config.mMemberInfo.getCardName()+"\n";}
+                if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
+            }
+            mes += "门店号: "+Config.posid+"\n单据  "+FlowNo;
+            mes += "品名      数量    单价    金额\n";
+            mes += "-------------------------------\n";
+
+            for(int i=0; i<mListData.size(); i++){
+                GetClassPluResult mGetClassPluResult = mListData.get(i);
+                Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
+                shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
+            }
+
+            mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";
+            mes += "抹零：     "+molingMoney+"\n优惠：     "+youhuiMoney+"\n";
+            mes += "-------------------------------\n";
+            if(!Config.mPrintPageFoot.equals("")){mes += Config.mPrintPageFoot+"\n";}
+
+            AidlUtil.getInstance().printText(mes, 24, false, false);
+        }
 
     }
 

@@ -931,7 +931,14 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         //RFID
         if (keyCode == 139 ||keyCode == 280) {
             if (event.getRepeatCount() == 0) {
-                readTag();
+                if(!starting){
+                    playSound(1);
+                    readTag();
+//                    Sound mSound = new Sound();
+//                    mSound.start();
+                }else{
+                    stopInventory();
+                }
             }
             return true;
         }
@@ -1251,6 +1258,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                     }
 
                 }
+            }
+        }
+    }
+
+    class Sound extends Thread {
+        public void run() {
+            while (starting){
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                playSound(1);
             }
         }
     }

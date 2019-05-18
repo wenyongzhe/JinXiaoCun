@@ -915,7 +915,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 if(Config.isPrinterUserName){mes += "会员姓名："+Config.mMemberInfo.getCardName()+"\n";}
                 if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
             }
-            mes += "门店号: "+Config.posid+"\n单据  "+FlowNo;
+            mes += "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n";
             mes += "品名      数量    单价    金额\n";
             mes += "-------------------------------\n";
 
@@ -931,6 +931,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mes += "-------------------------------\n";
             if(!Config.mPrintPageFoot.equals("")){mes += Config.mPrintPageFoot+"\n";}
 
+            mes += "\n";
+            mes += "\n";
             AidlUtil.getInstance().printText(mes, 24, false, false);
         }
 

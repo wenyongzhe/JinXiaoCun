@@ -23,26 +23,26 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_weight="1"
+                android:layout_weight="6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
                 android:paddingRight="10dp"
                 android:text="应付金额"
                 android:textColor="@color/black"
-                android:textSize="@dimen/txt_size35"/>
+                android:textSize="@dimen/txt_size26"/>
 
             <TextView
                 android:id="@+id/et_price"
                 style="@style/TextView_Black"
-                android:layout_weight="1"
+                android:layout_weight="10"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
                 android:imeOptions="actionSend"
                 android:text="￥50"
                 android:textColor="@color/text_red"
-                android:textSize="@dimen/txt_size35"
+                android:textSize="@dimen/txt_size26"
                 />
 
         </LinearLayout>

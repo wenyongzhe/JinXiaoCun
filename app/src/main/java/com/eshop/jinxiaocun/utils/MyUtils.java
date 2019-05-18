@@ -482,7 +482,7 @@ public class MyUtils {
      */
     public static String formatDouble4(double d) {
         DecimalFormat df = new DecimalFormat("#.0000");
-        return df.format(d);
+        return df.format(d).replace(",","");
     }
 
     /**
@@ -497,7 +497,7 @@ public class MyUtils {
         nf.setMaximumFractionDigits(4);
         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
         nf.setRoundingMode(RoundingMode.HALF_UP);
-        return nf.format(d);
+        return nf.format(d).replace(",","");
     }
 
     public static String formatDouble2(double d) {
@@ -506,7 +506,7 @@ public class MyUtils {
         nf.setMaximumFractionDigits(2);
         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
         nf.setRoundingMode(RoundingMode.HALF_UP);
-        return nf.format(d);
+        return nf.format(d).replace(",","");
     }
 
     public static String formatDouble(int len, double d,RoundingMode mRoundingMode) {
@@ -515,7 +515,7 @@ public class MyUtils {
         nf.setMaximumFractionDigits(len);
         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
         nf.setRoundingMode(mRoundingMode);
-        return nf.format(d);
+        return nf.format(d).replace(",","");
     }
 
     public static String formatFloat2(float d) {
@@ -524,7 +524,7 @@ public class MyUtils {
         nf.setMaximumFractionDigits(2);
         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
         nf.setRoundingMode(RoundingMode.HALF_UP);
-        return nf.format(d);
+        return nf.format(d).replace(",","");
     }
 
 }

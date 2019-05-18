@@ -48,6 +48,8 @@
     <dimen name="txt_size18">18sp</dimen>
     <dimen name="txt_size20">20sp</dimen>
     <dimen name="txt_size22">22sp</dimen>
+    <dimen name="txt_size26">26sp</dimen>
+    <dimen name="txt_size30">30sp</dimen>
     <dimen name="txt_size35">35sp</dimen>
 
     <dimen name="port_edit_width">230dp</dimen>

@@ -14,7 +14,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="20dp"
         android:text="要货单"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -25,7 +26,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="20dp"
         android:text="配送入库"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />
@@ -36,7 +38,8 @@
         android:layout_height="@dimen/layout_heigth50"
         android:layout_marginTop="10dp"
         android:text="配送出库"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />

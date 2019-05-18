@@ -200,7 +200,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="下一步"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:textSize="@dimen/txt_size16"
         />

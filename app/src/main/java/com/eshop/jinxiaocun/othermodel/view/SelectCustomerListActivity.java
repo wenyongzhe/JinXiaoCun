@@ -58,16 +58,16 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
             public void onRefresh() {
-//                mPageIndex = 1;
-//                getCustomerInfo("1","","",mPageIndex,mPageSize);
+                mPageIndex = 1;
+                getCustomerInfo("1","","",mPageIndex,mPageSize);
             }
         });
 
         mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
             @Override
             public void onRefresh() {
-//                mPageIndex++;
-//                getCustomerInfo("1","","",mPageIndex,mPageSize);
+                mPageIndex++;
+                getCustomerInfo("1","","",mPageIndex,mPageSize);
             }
         });
 

@@ -64,18 +64,18 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageIndex = 1;
-                getProviderInfo(TextUtils.isEmpty(mEtBarcode.getText().toString().trim())?""
-                        :mEtBarcode.getText().toString().trim(),mPageIndex,mPageSize);
+//                mPageIndex = 1;
+//                getProviderInfo(TextUtils.isEmpty(mEtBarcode.getText().toString().trim())?""
+//                        :mEtBarcode.getText().toString().trim(),mPageIndex,mPageSize);
             }
         });
 
         mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageIndex++;
-                getProviderInfo(TextUtils.isEmpty(mEtBarcode.getText().toString().trim())?""
-                        :mEtBarcode.getText().toString().trim(),mPageIndex,mPageSize);
+//                mPageIndex++;
+//                getProviderInfo(TextUtils.isEmpty(mEtBarcode.getText().toString().trim())?""
+//                        :mEtBarcode.getText().toString().trim(),mPageIndex,mPageSize);
             }
         });
 

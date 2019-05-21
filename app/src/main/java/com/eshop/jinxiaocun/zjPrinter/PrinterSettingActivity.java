@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.zjPrinter;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
@@ -219,16 +221,14 @@ public class PrinterSettingActivity extends CommonBaseActivity {
 
     @OnClick(R.id.btn_print_preview)
     public void onClickPrintPreview(){
-        gotoPrint();
+        gotoPrintPreview();
     }
 
     private void gotoPrint(){
-
         if(!AidlUtil.getInstance().isConnect()){
             AlertUtil.showToast("打印机没有连接，不能打印!");
             return;
         }
-
 
         int maxLength = 25;
         String title = "打印预览";
@@ -264,7 +264,6 @@ public class PrinterSettingActivity extends CommonBaseActivity {
             AidlUtil.getInstance().printEmptyLine(1);
         }
         AidlUtil.getInstance().printText("-------------------------",30f,false,false);
-
 
         if(isPrinterCardNo){
             String cardNo = "卡号: 88888888";
@@ -319,6 +318,37 @@ public class PrinterSettingActivity extends CommonBaseActivity {
 
     }
 
+    private void gotoPrintPreview(){
+        int shuliang = 0;
+        String mes = "";
 
+        if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
+        if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
+        if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
+        if(Config.mMemberInfo != null){
+            if(Config.isPrinterCardNo){mes += "会员卡号："+Config.mMemberInfo.getCardNo_TelNo()+"\n";}
+            if(Config.isPrinterUserName){mes += "会员姓名："+Config.mMemberInfo.getCardName()+"\n";}
+            if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
+        }
+        mes += "门店号: "+Config.posid+"\n单据  "+000000000000+"\n";
+        mes += "品名      数量    单价    金额\n";
+        mes += "-------------------------------\n";
+
+        for(int i=0; i<2; i++){
+            mes += "龙须菜   "+"1"+"   "+"1.28"+"     "+"1.28"+"\n";
+        }
+
+        mes += "数量：     "+shuliang+"\n总计：     "+2.56+"\n";
+        mes += "抹零：     "+"0"+"\n优惠：     "+"0"+"\n";
+        mes += "-------------------------------\n";
+        if(!Config.mPrintPageFoot.equals("")){mes += Config.mPrintPageFoot+"\n";}
+
+        mes += "\n";
+        mes += "\n";
+
+        Intent mIntent = new Intent(this,PrintPreviewActivity.class);
+        mIntent.putExtra("content",mes);
+        startActivity(mIntent);
+    }
 
 }

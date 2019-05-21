@@ -54,8 +54,8 @@ public class DanJuListImp implements IDanJuList {
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
             try {
-                List<DanJuMainBeanResultItem> listResult =  mJsonFormatImp.JsonToList(jsonData,DanJuMainBeanResultItem.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
+                    List<DanJuMainBeanResultItem> listResult =  mJsonFormatImp.JsonToList(jsonData,DanJuMainBeanResultItem.class);
                     mHandler.handleResule(Config.MESSAGE_OK,listResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

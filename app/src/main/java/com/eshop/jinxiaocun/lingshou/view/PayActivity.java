@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.PopupWindowCompat;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,7 +35,6 @@ import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
-import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.ActionBarClickListener;
@@ -47,9 +43,9 @@ import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
-import com.eshop.jinxiaocun.zjPrinter.PrinterSettingActivity;
-import com.google.zxing.activity.CaptureActivity;
+import com.eshop.jinxiaocun.zjPrinter.LingShouPrintSettingActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -120,7 +116,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(PayActivity.this, PrinterSettingActivity.class));
+                        Intent mIntent = new Intent(PayActivity.this, LingShouPrintSettingActivity.class);
+                        mIntent.putExtra("mListData", (Serializable) mListData);
+                        mIntent.putExtra("money",money);
+                        mIntent.putExtra("FlowNo",FlowNo);
+                        mIntent.putExtra("molingMoney",molingMoney);
+                        mIntent.putExtra("youhuiMoney",youhuiMoney);
+                        startActivity(mIntent);
                     }
                 },"整单取消", this);
 
@@ -923,7 +925,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 GetClassPluResult mGetClassPluResult = mListData.get(i);
                 Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
                 shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
-                mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
+                mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+
+                        MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"     "+
+                        total1+"\n";
             }
 
             mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";

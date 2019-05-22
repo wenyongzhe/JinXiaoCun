@@ -382,6 +382,9 @@
         <activity android:name=".zjPrinter.PrintPreviewActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".zjPrinter.LingShouPrintSettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
     </application>
 

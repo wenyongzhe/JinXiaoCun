@@ -318,7 +318,7 @@ public class PrinterSettingActivity extends CommonBaseActivity {
 
     }
 
-    private void gotoPrintPreview(){
+    public void gotoPrintPreview(){
         int shuliang = 0;
         String mes = "";
 

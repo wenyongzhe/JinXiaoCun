@@ -925,7 +925,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 GetClassPluResult mGetClassPluResult = mListData.get(i);
                 Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
                 shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
-                mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+
+                mes += mGetClassPluResult.getItem_name()+"\n            "+
+                        mGetClassPluResult.getSale_qnty()+"   "+
                         MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"     "+
                         total1+"\n";
             }

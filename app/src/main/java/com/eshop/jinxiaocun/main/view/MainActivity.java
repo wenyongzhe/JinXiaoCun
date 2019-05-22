@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity implements INetWorResult {
         mThreadManagerInterface.executeRunnable(this);*/
 
         getLimit();
+
     }
 
     private void startLogin(){

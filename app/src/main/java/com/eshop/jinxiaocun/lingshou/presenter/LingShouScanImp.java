@@ -274,7 +274,7 @@ public class LingShouScanImp implements ILingshouScan {
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_NET_PAY_RETURN,mNetPlayBeanResult);
             }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,mNetPlayBeanResult);
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }
         }
     }

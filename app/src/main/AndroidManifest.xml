@@ -301,7 +301,7 @@
             android:name=".widget.ListviewDialog"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/MyDialogStyleBottom" />
-        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <activity android:name="com.zxing.android.CaptureActivity" />
         <activity android:name=".lingshou.view.VipPayActivity" />
         <activity android:name=".lingshou.view.PayActivity" />
         <activity

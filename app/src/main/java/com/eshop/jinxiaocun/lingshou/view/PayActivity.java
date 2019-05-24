@@ -44,6 +44,7 @@ import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.LingShouPrintSettingActivity;
+import com.zxing.android.CaptureActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -291,8 +292,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 break;
             case Config.MESSAGE_ERROR:
                 AlertUtil.dismissDialog();
-                if(((String)o).equals("")){
-                    o = "程序错误";
+                if(o==null || ((String)o).equals("")){
+                    o = "接口错误";
                 }
                 AlertUtil.showAlert(PayActivity.this, "提示", (String)o,
                         "确定", new View.OnClickListener() {
@@ -414,12 +415,12 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 case 1:
 
                   //sunmi的摄像头扫码
-                    Intent intent = new Intent("com.summi.scan");
+                   /* Intent intent = new Intent("com.summi.scan");
                     intent.setPackage("com.sunmi.sunmiqrcodescanner");
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);*/
 
-//                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
-//                    startActivityForResult(intent, Config.REQ_QR_CODE);
+                    Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, Config.REQ_QR_CODE);
                     //rtWzfQry();
                     break;
                 case 2:
@@ -704,7 +705,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
     }
 
     private boolean sunmiScan(int requestCode, int resultCode, Intent data){
-        if (requestCode == 1 && data != null) {
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
             Bundle bundle = data.getExtras();
             ArrayList<HashMap<String, String>> result = (ArrayList<HashMap<String, String>>) bundle
                     .getSerializable("data");
@@ -731,6 +732,24 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         return false;
     }
 
+    private boolean zxingScan(int requestCode, int resultCode, Intent data){
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+
+            tempayway = "";
+            if(codedContent.startsWith("28")){
+                tempayway = "ZFB";
+            }else{
+                tempayway = "WXZ";
+            }
+
+            temMoney = money+"";
+            mLingShouScanImp.RtWzfPay(tempayway,codedContent,FlowNo,temMoney,temMoney);
+            return true;
+        }
+        return false;
+    }
+
     String code;
     String tempayway;
     String temMoney;
@@ -739,7 +758,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         super.onActivityResult(requestCode, resultCode, data);
         double temprice;
         //sunmi摄像头扫码
-        if(sunmiScan(requestCode,resultCode,data)){
+        if(zxingScan(requestCode,resultCode,data)){
             return;
         }
 

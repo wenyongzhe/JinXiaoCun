@@ -353,15 +353,15 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                                     }
                                 });
                     }else{
-                        AlertUtil.showAlert(PayActivity.this, "提示", "结算处理中 "+mNetPlayBeanResult.getReturn_msg(),
-                                "取消", new View.OnClickListener() {
+                        AlertUtil.showAlert(PayActivity.this, "提示", "结算处理 "+mNetPlayBeanResult.getReturn_msg(),
+                                "确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         query = false;
                                         AlertUtil.dismissDialog();
                                     }
                                 });
-                        mHan.sendEmptyMessageDelayed(3,2000);
+                        //mHan.sendEmptyMessageDelayed(3,2000);
                     }
                 }
                 break;

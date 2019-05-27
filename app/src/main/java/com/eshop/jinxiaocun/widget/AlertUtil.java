@@ -56,6 +56,7 @@ public class AlertUtil {
 		mDialog.setTitle(title);
 		mDialog.setMessage(message);
 		mDialog.setPositiveButton(positiveText, listener);
+		mDialog.setNegativeButtonDisable(true);
 		mDialog.setCancelable(false);
 		mDialog.show();
 	}

@@ -15,7 +15,6 @@ import com.eshop.jinxiaocun.utils.CommonUtility;
 
 /**
  * 自定义弹出对话框
- * zwei 2017-11-23 修改弹出风格
  */
 
 class CustomDialog extends Dialog {
@@ -90,6 +89,14 @@ class CustomDialog extends Dialog {
 
 	void setPositiveButton(View.OnClickListener listener) {
 		this.positiveButton.setOnClickListener(listener);
+	}
+
+	void setNegativeButtonDisable(boolean is){
+		if(is){
+			this.negativeButton.setVisibility(View.GONE);
+		}else{
+			this.negativeButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	void setNegativeButton(int text,

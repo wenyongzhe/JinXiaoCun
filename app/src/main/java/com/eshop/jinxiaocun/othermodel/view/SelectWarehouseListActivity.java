@@ -92,8 +92,10 @@ public class SelectWarehouseListActivity extends CommonBaseListActivity implemen
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
-            mBarcodeScan = new BarcodeScan(this);
-            mBarcodeScan.open();
+            if(Config.DEVICE_TYPE != 1){
+                mBarcodeScan = new BarcodeScan(this);
+                mBarcodeScan.open();
+            }
         }catch (Exception e){
 
         }

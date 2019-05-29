@@ -34,8 +34,8 @@ public class LingShouPrintSettingActivity extends PrinterSettingActivity {
         int shuliang = 0;
         String mes = "";
 
-        if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
-        if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
+        if(!Config.mPrintPageHeader.equals("")){mes += "    "+Config.mPrintPageHeader+"\n";}
+        if(!Config.mPrintOrderName.equals("")){mes += "    "+Config.mPrintOrderName+"\n";}
         if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
         if(Config.mMemberInfo != null){
             if(Config.isPrinterCardNo){mes += "会员卡号："+Config.mMemberInfo.getCardNo_TelNo()+"\n";}
@@ -43,24 +43,24 @@ public class LingShouPrintSettingActivity extends PrinterSettingActivity {
             if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
         }
         mes += "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n";
-        mes += "品名      数量    单价    金额\n";
+        mes += "品名   数量    单价    金额\n";
         mes += "-------------------------------\n";
 
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
             shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
-            mes += mGetClassPluResult.getItem_name()+"\n            "+
-                    mGetClassPluResult.getSale_qnty()+"   "+
-                    MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"     "+
-                            total1+"\n";
+
+            mes += mGetClassPluResult.getItem_name()+"\n"+
+                    "        "+mGetClassPluResult.getSale_qnty()+mGetClassPluResult.getItem_size()+"     "+
+                    MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
+                    MyUtils.formatDouble2(total1)+"元\n";
         }
 
-        mes += "-------------------------------\n";
         mes += "数量：     "+shuliang+"\n总计：     "+money+"\n";
         mes += "抹零：     "+molingMoney+"\n优惠：     "+youhuiMoney+"\n";
         mes += "-------------------------------\n";
-        if(!Config.mPrintPageFoot.equals("")){mes += Config.mPrintPageFoot+"\n";}
+        if(!Config.mPrintPageFoot.equals("")){mes += "    "+Config.mPrintPageFoot+"\n";}
 
         mes += "\n";
         mes += "\n";

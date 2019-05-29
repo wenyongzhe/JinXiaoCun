@@ -34,8 +34,8 @@ public class LingShouPrintSettingActivity extends PrinterSettingActivity {
         int shuliang = 0;
         String mes = "";
 
-        if(!Config.mPrintPageHeader.equals("")){mes += "    "+Config.mPrintPageHeader+"\n";}
-        if(!Config.mPrintOrderName.equals("")){mes += "    "+Config.mPrintOrderName+"\n";}
+        if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
+        if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
         if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
         if(Config.mMemberInfo != null){
             if(Config.isPrinterCardNo){mes += "会员卡号："+Config.mMemberInfo.getCardNo_TelNo()+"\n";}

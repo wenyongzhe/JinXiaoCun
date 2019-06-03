@@ -125,7 +125,8 @@ public class RefreshListView extends ListView implements OnScrollListener {
                 ViewGroup.LayoutParams.FILL_PARENT, footContentHeight));
         progressBarFoot.setVisibility(View.GONE);
 
-        addHeaderView(headView, null, false);
+        //左右与上下滑动有冲突，暂时屏蔽
+        //addHeaderView(headView, null, false);
 
         addFooterView(footView, null, false);
         setOnScrollListener(this);

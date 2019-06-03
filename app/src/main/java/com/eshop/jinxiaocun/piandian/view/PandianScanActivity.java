@@ -156,7 +156,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
         setHeaderTitle(R.id.tv_2,R.string.list_item_CountN4,100);//盘点数量
         setHeaderTitle(R.id.tv_3,R.string.list_item_XSPrice,100);//销售价格
         setHeaderTitle(R.id.tv_4,R.string.list_item_Unit,60);//单位
-        setHeaderTitle(R.id.tv_5,R.string.list_item_Pici_Name,150);//批次
+        setHeaderTitle(R.id.tv_5,R.string.list_item_Pici_Name,0);//批次
         setHeaderTitle(R.id.tv_6,R.string.list_item_Spec,100);//规格
         setHeaderTitle(R.id.tv_7,R.string.list_item_StoreNum,100);//库存数量
 

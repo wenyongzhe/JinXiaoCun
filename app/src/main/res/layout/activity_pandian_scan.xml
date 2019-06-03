@@ -113,6 +113,18 @@
             android:layout_marginRight="5dp"
             android:gravity="center|left"
             />
+
+        <ImageView
+            android:id="@+id/iv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:src="@mipmap/arrow_down"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -190,19 +202,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         >
-
-        <ImageView
-            android:id="@+id/iv_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:paddingLeft="30dp"
-            android:paddingTop="5dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="5dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/arrow_down"
-            />
 
         <TextView
             android:id="@+id/tv_pd_nopandian"

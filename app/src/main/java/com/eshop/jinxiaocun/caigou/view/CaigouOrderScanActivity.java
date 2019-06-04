@@ -2,6 +2,8 @@ package com.eshop.jinxiaocun.caigou.view;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -48,8 +50,12 @@ import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -296,9 +302,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 }
             }
             if(!isSame){//不存在则取商品价格后添加 ，已经存则直接刷新
-                mAddSelectGoods = scanOrSelectGoods;
+                //mAddSelectGoods = scanOrSelectGoods;
+                getPriceList.add(scanOrSelectGoods);
                 //单据商品取价
-                mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
+                //mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
             }
             if(mListDatas.size()>0){//默认选中最后一条
@@ -311,6 +318,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("无商品信息!");
         }
     }
+
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(6));
+
+
     //保存临时主表信息
     private void saveMainInfo(String sheet_no){
         DanJuMainBeanResultItem mainInfo = new DanJuMainBeanResultItem();
@@ -488,43 +499,49 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 break;
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
-                OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
-                if(obj==null){
-                    AlertUtil.showToast("商品"+mAddSelectGoods.getItem_no()+"取价失败，没有此商品价格!");
-                    return;
-                }
-                mListDatas.add(mAddSelectGoods);
-                GetClassPluResult addGoodsInfo = null;
-                for (int i=0 ; i<mListDatas.size();i++) {
-                    GetClassPluResult bean = mListDatas.get(i);
-                    if(bean.getItem_no().equals(obj.getBarCode())){
-                        mListDatas.get(i).setBase_price(obj.getPrice()+"");
-                        mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
-                        mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
-                        mListDatas.get(i).setVip_price(obj.getVip_price()+"");
-                        addGoodsInfo=mListDatas.get(i);
-                        break;
+                try {
+                    OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
+                    if(obj==null){
+                        AlertUtil.showToast("商品"+mAddSelectGoods.getItem_no()+"取价失败，没有此商品价格!");
+                        return;
                     }
-                }
-                if(mListDatas.size()>0){//默认选中最后一条
-                    mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
-                    mAdapter.setItemClickPosition(mListDatas.size()-1);
-                }
-                //如果是新开单或之前保存本地的单据 更新数量
-                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
-                    int zsl = 0;
-                    for (GetClassPluResult info : mListDatas) {
-                        zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                    mListDatas.add(mAddSelectGoods);
+                    GetClassPluResult addGoodsInfo = null;
+                    for (int i=0 ; i<mListDatas.size();i++) {
+                        GetClassPluResult bean = mListDatas.get(i);
+                        if(bean.getItem_no().equals(obj.getBarCode())){
+                            mListDatas.get(i).setBase_price(obj.getPrice()+"");
+                            mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
+                            mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
+                            mListDatas.get(i).setVip_price(obj.getVip_price()+"");
+                            addGoodsInfo=mListDatas.get(i);
+                            break;
+                        }
                     }
-                    addGoodsInfo.setSheet_No(mSheetNo);
-                    int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
-                    if(isSuccess == 0){
-                        AlertUtil.showToast("商品信息保存本地失败!");
+                    if(mListDatas.size()>0){//默认选中最后一条
+                        mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                        mAdapter.setItemClickPosition(mListDatas.size()-1);
                     }
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult info : mListDatas) {
+                            zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                        }
+                        addGoodsInfo.setSheet_No(mSheetNo);
+                        int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
+                        if(isSuccess == 0){
+                            AlertUtil.showToast("商品信息保存本地失败!");
+                        }
+                    }
+                    mAddSelectGoods = null;
+                    mAdapter.setListInfo(mListDatas);
+                    upDateUI();
+                    canAdd = true;
+                } catch (Exception e) {
+                    canAdd = true;
+                    e.printStackTrace();
                 }
-                mAddSelectGoods = null;
-                mAdapter.setListInfo(mListDatas);
-                upDateUI();
                 break;
             case Config.MESSAGE_GET_PRICE_FAIL:
                 mAddSelectGoods = null;
@@ -533,6 +550,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
 
         }
     }
+
+    private boolean canAdd = true;
+    List<GetClassPluResult> selectGoodsList;
+    List<GetClassPluResult> getPriceList = new ArrayList<>();
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -541,11 +562,18 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             mEtBarcode.requestFocus();
             mEtBarcode.setFocusable(true);
             mEtBarcode.setText("");
-            List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
+            selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
             if(selectGoodsList !=null && selectGoodsList.size()>0){
-                GetClassPluResult goods= selectGoodsList.get(0);
-                goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
-                addGoodsData(goods);
+                getPriceList.clear();
+                for(int k=0; k<selectGoodsList.size(); k++){
+                    GetClassPluResult goods= selectGoodsList.get(k);
+                    goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                    addGoodsData(goods);
+                }
+                if(getPriceList.size()>0){
+                    AlertUtil.showNoButtonProgressDialog(CaigouOrderScanActivity.this,"处理中");
+                    getPrice();
+                }
             }
         }
 
@@ -612,6 +640,36 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         }
 
     }
+
+    private void getPrice() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while (getPriceList.size()>0){
+                    Iterator it = getPriceList.iterator();
+                    while(it.hasNext()){
+                        if(canAdd){
+                            canAdd = false;
+                            GetClassPluResult mGetClassPluResult = (GetClassPluResult) it.next();
+                            mAddSelectGoods = mGetClassPluResult;
+                            mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",mGetClassPluResult.getItem_no(),SupCust_No);
+                            it.remove();
+                        }
+                    }
+                }
+                mhan.sendEmptyMessage(1);
+            }
+        };
+        executor.execute(runnable);
+    }
+
+    Handler mhan = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AlertUtil.dismissProgressDialog();
+        }
+    };
+
     @Override
     protected boolean scanBefore() {
         return true;
@@ -954,5 +1012,4 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     public void SearchDevices(List<BluetoothDeviceInfo> mDevices) { }
     @Override
     public void IsPair(boolean isPair) {}
-
 }

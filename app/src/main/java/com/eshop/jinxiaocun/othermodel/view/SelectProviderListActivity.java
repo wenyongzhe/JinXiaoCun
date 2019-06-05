@@ -143,7 +143,7 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
         Intent intent = new Intent();
-        intent.putExtra("ProviderInfo",mListInfo.get(position-1));
+        intent.putExtra("ProviderInfo",mListInfo.get(position));
         setResult(22,intent);
         finish();
     }

@@ -162,10 +162,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 Config.IP_POIN = txtSeverPort.getText().toString();
 
                 MyUtils.showToast("参数保存成功！",SystemSettingActivity.this);
-                finish();
-                Intent mIntent = new Intent(SystemSettingActivity.this,LoginActivity.class);
-                startActivity(mIntent);
                 ConfigureParamSP.getInstance().saveValue(SystemSettingActivity.this, ConfigureParamSP.KEY_HASSAVEIP, true);
+                finish();
+//                Intent mIntent = new Intent(SystemSettingActivity.this,LoginActivity.class);
+//                startActivity(mIntent);
 
                 break;
 

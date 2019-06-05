@@ -124,8 +124,8 @@ public class PeisongRukuListActivity extends CommonBaseListActivity implements I
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-        mSelectMainBean = mListInfo.get(position-1);
-        mAdapter.setItemClickPosition(position-1);
+        mSelectMainBean = mListInfo.get(position);
+        mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
         mTvCurrentPosition.setText("当前选择是第"+position+"条单据");
     }

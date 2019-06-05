@@ -2,6 +2,8 @@ package com.eshop.jinxiaocun.caigou.view;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -49,8 +51,12 @@ import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -289,9 +295,11 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
                     break;
                 }
             }
-            if(!isSame){//不存在则取商品价后添加 ，已经存则直接刷新
-                mAddSelectGoods = scanOrSelectGoods;
-                mOtherApi.getOrderGoodsPrice(Config.YwType.PI.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
+            if(!isSame){//不存在则取商品价格后添加 ，已经存则直接刷新
+                //mAddSelectGoods = scanOrSelectGoods;
+                getPriceList.add(scanOrSelectGoods);
+                //单据商品取价
+                //mOtherApi.getOrderGoodsPrice(Config.YwType.PO.toString(),"",scanOrSelectGoods.getItem_no(),SupCust_No);
                 return;
             }
             if(mListDatas.size()>0){//默认选中最后一条
@@ -524,39 +532,45 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
                 break;
             //单据商品取价
             case Config.MESSAGE_GET_PRICE_SUCCESS:
-                mListDatas.add(mAddSelectGoods);
-                GetClassPluResult addGoodsInfo = null;
-                OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
-                for (int i=0 ; i<mListDatas.size();i++) {
-                    GetClassPluResult bean = mListDatas.get(i);
-                    if(bean.getItem_no().equals(obj.getBarCode())){
-                        mListDatas.get(i).setBase_price(obj.getPrice()+"");
-                        mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
-                        mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
-                        mListDatas.get(i).setVip_price(obj.getVip_price()+"");
-                        addGoodsInfo=mListDatas.get(i);
-                        break;
+                try {
+                    mListDatas.add(mAddSelectGoods);
+                    GetClassPluResult addGoodsInfo = null;
+                    OrderGoodsPriceBeanResult obj = (OrderGoodsPriceBeanResult) o;
+                    for (int i=0 ; i<mListDatas.size();i++) {
+                        GetClassPluResult bean = mListDatas.get(i);
+                        if(bean.getItem_no().equals(obj.getBarCode())){
+                            mListDatas.get(i).setBase_price(obj.getPrice()+"");
+                            mListDatas.get(i).setPrice(obj.getBuyPrice()+"");
+                            mListDatas.get(i).setSale_price(obj.getSalePrice()+"");
+                            mListDatas.get(i).setVip_price(obj.getVip_price()+"");
+                            addGoodsInfo=mListDatas.get(i);
+                            break;
+                        }
                     }
-                }
-                if(mListDatas.size()>0){//默认选中最后一条
-                    mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
-                    mAdapter.setItemClickPosition(mListDatas.size()-1);
-                }
-                //如果是新开单或之前保存本地的单据 更新数量
-                if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
-                    int zsl = 0;
-                    for (GetClassPluResult info : mListDatas) {
-                        zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                    if(mListDatas.size()>0){//默认选中最后一条
+                        mSelectGoodsEntity = mListDatas.get(mListDatas.size()-1);
+                        mAdapter.setItemClickPosition(mListDatas.size()-1);
                     }
-                    addGoodsInfo.setSheet_No(mSheetNo);
-                    int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
-                    if(isSuccess == 0){
-                        AlertUtil.showToast("商品信息保存本地失败!");
+                    //如果是新开单或之前保存本地的单据 更新数量
+                    if(mSelectMainBean==null || mSheetType.equals(mSelectMainBean.getSheetType())) {
+                        int zsl = 0;
+                        for (GetClassPluResult info : mListDatas) {
+                            zsl += MyUtils.convertToInt(info.getSale_qnty(),0);
+                        }
+                        addGoodsInfo.setSheet_No(mSheetNo);
+                        int isSuccess = BusinessBLL.getInstance().insertGoodsInfoAndUpdateOrderQty(addGoodsInfo,mSheetNo,zsl+"");
+                        if(isSuccess == 0){
+                            AlertUtil.showToast("商品信息保存本地失败!");
+                        }
                     }
+                    mAddSelectGoods = null;
+                    mAdapter.setListInfo(mListDatas);
+                    upDateUI();
+                    canAdd = true;
+                } catch (Exception e) {
+                    canAdd = true;
+                    e.printStackTrace();
                 }
-                mAddSelectGoods = null;
-                mAdapter.setListInfo(mListDatas);
-                upDateUI();
                 break;
             case Config.MESSAGE_GET_PRICE_FAIL:
                 mAddSelectGoods = null;
@@ -565,6 +579,8 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         }
     }
 
+    private boolean canAdd = true;
+    List<GetClassPluResult> getPriceList = new ArrayList<>();
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -575,24 +591,32 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
             mEtBarcode.setText("");
             List<GetClassPluResult> selectGoodsList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
             if(selectGoodsList !=null && selectGoodsList.size()>0){
-                GetClassPluResult goods= selectGoodsList.get(0);
-                goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
-                if(isCiteOrder){
-                    //如果是引单 判断商品是否在引单商品中 如果在则添加 反之不添加
-                    boolean isSave = false;
-                    for (GetClassPluResult info : mListDatas) {
-                        if(info.getItem_no().equals(goods.getItem_no())){
-                            isSave = true;
-                            break;
+                getPriceList.clear();
+                for(int k=0; k<selectGoodsList.size(); k++){
+                    GetClassPluResult goods= selectGoodsList.get(k);
+                    goods.setSale_qnty(TextUtils.isEmpty(goods.getSale_qnty())?"1":goods.getSale_qnty());
+                    if(isCiteOrder){
+                        //如果是引单 判断商品是否在引单商品中 如果在则添加 反之不添加
+                        boolean isSave = false;
+                        for (GetClassPluResult info : mListDatas) {
+                            if(info.getItem_no().equals(goods.getItem_no())){
+                                isSave = true;
+                                break;
+                            }
                         }
-                    }
-                    if(isSave){
-                        addGoodsData(goods);
+                        if(isSave){
+                            addGoodsData(goods);
+                        }else{
+                            AlertUtil.showToast("商品("+goods.getItem_name()+")不在引单商品中");
+                        }
                     }else{
-                        AlertUtil.showToast("商品("+goods.getItem_name()+")不在引单商品中");
+                        addGoodsData(goods);
                     }
-                }else{
-                    addGoodsData(goods);
+                }
+
+                if(getPriceList.size()>0){
+                    AlertUtil.showNoButtonProgressDialog(CaigouRucangScanActivity.this,"处理中");
+                    getPrice();
                 }
             }
         }
@@ -680,6 +704,38 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
         }
 
     }
+
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(6));
+
+
+    private void getPrice() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while (getPriceList.size()>0){
+                    Iterator it = getPriceList.iterator();
+                    while(it.hasNext()){
+                        if(canAdd){
+                            canAdd = false;
+                            GetClassPluResult mGetClassPluResult = (GetClassPluResult) it.next();
+                            mAddSelectGoods = mGetClassPluResult;
+                            mOtherApi.getOrderGoodsPrice(Config.YwType.PI.toString(),"",mGetClassPluResult.getItem_no(),SupCust_No);
+                            it.remove();
+                        }
+                    }
+                }
+                mhan.sendEmptyMessage(1);
+            }
+        };
+        executor.execute(runnable);
+    }
+
+    Handler mhan = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AlertUtil.dismissProgressDialog();
+        }
+    };
 
     //处理引单过来的业务
     private void doCiteOrder(Intent data){

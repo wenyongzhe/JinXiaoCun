@@ -140,7 +140,7 @@ public class PandianListActivity extends CommonBaseListActivity implements INetW
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-        mAdapter.setItemClickPosition(position-1);
+        mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
     }
 

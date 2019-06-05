@@ -92,7 +92,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.PO.toString();
     //打印
-    private BluetoothPrinterManage bluetoothService;
+    //private BluetoothPrinterManage bluetoothService;
     private boolean isPrinter = true;//正在打印
 
     @Override
@@ -137,8 +137,8 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
-        bluetoothService = BluetoothPrinterManage.getInstance();
-        bluetoothService.init(this,this);
+//        bluetoothService = BluetoothPrinterManage.getInstance();
+//        bluetoothService.init(this,this);
     }
 
     @Override
@@ -962,10 +962,10 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(mGetDBDatas !=null){
             mGetDBDatas.cancel(true);
         }
-        if(bluetoothService!=null){
-            bluetoothService.disConnectBluetooth();
-            bluetoothService = null;
-        }
+//        if(bluetoothService!=null){
+//            bluetoothService.disConnectBluetooth();
+//            bluetoothService = null;
+//        }
     }
 
     //打印
@@ -981,7 +981,7 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
                 if(mListDatas.size()>0){
                     AlertUtil.showToast("正在打印...", this);
                     //必须连接成功才去打印，直接就finish(),则会异常退出
-                    bluetoothService.connectBluetooth();
+//                    bluetoothService.connectBluetooth();
                 }else{
                     isPrinter = true;
                     AlertUtil.showToast("没有数据，不能打印!", this);

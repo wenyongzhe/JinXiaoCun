@@ -59,19 +59,23 @@ public class CaigouRucangListAdapter extends BaseAdapter {
         TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
         TextView tvValidDate = ViewHolderUtils.get(convertView, R.id.tv_valid_Date);
 
-        if(mCheckflag.equals("1")){
-            tvOrderStatus.setText("已审核");
-        }else{
-            tvOrderStatus.setText("未审核");
+        try {
+            if(mCheckflag.equals("1")){
+                tvOrderStatus.setText("已审核");
+            }else{
+                tvOrderStatus.setText("未审核");
+            }
+            tvOrderNo.setSelected(true);
+            tvShopname.setSelected(true);
+            tv_xuhao.setText((position+1)+"");
+            tvOrderNo.setText(listInfo.get(position).getSheet_No());
+            tvOrderType.setText(listInfo.get(position).getSheetType());
+            tvShopname.setText(listInfo.get(position).getSupplyName());
+            tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
+            tvValidDate.setText(listInfo.get(position).getValid_date());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        tvOrderNo.setSelected(true);
-        tvShopname.setSelected(true);
-        tv_xuhao.setText((position+1)+"");
-        tvOrderNo.setText(listInfo.get(position).getSheet_No());
-        tvOrderType.setText(listInfo.get(position).getSheetType());
-        tvShopname.setText(listInfo.get(position).getSupplyName());
-        tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
-        tvValidDate.setText(listInfo.get(position).getValid_date());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);

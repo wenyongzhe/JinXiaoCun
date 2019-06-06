@@ -47,20 +47,24 @@ public class CaoGaoListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(Application.mContext).inflate(R.layout.item_list_xiaoshoudan_finish,parent,false);
         }
-        TextView tv_OperName = ViewHolderUtils.get(convertView, R.id.tv_OperName);
-        tv_OperName.setText(listInfo.get(position).getOper_Name());
-        TextView tv_GoodsNum = ViewHolderUtils.get(convertView, R.id.tv_GoodsNum);
-        tv_GoodsNum.setText(listInfo.get(position).getGoodsNum());
+        try {
+            TextView tv_OperName = ViewHolderUtils.get(convertView, R.id.tv_OperName);
+            tv_OperName.setText(listInfo.get(position).getOper_Name());
+            TextView tv_GoodsNum = ViewHolderUtils.get(convertView, R.id.tv_GoodsNum);
+            tv_GoodsNum.setText(listInfo.get(position).getGoodsNum());
 
-        TextView tv_SheetNo = ViewHolderUtils.get(convertView, R.id.tv_SheetNo);
-        tv_SheetNo.setText(listInfo.get(position).getSheet_No());
-        TextView tv_OrdAmt = ViewHolderUtils.get(convertView, R.id.tv_OrdAmt);
-        tv_OrdAmt.setText(listInfo.get(position).getOrd_Amt());
+            TextView tv_SheetNo = ViewHolderUtils.get(convertView, R.id.tv_SheetNo);
+            tv_SheetNo.setText(listInfo.get(position).getSheet_No());
+            TextView tv_OrdAmt = ViewHolderUtils.get(convertView, R.id.tv_OrdAmt);
+            tv_OrdAmt.setText(listInfo.get(position).getOrd_Amt());
 
-        TextView tv_OperDate = ViewHolderUtils.get(convertView, R.id.tv_OperDate);
-        tv_OperDate.setText(listInfo.get(position).getOper_Date());
-        TextView tv_BranchNo = ViewHolderUtils.get(convertView, R.id.tv_BranchNo);
-        tv_BranchNo.setText(listInfo.get(position).getBranch_No());
+            TextView tv_OperDate = ViewHolderUtils.get(convertView, R.id.tv_OperDate);
+            tv_OperDate.setText(listInfo.get(position).getOper_Date());
+            TextView tv_BranchNo = ViewHolderUtils.get(convertView, R.id.tv_BranchNo);
+            tv_BranchNo.setText(listInfo.get(position).getBranch_No());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return convertView;
     }
 }

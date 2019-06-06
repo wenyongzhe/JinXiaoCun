@@ -986,7 +986,7 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
         mTvAllRowNumber.setText(mAddPandianGoodsDetailData.size()+"");
         mTvZsl.setText(allCount+"");
-        mTvZje.setText(allMoney+"");
+        mTvZje.setText(MyUtils.formatDouble2(allMoney)+"");
     }
     //退出界面时判断是否保存数据
     private boolean finishActivity(){

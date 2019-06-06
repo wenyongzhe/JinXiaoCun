@@ -128,7 +128,7 @@ public class PifaChukuListActivity extends CommonBaseListActivity implements INe
         mSelectMainBean = mListInfo.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
-        mTvCurrentPosition.setText("当前选择是第"+position+"条单据");
+        mTvCurrentPosition.setText("当前选择是第"+(position+1)+"条单据");
     }
 
     @OnClick(R.id.dt_startDate)

@@ -138,7 +138,7 @@ public class PandianPihaoListActivity extends CommonBaseListActivity implements 
         super.onItemClick(parent, view, position, id);
 
         Intent intent = new Intent();
-        intent.putExtra("PandianPihao",mListDatas.get(position-1));
+        intent.putExtra("PandianPihao",mListDatas.get(position));
         setResult(11,intent);
         finish();
     }

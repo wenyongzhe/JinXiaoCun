@@ -312,33 +312,33 @@ public class RefreshListView extends ListView implements OnScrollListener {
         return super.onTouchEvent(event);
     }
 
-    //防止与外面的view滑动冲突
-    private int mLastX;
-    private int mLastY;
+//    //防止与外面的view滑动冲突
+//    private int mLastX;
+//    private int mLastY;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        int x = (int) ev.getX();
-        int y = (int) ev.getY();
+//        int x = (int) ev.getX();
+//        int y = (int) ev.getY();
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startY = (int) ev.getY();
-                //防止与外面的view滑动冲突
-                getParent().requestDisallowInterceptTouchEvent(true);
+//                //防止与外面的view滑动冲突
+//                getParent().requestDisallowInterceptTouchEvent(true);
                 break;
-            case MotionEvent.ACTION_MOVE://防止与外面的view滑动冲突
-                int xDiff = Math.abs(x - mLastX);
-                int yDiff = Math.abs(y - mLastY);
-                if (xDiff < yDiff) {
-                    getParent().requestDisallowInterceptTouchEvent(false);
-                } else {
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                break;
+//            case MotionEvent.ACTION_MOVE://防止与外面的view滑动冲突
+//                int xDiff = Math.abs(x - mLastX);
+//                int yDiff = Math.abs(y - mLastY);
+//                if (xDiff < yDiff) {
+//                    getParent().requestDisallowInterceptTouchEvent(false);
+//                } else {
+//                    getParent().requestDisallowInterceptTouchEvent(true);
+//                }
+//                break;
         }
-        //防止与外面的view滑动冲突
-        mLastX = x;
-        mLastY = y;
+//        //防止与外面的view滑动冲突
+//        mLastX = x;
+//        mLastY = y;
         return super.dispatchTouchEvent(ev);
     }
 

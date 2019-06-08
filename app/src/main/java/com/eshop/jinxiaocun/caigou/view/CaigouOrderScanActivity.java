@@ -66,7 +66,7 @@ import butterknife.OnClick;
  * Desc: 采购订单扫描
  */
 
-public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult, BluetoothPrinterManage.BluetoothResultListerner {
+public class CaigouOrderScanActivity extends CommonBaseScanActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
     EditText mEtBarcode;
@@ -91,9 +91,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
     private String mSheetNo;//标记本地数据的单据号
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.PO.toString();
-    //打印
-    //private BluetoothPrinterManage bluetoothService;
-    private boolean isPrinter = true;//正在打印
 
     @Override
     protected int getLayoutContentId() {
@@ -137,8 +134,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         mAdapter = new CaigouOrderScanAdapter(mListDatas);
         mListView.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
-//        bluetoothService = BluetoothPrinterManage.getInstance();
-//        bluetoothService.init(this,this);
     }
 
     @Override
@@ -246,7 +241,6 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             AlertUtil.showToast("没有商品信息,不能进行打印！", this);
             return ;
         }
-        gotoPrinter();
 //        AlertUtil.showAlert(this, R.string.dialog_title, "您确定要打印吗？", R.string.ok, new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -962,54 +956,5 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(mGetDBDatas !=null){
             mGetDBDatas.cancel(true);
         }
-//        if(bluetoothService!=null){
-//            bluetoothService.disConnectBluetooth();
-//            bluetoothService = null;
-//        }
     }
-
-    //打印
-    private void gotoPrinter(){
-        if(isPrinter){
-            isPrinter = false;
-            //判断是否有蓝牙地址
-            if (Config.BluetoothAddress.equals("")) {
-                isPrinter = true;
-                Intent i = new Intent(this, SettingBluetoothActivity.class);
-                startActivity(i);
-            }else{
-                if(mListDatas.size()>0){
-                    AlertUtil.showToast("正在打印...", this);
-                    //必须连接成功才去打印，直接就finish(),则会异常退出
-//                    bluetoothService.connectBluetooth();
-                }else{
-                    isPrinter = true;
-                    AlertUtil.showToast("没有数据，不能打印!", this);
-                }
-            }
-        }else{
-            AlertUtil.showToast("正在打印，请稍后..", this);
-        }
-    }
-    //打印机是否连接了
-    @Override
-    public void IsConnect(boolean isConnect) {
-        isPrinter = true;
-        try {
-            if (isConnect) {
-                AlertUtil.showToast("可以打印了，谢谢", this);
-//                bluetoothService.printerTxt_58mm(mSheetNo,mListDatas);
-//                bluetoothService.disConnectBluetooth();
-//                finish();
-            } else {
-                AlertUtil.showToast("连接打印机失败！可能要重新配置蓝牙打印机！", this);
-            }
-        } catch (Exception ex) {
-            AlertUtil.showToast("打印小票失败，原因：" + ex.getMessage(), this);
-        }
-    }
-    @Override
-    public void SearchDevices(List<BluetoothDeviceInfo> mDevices) { }
-    @Override
-    public void IsPair(boolean isPair) {}
 }

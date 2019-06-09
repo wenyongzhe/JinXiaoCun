@@ -88,21 +88,21 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         setHeaderTitle(R.id.tv_4,R.string.list_item_AllGoodsCount,100);//总商品数
         setHeaderTitle(R.id.tv_5,R.string.list_item_ValidDate,150);//交货日期
 
-        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPageIndex = 1;
-                getCiteOrderData();
-            }
-        });
-
-        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPageIndex++;
-                getCiteOrderData();
-            }
-        });
+//        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                mPageIndex = 1;
+//                getCiteOrderData();
+//            }
+//        });
+//
+//        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                mPageIndex++;
+//                getCiteOrderData();
+//            }
+//        });
 
         mAdapter = new CiteOrderListAdapter(mListInfo);
         mListView.setOnItemClickListener(this);

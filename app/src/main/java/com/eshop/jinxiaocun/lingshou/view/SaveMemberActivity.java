@@ -75,13 +75,17 @@ public class SaveMemberActivity extends MemberCheckActivity {
     public void onResume() {
         super.onResume();
         //开启前台调度系统
-        NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+        if(NfcUtils.mNfcAdapter!=null){
+            NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         //关闭前台调度系统
-        NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
+        if(NfcUtils.mNfcAdapter!=null){
+            NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 }

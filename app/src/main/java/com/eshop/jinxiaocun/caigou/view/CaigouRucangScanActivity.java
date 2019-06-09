@@ -93,6 +93,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.PI.toString();
     private boolean isCiteOrder;//false不是引单  true为引单
+    private int lastClickedPosition = -1;//标记最后点击的位置
 
     @Override
     protected int getLayoutContentId() {
@@ -256,6 +257,13 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
 //            startActivityForResult(intent,55);
 //
 //        }
+        if (MyUtils.isFastDoubleClick() && position == lastClickedPosition) {
+            //快速双击修改数量
+            if(modifyCountBefore()){
+                modifyCountAfter();
+            }
+        }
+        lastClickedPosition = position;
     }
 
     @OnClick(R.id.btn_print)

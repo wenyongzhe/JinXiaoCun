@@ -82,6 +82,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
     private String mSheetNo;//标记本地数据的单据号
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.SS.toString();
+    private int lastClickedPosition = -1;//标记最后点击的位置
 
     @Override
     protected int getLayoutContentId() {
@@ -205,6 +206,15 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         mSelectGoodsEntity = mListDatas.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
+
+        if (MyUtils.isFastDoubleClick() && position == lastClickedPosition) {
+            //快速双击修改数量
+            if(modifyCountBefore()){
+                modifyCountAfter();
+            }
+        }
+        lastClickedPosition = position;
+
     }
 
     @OnClick(R.id.ib_seach)

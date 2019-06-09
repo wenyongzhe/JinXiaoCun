@@ -83,6 +83,7 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
     private GetDBDatas mGetDBDatas;
     private final String mSheetType = "本地_"+Config.YwType.MI.toString();
     private boolean isCiteOrder;//false不是引单  true为引单
+    private int lastClickedPosition = -1;//标记最后点击的位置
 
     @Override
     protected int getLayoutContentId() {
@@ -213,6 +214,15 @@ public class PeisongRukuScanActivity extends CommonBaseScanActivity implements I
         mSelectGoodsEntity = mListDatas.get(position);
         mAdapter.setItemClickPosition(position);
         mAdapter.notifyDataSetInvalidated();
+
+        if (MyUtils.isFastDoubleClick() && position == lastClickedPosition) {
+            //快速双击修改数量
+            if(modifyCountBefore()){
+                modifyCountAfter();
+            }
+        }
+        lastClickedPosition = position;
+
     }
 
     @OnClick(R.id.btn_print)

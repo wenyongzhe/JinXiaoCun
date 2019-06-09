@@ -1,5 +1,7 @@
 package com.eshop.jinxiaocun.pifaxiaoshou.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -32,6 +34,7 @@ import com.eshop.jinxiaocun.othermodel.view.SelectCustomerListActivity;
 import com.eshop.jinxiaocun.piandian.view.SelectPandianGoodsListActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.adapter.PifaOrderScanAdapter;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
@@ -228,7 +231,38 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
     @OnClick(R.id.btn_print)
     public void onClickPront(){
-        AlertUtil.showToast("好的，我去打印");
+        if (mListDatas == null || mListDatas.size()==0){
+            AlertUtil.showToast("没有商品信息,不能进行打印！", this);
+            return ;
+        }
+
+        if(AidlUtil.getInstance().isConnect()){
+            AlertUtil.showAlert(this, R.string.dialog_title, R.string.is_need_print,
+                    R.string.yes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                            onPrintln();
+                        }
+                    }, R.string.no, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                        }
+                    });
+        }else{
+            AlertDialog dialog = new AlertDialog.Builder(this).create();
+            dialog.setTitle("温馨提示");
+            dialog.setMessage("未连接打印机！");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 
     private void addGoodsData(GetClassPluResult scanOrSelectGoods){
@@ -843,6 +877,111 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 AlertUtil.showToast("获取本地数据异常："+s);
             }
         }
+    }
+
+    //打印
+    private void onPrintln(){
+        int maxLength = 25;
+        String title = "批发订单商品";
+        if(MyUtils.length(title)<maxLength){
+            int beginLength = (maxLength-MyUtils.length(title))>>1;
+            int endLength=beginLength;
+            if(beginLength%2!=0){
+                endLength+=1;
+            }
+            title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(title,30f,false,false);
+        }
+
+        String userName = "操作人: "+ Config.UserName;
+        if(MyUtils.length(userName)<maxLength){
+            int endLength = maxLength-MyUtils.length(userName);
+            userName=userName+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+
+        String exchargeData = "操作时间: "+ DateUtility.getCurrentTime();
+        if(MyUtils.length(exchargeData)<maxLength){
+            int endLength = maxLength-MyUtils.length(exchargeData);
+            exchargeData=exchargeData+MyUtils.rpad(endLength,"");
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+        }else{//如果超过一行  要换行
+            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printEmptyLine(1);
+        }
+        AidlUtil.getInstance().printText("=========================",30f,false,false);
+
+
+        AidlUtil.getInstance().printText("品 名   数量   单价   金额",30f,false,false);
+
+        for (GetClassPluResult info : mListDatas) {
+            if(MyUtils.length(info.getItem_no()+info.getItem_name())<maxLength){
+                AidlUtil.getInstance().printText(info.getItem_no(),30f,false,false);
+                //中间还有多少个空格
+                int rpadLength = maxLength - MyUtils.length(info.getItem_no()+info.getItem_name());
+                if(rpadLength==0){
+                    //说明没有多余的空格, 自动空两格
+                    AidlUtil.getInstance().printText("  ",30f,false,false);
+                }else{
+                    //余下的空格，自动填满
+                    AidlUtil.getInstance().printText(MyUtils.rpad(rpadLength," "),30f,false,false);
+                }
+                AidlUtil.getInstance().printText(info.getItem_name(),30f,false,false);
+            }else {
+                //超过一行
+                AidlUtil.getInstance().printText(info.getItem_no()+"  "+info.getItem_name(),30f,false,false);
+            }
+
+            String qty = "        "+info.getSale_qnty();
+            AidlUtil.getInstance().printText(qty,30f,false,false);
+
+            String price;
+            if(MyUtils.length(qty)<15){
+                int rpad = 15-MyUtils.length(qty);
+                price = MyUtils.rpad(rpad," ")+info.getBase_price();
+            }else {
+                price = " "+info.getBase_price();
+            }
+            AidlUtil.getInstance().printText(price,30f,false,false);
+
+
+            float zje = MyUtils.convertToFloat(info.getBase_price(),0)
+                    *MyUtils.convertToFloat(info.getSale_qnty(),1);
+            AidlUtil.getInstance().printText(" "+zje+"\n",30f,false,false);
+        }
+
+        AidlUtil.getInstance().printText("=========================",30f,false,false);
+
+        StringBuffer sbfZSL= new StringBuffer();
+        sbfZSL.append("总数量: ");
+        sbfZSL.append(mTvZsl.getText().toString().trim());
+
+        StringBuffer sbfZJE= new StringBuffer();
+        sbfZJE.append("总金额: ");
+        sbfZJE.append(mTvZje.getText().toString().trim());
+
+        if(MyUtils.length(sbfZSL.toString()+sbfZJE.toString())<maxLength){
+            AidlUtil.getInstance().printText(sbfZSL.toString(),30f,false,false);
+            //中间还有多少个空格
+            int rpadLength = maxLength - MyUtils.length(sbfZSL.toString()+sbfZJE.toString());
+            if(rpadLength==0){
+                //说明没有多余的空格, 自动空两格
+                AidlUtil.getInstance().printText("  ",30f,false,false);
+            }else{
+                AidlUtil.getInstance().printText(MyUtils.rpad(rpadLength," "),30f,false,false);
+            }
+            AidlUtil.getInstance().printText(sbfZJE.toString(),30f,false,false);
+        }else {
+            //超过一行
+            AidlUtil.getInstance().printText(sbfZSL.toString()+"  "+sbfZJE.toString(),30f,false,false);
+        }
+
+
+        AidlUtil.getInstance().printEmptyLine(3);
+
     }
 
     @Override

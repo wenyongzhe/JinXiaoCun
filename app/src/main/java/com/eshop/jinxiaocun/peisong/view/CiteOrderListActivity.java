@@ -141,8 +141,7 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         super.onItemClick(parent, view, position, id);
 
         Intent intent = new Intent();
-//        intent.putExtra("Checkflag",mCheckflag);
-        intent.putExtra("SelectOrder",mListInfo.get(position-1));
+        intent.putExtra("SelectOrder",mListInfo.get(position));
         setResult(RESULT_OK,intent);
         finish();
 

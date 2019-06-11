@@ -141,6 +141,8 @@ public class Config {
     public static boolean isPrinterUserTel = true;//是否打印客户联系方式
     public static boolean isPrinterCashier = true;//是否打印收银员
 
+    //商锐 盘点扫描界面没有批次限制,在Application 设置为false
+    public static boolean isNeedPici = true;//true 为限制  false为不限制
 
 
     //下载文件路径

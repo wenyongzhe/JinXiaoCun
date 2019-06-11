@@ -260,60 +260,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
     private void addDianpinGoodsData(GetClassPluResult scanOrSelectGoods){
         if(scanOrSelectGoods !=null){
             if(!scanOrSelectGoods.getEnable_batch().equals("1")){//1为有批次商品
-               //非批次商品
-                PandianDetailBeanResult obj = new PandianDetailBeanResult();
-                obj.setItem_name(scanOrSelectGoods.getItem_name());
-                obj.setItem_no(scanOrSelectGoods.getItem_no());
-                obj.setBranch_no(Config.branch_no);
-                obj.setItem_size(scanOrSelectGoods.getItem_size());
-                obj.setUnit_no(scanOrSelectGoods.getUnit_no());
-                obj.setIn_price(MyUtils.convertToFloat(scanOrSelectGoods.getPrice(),0f));
-                obj.setSale_price(MyUtils.convertToFloat(scanOrSelectGoods.getSale_price(),0f));
-                obj.setStock_qty(MyUtils.convertToInt(scanOrSelectGoods.getStock_qty(),0));
-                obj.setCheck_qty(1);
-                obj.setBalance_qty(0);
-                obj.setProduce_date("");
-                obj.setValid_date("");
-                obj.setItem_barcode("");//批次号
-                obj.setHas_stocktake(1);//已盘点
-                obj.setStatus(0);//未上传
-
-                boolean isSame = false;
-                for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                    if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
-                            && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
-                            ){
-                        //已经存在自动+1
-                        int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
-                        mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
-                        //同时更新表中单品盘点盘点数量
-                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
-                        if(isSuccess==0){
-                            AlertUtil.showToast("更新本地数据失败！");
-                        }
-                        isSame = true;
-                        break;
-                    }
-                }
-                if(!isSame){//不存在列表中 添加到列表里
-                    mAddPandianGoodsDetailData.add(obj);
-                    boolean isSuccess = BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
-                    if(!isSuccess){
-                        AlertUtil.showToast("保存本地单品盘点数据失败！");
-                    }
-                }
-                mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                upDateShowView();
+                addDianpinGoodsInfo(scanOrSelectGoods);
             }else{//是批次商品
-                mScanOrSelectGoods = scanOrSelectGoods;
-                //去取商品批次信息
-                getGoodsPiciInfo(scanOrSelectGoods.getItem_no());
+                if(Config.isNeedPici){//需要添加批次限制 (默认为true)
+                    mScanOrSelectGoods = scanOrSelectGoods;
+                    //去取商品批次信息
+                    getGoodsPiciInfo(scanOrSelectGoods.getItem_no());
+                }else{//（特殊的需求）不需要添加批次限制
+                    addDianpinGoodsInfo(scanOrSelectGoods);
+                }
             }
         }else{
             AlertUtil.showToast("不在盘点范围!");
         }
-
-
     }
     // 单品盘点 获取商品批次信息 并在商品中赋值
     private void addDianpinGoodsPiciData(GoodsPiciInfoBeanResult piciInfo ){
@@ -365,6 +324,54 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             AlertUtil.showToast("不在盘点范围!");
         }
     }
+    //添加商品信息到列表中
+    private void addDianpinGoodsInfo(GetClassPluResult scanOrSelectGoods){
+        //非批次商品
+        PandianDetailBeanResult obj = new PandianDetailBeanResult();
+        obj.setItem_name(scanOrSelectGoods.getItem_name());
+        obj.setItem_no(scanOrSelectGoods.getItem_no());
+        obj.setBranch_no(Config.branch_no);
+        obj.setItem_size(scanOrSelectGoods.getItem_size());
+        obj.setUnit_no(scanOrSelectGoods.getUnit_no());
+        obj.setIn_price(MyUtils.convertToFloat(scanOrSelectGoods.getPrice(),0f));
+        obj.setSale_price(MyUtils.convertToFloat(scanOrSelectGoods.getSale_price(),0f));
+        obj.setStock_qty(MyUtils.convertToInt(scanOrSelectGoods.getStock_qty(),0));
+        obj.setCheck_qty(1);
+        obj.setBalance_qty(0);
+        obj.setProduce_date("");
+        obj.setValid_date("");
+        obj.setItem_barcode("");//批次号
+        obj.setHas_stocktake(1);//已盘点
+        obj.setStatus(0);//未上传
+
+        boolean isSame = false;
+        for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
+            if(mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
+                    && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
+            ){
+                //已经存在自动+1
+                int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty()+1;
+                mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
+                //同时更新表中单品盘点盘点数量
+                int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsCheckQty(pdNumber,obj.getItem_no(),mSheetNo);
+                if(isSuccess==0){
+                    AlertUtil.showToast("更新本地数据失败！");
+                }
+                isSame = true;
+                break;
+            }
+        }
+        if(!isSame){//不存在列表中 添加到列表里
+            mAddPandianGoodsDetailData.add(obj);
+            boolean isSuccess = BusinessBLL.getInstance().insertPandianGoodsEntity(mSheetNo,obj);
+            if(!isSuccess){
+                AlertUtil.showToast("保存本地单品盘点数据失败！");
+            }
+        }
+        mAdapter.setListInfo(mAddPandianGoodsDetailData);
+        upDateShowView();
+    }
+
 
     // 非单品盘点 添加到列表中去
     private void addNoDianpinGoodsData(GetClassPluResult scanOrSelectGoods){
@@ -381,56 +388,15 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
 
             if(isBelongToPandian){
                 if(scanOrSelectGoods.getEnable_batch().equals("1")) {//1为有批次商品
-                    //批次商品
-                    mScanOrSelectGoods = scanOrSelectGoods;
-                    //去取商品批次信息
-                    getGoodsPiciInfo(scanOrSelectGoods.getItem_no());
+                    if(Config.isNeedPici){//需要添加批次限制 (默认为true)
+                        mScanOrSelectGoods = scanOrSelectGoods;
+                        //去取商品批次信息
+                        getGoodsPiciInfo(scanOrSelectGoods.getItem_no());
+                    }else{//（特殊的需求）不需要添加批次限制
+                        addNoDianpinGoodsInfo(scanOrSelectGoods);
+                    }
                 }else{
-                    //非批次商品
-                    PandianDetailBeanResult obj = new PandianDetailBeanResult();
-                    obj.setItem_name(scanOrSelectGoods.getItem_name());
-                    obj.setItem_no(scanOrSelectGoods.getItem_no());
-                    obj.setBranch_no(Config.branch_no);
-                    obj.setItem_size(scanOrSelectGoods.getItem_size());
-                    obj.setUnit_no(scanOrSelectGoods.getUnit_no());
-                    obj.setIn_price(MyUtils.convertToFloat(scanOrSelectGoods.getPrice(), 0f));
-                    obj.setSale_price(MyUtils.convertToFloat(scanOrSelectGoods.getSale_price(), 0f));
-                    obj.setStock_qty(MyUtils.convertToInt(scanOrSelectGoods.getStock_qty(), 0));
-                    obj.setCheck_qty(1);
-                    obj.setBalance_qty(0);
-                    obj.setProduce_date("");
-                    obj.setValid_date("");
-                    obj.setItem_barcode("");//批次号
-                    obj.setHas_stocktake(1);//已盘点
-                    obj.setStatus(0);//未上传
-
-                    boolean isSame = false;
-                    for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
-                        if (mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
-                                && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
-                                ) {
-                            //已经存在自动+1
-                            int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty() + 1;
-                            mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
-                            //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                            int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
-                            if(isSuccess==0){
-                                AlertUtil.showToast("更新本地数据失败！");
-                            }
-                            isSame = true;
-                            break;
-                        }
-                    }
-                    if (!isSame) {//不存在列表中 添加到列表里
-                        mAddPandianGoodsDetailData.add(obj);
-                        //同时更新表中盘点状态和更改盘点数量 标记为已盘点
-                        int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
-                        if(isSuccess==0){
-                            AlertUtil.showToast("更新本地数据失败！");
-                        }
-                    }
-                    mAdapter.setListInfo(mAddPandianGoodsDetailData);
-                    upDateShowView();
+                    addNoDianpinGoodsInfo(scanOrSelectGoods);
                 }
 
             }else{
@@ -493,6 +459,55 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
             AlertUtil.showToast("不在盘点范围!");
         }
     }
+    //添加商品信息到列表中
+    private void addNoDianpinGoodsInfo(GetClassPluResult scanOrSelectGoods){
+        //非批次商品
+        PandianDetailBeanResult obj = new PandianDetailBeanResult();
+        obj.setItem_name(scanOrSelectGoods.getItem_name());
+        obj.setItem_no(scanOrSelectGoods.getItem_no());
+        obj.setBranch_no(Config.branch_no);
+        obj.setItem_size(scanOrSelectGoods.getItem_size());
+        obj.setUnit_no(scanOrSelectGoods.getUnit_no());
+        obj.setIn_price(MyUtils.convertToFloat(scanOrSelectGoods.getPrice(), 0f));
+        obj.setSale_price(MyUtils.convertToFloat(scanOrSelectGoods.getSale_price(), 0f));
+        obj.setStock_qty(MyUtils.convertToInt(scanOrSelectGoods.getStock_qty(), 0));
+        obj.setCheck_qty(1);
+        obj.setBalance_qty(0);
+        obj.setProduce_date("");
+        obj.setValid_date("");
+        obj.setItem_barcode("");//批次号
+        obj.setHas_stocktake(1);//已盘点
+        obj.setStatus(0);//未上传
+
+        boolean isSame = false;
+        for (int i = 0; i < mAddPandianGoodsDetailData.size(); i++) {
+            if (mAddPandianGoodsDetailData.get(i).getItem_no().equals(scanOrSelectGoods.getItem_no())
+                    && TextUtils.isEmpty(mAddPandianGoodsDetailData.get(i).getItem_barcode())
+            ) {
+                //已经存在自动+1
+                int pdNumber = mAddPandianGoodsDetailData.get(i).getCheck_qty() + 1;
+                mAddPandianGoodsDetailData.get(i).setCheck_qty(pdNumber);
+                //同时更新表中盘点状态和更改盘点数量 标记为已盘点
+                int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(pdNumber,"1",obj.getItem_no(),mSheetNo);
+                if(isSuccess==0){
+                    AlertUtil.showToast("更新本地数据失败！");
+                }
+                isSame = true;
+                break;
+            }
+        }
+        if (!isSame) {//不存在列表中 添加到列表里
+            mAddPandianGoodsDetailData.add(obj);
+            //同时更新表中盘点状态和更改盘点数量 标记为已盘点
+            int isSuccess = BusinessBLL.getInstance().updateStocktakeGoodsStatusAndCheckQty(1,"1",obj.getItem_no(),mSheetNo);
+            if(isSuccess==0){
+                AlertUtil.showToast("更新本地数据失败！");
+            }
+        }
+        mAdapter.setListInfo(mAddPandianGoodsDetailData);
+        upDateShowView();
+    }
+
 
     @Override
     protected boolean scanBefore() {

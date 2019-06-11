@@ -90,6 +90,9 @@ public class Application extends android.app.Application{
         Config.DEVICE_TYPE = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_DEVICE_TYPE,2);
         Config.initAscallMap();
 
+        //商锐 盘点扫描界面没有批次限制
+        Config.isNeedPici = false;
+
     }
 
     public static String getIMEI() {

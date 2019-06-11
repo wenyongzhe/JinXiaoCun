@@ -94,4 +94,10 @@
 
     </LinearLayout>
 
+    <com.eshop.jinxiaocun.widget.KeyboardView
+        android:id="@+id/tv_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="false"
+        android:visibility="visible" />
 </LinearLayout>

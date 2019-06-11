@@ -94,4 +94,9 @@
     <color name="status_text">#ffffffff</color>
     <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
 
+    <color name="keyboard_bg">#BDBDBD</color>
+    <color name="iv_back_bg">#F5F5F5</color>
+    <color name="key_normal_bg">#F5F5F5</color>
+    <color name="key_pressed_bg">#33000000</color>
+    <color name="btn_gray">#E0E0E0</color>
 </resources>

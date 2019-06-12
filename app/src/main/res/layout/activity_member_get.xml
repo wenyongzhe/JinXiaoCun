@@ -21,6 +21,13 @@
             android:orientation="horizontal"
             >
 
+            <ImageView
+                android:id="@+id/iv_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/scan"
+                />
+
             <EditText
                 android:id="@+id/et_search"
                 style="@style/EditText_Grey"

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.utils.DensityUtil;
@@ -32,12 +33,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKeyboardClickListener{
+public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKeyboardClickListener, View.OnClickListener {
 
     @BindView(R.id.txtCountN)
     EditText txtCountN;
-    @BindView(R.id.tv_key)
-    KeyboardView keyboardView;
+    @BindView(R.id.iv_plus)
+    ImageView iv_plus;
+    @BindView(R.id.iv_minus)
+    ImageView iv_minus;
+
+
+//    @BindView(R.id.tv_key)
+//    KeyboardView keyboardView;
 
     private List<String> keyboardNumbers;
     private boolean refreshStartPoint = true;
@@ -54,10 +61,10 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
 
         ButterKnife.bind(this);
 
-        keyboardView.setOnKeyBoardClickListener( this);
-        keyboardView.recyclerView.setOnTouchListener(onTouchListener);
+//        keyboardView.setOnKeyBoardClickListener( this);
+//        keyboardView.recyclerView.setOnTouchListener(onTouchListener);
 
-        keyboardNumbers = keyboardView.getKeyboardWords();
+//        keyboardNumbers = keyboardView.getKeyboardWords();
 
         txtCountN.setFocusable(true);
         txtCountN.setFocusableInTouchMode(true);
@@ -66,16 +73,16 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
         Intent intent = getIntent();
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
-        txtCountN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!keyboardView.isVisible()) {
-                    keyboardView.show();
-                }
-            }
-        });
+//        txtCountN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!keyboardView.isVisible()) {
+//                    keyboardView.show();
+//                }
+//            }
+//        });
 
-        closeEditTextKeyboard();
+//        closeEditTextKeyboard();
         initGestureDetector();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);
@@ -90,13 +97,16 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
         localLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(localLayoutParams);
         mH.sendEmptyMessageDelayed(2,300);
+
+        iv_plus.setOnClickListener(this);
+        iv_minus.setOnClickListener(this);
     }
 
     Handler mH = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-//            showSoftKeyboard();
+            showSoftKeyboard();
         }
     };
 
@@ -310,6 +320,27 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
 //                txtCountN.setCompoundDrawablesWithIntrinsicBounds(mDrawable, null, null, null);
 //                findViewById(R.id.ai_long_tv_confirm).setBackgroundResource(R.drawable.bg_determine_disable);
 //            }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        String editText = txtCountN.getText().toString();
+        if(editText == null || editText.equals("")){
+            editText = "0";
+        }
+        int count = 1;
+        switch (view.getId()){
+            case R.id.iv_plus:
+                count = Integer.decode(editText)+1;
+                txtCountN.setText(count+"");
+                break;
+            case R.id.iv_minus:
+                if(Integer.decode(editText)>0) {
+                    count = Integer.decode(editText) - 1;
+                    txtCountN.setText(count + "");
+                }
+                break;
         }
     }
 }

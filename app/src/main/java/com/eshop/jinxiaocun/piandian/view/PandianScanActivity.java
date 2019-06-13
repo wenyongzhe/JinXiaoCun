@@ -810,9 +810,19 @@ public class PandianScanActivity extends CommonBaseScanActivity implements INetW
                         addNoDianpinGoodsData(selectGoodsList.get(0));
                     }
                 }else{
-                    Intent intent = new Intent(PandianScanActivity.this,SelectPandianGoodsListActivity.class);
-                    intent.putExtra("GoodsInfoList", (Serializable) selectGoodsList);
-                    startActivityForResult(intent,44);
+                    if(Config.isNeedPici){//有批次限制
+                        Intent intent = new Intent(PandianScanActivity.this,SelectPandianGoodsListActivity.class);
+                        intent.putExtra("GoodsInfoList", (Serializable) selectGoodsList);
+                        startActivityForResult(intent,44);
+                    }else{//没有批次限制
+                        for (GetClassPluResult item : selectGoodsList) {
+                            if(isDianpin){//单品盘点
+                                addDianpinGoodsData(item);
+                            }else{
+                                addNoDianpinGoodsData(item);
+                            }
+                        }
+                    }
                 }
             }else{
                 AlertUtil.showToast("该条码没有对应的商品数据!");

@@ -1,8 +1,10 @@
 package com.eshop.jinxiaocun.peisong.view;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -46,6 +48,7 @@ public class PeisongRukuListActivity extends CommonBaseListActivity implements I
     @BindView(R.id.dt_endDate)
     TextView mTvEndDate;
 
+    private DatePickerDialog mStartDate,mEndDate;
     private PeisongRukuListAdapter mAdapter;
     private List<DanJuMainBeanResultItem> mListInfo = new ArrayList<>();
     private IDanJuList mDanJuList;
@@ -132,51 +135,42 @@ public class PeisongRukuListActivity extends CommonBaseListActivity implements I
 
     @OnClick(R.id.dt_startDate)
     void OnStartDate(){
-        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
-                .setListener(listenerStart)
-                .setInitialDate(new Date())
-                .build()
-                .show();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mStartDate = new DatePickerDialog(this,listenerStart,year,month,day);
+        mStartDate.show();
     }
 
-    private SlideDateTimeListener listenerStart = new SlideDateTimeListener() {
+    DatePickerDialog.OnDateSetListener listenerStart = new DatePickerDialog.OnDateSetListener() {
         @Override
-        public void onDateTimeSet(Date date) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String strDate = format.format(calendar.getTime());
-            mTvStartDate.setText(strDate);
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            // 获取月，这里需要需要月份的范围为0~11，因此获取月份的时候需要+1才是当前月份值
+            int m = month+1;
+            String strMonth = m>9?m+"":"0"+m;
+            mTvStartDate.setText(year+"-"+strMonth+"-"+dayOfMonth+" 00:00:00");
             getPeisongRukuData();
-        }
-        @Override
-        public void onDateTimeCancel() {
-
         }
     };
 
     @OnClick(R.id.dt_endDate)
     void OnEndDate(){
-        new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
-                .setListener(listenerEnd)
-                .setInitialDate(new Date())
-                .build()
-                .show();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mEndDate = new DatePickerDialog(this,listenerEnd,year,month,day);
+        mEndDate.show();
     }
-
-    private SlideDateTimeListener listenerEnd = new SlideDateTimeListener() {
+    DatePickerDialog.OnDateSetListener listenerEnd = new DatePickerDialog.OnDateSetListener() {
         @Override
-        public void onDateTimeSet(Date date) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String strDate = format.format(calendar.getTime());
-            mTvEndDate.setText(strDate);
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            // 获取月，这里需要需要月份的范围为0~11，因此获取月份的时候需要+1才是当前月份值
+            int m = month+1;
+            String strMonth = m>9?m+"":"0"+m;
+            mTvEndDate.setText(year+"-"+strMonth+"-"+dayOfMonth+" 23:59:59");
             getPeisongRukuData();
-        }
-        @Override
-        public void onDateTimeCancel() {
-
         }
     };
 
@@ -346,6 +340,26 @@ public class PeisongRukuListActivity extends CommonBaseListActivity implements I
         mAdapter.setItemClickPosition(-1);
         mSelectMainBean = null;
         getPeisongRukuData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mListInfo!=null){
+            mListInfo.clear();
+            mListInfo=null;
+        }
+
+        if(mStartDate!=null &&mStartDate.isShowing()){
+            mStartDate.dismiss();
+            mStartDate=null;
+        }
+
+        if(mEndDate!=null &&mEndDate.isShowing()){
+            mEndDate.dismiss();
+            mEndDate=null;
+        }
+
     }
 
 }

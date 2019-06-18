@@ -43,6 +43,7 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     private TwoListView mTwoListView;
     ISelectGoods mISelectGoods;
     private String type_no = "";
+    private boolean isLingshou = false;
 
     public static SelectGoodsFragment getInstance(String type_no) {
         SelectGoodsFragment sf = new SelectGoodsFragment(type_no);
@@ -68,6 +69,8 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
         mQryClassResult = new ArrayList<QryClassResult>();
         mGetClassPluResult = new ArrayList<GetClassPluResult>();
         selectList = (List<GetClassPluResult>) getActivity().getIntent().getSerializableExtra("selectList");
+        isLingshou = getActivity().getIntent().getBooleanExtra("lingshou",false);
+
         if(selectList == null){
             selectList = new ArrayList<GetClassPluResult>();
         }
@@ -193,15 +196,16 @@ public class SelectGoodsFragment extends BaseListFragment implements INetWorResu
     public class DetailListListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//            try {
-//                selectList.add(mDetaillistTemp.get(i-1));
-//                Intent mIntent = new Intent();
-//                mIntent.putExtra("SelectList", (Serializable) selectList);
-//                getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
-//                getActivity().finish();
-//            }catch (Exception e){
-//                Log.e("--",""+e.getMessage());
-//            }
+            try {
+                selectList.clear();
+                selectList.add(mDetaillistTemp.get(i-1));
+                Intent mIntent = new Intent();
+                mIntent.putExtra("SelectList", (Serializable) selectList);
+                getActivity().setResult(Config.RESULT_SELECT_GOODS,mIntent);
+                getActivity().finish();
+            }catch (Exception e){
+                Log.e("--",""+e.getMessage());
+            }
 
         }
     }

@@ -173,6 +173,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     mGetClassPluResultList.addAll(mListData);
                 }
                 mIntent.putExtra("selectList", (Serializable) mGetClassPluResultList);
+                mIntent.putExtra("lingshou",true);
                 startActivityForResult(mIntent, 100);
             }
         });

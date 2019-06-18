@@ -26,5 +26,6 @@ public interface IMemberList {
     void getIntegralExchangeGoods(String cardNo,float integral);
     //积分兑换
     void integralExchange(IntegralExchangeBean bean);
-
+    //1.21查询计次项目  （t_rm_vip_stored）
+    void qryCountInfo(String  sheet_no);
 }

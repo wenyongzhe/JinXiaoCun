@@ -16,6 +16,8 @@ import com.eshop.jinxiaocun.huiyuan.bean.IntegralSubtractBean;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckBean;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
+import com.eshop.jinxiaocun.jichi.JichiChaxunBean;
+import com.eshop.jinxiaocun.jichi.JichiChaxunResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
@@ -131,6 +133,38 @@ public class MemberImp implements IMemberList{
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new IntegralExchangeInterface());
     }
+
+    @Override
+    public void qryCountInfo(String sheet_no) {
+        JichiChaxunBean bean = new JichiChaxunBean();
+        bean.JsonData.sheet_no = sheet_no;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new JichiChaxunInterface());
+    }
+
+    //计次查询
+    class JichiChaxunInterface implements IResponseListener{
+        @Override
+        public void handleError(Object event) {}
+        @Override
+        public void handleResult(Response event, String result) {}
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                List<JichiChaxunResult> listResult =  mJsonFormatImp.JsonToList(jsonData,JichiChaxunResult.class);
+                if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_OK,listResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     //新增会员
     class AddMemberInterface implements IResponseListener{

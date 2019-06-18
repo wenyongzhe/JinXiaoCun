@@ -22,19 +22,19 @@ public class JichiMenuActivity extends CommonBaseActivity {
     protected void initView() {
         super.initView();
 
-        setTopToolBar("配送管理",R.mipmap.ic_left_light,"",0,"");
+        setTopToolBar("计次管理",R.mipmap.ic_left_light,"",0,"");
 
     }
 
 
-    @OnClick(R.id.btn_yaohuo_order)
+    @OnClick(R.id.btn_jichi)
     public void onClickYaohuoOrder() {
-        startActivity(new Intent(this, YaohuoOrderListActivity.class));
+        startActivity(new Intent(this, JichiActivity.class));
     }
 
-    @OnClick(R.id.btn_peisong_ruku)
+    @OnClick(R.id.btn_jichi_chaxun)
     public void onClickPeisongRuku() {
-        startActivity(new Intent(this, PeisongRukuListActivity.class));
+        startActivity(new Intent(this, JichiChaxunActivity.class));
     }
 
 

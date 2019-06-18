@@ -23,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class JichiActivity extends CommonBaseActivity implements INetWorResult {
+public class JichiChaxunActivity extends CommonBaseActivity implements INetWorResult {
 
 
     @BindView(R.id.et_search)
@@ -46,7 +46,7 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_member_jichi;
+        return R.layout.activity_member_jichi_chaxun;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
             refreshUIByData(Config.mMemberInfo);
         }
 
-        setTopToolBar("计次消费", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBar("计次查询", R.mipmap.ic_left_light, "", 0, "");
         mEtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -66,7 +66,7 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
                         AlertUtil.showToast("请输入卡号/手机号/姓名");
                         return false;
                     }
-                    AlertUtil.showNoButtonProgressDialog(JichiActivity.this,"正在读取卡信息，请稍后...");
+                    AlertUtil.showNoButtonProgressDialog(JichiChaxunActivity.this,"正在读取卡信息，请稍后...");
                     mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
                     hideSoftInput();
                     return true;

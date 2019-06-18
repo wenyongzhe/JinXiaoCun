@@ -49,6 +49,7 @@
     <string name="menu_yaohuo_order">要货单</string>
     <string name="menu_member_manager">会员</string>
     <string name="menu_qudan">销售取单</string>
+    <string name="menu_jichi_manage">会员计次</string>
 
     <!--销售-->
     <string name="item_title_xiaoshoudan">销售单</string>

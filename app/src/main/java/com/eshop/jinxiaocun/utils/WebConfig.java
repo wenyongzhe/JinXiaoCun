@@ -57,6 +57,7 @@ public class WebConfig {
     public static final String W_SALETEMP = "W-SALETEMP";//销售预售/结转
     public static final String checksaleman = "checksaleman";//检查营业员
     public static final String QryCountInfo = "QryCountInfo";//1.21查询计次项目  （t_rm_vip_stored）
+    public static final String SaveCountSale = "SaveCountSale";//1.22计次项目销售
 
 
     public static String getPosLogin() {

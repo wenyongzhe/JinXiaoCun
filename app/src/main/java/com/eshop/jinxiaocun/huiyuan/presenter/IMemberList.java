@@ -28,4 +28,7 @@ public interface IMemberList {
     void integralExchange(IntegralExchangeBean bean);
     //1.21查询计次项目  （t_rm_vip_stored）
     void qryCountInfo(String  sheet_no);
+    //1.22计次项目销售
+    void SaveCountSale(String  sheet_no);
+
 }

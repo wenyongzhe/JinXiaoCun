@@ -18,10 +18,14 @@ import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
 import com.eshop.jinxiaocun.jichi.JichiChaxunBean;
 import com.eshop.jinxiaocun.jichi.JichiChaxunResult;
+import com.eshop.jinxiaocun.jichi.JichiSaveBean;
+import com.eshop.jinxiaocun.jichi.JichiSaveResult;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
@@ -154,7 +158,7 @@ public class MemberImp implements IMemberList{
             try {
                 List<JichiChaxunResult> listResult =  mJsonFormatImp.JsonToList(jsonData,JichiChaxunResult.class);
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_OK,listResult);
+                    mHandler.handleResule(Config.MESSAGE_JICI_CHAXUN_OK,listResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,msg);
                 }
@@ -165,6 +169,43 @@ public class MemberImp implements IMemberList{
         }
     }
 
+    @Override
+    public void SaveCountSale(String sheet_no) {
+        JichiSaveBean bean = new JichiSaveBean();
+        bean.JsonData.sheet_no = sheet_no;
+        bean.JsonData.branch_no = Config.branch_no;
+        bean.JsonData.consum_count = "1";
+        bean.JsonData.oper_oper = Config.UserName;
+        bean.JsonData.oper_date = DateUtility.getCurrentTime();
+        bean.JsonData.memo = "";
+        bean.JsonData.aprove = "1";
+        bean.JsonData.aprove_date = bean.JsonData.oper_date;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SaveCountSaleInterface());
+    }
+
+    //计次保存
+    class SaveCountSaleInterface implements IResponseListener{
+        @Override
+        public void handleError(Object event) {}
+        @Override
+        public void handleResult(Response event, String result) {}
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                List<JichiSaveResult> listResult =  mJsonFormatImp.JsonToList(jsonData, JichiSaveResult.class);
+                if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
+                    mHandler.handleResule(Config.MESSAGE_JICI_CHAXUN_OK,listResult);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 
     //新增会员
     class AddMemberInterface implements IResponseListener{

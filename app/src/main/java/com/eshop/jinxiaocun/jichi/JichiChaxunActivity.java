@@ -1,11 +1,15 @@
 package com.eshop.jinxiaocun.jichi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -16,7 +20,9 @@ import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.zxing.android.CaptureActivity;
 
 import java.util.List;
 
@@ -40,6 +46,8 @@ public class JichiChaxunActivity extends CommonBaseActivity implements INetWorRe
     TextView mTvBalance;//余额
     @BindView(R.id.tv_current_integral)
     TextView mTvCurrentIntegral;// 当前积分
+    @BindView(R.id.iv_scan)
+    ImageView iv_scan;
 
     private IMemberList mApi;
     public List<MemberCheckResultItem> data;
@@ -74,10 +82,32 @@ public class JichiChaxunActivity extends CommonBaseActivity implements INetWorRe
                 return false;
             }
         });
+        iv_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JichiChaxunActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, Config.REQ_QR_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //当该Activity接收到NFC标签时，运行该方法
+        //调用工具方法，读取NFC数据
+        try {
+            String str = NfcUtils.resolveIntent(intent);
+            mEtSearch.setText(str);
+            onClickSearch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void initData() {
+        //nfc初始化设置
+        NfcUtils nfcUtils = new NfcUtils(this);
     }
 
     private void refreshUIByData(MemberCheckResultItem data) {
@@ -137,4 +167,36 @@ public class JichiChaxunActivity extends CommonBaseActivity implements INetWorRe
             inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //开启前台调度系统
+        if(NfcUtils.mNfcAdapter!=null){
+            NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //关闭前台调度系统
+        if(NfcUtils.mNfcAdapter!=null){
+            NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(codedContent != null && !codedContent.equals("")){
+                mEtSearch.setText(codedContent);
+                onClickSearch();
+            }
+        }
+
+    }
+
 }

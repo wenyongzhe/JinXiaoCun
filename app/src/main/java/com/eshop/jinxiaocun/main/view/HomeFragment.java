@@ -138,7 +138,7 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 8://记次
-                intent.setClass(Application.mContext, JichiMenuActivity.class);
+                intent.setClass(Application.mContext, JichiActivity.class);
                 startActivity(intent);
                 break;
 //            case 8://批发销售单

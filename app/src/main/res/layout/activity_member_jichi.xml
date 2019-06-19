@@ -291,7 +291,7 @@
         />
 
     <Button
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="90dp"
         android:id="@+id/bt_ok"
         android:text="打印"
         android:textColor="@color/white"

@@ -12,6 +12,8 @@ import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.landicorp.android.eptapi.device.RFCardReader;
+import com.landicorp.android.eptapi.exception.RequestException;
 import com.zxing.android.CaptureActivity;
 
 import java.io.UnsupportedEncodingException;
@@ -91,6 +93,28 @@ public class SaveMemberActivity extends MemberCheckActivity {
         //开启前台调度系统
         if(NfcUtils.mNfcAdapter!=null){
             NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
+        }
+
+        try {
+            RFCardReader mRFCardReader = RFCardReader.getInstance();
+            mRFCardReader.searchCard(new RFCardReader.OnSearchListener() {
+                @Override
+                public void onCardPass(int i) {
+
+                }
+
+                @Override
+                public void onFail(int i) {
+
+                }
+
+                @Override
+                public void onCrash() {
+
+                }
+            });
+        } catch (RequestException e) {
+            e.printStackTrace();
         }
     }
 

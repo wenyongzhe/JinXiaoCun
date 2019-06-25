@@ -1,11 +1,14 @@
 package com.eshop.jinxiaocun.huiyuan.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -14,9 +17,11 @@ import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
+import com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.zxing.android.CaptureActivity;
 
 
 import java.util.List;
@@ -47,6 +52,8 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
     TextView mTvBalance;//余额
     @BindView(R.id.tv_current_integral)
     TextView mTvCurrentIntegral;// 当前积分
+    @BindView(R.id.iv_scan)
+    ImageView iv_scan;
 
     private IMemberList mApi;
     public List<MemberCheckResultItem> data;
@@ -79,6 +86,13 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
                     return true;
                 }
                 return false;
+            }
+        });
+        iv_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MemberCheckActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, Config.REQ_QR_CODE);
             }
         });
     }
@@ -145,5 +159,17 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if (codedContent != null && !codedContent.equals("")) {
+                mEtSearch.setText(codedContent);
+                onClickSearch();
+            }
+            return;
+        }
+    }
 }

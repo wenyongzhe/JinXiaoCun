@@ -54,7 +54,7 @@ public class HomeFragment extends BaseFragment {
 //            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
             R.drawable.peisong,
-            R.drawable.menber
+//            R.drawable.menber
     };
     private int[] nameIds = {
             R.string.item_message_lingshou,
@@ -64,8 +64,8 @@ public class HomeFragment extends BaseFragment {
             R.string.menu_caigoudan,
             R.string.menu_shanpingchaxun,
             R.string.menu_pifa_xiaoshou,
-            R.string.menu_peisong_manager,
-            R.string.menu_jichi_manage
+            R.string.menu_peisong_manager
+//            R.string.menu_jichi_manage
 //            R.string.menu_diaobo_manage,
 //            R.string.menu_peisong_manager,
     };
@@ -138,8 +138,8 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 8://记次
-                intent.setClass(Application.mContext, JichiActivity.class);
-                startActivity(intent);
+//                intent.setClass(Application.mContext, JichiActivity.class);
+//                startActivity(intent);
                 break;
 //            case 8://批发销售单
 //                intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);

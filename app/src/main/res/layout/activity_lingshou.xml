@@ -11,13 +11,23 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/layout_item_heigth">
 
+        <ImageView
+            android:id="@+id/iv_scan"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/scan"
+            />
+
         <EditText
             android:id="@+id/et_barcode"
             android:hint="@string/list_item_BarCode"
-            android:layout_margin="10dp"
             android:cursorVisible="false"
+            android:layout_margin="10dp"
             android:selectAllOnFocus="true"
             style="@style/EditText_Grey_Border"
+            android:layout_gravity="center_vertical"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/layout_margin35"/>
         <ImageButton

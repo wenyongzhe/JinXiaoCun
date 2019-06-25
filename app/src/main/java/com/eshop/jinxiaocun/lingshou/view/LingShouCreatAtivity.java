@@ -28,6 +28,7 @@ import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.QreShanpingActivity;
 import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
+import com.eshop.jinxiaocun.jichi.JichiActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetPluPriceBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
@@ -44,6 +45,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinZheKouCreatDialog;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.PiChiDialog;
+import com.zxing.android.CaptureActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -81,7 +83,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     Button btn_vip;
     @BindView(R.id.bt_next)
     Button bt_next;
-
+    @BindView(R.id.iv_scan)
+    ImageView iv_scan;
 
     private List<GetClassPluResult> mListData = new ArrayList<>();
     private ILingshouScan mLingShouScanImp;
@@ -206,6 +209,14 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 btn_zhekou(mListData.get(i));
             }
         });
+
+        iv_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LingShouCreatAtivity.this, CaptureActivity.class);
+                startActivityForResult(intent, Config.REQ_QR_CODE);
+            }
+        });
     }
 
     void btn_zhekou(GetClassPluResult mGetClassPluResult) {
@@ -262,6 +273,15 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(codedContent != null && !codedContent.equals("")){
+                et_barcode.setText(codedContent);
+                scanData(codedContent);
+            }
+            return;
+        }
         double temprice;
         switch (resultCode) {
             case Config.RESULT_SELECT_GOODS:
@@ -415,6 +435,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 mGetClassPluResultList = (List<GetClassPluResult>) o;
                 if (mGetClassPluResultList != null && mGetClassPluResultList.size() == 0) {
                     AlertUtil.showAlert(LingShouCreatAtivity.this, "提示", "没有商品");
+                    et_barcode.setText("");
                     return;
                 }
                 if (mGetClassPluResultList != null && mGetClassPluResultList.size() > 1) {

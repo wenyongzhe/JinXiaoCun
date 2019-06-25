@@ -26,6 +26,7 @@ import com.eshop.jinxiaocun.bluetoothprinter.entity.BluetoothService;
 import com.eshop.jinxiaocun.bluetoothprinter.view.SettingBluetoothActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderScanAdapter;
 import com.eshop.jinxiaocun.db.BusinessBLL;
+import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
@@ -49,6 +50,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
+import com.zxing.android.CaptureActivity;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -247,6 +249,17 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
             return ;
         }
         scanResultData(mEtBarcode.getText().toString().trim());
+    }
+
+    //调用摄像头
+    @OnClick(R.id.iv_scan)
+    protected void onClickScan(){
+        if(TextUtils.isEmpty(mTvProvider.getText().toString().trim())){
+            AlertUtil.showToast("请选择供应商，再添加商品!");
+            return ;
+        }
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, Config.REQ_QR_CODE);
     }
 
     @OnClick(R.id.btn_print)
@@ -656,6 +669,16 @@ public class CaigouOrderScanActivity extends CommonBaseScanActivity implements I
         if(requestCode == 55 && resultCode == RESULT_OK){
             String remarks = data.getStringExtra("Remarks");
             AlertUtil.showToast("修改好了 "+remarks);
+        }
+
+        //调用摄像头扫描返回的数据
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(!TextUtils.isEmpty(codedContent)){
+                scanResultData(codedContent);
+            }else{
+                AlertUtil.showToast("扫描内容为空!");
+            }
         }
 
     }

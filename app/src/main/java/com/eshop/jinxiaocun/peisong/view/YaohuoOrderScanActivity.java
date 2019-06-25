@@ -43,6 +43,7 @@ import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPriceDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
+import com.zxing.android.CaptureActivity;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -230,6 +231,17 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
             return;
         }
         scanResultData(mEtBarcode.getText().toString().trim());
+    }
+
+    //调用摄像头
+    @OnClick(R.id.iv_scan)
+    protected void onClickScan(){
+        if(TextUtils.isEmpty(mTvFhStore.getText().toString().trim())){
+            AlertUtil.showToast("请选择发货门店，再添加商品!");
+            return;
+        }
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, Config.REQ_QR_CODE);
     }
 
     @OnClick(R.id.btn_print)
@@ -638,6 +650,16 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 //            entity.setSale_qnty(TextUtils.isEmpty(entity.getSale_qnty())?"1":entity.getSale_qnty());
 //            addGoodsData(entity);
 //        }
+
+        //调用摄像头扫描返回的数据
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(!TextUtils.isEmpty(codedContent)){
+                scanResultData(codedContent);
+            }else{
+                AlertUtil.showToast("扫描内容为空!");
+            }
+        }
 
     }
 

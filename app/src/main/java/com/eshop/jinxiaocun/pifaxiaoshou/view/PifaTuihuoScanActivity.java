@@ -45,6 +45,7 @@ import com.eshop.jinxiaocun.widget.DrawableTextView;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.eshop.jinxiaocun.widget.ModifyGoodsPriceDialog;
 import com.eshop.jinxiaocun.widget.ModifyPriceDialog;
+import com.zxing.android.CaptureActivity;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -189,6 +190,17 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             return ;
         }
         scanResultData(mEtBarcode.getText().toString().trim());
+    }
+
+    //调用摄像头
+    @OnClick(R.id.iv_scan)
+    protected void onClickScan(){
+        if(TextUtils.isEmpty(mTvUser.getText().toString().trim())){
+            AlertUtil.showToast("请选择客户，再添加商品!");
+            return ;
+        }
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, Config.REQ_QR_CODE);
     }
 
     @OnClick(R.id.btn_citeOrder)
@@ -702,7 +714,15 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
             }
         }
 
-
+        //调用摄像头扫描返回的数据
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(!TextUtils.isEmpty(codedContent)){
+                scanResultData(codedContent);
+            }else{
+                AlertUtil.showToast("扫描内容为空!");
+            }
+        }
     }
 
     //处理引单过来的业务

@@ -16,6 +16,11 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.CrashHandler;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.landicorp.android.eptapi.DeviceService;
+import com.landicorp.android.eptapi.exception.ReloginException;
+import com.landicorp.android.eptapi.exception.RequestException;
+import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
+import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
 
 import java.util.List;
 import java.util.Stack;
@@ -92,6 +97,18 @@ public class Application extends android.app.Application{
 
         //商锐 盘点扫描界面没有批次限制
         Config.isNeedPici = false;
+
+        try {
+            DeviceService.login(this); //this 此处为调用接口的上下文
+        } catch (ServiceOccupiedException e) {
+            e.printStackTrace();
+        } catch (ReloginException e) {
+            e.printStackTrace();
+        } catch (UnsupportMultiProcess unsupportMultiProcess) {
+            unsupportMultiProcess.printStackTrace();
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -187,5 +204,6 @@ public class Application extends android.app.Application{
             e.printStackTrace();
         }
     }
+
 
 }

@@ -205,6 +205,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
         // 用返回的 driver 进行读卡等操作
             byte[] byteStr = getLastCardSerialNo();
             byte[] byteStr2 = getLastResponseData();
+
         }
         @Override
         public void onActivateError(int code) {

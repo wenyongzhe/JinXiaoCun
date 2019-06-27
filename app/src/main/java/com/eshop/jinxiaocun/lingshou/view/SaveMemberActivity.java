@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.landicorp.android.eptapi.card.RFCpuCardDriver;
 import com.landicorp.android.eptapi.card.RFDriver;
 import com.landicorp.android.eptapi.device.RFCardReader;
 import com.landicorp.android.eptapi.exception.RequestException;
@@ -206,8 +207,8 @@ public class SaveMemberActivity extends MemberCheckActivity {
         public void onCardActivate(RFDriver driver) {
         // 成功激活时触发
         // 用返回的 driver 进行读卡等操作
-            byte[] byteStr = getLastCardSerialNo();
-            byte[] byteStr2 = getLastResponseData();
+            RFCpuCardDriver mRFCpuCardDriver = (RFCpuCardDriver) driver;
+//            mRFCpuCardDriver.cardTransparent()
         }
         @Override
         public void onActivateError(int code) {

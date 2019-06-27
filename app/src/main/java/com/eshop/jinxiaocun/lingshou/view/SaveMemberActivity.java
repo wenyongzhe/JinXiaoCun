@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.lingshou.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.landicorp.android.eptapi.card.RFDriver;
 import com.landicorp.android.eptapi.device.RFCardReader;
 import com.landicorp.android.eptapi.exception.RequestException;
+import com.landicorp.android.eptapi.utils.StringUtil;
 import com.zxing.android.CaptureActivity;
 
 import java.io.UnsupportedEncodingException;
@@ -107,31 +109,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
         try {
             mRFCardReader = RFCardReader.getInstance();
             mRFCardReader.turnOnLed(LED_GREEN);
-            //mRFCardReader.searchCard(onSearchListener);
-
-
-            mRFCardReader.searchCardAndActivate(new RFCardReader.OnSearchAndActivateListenerEx() {
-                @Override
-                public void onSuccess(RFDriver rfDriver, byte[] bytes) {
-                    byte[] bytes2 = bytes;
-                    String dd = NfcUtils.ByteArrayToListString(bytes2);
-                }
-
-                @Override
-                public void onSearchFail(int i) {
-
-                }
-
-                @Override
-                public void onActivateFail(int i) {
-
-                }
-
-                @Override
-                public void onCrash() {
-
-                }
-            });
+            mRFCardReader.searchCard(onSearchListener);
         } catch (RequestException e) {
             e.printStackTrace();
         }
@@ -164,6 +142,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
             }
         }
     }
+
 
     //定义寻卡监听器
     RFCardReader.OnSearchListener onSearchListener = new
@@ -205,8 +184,6 @@ public class SaveMemberActivity extends MemberCheckActivity {
                     break;
                 case ERROR_MULTIERR:// 感应区内多卡存在
                     break;
-                // case ERROR_MUTILERR://感应区内多卡存在
-                // break;
                 case ERROR_PROTERR:// 卡片返回数据不符合规范要求
                     break;
                 case ERROR_TRANSERR:// 通信错误
@@ -231,7 +208,6 @@ public class SaveMemberActivity extends MemberCheckActivity {
         // 用返回的 driver 进行读卡等操作
             byte[] byteStr = getLastCardSerialNo();
             byte[] byteStr2 = getLastResponseData();
-
         }
         @Override
         public void onActivateError(int code) {
@@ -255,5 +231,6 @@ public class SaveMemberActivity extends MemberCheckActivity {
         public void onCrash() {
         //设备服务崩溃处理
         }
+
     };
 }

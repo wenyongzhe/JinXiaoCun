@@ -198,7 +198,7 @@ public class NfcUtils {
     /**
      * 将字节数组转换字符数组
      */
-    private static String ByteArrayToListString(byte[] inarray) {
+    public static String ByteArrayToListString(byte[] inarray) {
         int i, j, in;
         String out = "";
 

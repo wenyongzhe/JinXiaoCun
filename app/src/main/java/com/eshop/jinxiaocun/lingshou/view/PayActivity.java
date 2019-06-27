@@ -996,6 +996,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 format.setHzSize(Printer.Format.HZ_DOT16x16);
                 printer.setFormat(format);
                 printer.printText(mes);
+                /** 进纸 2 行
+                 */
+                printer.feedLine(2);
             }
             @Override
             public void onFinish(int code) {

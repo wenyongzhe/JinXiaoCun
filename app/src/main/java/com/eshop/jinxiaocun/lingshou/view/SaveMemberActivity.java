@@ -18,6 +18,7 @@ import com.landicorp.android.eptapi.exception.RequestException;
 import com.zxing.android.CaptureActivity;
 
 import java.io.UnsupportedEncodingException;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -106,7 +107,31 @@ public class SaveMemberActivity extends MemberCheckActivity {
         try {
             mRFCardReader = RFCardReader.getInstance();
             mRFCardReader.turnOnLed(LED_GREEN);
-            mRFCardReader.searchCard(onSearchListener);
+            //mRFCardReader.searchCard(onSearchListener);
+
+
+            mRFCardReader.searchCardAndActivate(new RFCardReader.OnSearchAndActivateListenerEx() {
+                @Override
+                public void onSuccess(RFDriver rfDriver, byte[] bytes) {
+                    byte[] bytes2 = bytes;
+                    String dd = NfcUtils.ByteArrayToListString(bytes2);
+                }
+
+                @Override
+                public void onSearchFail(int i) {
+
+                }
+
+                @Override
+                public void onActivateFail(int i) {
+
+                }
+
+                @Override
+                public void onCrash() {
+
+                }
+            });
         } catch (RequestException e) {
             e.printStackTrace();
         }
@@ -190,6 +215,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
                     break;
             }
         }
+
         @Override
         public void onCrash() {
             //设备服务崩溃处理

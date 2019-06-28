@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.landicorp.android.eptapi.card.MifareDriver;
 import com.landicorp.android.eptapi.card.RFCpuCardDriver;
 import com.landicorp.android.eptapi.card.RFDriver;
 import com.landicorp.android.eptapi.device.RFCardReader;
@@ -205,10 +206,10 @@ public class SaveMemberActivity extends MemberCheckActivity {
     RFCardReader.OnActiveListener() {
         @Override
         public void onCardActivate(RFDriver driver) {
-        // 成功激活时触发
-        // 用返回的 driver 进行读卡等操作
-            RFCpuCardDriver mRFCpuCardDriver = (RFCpuCardDriver) driver;
-//            mRFCpuCardDriver.cardTransparent()
+            // 成功激活时触发
+            // 用返回的 driver 进行读卡等操作
+            MifareDriver mMifareDriver = (MifareDriver) driver;
+            NfcUtils.readMifareCard(mMifareDriver);
         }
         @Override
         public void onActivateError(int code) {

@@ -15,16 +15,14 @@ import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.eshop.jinxiaocun.BuildConfig;
-import com.eshop.jinxiaocun.base.view.Application;
+import com.landicorp.android.eptapi.card.MifareDriver;
+import com.landicorp.android.eptapi.exception.RequestException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 public class NfcUtils {
     //nfc
@@ -122,6 +120,81 @@ public class NfcUtils {
         return "";
     }
 
+    //认证扇区所需数据
+    final static int blockNo = 8;
+    final static int sectorNo = 2;
+    final static String keyA = "FFFFFFFFFFFF";
+    final static byte[] key = hexStringToByte(keyA);
+    //获取认证结果监听器
+    static MifareDriver.OnResultListener authListener = new MifareDriver.OnResultListener() {
+        @Override
+        public void onSuccess() {
+            try {
+                mRFDriver.authBlock(blockNo, MifareDriver.KEY_A, key, new MifareDriver.OnResultListener() {
+                    @Override
+                    public void onSuccess() {
+                        try {
+                            mRFDriver.readBlock(blockNo, new MifareDriver.OnReadListener() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    String dd = ByteArrayToListString(bytes);
+                                }
+
+                                @Override
+                                public void onFail(int i) {
+                                }
+
+                                @Override
+                                public void onCrash() {
+                                }
+                            });
+                        } catch (RequestException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFail(int i) {
+
+                    }
+
+                    @Override
+                    public void onCrash() {
+
+                    }
+                });
+
+            } catch (RequestException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+        @Override
+        public void onFail(int arg0) {
+        }
+        @Override
+        public void onCrash() {
+        }
+    };
+
+    static MifareDriver mRFDriver;
+    public static String readMifareCard(MifareDriver rFDriver) {
+        //认证扇区
+        try {
+            mRFDriver = rFDriver;
+            mRFDriver.authSector(sectorNo, MifareDriver.KEY_A, key, authListener);
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return "";
+    }
+
     public static byte[] hexStringToByte(String hex) {
         int len = (hex.length() / 2);
         byte[] result = new byte[len];
@@ -207,9 +280,10 @@ public class NfcUtils {
             if(in != 0){
                 i = (in >> 4) & 0x0f;
                 out += ((in-48)+"");
-            }else{
-                return out;
             }
+//            else{
+//                return out;
+//            }
         }
         return out;
     }

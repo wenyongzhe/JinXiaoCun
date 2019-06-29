@@ -13,6 +13,7 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.Ndef;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -189,6 +190,9 @@ public class NfcUtils {
         @Override
         public void onSuccess(byte[] bytes) {
             String cardId = ByteArrayToListString(bytes);
+            Message msg = new Message();
+            msg.obj = cardId.substring(0,cardId.indexOf("-"));
+            NfcUtils.mHandler.sendMessage(msg);
         }
 
         @Override

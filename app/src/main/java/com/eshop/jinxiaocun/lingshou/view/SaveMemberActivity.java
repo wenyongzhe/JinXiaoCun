@@ -109,14 +109,8 @@ public class SaveMemberActivity extends MemberCheckActivity {
         if(NfcUtils.mNfcAdapter!=null){
             NfcUtils.mNfcAdapter.enableForegroundDispatch(this, NfcUtils.mPendingIntent, NfcUtils.mIntentFilter, NfcUtils.mTechList);
         }
+        scanRFCard();
 
-        try {
-            mRFCardReader = RFCardReader.getInstance();
-            mRFCardReader.turnOnLed(LED_GREEN);
-            mRFCardReader.searchCard(onSearchListener);
-        } catch (RequestException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -126,10 +120,20 @@ public class SaveMemberActivity extends MemberCheckActivity {
         if(NfcUtils.mNfcAdapter!=null){
             NfcUtils.mNfcAdapter.disableForegroundDispatch(this);
         }
-
         try {
             mRFCardReader.turnOffLed(LED_GREEN);
             mRFCardReader.stopSearch();
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void scanRFCard(){
+        try {
+            mRFCardReader = RFCardReader.getInstance();
+            mRFCardReader.turnOnLed(LED_GREEN);
+            mRFCardReader.searchCard(onSearchListener);
         } catch (RequestException e) {
             e.printStackTrace();
         }
@@ -207,6 +211,15 @@ public class SaveMemberActivity extends MemberCheckActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if(msg.what==1){
+                scanRFCard();
+                return;
+            }
+            if(msg.obj!=null){
+                mEtSearch.setText((CharSequence) msg.obj);
+                onClickSearch();
+            }
+            sendEmptyMessageDelayed(1,2000);
         }
     };
     // 卡激活监听器

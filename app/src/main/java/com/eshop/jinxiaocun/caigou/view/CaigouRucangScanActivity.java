@@ -1215,7 +1215,7 @@ public class CaigouRucangScanActivity extends CommonBaseScanActivity implements 
 
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     @Override

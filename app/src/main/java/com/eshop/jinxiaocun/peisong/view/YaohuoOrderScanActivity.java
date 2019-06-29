@@ -1042,7 +1042,7 @@ public class YaohuoOrderScanActivity extends CommonBaseScanActivity implements I
 
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     @Override

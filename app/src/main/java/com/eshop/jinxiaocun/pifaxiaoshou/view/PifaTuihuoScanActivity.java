@@ -1129,7 +1129,7 @@ public class PifaTuihuoScanActivity extends CommonBaseScanActivity implements IN
 
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     @Override

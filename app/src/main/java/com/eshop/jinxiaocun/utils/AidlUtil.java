@@ -231,8 +231,9 @@ public class AidlUtil {
     /**
      * 打印文字
      */
+    String strPrintTemp = "";
     public void printText(String content, float size, boolean isBold, boolean isUnderLine) {
-        print(content);
+        strPrintTemp += content;
 
 //        if (woyouService == null) {
 //            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
@@ -263,7 +264,9 @@ public class AidlUtil {
     /**
      * POS 签购单打印
      */
-    public void print(final String mes){
+    public void print(){
+        final String mes = strPrintTemp;
+        strPrintTemp = "";
         /** 1、创建 Printer.Progress 实例 */
         Printer.Progress progress = new Printer.Progress() {
             /** 2、在 Printer.Progress 的 doPrint 方法中设置签购单的打印样式 */
@@ -277,6 +280,7 @@ public class AidlUtil {
                 format.setHzSize(Printer.Format.HZ_DOT24x24);
                 printer.setFormat(format);
                 printer.printText(mes);
+                printer.feedLine(3);
             }
             @Override
             public void onFinish(int code) {
@@ -410,15 +414,15 @@ public class AidlUtil {
     * 空行几行打
      */
     public void printEmptyLine(int emptyLineNumber){
-        if (woyouService == null) {
-            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
-            return;
-        }
-        try {
-            woyouService.lineWrap(emptyLineNumber, null);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+//        if (woyouService == null) {
+//            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        try {
+//            woyouService.lineWrap(emptyLineNumber, null);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
     }
 
 

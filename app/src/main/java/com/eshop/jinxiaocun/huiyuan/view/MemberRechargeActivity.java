@@ -346,6 +346,8 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
 
         AidlUtil.getInstance().printEmptyLine(3);
         reSetViewValues();
+
+        AidlUtil.getInstance().print();
     }
 
 

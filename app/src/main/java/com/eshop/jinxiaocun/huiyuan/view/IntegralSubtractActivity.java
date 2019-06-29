@@ -396,6 +396,7 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         }
 
         AidlUtil.getInstance().printEmptyLine(3);
+        AidlUtil.getInstance().print();
         reSetViewValues();
     }
 

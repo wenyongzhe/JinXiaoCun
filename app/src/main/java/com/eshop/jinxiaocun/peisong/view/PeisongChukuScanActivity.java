@@ -1121,7 +1121,7 @@ public class PeisongChukuScanActivity extends CommonBaseScanActivity implements 
 
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     @Override

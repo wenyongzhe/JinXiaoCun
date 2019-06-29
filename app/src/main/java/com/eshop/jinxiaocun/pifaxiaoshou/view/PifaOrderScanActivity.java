@@ -1003,7 +1003,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
 
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     @Override

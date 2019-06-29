@@ -315,7 +315,7 @@ public class PrinterSettingActivity extends CommonBaseActivity {
         }
 
         AidlUtil.getInstance().printEmptyLine(3);
-
+        AidlUtil.getInstance().print();
     }
 
     public void gotoPrintPreview(){

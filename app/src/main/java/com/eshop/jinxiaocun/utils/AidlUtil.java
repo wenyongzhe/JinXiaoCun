@@ -280,7 +280,7 @@ public class AidlUtil {
                 format.setHzSize(Printer.Format.HZ_DOT24x24);
                 printer.setFormat(format);
                 printer.printText(mes);
-                printer.feedLine(3);
+                printer.feedLine(5);
             }
             @Override
             public void onFinish(int code) {
@@ -414,6 +414,10 @@ public class AidlUtil {
     * 空行几行打
      */
     public void printEmptyLine(int emptyLineNumber){
+//        for(int i=0; i<emptyLineNumber; i++){
+//            strPrintTemp += "\n";
+//        }
+
 //        if (woyouService == null) {
 //            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
 //            return;

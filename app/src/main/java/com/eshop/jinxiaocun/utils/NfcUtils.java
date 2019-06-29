@@ -134,20 +134,7 @@ public class NfcUtils {
                     @Override
                     public void onSuccess() {
                         try {
-                            mRFDriver.readBlock(blockNo, new MifareDriver.OnReadListener() {
-                                @Override
-                                public void onSuccess(byte[] bytes) {
-                                    String dd = ByteArrayToListString(bytes);
-                                }
-
-                                @Override
-                                public void onFail(int i) {
-                                }
-
-                                @Override
-                                public void onCrash() {
-                                }
-                            });
+                            mRFDriver.readBlock(blockNo, mReadListener);
                         } catch (RequestException e) {
                             e.printStackTrace();
                         }
@@ -194,6 +181,21 @@ public class NfcUtils {
 
         return "";
     }
+
+    public static MifareDriver.OnReadListener mReadListener = new MifareDriver.OnReadListener() {
+        @Override
+        public void onSuccess(byte[] bytes) {
+            String cardId = ByteArrayToListString(bytes);
+        }
+
+        @Override
+        public void onFail(int i) {
+        }
+
+        @Override
+        public void onCrash() {
+        }
+    };
 
     public static byte[] hexStringToByte(String hex) {
         int len = (hex.length() / 2);

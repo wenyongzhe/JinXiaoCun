@@ -912,16 +912,16 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
                 endLength+=1;
             }
             title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(title,30f,false,false);
+            AidlUtil.getInstance().printText(title+"\n",30f,false,false);
         }
 
         String userName = "操作人: "+ Config.UserName;
         if(MyUtils.length(userName)<maxLength){
             int endLength = maxLength-MyUtils.length(userName);
             userName=userName+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
         }else{//如果超过一行  要换行
-            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
             AidlUtil.getInstance().printEmptyLine(1);
         }
 
@@ -929,33 +929,33 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
         if(MyUtils.length(exchargeData)<maxLength){
             int endLength = maxLength-MyUtils.length(exchargeData);
             exchargeData=exchargeData+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printText(exchargeData+"\n",30f,false,false);
         }else{//如果超过一行  要换行
-            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printText(exchargeData+"\n",30f,false,false);
             AidlUtil.getInstance().printEmptyLine(1);
         }
-        AidlUtil.getInstance().printText("=========================",30f,false,false);
+        AidlUtil.getInstance().printText("========================="+"\n",30f,false,false);
 
 
-        AidlUtil.getInstance().printText("品 名   数量   单价   金额",30f,false,false);
+        AidlUtil.getInstance().printText("品 名   数量   单价   金额"+"\n",30f,false,false);
 
         for (GetClassPluResult info : mListDatas) {
-            if(MyUtils.length(info.getItem_no()+info.getItem_name())<maxLength){
-                AidlUtil.getInstance().printText(info.getItem_no(),30f,false,false);
-                //中间还有多少个空格
-                int rpadLength = maxLength - MyUtils.length(info.getItem_no()+info.getItem_name());
-                if(rpadLength==0){
-                    //说明没有多余的空格, 自动空两格
-                    AidlUtil.getInstance().printText("  ",30f,false,false);
-                }else{
-                    //余下的空格，自动填满
-                    AidlUtil.getInstance().printText(MyUtils.rpad(rpadLength," "),30f,false,false);
-                }
-                AidlUtil.getInstance().printText(info.getItem_name(),30f,false,false);
-            }else {
+//            if(MyUtils.length(info.getItem_no()+info.getItem_name())<maxLength){
+//                AidlUtil.getInstance().printText(info.getItem_no(),30f,false,false);
+//                //中间还有多少个空格
+//                int rpadLength = maxLength - MyUtils.length(info.getItem_no()+info.getItem_name());
+//                if(rpadLength==0){
+//                    //说明没有多余的空格, 自动空两格
+//                    AidlUtil.getInstance().printText("  ",30f,false,false);
+//                }else{
+//                    //余下的空格，自动填满
+//                    AidlUtil.getInstance().printText(MyUtils.rpad(rpadLength," "),30f,false,false);
+//                }
+//                AidlUtil.getInstance().printText(info.getItem_name(),30f,false,false);
+//            }else {
                 //超过一行
-                AidlUtil.getInstance().printText(info.getItem_no()+"  "+info.getItem_name(),30f,false,false);
-            }
+                AidlUtil.getInstance().printText(info.getItem_no()+info.getItem_name()+"\n",30f,false,false);
+//            }
 
             String qty = "        "+info.getSale_qnty();
             AidlUtil.getInstance().printText(qty,30f,false,false);
@@ -975,7 +975,7 @@ public class PifaOrderScanActivity extends CommonBaseScanActivity implements INe
             AidlUtil.getInstance().printText(" "+zje+"\n",30f,false,false);
         }
 
-        AidlUtil.getInstance().printText("=========================",30f,false,false);
+        AidlUtil.getInstance().printText("========================="+"\n",30f,false,false);
 
         StringBuffer sbfZSL= new StringBuffer();
         sbfZSL.append("总数量: ");

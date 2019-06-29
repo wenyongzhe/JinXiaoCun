@@ -239,7 +239,7 @@ public class PrinterSettingActivity extends CommonBaseActivity {
                 endLength+=1;
             }
             title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(title,30f,false,false);
+            AidlUtil.getInstance().printText(title+"\n",30f,false,false);
         }
 
         if(isPrinterCashier){
@@ -247,9 +247,9 @@ public class PrinterSettingActivity extends CommonBaseActivity {
             if(MyUtils.length(cashier)<maxLength){
                 int endLength = maxLength-MyUtils.length(cashier);
                 cashier=cashier+MyUtils.rpad(endLength,"");
-                AidlUtil.getInstance().printText(cashier,30f,false,false);
+                AidlUtil.getInstance().printText(cashier+"\n",30f,false,false);
             }else{//如果超过一行  要换行
-                AidlUtil.getInstance().printText(cashier,30f,false,false);
+                AidlUtil.getInstance().printText(cashier+"\n",30f,false,false);
                 AidlUtil.getInstance().printEmptyLine(1);
             }
         }
@@ -258,21 +258,21 @@ public class PrinterSettingActivity extends CommonBaseActivity {
         if(MyUtils.length(dateTime)<maxLength){
             int endLength = maxLength-MyUtils.length(dateTime);
             dateTime=dateTime+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(dateTime,30f,false,false);
+            AidlUtil.getInstance().printText(dateTime+"\n",30f,false,false);
         }else{//如果超过一行  要换行
-            AidlUtil.getInstance().printText(dateTime,30f,false,false);
+            AidlUtil.getInstance().printText(dateTime+"\n",30f,false,false);
             AidlUtil.getInstance().printEmptyLine(1);
         }
-        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+        AidlUtil.getInstance().printText("-------------------------"+"\n",30f,false,false);
 
         if(isPrinterCardNo){
             String cardNo = "卡号: 88888888";
             if(MyUtils.length(cardNo)<maxLength){
                 int endLength = maxLength-MyUtils.length(cardNo);
                 cardNo=cardNo+MyUtils.rpad(endLength,"");
-                AidlUtil.getInstance().printText(cardNo,30f,false,false);
+                AidlUtil.getInstance().printText(cardNo+"\n",30f,false,false);
             }else{//如果超过一行  要换行
-                AidlUtil.getInstance().printText(cardNo,30f,false,false);
+                AidlUtil.getInstance().printText(cardNo+"\n",30f,false,false);
                 AidlUtil.getInstance().printEmptyLine(1);
             }
         }
@@ -282,9 +282,9 @@ public class PrinterSettingActivity extends CommonBaseActivity {
             if(MyUtils.length(userName)<maxLength){
                 int endLength = maxLength-MyUtils.length(userName);
                 userName=userName+MyUtils.rpad(endLength,"");
-                AidlUtil.getInstance().printText(userName,30f,false,false);
+                AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
             }else{//如果超过一行  要换行
-                AidlUtil.getInstance().printText(userName,30f,false,false);
+                AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
                 AidlUtil.getInstance().printEmptyLine(1);
             }
         }
@@ -294,15 +294,15 @@ public class PrinterSettingActivity extends CommonBaseActivity {
             if(MyUtils.length(userTel)<maxLength){
                 int endLength = maxLength-MyUtils.length(userTel);
                 userTel=userTel+MyUtils.rpad(endLength,"");
-                AidlUtil.getInstance().printText(userTel,30f,false,false);
+                AidlUtil.getInstance().printText(userTel+"\n",30f,false,false);
             }else{//如果超过一行  要换行
-                AidlUtil.getInstance().printText(userTel,30f,false,false);
+                AidlUtil.getInstance().printText(userTel+"\n",30f,false,false);
                 AidlUtil.getInstance().printEmptyLine(1);
             }
         }
 
 
-        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+        AidlUtil.getInstance().printText("-------------------------"+"\n",30f,false,false);
         String pageFoot = mEtPrintPageFoot.getText().toString().trim();
         if(MyUtils.length(pageFoot)<maxLength){
             int beginLength = (maxLength-MyUtils.length(pageFoot))>>1;
@@ -311,7 +311,7 @@ public class PrinterSettingActivity extends CommonBaseActivity {
                 endLength+=1;
             }
             pageFoot = MyUtils.rpad(beginLength,"")+pageFoot+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(pageFoot,30f,false,false);
+            AidlUtil.getInstance().printText(pageFoot+"\n",30f,false,false);
         }
 
         AidlUtil.getInstance().printEmptyLine(3);

@@ -339,16 +339,16 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
                 endLength+=1;
             }
             title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(title,30f,false,false);
+            AidlUtil.getInstance().printText(title+"\n",30f,false,false);
         }
 
         String userName = "操作人: "+ Config.UserName;
         if(MyUtils.length(userName)<maxLength){
             int endLength = maxLength-MyUtils.length(userName);
             userName=userName+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
         }else{//如果超过一行  要换行
-            AidlUtil.getInstance().printText(userName,30f,false,false);
+            AidlUtil.getInstance().printText(userName+"\n",30f,false,false);
             AidlUtil.getInstance().printEmptyLine(1);
         }
 
@@ -356,12 +356,12 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
         if(MyUtils.length(exchargeData)<maxLength){
             int endLength = maxLength-MyUtils.length(exchargeData);
             exchargeData=exchargeData+MyUtils.rpad(endLength,"");
-            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printText(exchargeData+"\n",30f,false,false);
         }else{//如果超过一行  要换行
-            AidlUtil.getInstance().printText(exchargeData,30f,false,false);
+            AidlUtil.getInstance().printText(exchargeData+"\n",30f,false,false);
             AidlUtil.getInstance().printEmptyLine(1);
         }
-        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+        AidlUtil.getInstance().printText("-------------------------"+"\n",30f,false,false);
 
         float integral ;
         String subtractName;
@@ -377,22 +377,22 @@ public class IntegralSubtractActivity extends CommonBaseActivity implements INet
             subtractName = "奖励积分: ";
         }
 
-        AidlUtil.getInstance().printText("卡积分: "+mTvCurrentIntegral.getText().toString().trim(),30f,false,false);
+        AidlUtil.getInstance().printText("卡积分: "+mTvCurrentIntegral.getText().toString().trim()+"\n",30f,false,false);
         AidlUtil.getInstance().printEmptyLine(1);
 
         String subtractIntegral = subtractName+mEtSubtractIntegral.getText().toString().trim();
-        AidlUtil.getInstance().printText(subtractIntegral,30f,false,false);
+        AidlUtil.getInstance().printText(subtractIntegral+"\n",30f,false,false);
         AidlUtil.getInstance().printEmptyLine(1);
 
-        AidlUtil.getInstance().printText("卡当前积分: "+integral,30f,false,false);
+        AidlUtil.getInstance().printText("卡当前积分: "+integral+"\n",30f,false,false);
         AidlUtil.getInstance().printEmptyLine(1);
 
 
 
-        AidlUtil.getInstance().printText("-------------------------",30f,false,false);
+        AidlUtil.getInstance().printText("-------------------------"+"\n",30f,false,false);
 
         if(!TextUtils.isEmpty(mEtRemarks.getText().toString().trim())){
-            AidlUtil.getInstance().printText("备注: "+mEtRemarks.getText().toString().trim(),30f,false,false);
+            AidlUtil.getInstance().printText("备注: "+mEtRemarks.getText().toString().trim()+"\n",30f,false,false);
         }
 
         AidlUtil.getInstance().printEmptyLine(3);

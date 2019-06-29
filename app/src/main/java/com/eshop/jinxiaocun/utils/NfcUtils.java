@@ -12,6 +12,7 @@ import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.Ndef;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -167,10 +168,12 @@ public class NfcUtils {
         }
     };
 
+    static Handler mHandler;
     static MifareDriver mRFDriver;
-    public static String readMifareCard(MifareDriver rFDriver) {
+    public static String readMifareCard(MifareDriver rFDriver, Handler mHandler) {
         //认证扇区
         try {
+            NfcUtils.mHandler = mHandler;
             mRFDriver = rFDriver;
             mRFDriver.authSector(sectorNo, MifareDriver.KEY_A, key, authListener);
         } catch (RequestException e) {

@@ -2,6 +2,8 @@ package com.eshop.jinxiaocun.lingshou.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -201,6 +203,12 @@ public class SaveMemberActivity extends MemberCheckActivity {
         }
     };
 
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
     // 卡激活监听器
     private RFCardReader.OnActiveListener onActiveListener = new
     RFCardReader.OnActiveListener() {
@@ -209,7 +217,7 @@ public class SaveMemberActivity extends MemberCheckActivity {
             // 成功激活时触发
             // 用返回的 driver 进行读卡等操作
             MifareDriver mMifareDriver = (MifareDriver) driver;
-            NfcUtils.readMifareCard(mMifareDriver);
+            NfcUtils.readMifareCard(mMifareDriver,mHandler);
         }
         @Override
         public void onActivateError(int code) {

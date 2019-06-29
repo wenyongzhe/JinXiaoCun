@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.TableItem;
+import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.landicorp.android.eptapi.device.Printer;
+import com.landicorp.android.eptapi.exception.RequestException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -67,7 +70,8 @@ public class AidlUtil {
     }
 
     public boolean isConnect() {
-        return woyouService != null;
+        return true;
+//        return woyouService != null;
     }
 
     private ServiceConnection connService = new ServiceConnection() {
@@ -228,30 +232,96 @@ public class AidlUtil {
      * 打印文字
      */
     public void printText(String content, float size, boolean isBold, boolean isUnderLine) {
-        if (woyouService == null) {
-            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
-            return;
-        }
+        print(content);
 
+//        if (woyouService == null) {
+//            Toast.makeText(context, R.string.toast_2, Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//
+//        try {
+//            if (isBold) {
+//                woyouService.sendRAWData(ESCUtil.boldOn(), null);
+//            } else {
+//                woyouService.sendRAWData(ESCUtil.boldOff(), null);
+//            }
+//
+//            if (isUnderLine) {
+//                woyouService.sendRAWData(ESCUtil.underlineWithOneDotWidthOn(), null);
+//            } else {
+//                woyouService.sendRAWData(ESCUtil.underlineOff(), null);
+//            }
+//
+//            woyouService.printTextWithFont(content, null, size, null);
+//            //woyouService.lineWrap(3, null);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
+    /**
+     * POS 签购单打印
+     */
+    public void print(final String mes){
+        /** 1、创建 Printer.Progress 实例 */
+        Printer.Progress progress = new Printer.Progress() {
+            /** 2、在 Printer.Progress 的 doPrint 方法中设置签购单的打印样式 */
+            @Override
+            public void doPrint(Printer printer) throws Exception {
+                /** 设置打印格式 */
+                Printer.Format format = new Printer.Format();
+                /** 中文字符打印,此处使用 16x16 点,1 倍宽&&1 倍高
+                 */
+                format.setHzScale(Printer.Format.HZ_SC1x1);
+                format.setHzSize(Printer.Format.HZ_DOT24x24);
+                printer.setFormat(format);
+                printer.printText(mes);
+            }
+            @Override
+            public void onFinish(int code) {
+                /** Printer.ERROR_NONE 即打印成功 */
+                if (code == Printer.ERROR_NONE) {
+                    AlertUtil.showToast("打印成功!");
+                }
+                else {
+                    AlertUtil.showToast("[打印失败]"+getErrorDescription(code));
+                }
+            }
+            /** 根据错误码获取相应错误提示
+             * @param code 错误码
+             * @return 错误提示
+             */
+            public String getErrorDescription(int code) {
+                switch(code) {
+                    case Printer.ERROR_PAPERENDED: return "Paper-out, the operation is invalid this time";
+                    case Printer.ERROR_HARDERR: return "Hardware fault, can not find HP signal";
+                    case Printer.ERROR_OVERHEAT: return "Overheat";
+                    case Printer.ERROR_BUFOVERFLOW: return "The operation buffer mode position is out of range";
+                    case Printer.ERROR_LOWVOL: return "Low voltage protect";
+                    case Printer.ERROR_PAPERENDING: return "Paper-out, permit the latter operation";
+                    case Printer.ERROR_MOTORERR: return "The printer core fault (too fast or too slow)";
+                    case Printer.ERROR_PENOFOUND: return "Automatic positioning did not find the alignment position, the paper back to its original position";
+                    case Printer.ERROR_PAPERJAM: return "paper got jammed";
+                    case Printer.ERROR_NOBM: return "Black mark not found";
+                    case Printer.ERROR_BUSY: return "The printer is busy";
+                    case Printer.ERROR_BMBLACK: return "Black label detection to black signal";
+                    case Printer.ERROR_WORKON: return "The printer power is open";
+                    case Printer.ERROR_LIFTHEAD: return "Printer head lift";
+                    case Printer.ERROR_LOWTEMP: return "Low temperature protect";
+                }
+                return "unknown error ("+code+")";
+            }
+            @Override
+            public void onCrash() {
+            }
+        };
+        /** 3、启动打印 */
         try {
-            if (isBold) {
-                woyouService.sendRAWData(ESCUtil.boldOn(), null);
-            } else {
-                woyouService.sendRAWData(ESCUtil.boldOff(), null);
-            }
-
-            if (isUnderLine) {
-                woyouService.sendRAWData(ESCUtil.underlineWithOneDotWidthOn(), null);
-            } else {
-                woyouService.sendRAWData(ESCUtil.underlineOff(), null);
-            }
-
-            woyouService.printTextWithFont(content, null, size, null);
-            //woyouService.lineWrap(3, null);
-        } catch (RemoteException e) {
+            progress.start();
+        } catch (RequestException e) {
             e.printStackTrace();
         }
-
     }
 
     /*

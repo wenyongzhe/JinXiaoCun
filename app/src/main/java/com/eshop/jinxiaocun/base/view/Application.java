@@ -92,7 +92,7 @@ public class Application extends android.app.Application{
         //sunmi机器打印机，通过aidl方式链接，初始化打印机
         AidlUtil.getInstance().connectPrinterService(this);
         //设备类型
-        Config.DEVICE_TYPE = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_DEVICE_TYPE,2);
+        Config.DEVICE_TYPE = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_DEVICE_TYPE,1);
         Config.initAscallMap();
 
         //商锐 盘点扫描界面没有批次限制

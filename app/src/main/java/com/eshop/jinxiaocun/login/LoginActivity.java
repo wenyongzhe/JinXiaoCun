@@ -141,11 +141,6 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
     public void OnLogin() {
         try {
-            if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this)) {
-                MyUtils.showToast("您的网络有问题，请检查网络连接！", LoginActivity.this);
-                return;
-            }
-
             if (editUser.getText().toString().trim().length() == 0) {
                 MyUtils.showToast("用户名不能为空", this);
                 return;
@@ -178,6 +173,10 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
     }
 
     public void OnRegist(){
+        if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this)) {
+            MyUtils.showToast("您的网络有问题，请检查网络连接！", LoginActivity.this);
+            return;
+        }
         loginAction.registDevice();
     }
 

@@ -178,6 +178,10 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
     }
 
     public void OnRegist(){
+        if (!CommonUtility.getInstance().isConnectingToInternet(LoginActivity.this)) {
+            MyUtils.showToast("您的网络有问题，请检查网络连接！", LoginActivity.this);
+            return;
+        }
         loginAction.registDevice();
     }
 

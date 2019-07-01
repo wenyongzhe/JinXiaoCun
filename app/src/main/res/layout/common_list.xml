@@ -101,13 +101,23 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentTop="true"
+        android:background="@color/divider"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        />
+
     <com.eshop.jinxiaocun.widget.RefreshListView
         android:id="@+id/rfListview"
         android:layout_width="match_parent"
         android:divider="@color/divider"
         android:layout_weight="1"
         android:layout_above="@+id/ll_bottom_txt"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/line"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:dividerHeight="1dip"

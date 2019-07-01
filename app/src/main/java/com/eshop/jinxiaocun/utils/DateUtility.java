@@ -486,7 +486,6 @@ public class DateUtility {
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
             strDate1 = sdf2.format(date);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -502,7 +501,21 @@ public class DateUtility {
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
             strDate1 = sdf2.format(date);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return strDate1;
+    }
+
+    public static String getStrDate3(String strDate) {
+        String strDate1 = null;
+        try {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date;
+            date = (Date) sdf1.parse(strDate);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            strDate1 = sdf2.format(date);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

@@ -216,6 +216,16 @@
     <string name="list_item_Oper_Name">操作员</string>
 
     <string name="yuan">元</string>
+
+    <!--布局标题-->
+    <string name="orderNo">单据号:</string>
+    <string name="validDate">交货日期:</string>
+    <string name="customerName">客户名称:</string>
+    <string name="allGoodsQty">总数量:</string>
+    <string name="allMoney">总金额:</string>
+    <string name="orderStatus">单据状态:</string>
+
+
     <!-- 下拉刷新 -->
     <string name="pull_to_refreshing">下拉刷新</string>
     <string name="last_update">最后更新</string>

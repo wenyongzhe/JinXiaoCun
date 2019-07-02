@@ -167,9 +167,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         spinners.add("聚合支付");
 //        spinners.add("支付宝");
 //        spinners.add("微信");
-        if(Config.mMemberInfo != null){
+        //if(Config.mMemberInfo != null){
             spinners.add("会员储蓄卡");
-        }
+        //}
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
@@ -327,7 +327,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         mHan.sendEmptyMessage(1);
                         break;
                     case 2:
-                        mHan.sendEmptyMessage(2);
+                        Intent mIntent = new Intent(PayActivity.this, VipCardPayActivity.class);
+                            startActivityForResult(mIntent,300);
+                        //mHan.sendEmptyMessage(2);
                         break;
 
                 }
@@ -766,7 +768,10 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         if(zxingScan(requestCode,resultCode,data)){
             return;
         }
-
+        if(requestCode == 300){
+            mHan.sendEmptyMessage(2);
+            return;
+        }
         switch (resultCode){
             case Config.MESSAGE_PAY_MAN:
                 Config.saleMan = data.getStringExtra("PayMan");

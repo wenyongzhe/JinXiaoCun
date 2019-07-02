@@ -120,6 +120,16 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         mTvCurrentIntegral.setText(MyUtils.convertToString(data.getVip_accnum(), "0"));
     }
 
+    protected void cleanUI() {
+        mEtSearch.setText("");
+        mTvCardNumber.setText("");
+        mTvName.setText("");
+        mTvCardType.setText("");
+        mTvStatus.setText("");
+        mTvBalance.setText("");
+        mTvCurrentIntegral.setText("");
+    }
+
     @OnClick(R.id.iv_close)
     public void onClickClose(){
         mEtSearch.setText("");

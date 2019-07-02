@@ -24,7 +24,13 @@ public class VipCardPayActivity extends SaveMemberActivity {
                 data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
                     //Config.mMemberInfo=data.get(0);//记录最近一次会员信息  供销售结算时使用
-                    refreshUIByData(data.get(0));
+                    if(data.get(0).getCardType().contains("[03]")){
+                        refreshUIByData(data.get(0));
+                    }
+                    else {
+                        AlertUtil.showToast("不是会员储值卡！");
+                        cleanUI();
+                    }
                 } else {
                     AlertUtil.showToast("没有对应此卡号的信息！");
                 }

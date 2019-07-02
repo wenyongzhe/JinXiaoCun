@@ -110,7 +110,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
     protected void initData() {
     }
 
-    private void refreshUIByData(MemberCheckResultItem data) {
+    protected void refreshUIByData(MemberCheckResultItem data) {
         mEtSearch.setText("");
         mTvCardNumber.setText(data.getCardNo_TelNo());
         mTvName.setText(data.getCardName());

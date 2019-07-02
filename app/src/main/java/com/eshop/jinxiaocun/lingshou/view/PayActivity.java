@@ -170,7 +170,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         //if(Config.mMemberInfo != null){
             spinners.add("会员储蓄卡");
         //}
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.my_simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_payway.setAdapter(adapter);
         sp_payway.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

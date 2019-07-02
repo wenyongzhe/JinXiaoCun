@@ -256,6 +256,37 @@
         android:layout_marginBottom="5dp"
         android:background="@color/line_grey"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_35"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"
+            android:text="实收:"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_real_income_money"
+            style="@style/TextView_Black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/line_grey"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -168,7 +168,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 //        spinners.add("支付宝");
 //        spinners.add("微信");
         if(Config.mMemberInfo != null){
-            spinners.add("会员卡");
+            spinners.add("会员储蓄卡");
         }
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinners);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

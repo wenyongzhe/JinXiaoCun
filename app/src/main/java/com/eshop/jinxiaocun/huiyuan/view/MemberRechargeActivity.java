@@ -58,6 +58,8 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     EditText mEtGiveFreeMoney;//赠送金额
     @BindView(R.id.tv_all_recharge_money)
     TextView mTvAllRechargeMoney;//合计
+    @BindView(R.id.tv_real_income_money)
+    TextView mTvRealIncomeMoney;//实收
     @BindView(R.id.et_remarks)
     EditText mEtRemarks;//备注
 
@@ -106,6 +108,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             @Override
             public void afterTextChanged(Editable s) {
                 setCountRechargeMoney();
+                mTvRealIncomeMoney.setText(MyUtils.convertToFloat(s.toString().trim(),0)+"");
             }
         });
         mEtGiveFreeMoney.addTextChangedListener(new TextWatcher() {
@@ -156,6 +159,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         mEtGiveFreeMoney.setText("");
         mEtRemarks.setText("");
         mTvAllRechargeMoney.setText("");
+        mTvRealIncomeMoney.setText("");
     }
 
     @OnClick(R.id.iv_close)

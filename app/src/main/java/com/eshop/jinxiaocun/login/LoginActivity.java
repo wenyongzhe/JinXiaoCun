@@ -157,7 +157,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
             loginAction.loginAction(editUser.getText().toString().trim(),editPassword.getText().toString().trim());
         }
         catch (Exception ex){
-            MyUtils.showToast("登录失败！原因：" + ex.getMessage(), this);
+            MyUtils.showToast("登录失败！" + ex.getMessage()==null?"":ex.getMessage(), this);
         }
     }
 

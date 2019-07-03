@@ -125,7 +125,7 @@ public class LoginImp implements ILogin {
                     /*Config.posid = "1001";
                     Config.branch_no = "000101";*/
                     Config.soft_name = "智能移动POS";
-                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败,原因："+jsonBean.getMessage());
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败 "+jsonBean.getMessage()==null?"":jsonBean.getMessage());
                 }else{
                     Config.posid = jsonBean.getPosid();
                     Config.branch_no = jsonBean.getBranch_no();

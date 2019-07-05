@@ -224,6 +224,8 @@
     <string name="allGoodsQty">总数量:</string>
     <string name="allMoney">总金额:</string>
     <string name="orderStatus">单据状态:</string>
+    <string name="storeName">门店名称:</string>
+    <string name="supplierName">供应商名称:</string>
 
 
     <!-- 下拉刷新 -->

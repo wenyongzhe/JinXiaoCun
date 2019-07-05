@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
@@ -51,30 +52,24 @@ public class CaigouRucangListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_list_caigou_rucang,parent,false);
         }
-        TextView tv_xuhao = ViewHolderUtils.get(convertView, R.id.tv_xuhao);
-        TextView tvOrderStatus = ViewHolderUtils.get(convertView, R.id.tv_order_status);
         TextView tvOrderNo = ViewHolderUtils.get(convertView, R.id.tv_order_no);
-        TextView tvOrderType = ViewHolderUtils.get(convertView, R.id.tv_order_type);
-        TextView tvShopname = ViewHolderUtils.get(convertView, R.id.tv_shopname);
-        TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
         TextView tvValidDate = ViewHolderUtils.get(convertView, R.id.tv_valid_Date);
 
-        try {
-            if(mCheckflag.equals("1")){
-                tvOrderStatus.setText("已审核");
-            }else{
-                tvOrderStatus.setText("未审核");
-            }
-            tvOrderNo.setSelected(true);
-            tvShopname.setSelected(true);
-            tv_xuhao.setText((position+1)+"");
-            tvOrderNo.setText(listInfo.get(position).getSheet_No());
-            tvOrderType.setText(listInfo.get(position).getSheetType());
-            tvShopname.setText(listInfo.get(position).getSupplyName());
-            tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
-            tvValidDate.setText(listInfo.get(position).getValid_date());
-        } catch (Exception e) {
-            e.printStackTrace();
+        TextView tvSupplierName = ViewHolderUtils.get(convertView, R.id.tv_supplier_Name);
+
+        TextView tvAllGoodsCount = ViewHolderUtils.get(convertView, R.id.tv_allgoodscount);
+        TextView tvAllMoney = ViewHolderUtils.get(convertView, R.id.tv_all_Money);
+        TextView tvOrderStatus = ViewHolderUtils.get(convertView, R.id.tv_order_status);
+
+        tvOrderNo.setText(listInfo.get(position).getSheet_No());
+        tvValidDate.setText(DateUtility.getStrDate3(listInfo.get(position).getValid_date()));
+        tvSupplierName.setText(listInfo.get(position).getSupplyName());
+        tvAllGoodsCount.setText(listInfo.get(position).getGoodsNum());
+        tvAllMoney.setText("0.00元");
+        if(mCheckflag.equals("1")){
+            tvOrderStatus.setText("已审核");
+        }else{
+            tvOrderStatus.setText("未审核");
         }
 
         if (itemClickPosition == position) {

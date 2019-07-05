@@ -2,8 +2,6 @@ package com.eshop.jinxiaocun.caigou.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -11,8 +9,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
-import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
+import com.eshop.jinxiaocun.base.view.CommonListActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouOrderListAdapter;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
@@ -21,19 +18,13 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
-import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimeListener;
-import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimePicker;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
-
-import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +36,7 @@ import butterknife.OnClick;
  * 描述 采购订单
  */
 
-public class CaigouOrderListActivity extends CommonBaseListActivity implements INetWorResult {
+public class CaigouOrderListActivity extends CommonListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
@@ -76,14 +67,6 @@ public class CaigouOrderListActivity extends CommonBaseListActivity implements I
 
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
-
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
-        setHeaderTitle(R.id.tv_1,R.string.list_item_Status,100);//单据状态
-        setHeaderTitle(R.id.tv_2,R.string.list_item_FormIndex,150);//单据号
-        setHeaderTitle(R.id.tv_3,R.string.list_item_BillType,100);// 单据类型
-        setHeaderTitle(R.id.tv_4,R.string.list_item_SupName,150); //供应商名称
-        setHeaderTitle(R.id.tv_5,R.string.list_item_AllGoodsCount,100);//总商品数
-        setHeaderTitle(R.id.tv_6,R.string.list_item_ValidDate,150);//交货日期
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override

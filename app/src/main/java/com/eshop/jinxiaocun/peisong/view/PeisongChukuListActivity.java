@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
+import com.eshop.jinxiaocun.base.view.CommonListActivity;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
@@ -41,7 +42,7 @@ import butterknife.OnClick;
  * 描述 配送出库
  */
 
-public class PeisongChukuListActivity extends CommonBaseListActivity implements INetWorResult {
+public class PeisongChukuListActivity extends CommonListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
@@ -72,14 +73,6 @@ public class PeisongChukuListActivity extends CommonBaseListActivity implements 
 
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
-
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,100);//序号
-        setHeaderTitle(R.id.tv_1,R.string.list_item_Status,100);//单据状态
-        setHeaderTitle(R.id.tv_2,R.string.list_item_FormIndex,150);//单据号
-        setHeaderTitle(R.id.tv_3,R.string.list_item_BillType,100);// 单据类型
-        setHeaderTitle(R.id.tv_4,R.string.list_item_ShopName,150); //门店名称
-        setHeaderTitle(R.id.tv_5,R.string.list_item_AllGoodsCount,100);//总商品数
-        setHeaderTitle(R.id.tv_6,R.string.list_item_ValidDate,150);//交货日期
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override

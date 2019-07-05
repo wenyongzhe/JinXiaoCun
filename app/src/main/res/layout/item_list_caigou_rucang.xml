@@ -2,80 +2,129 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
+
 
     <LinearLayout
-        android:id="@+id/lin_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_item_height_40"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/layout_margin5"
+            android:text="@string/orderNo" />
+
+        <TextView
+            android:id="@+id/tv_order_no"
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/layout_margin5"
+            android:text="@string/validDate" />
+
+        <TextView
+            android:id="@+id/tv_valid_Date"
+            style="@style/TextView_Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/layout_margin5"
+            android:text="@string/supplierName" />
+
+        <TextView
+            android:id="@+id/tv_supplier_Name"
+            style="@style/TextView_Grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tv_xuhao"
-                style="@style/TextView_Grey"
-                android:layout_width="50dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_order_status"
-                style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_order_no"
-                style="@style/AutoScrollTextView"
-                android:layout_width="150dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_order_type"
-                style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/tv_shopname"
-                style="@style/AutoScrollTextView"
-                android:layout_width="150dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin5"
+                android:text="@string/allGoodsQty" />
 
             <TextView
                 android:id="@+id/tv_allgoodscount"
                 style="@style/TextView_Grey"
-                android:layout_width="100dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tv_valid_Date"
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin5"
+                android:text="@string/allMoney" />
+
+            <TextView
+                android:id="@+id/tv_all_Money"
                 style="@style/TextView_Grey"
-                android:layout_width="150dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:maxLines="1" />
-
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-    </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                style="@style/TextView_Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/layout_margin5"
+                android:text="@string/orderStatus" />
+
+            <TextView
+                android:id="@+id/tv_order_status"
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.view.CommonBaseListActivity;
+import com.eshop.jinxiaocun.base.view.CommonListActivity;
 import com.eshop.jinxiaocun.caigou.adapter.CaigouRucangListAdapter;
 import com.eshop.jinxiaocun.db.BusinessBLL;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
@@ -18,18 +18,14 @@ import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBean;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.DanJuListImp;
 import com.eshop.jinxiaocun.pifaxiaoshou.presenter.IDanJuList;
-import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimeListener;
-import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimePicker;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +37,7 @@ import butterknife.OnClick;
  * Desc:
  */
 
-public class CaigouRuCangListActivity extends CommonBaseListActivity implements INetWorResult {
+public class CaigouRuCangListActivity extends CommonListActivity implements INetWorResult {
 
     @BindView(R.id.dt_startDate)
     TextView mTvStartDate;
@@ -72,14 +68,6 @@ public class CaigouRuCangListActivity extends CommonBaseListActivity implements 
         setTopToolBarRightTitleAndStyle("审核单",R.drawable.border_bg);
         mTvStartDate.setText(DateUtility.getCurrentDate()+" 00:00:00");
         mTvEndDate.setText(DateUtility.getCurrentDate()+" 23:59:59");
-
-        setHeaderTitle(R.id.tv_0,R.string.list_item_XuHao,50);//序号
-        setHeaderTitle(R.id.tv_1,R.string.list_item_Status,100);//单据状态
-        setHeaderTitle(R.id.tv_2,R.string.list_item_FormIndex,150);//单据号
-        setHeaderTitle(R.id.tv_3,R.string.list_item_BillType,100);// 单据类型
-        setHeaderTitle(R.id.tv_4,R.string.list_item_SupName,150); //供应商名称
-        setHeaderTitle(R.id.tv_5,R.string.list_item_AllGoodsCount,100);//总商品数
-        setHeaderTitle(R.id.tv_6,R.string.list_item_ValidDate,150);//交货日期
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override

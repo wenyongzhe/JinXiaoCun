@@ -58,8 +58,8 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     EditText mEtGiveFreeMoney;//赠送金额
     @BindView(R.id.tv_all_recharge_money)
     TextView mTvAllRechargeMoney;//合计
-    @BindView(R.id.tv_real_income_money)
-    TextView mTvRealIncomeMoney;//实收
+    @BindView(R.id.et_real_income_money)
+    EditText metRealIncomeMoney;//实收
     @BindView(R.id.et_remarks)
     EditText mEtRemarks;//备注
 
@@ -108,7 +108,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             @Override
             public void afterTextChanged(Editable s) {
                 setCountRechargeMoney();
-                mTvRealIncomeMoney.setText(MyUtils.convertToFloat(s.toString().trim(),0)+"");
+                metRealIncomeMoney.setText(MyUtils.convertToFloat(s.toString().trim(),0)+"");
             }
         });
         mEtGiveFreeMoney.addTextChangedListener(new TextWatcher() {
@@ -159,7 +159,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         mEtGiveFreeMoney.setText("");
         mEtRemarks.setText("");
         mTvAllRechargeMoney.setText("");
-        mTvRealIncomeMoney.setText("");
+        metRealIncomeMoney.setText("");
     }
 
     @OnClick(R.id.iv_close)
@@ -210,7 +210,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         //充值金额(有可能包含赠送金额)
         bean.JsonData.AddMoney = MyUtils.convertToFloat(mTvAllRechargeMoney.getText().toString().trim(),0);
         //实付金额
-        bean.JsonData.PayMoney = MyUtils.convertToFloat(mEtRechargeMoney.getText().toString().trim(),0);
+        bean.JsonData.PayMoney = MyUtils.convertToFloat(metRealIncomeMoney.getText().toString().trim(),0);
         bean.JsonData.FlowNo = flowNo;//"流水号"
         bean.JsonData.PayWay = "RMB";//支付方式  后续需要改成多种支付方式，跟销售一样
         bean.JsonData.Memo = mEtRemarks.getText().toString().trim();

@@ -168,8 +168,6 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
         hideSoftInput();
     }
 
-
-
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {

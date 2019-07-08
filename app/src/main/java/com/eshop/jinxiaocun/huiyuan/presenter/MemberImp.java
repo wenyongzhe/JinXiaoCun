@@ -143,7 +143,7 @@ public class MemberImp implements IMemberList{
         JichiChaxunBean bean = new JichiChaxunBean();
         bean.JsonData.sheet_no = sheet_no;
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new JichiChaxunInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new JichiChaxunInterface());
     }
 
     //计次查询
@@ -181,7 +181,7 @@ public class MemberImp implements IMemberList{
         bean.JsonData.aprove = "1";
         bean.JsonData.aprove_date = bean.JsonData.oper_date;
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new SaveCountSaleInterface());
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SaveCountSaleInterface());
     }
 
     //计次保存

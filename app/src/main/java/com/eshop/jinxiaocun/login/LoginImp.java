@@ -55,15 +55,6 @@ public class LoginImp implements ILogin {
 
     }
 
-    @Override
-    public void registDevice() {
-        RegistBean mRegistBean = new RegistBean();
-        mRegistBean.getJsonData().setiDevID(Config.DeviceID + DeviceUtils.getMacAddress());
-        Map map = ReflectionUtils.obj2Map(mRegistBean);
-        mHandler.handleResule(Config.SHOW_PROGRESS,null);
-        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new RegistInterface());
-    }
-
     //登陆
     class LoginInterface implements IResponseListener{
 
@@ -101,6 +92,15 @@ public class LoginImp implements ILogin {
         }
     }
 
+    @Override
+    public void registDevice() {
+        RegistBean mRegistBean = new RegistBean();
+        mRegistBean.getJsonData().setiDevID(Config.DeviceID + DeviceUtils.getMacAddress());
+        Map map = ReflectionUtils.obj2Map(mRegistBean);
+        mHandler.handleResule(Config.SHOW_PROGRESS,null);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new RegistInterface());
+    }
+
     //注册
     class RegistInterface implements IResponseListener{
 
@@ -120,6 +120,10 @@ public class LoginImp implements ILogin {
             try {
                 mHandler.handleResule(Config.DISS_PROGRESS,null);
                 RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
+                if(status.equals(Config.MESSAGE_ERROR+"")){
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败 " + Msg);
+                    return;
+                }
                 if( (!status.equals(Config.MESSAGE_OK+"") && jsonBean==null) ||
                         (jsonBean!=null && jsonBean.getResult().equals("N")) ){
                     /*Config.posid = "1001";

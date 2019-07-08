@@ -19,7 +19,7 @@ public class JichiSaveBean extends BaseBean{
     public static class JichiSaveData{
         public String sheet_no;//xc1905300001” // 单号
         public String branch_no;//0001” // 单号
-        public String consum_count;//" :1 // 本单消费次数
+        public int consum_count;//" :1 // 本单消费次数
         public String oper_oper;//1001” //操作员
         public String oper_date;////2019-05-30 11：20：00” //操作日期时间
         public String memo;//”:””        //备注

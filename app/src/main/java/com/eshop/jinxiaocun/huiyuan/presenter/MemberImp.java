@@ -174,7 +174,7 @@ public class MemberImp implements IMemberList{
         JichiSaveBean bean = new JichiSaveBean();
         bean.JsonData.sheet_no = sheet_no;
         bean.JsonData.branch_no = Config.branch_no;
-        bean.JsonData.consum_count = "1";
+        bean.JsonData.consum_count = 1;
         bean.JsonData.oper_oper = Config.UserName;
         bean.JsonData.oper_date = DateUtility.getCurrentTime();
         bean.JsonData.memo = "";
@@ -194,6 +194,10 @@ public class MemberImp implements IMemberList{
         @Override
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
+                if(status.equals("1") || status.equals("-1")){
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"操作失败 "+msg);
+                    return;
+                }
                 List<JichiSaveResult> listResult =  mJsonFormatImp.JsonToList(jsonData, JichiSaveResult.class);
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_JICI_CHAXUN_OK,listResult);

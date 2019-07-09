@@ -28,6 +28,7 @@ import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.zxing.android.CaptureActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -186,7 +187,9 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
             case Config.MESSAGE_JICI_SAVE_OK:
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showAlert(JichiActivity.this,"提示","消费成功");
-                mJichiSaveResult = (List<JichiSaveResult>) o;
+                JichiSaveResult jichiSaveResult = (JichiSaveResult) o;
+                mJichiSaveResult = new ArrayList<>();
+                mJichiSaveResult.add(jichiSaveResult);
                 if (mJichiSaveResult != null && mJichiSaveResult.size()>0) {
                     refreshUIByData(mJichiSaveResult.get(0));
                 }

@@ -43,6 +43,7 @@ public class Config {
     public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
 
     public final static int MESSAGE_OK = 0;
+    public final static int MESSAGE_JICHI_OK = 1;
     public final static int MESSAGE_ERROR = -1;
     public final static int MESSAGE_INTENT = 2;
     public final static int MESSAGE_REFLASH = 3;

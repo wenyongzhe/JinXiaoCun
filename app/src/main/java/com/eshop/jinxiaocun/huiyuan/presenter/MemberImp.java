@@ -198,8 +198,8 @@ public class MemberImp implements IMemberList{
                     mHandler.handleResule(Config.MESSAGE_ERROR,"操作失败 "+msg);
                     return;
                 }
-                List<JichiSaveResult> listResult =  mJsonFormatImp.JsonToList(jsonData, JichiSaveResult.class);
-                if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
+                JichiSaveResult listResult =  mJsonFormatImp.JsonToBean(jsonData, JichiSaveResult.class);
+                if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_JICHI_OK+"")){
                     mHandler.handleResule(Config.MESSAGE_JICI_SAVE_OK,listResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,msg);

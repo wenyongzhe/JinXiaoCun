@@ -45,7 +45,7 @@ public class HomeFragment extends BaseFragment {
 
     private Unbinder unbinder;
     private int[] iconIds = {
-            R.drawable.kssk,
+            R.drawable.menber,
             R.drawable.xsqd,
             R.drawable.menber,
             R.drawable.pandian,
@@ -54,10 +54,10 @@ public class HomeFragment extends BaseFragment {
 //            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
             R.drawable.peisong,
-            R.drawable.menber
+            R.drawable.kssk
     };
     private int[] nameIds = {
-            R.string.item_message_lingshou,
+            R.string.menu_jichi_manage,
             R.string.menu_qudan,
             R.string.menu_member_manager,
             R.string.menu_pandian_manage,
@@ -65,7 +65,7 @@ public class HomeFragment extends BaseFragment {
             R.string.menu_shanpingchaxun,
             R.string.menu_pifa_xiaoshou,
             R.string.menu_peisong_manager,
-            R.string.menu_jichi_manage
+            R.string.item_message_lingshou
 //            R.string.menu_diaobo_manage,
 //            R.string.menu_peisong_manager,
     };
@@ -104,9 +104,8 @@ public class HomeFragment extends BaseFragment {
         Intent intent = new Intent();
 
         switch (i){
-            case 0://零售
-                intent.setClass(Application.mContext, LingShouCreatAtivity.class);
-                intent.putExtra(Config.SHEET_NO,"");
+            case 0://记次
+                intent.setClass(Application.mContext, JichiActivity.class);
                 startActivity(intent);
                 break;
             case 1://销售取单
@@ -137,8 +136,9 @@ public class HomeFragment extends BaseFragment {
                 intent.setClass(Application.mContext, PeisongManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 8://记次
-                intent.setClass(Application.mContext, JichiActivity.class);
+            case 8://零售
+                intent.setClass(Application.mContext, LingShouCreatAtivity.class);
+                intent.putExtra(Config.SHEET_NO,"");
                 startActivity(intent);
                 break;
 //            case 8://批发销售单

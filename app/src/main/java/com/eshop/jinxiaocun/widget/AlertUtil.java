@@ -125,12 +125,7 @@ public class AlertUtil {
 				dismissDialog();
 			}
 		});
-		mDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				dismissDialog();
-			}
-		});
+		mDialog.setNegativeButtonDisable(true);
 		mDialog.show();
 	}
 

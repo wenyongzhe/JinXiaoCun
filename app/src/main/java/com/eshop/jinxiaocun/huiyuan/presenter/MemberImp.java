@@ -194,13 +194,13 @@ public class MemberImp implements IMemberList{
         @Override
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
-                if(status.equals("1") || status.equals("-1")){
+                if( status.equals("-1") || jsonData == null || jsonData.equals("null")){
                     mHandler.handleResule(Config.MESSAGE_ERROR,"操作失败 "+msg);
                     return;
                 }
                 List<JichiSaveResult> listResult =  mJsonFormatImp.JsonToList(jsonData, JichiSaveResult.class);
                 if(!TextUtils.isEmpty(status) && status.equals(Config.MESSAGE_OK+"")){
-                    mHandler.handleResule(Config.MESSAGE_JICI_CHAXUN_OK,listResult);
+                    mHandler.handleResule(Config.MESSAGE_JICI_SAVE_OK,listResult);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,msg);
                 }

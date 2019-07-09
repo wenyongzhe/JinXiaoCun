@@ -15,11 +15,13 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.view.SaveMemberActivity;
+import com.eshop.jinxiaocun.utils.AidlUtil;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.NfcUtils;
@@ -76,11 +78,11 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
     @OnClick(R.id.bt_ok)
     public void onClickOK(){
         if (TextUtils.isEmpty(tv_sheet_no.getText().toString().trim())) {
-            AlertUtil.showToast("请查询会员号");
+            AlertUtil.showToast("没有打印数据");
             return;
         }
         if (mJichiSaveResult != null && mJichiSaveResult.size()>0) {
-
+            Print_Ex();
         }
         finish();
     }
@@ -183,7 +185,7 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
                 break;
             case Config.MESSAGE_JICI_SAVE_OK:
                 AlertUtil.dismissProgressDialog();
-                AlertUtil.showToast("消费成功");
+                AlertUtil.showAlert(JichiActivity.this,"提示","消费成功");
                 mJichiSaveResult = (List<JichiSaveResult>) o;
                 if (mJichiSaveResult != null && mJichiSaveResult.size()>0) {
                     refreshUIByData(mJichiSaveResult.get(0));
@@ -235,4 +237,33 @@ public class JichiActivity extends CommonBaseActivity implements INetWorResult {
         }
 
     }
+
+    private void Print_Ex() {
+        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
+            String mes = "";
+
+            if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
+            if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
+            if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
+            mes += "\n";
+
+            JichiSaveResult mJichiSave = mJichiSaveResult.get(0);
+            mes += "门店号: "+Config.posid+"\n";
+            mes += "单号："+mJichiSave.getSheet_no()+"\n";
+            mes += "客户名："+mJichiSave.getCust_name()+"\n";
+            mes += "服务项目名称："+mJichiSave.getServer_name()+"\n";
+            mes += "总金额："+mJichiSave.getTot_money()+"\n";
+            mes += "实际金额："+mJichiSave.getReal_money()+"\n";
+            mes += "总次数："+mJichiSave.getTot_num()+"\n";
+            mes += "剩余次数："+mJichiSave.getRet_num()+"\n";
+            mes += "有效日期："+mJichiSave.getVolid_date()+"\n";
+            mes += "\n";
+            if(!Config.mPrintPageFoot.equals("")){mes += "    "+Config.mPrintPageFoot+"\n";}
+
+            mes += "\n";
+            mes += "\n";
+            AidlUtil.getInstance().printText(mes, 24, false, false);
+        }
+    }
+
 }

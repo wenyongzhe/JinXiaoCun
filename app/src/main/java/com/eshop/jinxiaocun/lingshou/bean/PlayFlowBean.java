@@ -7,8 +7,8 @@ public class PlayFlowBean{
     private double sale_amount;//;//10 //销售金额
     private String pay_way;//”//支付方式
     private String sell_way;//A” //A:正常 B:退货
-    private int card_no;//1 //卡号
-    private int vip_no;//1 //会员号
+    private String card_no;//1 //卡号
+    private String vip_no;//1 //会员号
     private String coin_no;//RMB” //货币标识 RMB
     private double coin_rate;//0.8 //汇率
     private double pay_amount;//” //付款金额
@@ -68,19 +68,19 @@ public class PlayFlowBean{
         this.sell_way = sell_way;
     }
 
-    public int getCard_no() {
+    public String getCard_no() {
         return card_no;
     }
 
-    public void setCard_no(int card_no) {
+    public void setCard_no(String card_no) {
         this.card_no = card_no;
     }
 
-    public int getVip_no() {
+    public String getVip_no() {
         return vip_no;
     }
 
-    public void setVip_no(int vip_no) {
+    public void setVip_no(String vip_no) {
         this.vip_no = vip_no;
     }
 

@@ -1075,9 +1075,9 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mPlayFlowBean.setSale_amount(Float.parseFloat(payAmount));
         mPlayFlowBean.setPay_way(pay_type);
         mPlayFlowBean.setSell_way("A");
-        mPlayFlowBean.setCard_no(1);
-        mPlayFlowBean.setVip_no(1);
-        mPlayFlowBean.setCoin_no("RMB");
+        mPlayFlowBean.setCard_no("");
+        mPlayFlowBean.setVip_no("");
+        mPlayFlowBean.setCoin_no("");
         mPlayFlowBean.setCoin_rate(1);
         mPlayFlowBean.setPay_amount(Float.parseFloat(payAmount));//付款金额
         mPlayFlowBean.setVoucher_no("");

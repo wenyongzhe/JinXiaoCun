@@ -312,7 +312,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             case Config.MESSAGE_VIP_PAY_RESULT:
                 mVipPayBeanResult = (VipPayBeanResult)o;
                 //setResult(Config.MESSAGE_VIP_PAY_RESULT);
-                sellOk();
+                mHan.sendEmptyMessage(0);
+                //sellOk();
                 break;
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
@@ -327,8 +328,15 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                         mHan.sendEmptyMessage(1);
                         break;
                     case 2:
-                        Intent mIntent = new Intent(PayActivity.this, VipCardPayActivity.class);
-                            startActivityForResult(mIntent,300);
+                        if(Config.mMemberInfo!=null){
+                            MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
+                            mLingShouScanImp.sellVipPay(FlowNo,"1",
+                                    mMemberCheckResultItem.getCardNo_TelNo(),
+                                    mMemberCheckResultItem.getPassword(),
+                                    money);
+                        }else{
+                            AlertUtil.showToast("没有会员信息");
+                        }
                         //mHan.sendEmptyMessage(2);
                         break;
 
@@ -431,15 +439,22 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     //rtWzfQry();
                     break;
                 case 2:
-                    if(Config.mMemberInfo!=null){
-                        MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
-                        mLingShouScanImp.sellVipPay(FlowNo,"1",
-                                mMemberCheckResultItem.getCardNo_TelNo(),
-                                mMemberCheckResultItem.getPassword(),
-                                money);
-                    }else{
-                        AlertUtil.showToast("没有会员信息");
+                    ArrayList hashMapList = new ArrayList();
+                    if(memberId==null || btn_jiesuan.equals("")){
+                        AlertUtil.showAlert(PayActivity.this,"提示","请点击会员验证会员信息！");
+                        return;
                     }
+                    HashMap<String,String> hashMapVIP = new HashMap<>();
+                    hashMapVIP.put("payAmount",money+"");
+                    hashMapVIP.put("pay_type","SAV");
+                    hashMapList.add(hashMapVIP);
+                    if( hasMoling ){
+                        HashMap<String,String> hashMap2 = new HashMap<>();
+                        hashMap2.put("payAmount",molingMoney+"");
+                        hashMap2.put("pay_type","CHG");
+                        hashMapList.add(hashMap2);
+                    }
+                    setPlayFlowBean(hashMapList,Config.mMemberInfo.getCardNo_TelNo());
                     break;
                 case 3:
                     rtWzfQry();
@@ -659,7 +674,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     hashMap.put("payAmount",et_pay_money.getText().toString());
                     hashMap.put("pay_type","RMB");
                     hashMapList.add(hashMap);
-                    if( !tv_pay_return.getText().toString().equals("") ){
+                    if( !tv_pay_return.getText().toString().equals("") && !tv_pay_return.getText().toString().equals("0")){
                         HashMap<String,String> hashMap1 = new HashMap<>();
                         hashMap1.put("payAmount",tv_pay_return.getText().toString());
                         hashMap1.put("pay_type","RMB");
@@ -680,15 +695,9 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     hashMapList.add(hashMapWX);
                     break;*/
                 case 2:
-                    if(memberId==null || btn_jiesuan.equals("")){
-                        AlertUtil.showAlert(this,"提示","请点击会员验证会员信息！");
-                        return;
-                    }
-                    HashMap<String,String> hashMapVIP = new HashMap<>();
-                    hashMapVIP.put("payAmount",money+"");
-                    hashMapVIP.put("pay_type","VIP");
-                    hashMapList.add(hashMapVIP);
-                    break;
+                    Intent mIntent = new Intent(PayActivity.this, VipCardPayActivity.class);
+                    startActivityForResult(mIntent,300);
+                    return;
             }
             if( hasMoling ){
                 HashMap<String,String> hashMap2 = new HashMap<>();
@@ -696,7 +705,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 hashMap2.put("pay_type","CHG");
                 hashMapList.add(hashMap2);
             }
-            setPlayFlowBean(hashMapList);
+            setPlayFlowBean(hashMapList,"");
         }catch (Exception e){
             Log.e("","");
         }
@@ -873,10 +882,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         mLingShouScanImp.upSallFlow(mSaleFlowBeanList);
     }
 
-    private void setPlayFlowBean(List<HashMap<String,String>> hashMap){
+    private void setPlayFlowBean(List<HashMap<String,String>> hashMap,String mCard_no){
         if(Config.saleMan == null){
             Config.saleMan = "";
         }
+        mPlayFlowBeanList.clear();
         for(int i=0; i<hashMap.size(); i++){
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();
             mPlayFlowBean.setBranch_no(Config.branch_no);
@@ -889,19 +899,18 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
+            mPlayFlowBean.setCard_no(mCard_no);
             if(Config.mMemberInfo==null){
-                mPlayFlowBean.setCard_no(1);
-                mPlayFlowBean.setVip_no(1);
+                mPlayFlowBean.setVip_no("");
             }else{
-                mPlayFlowBean.setCard_no(Integer.decode(Config.mMemberInfo.getCardNo_TelNo()));
-                mPlayFlowBean.setVip_no(Integer.decode(Config.mMemberInfo.getCardNo_TelNo()));
+                mPlayFlowBean.setVip_no(Config.mMemberInfo.getCardNo_TelNo());
             }
-            mPlayFlowBean.setCoin_no("RMB");
+            mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);
             mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
-            mPlayFlowBean.setCounter_no("");
+            mPlayFlowBean.setCounter_no("9999");
             mPlayFlowBean.setOper_id(Config.UserName);
             mPlayFlowBean.setSale_man(Config.saleMan);
             mPlayFlowBean.setShift_no("");

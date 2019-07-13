@@ -138,11 +138,15 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
     //搜索
     @OnClick(R.id.iv_search)
     public void onClickSearch() {
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
+        sercheVIPInfo();
+    }
+
+    protected void sercheVIPInfo(){
         if (TextUtils.isEmpty(mEtSearch.getText().toString().trim())) {
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
-        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -200,7 +204,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
             String codedContent = data.getStringExtra("codedContent");
             if (codedContent != null && !codedContent.equals("")) {
                 mEtSearch.setText(codedContent);
-                onClickSearch();
+                sercheVIPInfo();
             }
             return;
         }

@@ -166,7 +166,22 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 return false;
             }
         });
-        et_barcode.setOnClickListener(new View.OnClickListener() {
+//        et_barcode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent mIntent = new Intent(LingShouCreatAtivity.this, QreShanpingActivity.class);
+//                if(mGetClassPluResultList!=null){
+//
+//                    mGetClassPluResultList.clear();
+//                    mGetClassPluResultList.addAll(mListData);
+//                }
+//                mIntent.putExtra("selectList", (Serializable) mGetClassPluResultList);
+//                mIntent.putExtra("lingshou",true);
+//                startActivityForResult(mIntent, 100);
+//            }
+//        });
+
+        ib_seach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(LingShouCreatAtivity.this, QreShanpingActivity.class);
@@ -178,18 +193,13 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                 mIntent.putExtra("selectList", (Serializable) mGetClassPluResultList);
                 mIntent.putExtra("lingshou",true);
                 startActivityForResult(mIntent, 100);
-            }
-        });
 
-        ib_seach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mLingShouScanImp.getPLUInfo(et_barcode.getText().toString().trim());
-                /*隐藏软键盘*/
-                InputMethodManager inputMethodManager = (InputMethodManager) LingShouCreatAtivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (inputMethodManager.isActive()) {
-                    inputMethodManager.hideSoftInputFromWindow(et_barcode.getApplicationWindowToken(), 0);
-                }
+//                mLingShouScanImp.getPLUInfo(et_barcode.getText().toString().trim());
+//                /*隐藏软键盘*/
+//                InputMethodManager inputMethodManager = (InputMethodManager) LingShouCreatAtivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if (inputMethodManager.isActive()) {
+//                    inputMethodManager.hideSoftInputFromWindow(et_barcode.getApplicationWindowToken(), 0);
+//                }
             }
         });
 
@@ -448,7 +458,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     } else {
                         mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
                         addListData();
-                        //reflashList();
+                        reflashList();
                     }
                     // setSaleFlowBean();
                 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
@@ -30,6 +31,7 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.zjPrinter.PrinterSettingActivity;
+import com.zxing.android.CaptureActivity;
 
 import java.util.List;
 
@@ -62,6 +64,8 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     EditText metRealIncomeMoney;//实收
     @BindView(R.id.et_remarks)
     EditText mEtRemarks;//备注
+    @BindView(R.id.iv_scan)
+    ImageView iv_scan;
 
     private IMemberList mApi;
     private ILingshouScan mApi2;
@@ -125,6 +129,13 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             @Override
             public void afterTextChanged(Editable s) {
                 setCountRechargeMoney();
+            }
+        });
+        iv_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MemberRechargeActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, Config.REQ_QR_CODE);
             }
         });
     }
@@ -360,6 +371,20 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if(inputMethodManager.isActive()){
             inputMethodManager.hideSoftInputFromWindow(mEtSearch.getApplicationWindowToken(), 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if (codedContent != null && !codedContent.equals("")) {
+                mEtSearch.setText(codedContent);
+                onClickSearch();
+            }
+            return;
         }
     }
 }

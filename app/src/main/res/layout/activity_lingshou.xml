@@ -13,12 +13,11 @@
 
         <ImageView
             android:id="@+id/iv_scan"
+            android:layout_width="25dp"
+            android:layout_height="26dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/scan"
-            />
+            android:src="@drawable/scan" />
 
         <EditText
             android:id="@+id/et_barcode"
@@ -28,10 +27,9 @@
             android:selectAllOnFocus="true"
             style="@style/EditText_Grey_Border"
             android:layout_gravity="center_vertical"
-            android:layout_width="fill_parent"
+            android:layout_width="270dp"
             android:layout_height="@dimen/layout_margin35"/>
         <ImageButton
-            android:visibility="gone"
             android:id="@+id/ib_seach"
             android:background="@drawable/seach"
             android:layout_width="wrap_content"

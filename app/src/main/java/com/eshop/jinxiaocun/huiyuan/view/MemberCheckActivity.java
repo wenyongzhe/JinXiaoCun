@@ -19,6 +19,8 @@ import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;

@@ -11,6 +11,7 @@ import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBean;
 import com.eshop.jinxiaocun.lingshou.bean.BillDiscountBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.CheckSaleManBean;
+import com.eshop.jinxiaocun.lingshou.bean.ElecCardBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBean;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthBean;
@@ -278,6 +279,48 @@ public class LingShouScanImp implements ILingshouScan {
             }
         }
     }
+
+    //电子会员卡查询卡号
+    @Override
+    public void eleccardQry(String flowno,String auth_code ) {
+        ElecCardBean mNetPlayBean = new ElecCardBean();
+        mNetPlayBean.getJsonData().setAs_branchNo(Config.branch_no);
+        mNetPlayBean.getJsonData().setAs_flowno(flowno);
+        mNetPlayBean.getJsonData().setAs_posid(Config.posid);
+        mNetPlayBean.getJsonData().setPay_amount(0);
+        mNetPlayBean.getJsonData().setTotal_amount(0);
+        mNetPlayBean.getJsonData().setPay_type("");
+        mNetPlayBean.getJsonData().setOrder_title("");
+        mNetPlayBean.getJsonData().setAuth_code(auth_code);
+        mNetPlayBean.setStrCmd(WebConfig.RT_GET_ELECCARD);
+
+        Map map = ReflectionUtils.obj2Map(mNetPlayBean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new EleccardQryInterface());
+    }
+
+    //电子会员卡查询卡号
+    class EleccardQryInterface implements IResponseListener {
+
+        @Override
+        public void handleError(Object event) {
+            Log.e("error", event.toString());
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+        }
+
+        @Override
+        public void handleResultJson(String status, String Msg, String jsonData) {
+            NetPlayBeanResult mNetPlayBeanResult =  mJsonFormatImp.JsonToBean(jsonData,NetPlayBeanResult.class);
+            if(status.equals(Config.MESSAGE_OK+"")){
+                mHandler.handleResule(Config.MESSAGE_ELEC_CARD_RETURN,mNetPlayBeanResult);
+            }else{
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
+            }
+        }
+    }
+
 //{"return_code":"1013","return_msg":"商户订单号重复","paytype":"","trade_no":""}
     //{"return_code":"010001","return_msg":"超时","paytype":"WECHAT","trade_no":""}
     //付款方式

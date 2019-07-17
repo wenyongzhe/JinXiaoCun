@@ -26,4 +26,5 @@ public interface ILingshouScan {
     public void getSystemInfo();//8.1参数（抹零，卡密码，四舍五入等）
     public void saletemp(List mListData);//1.15 销售预售/结转
     public void checkSaleman(String mSaleman);
+    public void eleccardQry(String flowno,String auth_code );
 }

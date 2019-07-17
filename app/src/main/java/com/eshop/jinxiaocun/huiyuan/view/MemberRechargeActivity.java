@@ -23,6 +23,7 @@ import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.AidlUtil;
@@ -69,7 +70,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
 
     private IMemberList mApi;
     private ILingshouScan mApi2;
-
+    GetFlowNoBeanResult.FlowNoJson mFlowNoJson;
 
     @Override
     protected int getLayoutId() {
@@ -144,6 +145,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     protected void initData() {
         mApi = new MemberImp(this);
         mApi2 = new LingShouScanImp(this);
+        mApi2.getFlowNo();//取流水号
     }
 
     //计算合计并显示
@@ -208,7 +210,14 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
             return;
         }
         AlertUtil.showNoButtonProgressDialog(this,"正在为您充值，请稍后...");
-        mApi2.getFlowNo();//取流水号
+
+        if(mFlowNoJson != null ){
+            String flowNo = MyUtils.formatFlowNo(mFlowNoJson.getFlowNo());
+            rechargeData(flowNo);
+        }else{
+            AlertUtil.dismissProgressDialog();
+            AlertUtil.showToast("没有小票号信息");
+        }
         hideSoftInput();
 
     }
@@ -233,7 +242,17 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag){
-
+            case Config.MESSAGE_ELEC_CARD_RETURN:
+                NetPlayBeanResult mNetPlayBeanResult = (NetPlayBeanResult)o;
+                if(mNetPlayBeanResult!=null){
+                    if(mNetPlayBeanResult.getReturn_code().equals("000000")){
+                        mEtSearch.setText(mNetPlayBeanResult.getTrade_no());
+                        onClickSearch();
+                    }else{
+                        AlertUtil.showToast("查询失败 "+mNetPlayBeanResult.getReturn_msg());
+                    }
+                }
+                break;
             case Config.MESSAGE_OK:
                 List<MemberCheckResultItem> data = (List<MemberCheckResultItem>) o;
                 if (data != null && data.size()>0) {
@@ -244,14 +263,7 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 AlertUtil.dismissProgressDialog();
                 break;
             case Config.MESSAGE_FLOW_NO:
-                GetFlowNoBeanResult.FlowNoJson result = (GetFlowNoBeanResult.FlowNoJson)o;
-                if(result != null ){
-                    String flowNo = MyUtils.formatFlowNo(result.getFlowNo());
-                    rechargeData(flowNo);
-                }else{
-                    AlertUtil.dismissProgressDialog();
-                    AlertUtil.showToast("没有小票号信息");
-                }
+                mFlowNoJson = (GetFlowNoBeanResult.FlowNoJson)o;
                 break;
             case Config.RESULT_SUCCESS:
                 AlertUtil.dismissProgressDialog();
@@ -381,8 +393,10 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
         if (requestCode == Config.REQ_QR_CODE && data != null) {
             String codedContent = data.getStringExtra("codedContent");
             if (codedContent != null && !codedContent.equals("")) {
-                mEtSearch.setText(codedContent);
-                onClickSearch();
+                String flowNo = MyUtils.formatFlowNo(mFlowNoJson.getFlowNo());
+                mApi2.eleccardQry(flowNo,codedContent);
+//                mEtSearch.setText(codedContent);
+//                onClickSearch();
             }
             return;
         }

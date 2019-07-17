@@ -100,6 +100,7 @@ public class Config {
     public final static int PICHI_SELECT_DIALOG = 51;
     public final static int MESSAGE_JICI_CHAXUN_OK = 52;
     public final static int MESSAGE_JICI_SAVE_OK = 53;
+    public final static int MESSAGE_ELEC_CARD_RETURN = 54;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
     public final static String GRANT_ITEM_CAHNGE_PRICE = "10";//单品议价

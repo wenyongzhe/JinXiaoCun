@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="15dp"
+    android:paddingRight="10dp"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/lin_layout"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_billType"
+            style="@style/TextView_Grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="该单非销售记录！不能退货"
+            android:maxLines="1"
+            />
+        <TextView
+            android:id="@+id/tv_price"
+            style="@style/TextView_Grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="￥158.56"
+            android:textColor="@color/red"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_reQty"
+        style="@style/TextView_Grey"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="805.00"
+        />
+
+    <TextView
+        android:id="@+id/tv_qty"
+        style="@style/TextView_Grey"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="800.00"
+        />
+
+</LinearLayout>

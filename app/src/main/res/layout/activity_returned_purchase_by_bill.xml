@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="单号"
+            android:textColor="@color/red"
+            android:layout_marginRight="5dp"
+            />
+        <EditText
+            android:id="@+id/et_billNo"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:imeOptions="actionSend"
+            style="@style/EditText_Grey_Border"
+            android:gravity="left|center_vertical"
+            android:hint="请输入单号搜索"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_search"
+            android:background="@drawable/seach"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_item_height_40"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:layout_below="@id/ll_search"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:background="@color/bg_grid_press"
+        >
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:text="商品"
+            />
+
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="可退数量"
+            android:gravity="center"
+            />
+        <TextView
+            style="@style/TextView_Black"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="退货数量"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:id="@+id/tv_allMoney"
+            style="@style/TextView_Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="应退金额:￥10000.00"
+            android:textColor="@color/red"
+            android:layout_marginRight="5dp"
+            />
+
+        <Button
+            android:id="@+id/btn_allReturned"
+            style="@style/Button_blue"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="全退"
+            />
+
+        <Button
+            android:id="@+id/btn_sureReturned"
+            style="@style/Button_blue"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            />
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_billData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_bar"
+        android:layout_above="@id/ll_bottom"
+        android:divider="@color/divider"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:dividerHeight="1dip"
+        android:listSelector="#00000000"
+        />
+
+
+</RelativeLayout>

@@ -31,6 +31,7 @@ import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaOrderListActivity;
 import com.eshop.jinxiaocun.stock.view.GoodDetailCheckActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
+import com.eshop.jinxiaocun.turnedpurchase.view.ReturnedPurchaseByBillActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 
@@ -54,7 +55,7 @@ public class HomeFragment extends BaseFragment {
 //            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
             R.drawable.peisong,
-//            R.drawable.menber
+            R.drawable.tbgl
     };
     private int[] nameIds = {
             R.string.item_message_lingshou,
@@ -64,8 +65,8 @@ public class HomeFragment extends BaseFragment {
             R.string.menu_caigoudan,
             R.string.menu_shanpingchaxun,
             R.string.menu_pifa_xiaoshou,
-            R.string.menu_peisong_manager
-//            R.string.menu_jichi_manage
+            R.string.menu_peisong_manager,
+            R.string.menu_returned_purchase_by_bill
 //            R.string.menu_diaobo_manage,
 //            R.string.menu_peisong_manager,
     };
@@ -137,10 +138,14 @@ public class HomeFragment extends BaseFragment {
                 intent.setClass(Application.mContext, PeisongManagerActivity.class);
                 startActivity(intent);
                 break;
-            case 8://记次
+            case 8:
+                intent.setClass(Application.mContext, ReturnedPurchaseByBillActivity.class);
+                startActivity(intent);
+                break;
+//            case 8://记次
 //                intent.setClass(Application.mContext, JichiActivity.class);
 //                startActivity(intent);
-                break;
+//                break;
 //            case 8://批发销售单
 //                intent.setClass(Application.mContext, PiFaXiaoshouDanScanActivity.class);
 //                startActivity(intent);

@@ -11,7 +11,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.huiyuan.view.IElecCardInterface;
 import com.eshop.jinxiaocun.huiyuan.view.MemberCheckActivity;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
+import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.NfcUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -30,7 +35,7 @@ import butterknife.OnClick;
 
 import static com.landicorp.android.eptapi.device.RFCardReader.LED_GREEN;
 
-public class SaveMemberActivity extends MemberCheckActivity {
+public class SaveMemberActivity extends MemberCheckActivity implements IElecCardInterface {
 
     @BindView(R.id.bt_ok)
     Button bt_ok;//
@@ -141,16 +146,37 @@ public class SaveMemberActivity extends MemberCheckActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Config.REQ_QR_CODE && data != null) {
             String codedContent = data.getStringExtra("codedContent");
             if(codedContent != null && !codedContent.equals("")){
-                mEtSearch.setText(codedContent);
-                onClickSearch();
+                getElecCradNo(codedContent);
             }
         }
     }
 
+    @Override
+    public void getElecCradNo(String auth_code) {
+        ILingshouScan mApi2 = new LingShouScanImp(new INetWorResult() {
+            @Override
+            public void handleResule(int flag, Object o) {
+                switch (flag) {
+                    case Config.MESSAGE_ELEC_CARD_RETURN:
+                        NetPlayBeanResult mNetPlayBeanResult = (NetPlayBeanResult) o;
+                        if (mNetPlayBeanResult != null) {
+                            if (mNetPlayBeanResult.getReturn_code().equals("000000")) {
+                                mEtSearch.setText(mNetPlayBeanResult. getTrade_no());
+                                onClickSearch();
+                            } else {
+                                AlertUtil.showToast("查询失败 " + mNetPlayBeanResult.getReturn_msg());
+                            }
+                        }
+                        break;
+                }
+
+            }
+        });
+        mApi2.eleccardQry("",auth_code);
+    }
 
     //定义寻卡监听器
     RFCardReader.OnSearchListener onSearchListener = new

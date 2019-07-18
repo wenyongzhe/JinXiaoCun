@@ -20,7 +20,9 @@ import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
+import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
+import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -46,7 +48,7 @@ import static com.landicorp.android.eptapi.device.RFCardReader.LED_GREEN;
  * Desc: 会员查询
  */
 
-public class MemberCheckActivity extends CommonBaseActivity implements INetWorResult {
+public class MemberCheckActivity extends CommonBaseActivity implements INetWorResult,IElecCardInterface {
 
 
     @BindView(R.id.et_search)
@@ -68,6 +70,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
 
     private IMemberList mApi;
     public List<MemberCheckResultItem> data;
+    private ILingshouScan mApi2;
 
     @Override
     protected int getLayoutId() {
@@ -205,8 +208,9 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         if (requestCode == Config.REQ_QR_CODE && data != null) {
             String codedContent = data.getStringExtra("codedContent");
             if (codedContent != null && !codedContent.equals("")) {
-                mEtSearch.setText(codedContent);
-                sercheVIPInfo();
+                getElecCradNo(codedContent);
+//                mEtSearch.setText(codedContent);
+//                sercheVIPInfo();
             }
             return;
         }
@@ -335,4 +339,28 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
                 }
 
             };
+
+    @Override
+    public void getElecCradNo(String auth_code) {
+        mApi2 = new LingShouScanImp(new INetWorResult() {
+            @Override
+            public void handleResule(int flag, Object o) {
+                switch (flag) {
+                    case Config.MESSAGE_ELEC_CARD_RETURN:
+                        NetPlayBeanResult mNetPlayBeanResult = (NetPlayBeanResult) o;
+                        if (mNetPlayBeanResult != null) {
+                            if (mNetPlayBeanResult.getReturn_code().equals("000000")) {
+                                mEtSearch.setText(mNetPlayBeanResult.getTrade_no());
+                                sercheVIPInfo();
+                            } else {
+                                AlertUtil.showToast("查询失败 " + mNetPlayBeanResult.getReturn_msg());
+                            }
+                        }
+                        break;
+                }
+
+            }
+        });
+        mApi2.eleccardQry("",auth_code);
+    }
 }

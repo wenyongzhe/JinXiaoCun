@@ -753,10 +753,15 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             String codedContent = data.getStringExtra("codedContent");
 
             tempayway = "";
-            if(codedContent.startsWith("28")){
-                tempayway = "ZFB";
-            }else{
+            if(codedContent.startsWith("10") ||
+                    codedContent.startsWith("11") ||
+                    codedContent.startsWith("12") ||
+                    codedContent.startsWith("13") ||
+                    codedContent.startsWith("14") ||
+                    codedContent.startsWith("15")){
                 tempayway = "WXZ";
+            }else{
+                tempayway = "ZFB";
             }
 
             temMoney = money+"";

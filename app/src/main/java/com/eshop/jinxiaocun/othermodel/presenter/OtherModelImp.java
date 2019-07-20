@@ -18,6 +18,7 @@ import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBean;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.SalesRecordBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
@@ -25,6 +26,7 @@ import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
+import com.eshop.jinxiaocun.turnedpurchase.bean.ReturnedPurchaseBean;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
@@ -221,6 +223,19 @@ public class OtherModelImp implements IOtherModel {
 
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getGetWsdlUri(),map,new CiteOrderInterface());
+    }
+
+    /**
+     * 根据单号获取销售记录数据
+     * @param orderNo 单号
+     */
+    @Override
+    public void getSalesRecordDatas(String orderNo) {
+        SalesRecordBean bean = new SalesRecordBean();
+        bean.JsonData.as_branchNo = Config.branch_no;//门店机构
+        bean.JsonData.as_flowno = orderNo;//单号
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SalesRecordInterface());
     }
 
 
@@ -552,6 +567,35 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_FAIL,"引用单据查询失败: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //获取销售记录
+    class SalesRecordInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<ReturnedPurchaseBean> resultList = mJsonFormatImp.JsonToList(jsonData,ReturnedPurchaseBean.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录异常: "+e.getMessage());
                 e.printStackTrace();
             }
         }

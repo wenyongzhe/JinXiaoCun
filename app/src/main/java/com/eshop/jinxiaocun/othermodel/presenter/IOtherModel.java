@@ -33,5 +33,6 @@ public interface IOtherModel {
     void getOrderGoodsPrice(String orderType ,String d_branchNo ,String as_itemNo ,String supcust_no );
     //引用单据查询
     void getCiteOrderDatas(String sheetType ,String operId,String checkFlag, int pageIndex,int pageSize,String beginTime ,String endTime);
-
+    //根据单号获取销售记录数据
+    void getSalesRecordDatas(String orderNo );
 }

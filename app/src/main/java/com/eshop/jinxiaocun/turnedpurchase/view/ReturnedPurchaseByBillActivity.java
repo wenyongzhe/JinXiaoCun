@@ -3,6 +3,7 @@ package com.eshop.jinxiaocun.turnedpurchase.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -10,9 +11,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
+import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.turnedpurchase.adapter.ReturnedPurchaseByBillAdapter;
 import com.eshop.jinxiaocun.turnedpurchase.bean.ReturnedPurchaseBean;
+import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
@@ -28,7 +33,7 @@ import butterknife.OnClick;
  * Date: 2019/7/17
  * Desc:   按单退货
  */
-public class ReturnedPurchaseByBillActivity extends CommonBaseActivity {
+public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implements INetWorResult {
 
     @BindView(R.id.et_billNo)
     EditText mEditBillNo;
@@ -37,6 +42,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity {
     @BindView(R.id.lv_billData)
     ListView mListView;
 
+    private IOtherModel mServerApi;
     private ReturnedPurchaseByBillAdapter mAdapter;
     private List<ReturnedPurchaseBean> mDataList = new ArrayList<>();
     private ReturnedPurchaseBean mSelectMain;
@@ -49,11 +55,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView() {
         setTopToolBar("按单退货", R.mipmap.ic_left_light, "", 0, "");
 
+        mEditBillNo.setOnKeyListener(onKey);
         mAdapter = new ReturnedPurchaseByBillAdapter(this,mDataList);
         mAdapter.setCallback(new ReturnedPurchaseByBillAdapter.ModifyCallback() {
             @Override
@@ -82,31 +88,46 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity {
     @Override
     protected void initData() {
 
-        float allMoney =0;
-        for(int i=0;i<20;i++){
-            ReturnedPurchaseBean bean = new ReturnedPurchaseBean();
-            bean.setFlow_no("NO_00001");
-            bean.setItem_no("AA"+i);
-            bean.setItem_name("天仙苹果_"+i);
-            bean.setRe_qty(i<<1);
-            bean.setSale_qnty(0);
-            bean.setSale_price((i<<1)+1);
+        mServerApi = new OtherModelImp(this);
 
-            mDataList.add(bean);
-            allMoney+=bean.getRe_qty()*bean.getSale_price();
-        }
-
-        mAdapter.add(mDataList);
-        mTxtAllMoney.setText(String.format("应退金额:￥%s",allMoney));
+//        float allMoney =0;
+//        for(int i=0;i<20;i++){
+//            ReturnedPurchaseBean bean = new ReturnedPurchaseBean();
+//            bean.setFlow_no("NO_00001");
+//            bean.setItem_no("AA"+i);
+//            bean.setItem_name("天仙苹果_"+i);
+//            bean.setRe_qty(i<<1);
+//            bean.setSale_qnty(0);
+//            bean.setSale_price((i<<1)+1);
+//
+//            mDataList.add(bean);
+//            allMoney+=bean.getRe_qty()*bean.getSale_price();
+//        }
+//
+//        mAdapter.add(mDataList);
+//        mTxtAllMoney.setText(String.format("应退金额:￥%s",allMoney));
     }
+
+    //手动输入条码事件
+    View.OnKeyListener onKey= new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_UP){
+                onClickSearch();
+                return true;
+            }
+            return false;
+        }
+    };
 
     //按单号搜索 退货单
     @OnClick(R.id.ib_search)
     public void onClickSearch(){
-        if(TextUtils.isEmpty(mEditBillNo.getText().toString())){
+        if(TextUtils.isEmpty(mEditBillNo.getText().toString().trim())){
             AlertUtil.showToast("请输入单据号!");
             return;
         }
+        mServerApi.getSalesRecordDatas(mEditBillNo.getText().toString().trim());
     }
 
     //全退
@@ -189,5 +210,26 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity {
         }
 
 
+    }
+
+    //网络返回的数据处理
+    @Override
+    public void handleResule(int flag, Object o) {
+        switch (flag){
+            case Config.MESSAGE_OK:
+                mDataList = (List<ReturnedPurchaseBean>) o;
+                mAdapter.add(mDataList);
+
+                float allMoney =0;
+                for(ReturnedPurchaseBean bean:mDataList){
+                    allMoney+=bean.getRe_qty()*bean.getSale_price();
+                }
+                mTxtAllMoney.setText(String.format("应退金额:￥%s",allMoney));
+
+                break;
+            case Config.MESSAGE_ERROR:
+                AlertUtil.showToast(o.toString());
+                break;
+        }
     }
 }

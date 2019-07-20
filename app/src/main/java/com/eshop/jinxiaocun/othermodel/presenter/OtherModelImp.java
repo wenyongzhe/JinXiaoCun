@@ -16,6 +16,8 @@ import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBean;
 import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBean;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.PayFlowBean;
+import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesRecordBean;
@@ -24,14 +26,11 @@ import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SheetSaveBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
-import com.eshop.jinxiaocun.turnedpurchase.bean.ReturnedPurchaseBean;
+import com.eshop.jinxiaocun.othermodel.bean.ReturnedPurchaseResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
-
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -236,6 +235,19 @@ public class OtherModelImp implements IOtherModel {
         bean.JsonData.as_flowno = orderNo;//单号
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SalesRecordInterface());
+    }
+
+    /**
+     * 根据单号获取付款记录数据
+     * @param orderNo 单号
+     */
+    @Override
+    public void getPayRecordDatas(String orderNo) {
+        PayFlowBean bean = new PayFlowBean();
+        bean.JsonData.as_branchNo = Config.branch_no;//门店机构
+        bean.JsonData.as_flowno = orderNo;//单号
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new PayRecordInterface());
     }
 
 
@@ -589,13 +601,42 @@ public class OtherModelImp implements IOtherModel {
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    List<ReturnedPurchaseBean> resultList = mJsonFormatImp.JsonToList(jsonData,ReturnedPurchaseBean.class);
+                    List<ReturnedPurchaseResult> resultList = mJsonFormatImp.JsonToList(jsonData, ReturnedPurchaseResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
                     mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录失败: "+msg);
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //获取付款记录
+    class PayRecordInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PayRecordResult> resultList = mJsonFormatImp.JsonToList(jsonData,PayRecordResult.class);
+                    mHandler.handleResule(Config.RESULT_SUCCESS,resultList);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"获取付款记录失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"获取付款记录异常: "+e.getMessage());
                 e.printStackTrace();
             }
         }

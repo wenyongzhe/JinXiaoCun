@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.turnedpurchase.bean.ReturnedPurchaseBean;
+import com.eshop.jinxiaocun.othermodel.bean.ReturnedPurchaseResult;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
@@ -24,13 +24,13 @@ import java.util.List;
  */
 public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
 
-    private List<ReturnedPurchaseBean> listInfo;
+    private List<ReturnedPurchaseResult> listInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
     private ModifyCallback mModifyCallback;
     private Context mContext;
 
-    public ReturnedPurchaseByBillAdapter(Context context,List<ReturnedPurchaseBean> listInfo) {
+    public ReturnedPurchaseByBillAdapter(Context context,List<ReturnedPurchaseResult> listInfo) {
         mContext=context;
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
@@ -66,7 +66,7 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
         TextView reQty = ViewHolderUtils.get(convertView, R.id.tv_reQty);//可退数量
         final TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);//退货数量
 
-        final ReturnedPurchaseBean info = listInfo.get(position);
+        final ReturnedPurchaseResult info = listInfo.get(position);
         goodsName.setSelected(true);
         goodsName.setText(info.getItem_name());
         price.setText(String.format("￥%s",info.getSale_price()));
@@ -89,7 +89,7 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(List<ReturnedPurchaseBean> listInfo) {
+    public void add(List<ReturnedPurchaseResult> listInfo) {
         this.listInfo = listInfo;
         notifyDataSetChanged();
     }

@@ -35,4 +35,6 @@ public interface IOtherModel {
     void getCiteOrderDatas(String sheetType ,String operId,String checkFlag, int pageIndex,int pageSize,String beginTime ,String endTime);
     //根据单号获取销售记录数据
     void getSalesRecordDatas(String orderNo );
+    //根据单号获取付款记录数据
+    void getPayRecordDatas(String orderNo );
 }

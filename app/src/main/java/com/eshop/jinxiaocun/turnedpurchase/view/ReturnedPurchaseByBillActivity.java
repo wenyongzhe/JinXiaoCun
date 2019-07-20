@@ -1,6 +1,5 @@
 package com.eshop.jinxiaocun.turnedpurchase.view;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -16,7 +15,7 @@ import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.turnedpurchase.adapter.ReturnedPurchaseByBillAdapter;
-import com.eshop.jinxiaocun.turnedpurchase.bean.ReturnedPurchaseBean;
+import com.eshop.jinxiaocun.othermodel.bean.ReturnedPurchaseResult;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -44,8 +43,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
     private IOtherModel mServerApi;
     private ReturnedPurchaseByBillAdapter mAdapter;
-    private List<ReturnedPurchaseBean> mDataList = new ArrayList<>();
-    private ReturnedPurchaseBean mSelectMain;
+    private List<ReturnedPurchaseResult> mDataList = new ArrayList<>();
+    private ReturnedPurchaseResult mSelectMain;
     private int modifyQtyPosition =-1;
 
 
@@ -92,7 +91,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
 //        float allMoney =0;
 //        for(int i=0;i<20;i++){
-//            ReturnedPurchaseBean bean = new ReturnedPurchaseBean();
+//            ReturnedPurchaseResult bean = new ReturnedPurchaseResult();
 //            bean.setFlow_no("NO_00001");
 //            bean.setItem_no("AA"+i);
 //            bean.setItem_name("天仙苹果_"+i);
@@ -217,11 +216,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     public void handleResule(int flag, Object o) {
         switch (flag){
             case Config.MESSAGE_OK:
-                mDataList = (List<ReturnedPurchaseBean>) o;
+                mDataList = (List<ReturnedPurchaseResult>) o;
                 mAdapter.add(mDataList);
 
                 float allMoney =0;
-                for(ReturnedPurchaseBean bean:mDataList){
+                for(ReturnedPurchaseResult bean:mDataList){
                     allMoney+=bean.getRe_qty()*bean.getSale_price();
                 }
                 mTxtAllMoney.setText(String.format("应退金额:￥%s",allMoney));

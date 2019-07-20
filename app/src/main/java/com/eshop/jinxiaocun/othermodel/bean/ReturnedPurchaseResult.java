@@ -1,11 +1,11 @@
-package com.eshop.jinxiaocun.turnedpurchase.bean;
+package com.eshop.jinxiaocun.othermodel.bean;
 
 /**
  * Author: 安仔夏天勤奋
  * Date: 2019/7/17
  * Desc:
  */
-public class ReturnedPurchaseBean {
+public class ReturnedPurchaseResult {
 
     private String flow_no;//单据号
     private String item_no;//商品编码

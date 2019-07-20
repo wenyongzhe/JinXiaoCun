@@ -17,11 +17,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_billType"
-            style="@style/TextView_Grey"
+            android:id="@+id/tv_goodsName"
+            style="@style/AutoScrollTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="该单非销售记录！不能退货"
             android:maxLines="1"
             />
         <TextView
@@ -29,7 +28,6 @@
             style="@style/TextView_Grey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="￥158.56"
             android:textColor="@color/red"
             android:maxLines="1"
             />
@@ -41,16 +39,17 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="805.00"
         />
 
     <TextView
         android:id="@+id/tv_qty"
-        style="@style/TextView_Grey"
+        style="@style/EditText_Black"
         android:layout_width="80dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:maxLines="1"
         android:gravity="center"
-        android:text="800.00"
         />
 
 </LinearLayout>

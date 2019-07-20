@@ -54,8 +54,8 @@ public class HomeFragment extends BaseFragment {
             R.drawable.kcgl,
 //            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
-            R.drawable.peisong
-//            R.drawable.tbgl
+            R.drawable.peisong,
+            R.drawable.tbgl
     };
     private int[] nameIds = {
             R.string.item_message_lingshou,
@@ -65,8 +65,8 @@ public class HomeFragment extends BaseFragment {
             R.string.menu_caigoudan,
             R.string.menu_shanpingchaxun,
             R.string.menu_pifa_xiaoshou,
-            R.string.menu_peisong_manager
-//            R.string.menu_returned_purchase_by_bill
+            R.string.menu_peisong_manager,
+            R.string.menu_returned_purchase_by_bill
 //            R.string.menu_diaobo_manage,
 //            R.string.menu_peisong_manager,
     };

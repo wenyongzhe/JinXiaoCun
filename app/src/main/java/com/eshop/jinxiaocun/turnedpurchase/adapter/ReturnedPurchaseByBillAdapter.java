@@ -1,5 +1,7 @@
 package com.eshop.jinxiaocun.turnedpurchase.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
 
+
 /**
  * Author: 安仔夏天勤奋
  * Date: 2019/7/17
@@ -24,10 +27,17 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
     private List<ReturnedPurchaseBean> listInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
+    private ModifyCallback mModifyCallback;
+    private Context mContext;
 
-    public ReturnedPurchaseByBillAdapter(List<ReturnedPurchaseBean> listInfo) {
+    public ReturnedPurchaseByBillAdapter(Context context,List<ReturnedPurchaseBean> listInfo) {
+        mContext=context;
         this.listInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
+    }
+
+    public void setCallback(ModifyCallback modifyCallback){
+        mModifyCallback = modifyCallback;
     }
 
     @Override
@@ -45,22 +55,31 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_returned_purchase_by_bill, parent, false);
         }
-        TextView billType = ViewHolderUtils.get(convertView, R.id.tv_billType);//单据类型
+        TextView goodsName = ViewHolderUtils.get(convertView, R.id.tv_goodsName);//商品名称
         TextView price = ViewHolderUtils.get(convertView, R.id.tv_price);//价格
         TextView reQty = ViewHolderUtils.get(convertView, R.id.tv_reQty);//可退数量
-        TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);//退货数量
+        final TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);//退货数量
 
-        ReturnedPurchaseBean info = listInfo.get(position);
-
-        billType.setText(info.getBillType());
-        price.setText(String.format("￥%s",info.getPrice()));
-        reQty.setText(MyUtils.convertToString(info.getReQty(),"0"));
-        qty.setText(MyUtils.convertToString(info.getQty(),"0"));
+        final ReturnedPurchaseBean info = listInfo.get(position);
+        goodsName.setSelected(true);
+        goodsName.setText(info.getItem_name());
+        price.setText(String.format("￥%s",info.getSale_price()));
+        reQty.setText(MyUtils.convertToString(info.getRe_qty(),"0"));
+        qty.setText(MyUtils.convertToString(info.getSale_qnty(),"0"));
+        qty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mModifyCallback!=null){
+                    mModifyCallback.onModifyReQty(position,qty.getText().toString().trim());
+                }
+            }
+        });
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -82,4 +101,11 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }
+
+
+    public interface ModifyCallback{
+        void onModifyReQty(int position ,String qty);
+    }
+
+
 }

@@ -17,7 +17,7 @@ public class ReturnedPurchaseResult {
     private String sell_way;//-销售方式: A销售 B退货 D赠送
     private int re_qty;//可退数量
     private int already_re_qty; //已退数量
-
+    private int rp_Qty;//退货数量
 
     public String getFlow_no() {
         return flow_no;
@@ -97,5 +97,13 @@ public class ReturnedPurchaseResult {
 
     public void setAlready_re_qty(int already_re_qty) {
         this.already_re_qty = already_re_qty;
+    }
+
+    public int getRp_Qty() {
+        return rp_Qty;
+    }
+
+    public void setRp_Qty(int rp_Qty) {
+        this.rp_Qty = rp_Qty;
     }
 }

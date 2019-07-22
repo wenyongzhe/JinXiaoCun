@@ -64,19 +64,19 @@ public class ReturnedPurchaseByBillAdapter extends BaseAdapter {
         TextView goodsName = ViewHolderUtils.get(convertView, R.id.tv_goodsName);//商品名称
         TextView price = ViewHolderUtils.get(convertView, R.id.tv_price);//价格
         TextView reQty = ViewHolderUtils.get(convertView, R.id.tv_reQty);//可退数量
-        final TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);//退货数量
+        final TextView rPQty = ViewHolderUtils.get(convertView, R.id.tv_qty);//退货数量
 
         final ReturnedPurchaseResult info = listInfo.get(position);
         goodsName.setSelected(true);
         goodsName.setText(info.getItem_name());
         price.setText(String.format("￥%s",info.getSale_price()));
         reQty.setText(MyUtils.convertToString(info.getRe_qty(),"0"));
-        qty.setText(MyUtils.convertToString(info.getSale_qnty(),"0"));
-        qty.setOnClickListener(new View.OnClickListener() {
+        rPQty.setText(MyUtils.convertToString(info.getRp_Qty(),"0"));
+        rPQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mModifyCallback!=null){
-                    mModifyCallback.onModifyReQty(position,qty.getText().toString().trim());
+                    mModifyCallback.onModifyReQty(position,rPQty.getText().toString().trim());
                 }
             }
         });

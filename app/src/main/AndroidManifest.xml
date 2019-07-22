@@ -303,6 +303,7 @@
         <activity android:name="com.zxing.android.CaptureActivity" />
         <activity android:name=".lingshou.view.VipPayActivity" />
         <activity android:name=".lingshou.view.PayActivity" />
+        <activity android:name=".lingshou.view.CombiPayActivity" />
         <activity
             android:name=".widget.InputRemarksDialog"
             android:screenOrientation="portrait"

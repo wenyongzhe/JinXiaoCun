@@ -1102,7 +1102,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         }
         isOk = true;
         setSaleFlowBean();
-        Intent mIntent = new Intent(this,PayActivity.class);
+        Intent mIntent = new Intent(this,CombiPayActivity.class);
         Bundle bundle = new Bundle();
         mIntent.putExtra("mListData", (Serializable) mListData);
         mIntent.putExtra("money",total);

@@ -71,10 +71,15 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     Button btn_yingyeyuan;//营业员
     @BindView(R.id.et_price)
     TextView et_price;
-    @BindView(R.id.tv_pay_return)
-    TextView tv_pay_return;
     @BindView(R.id.btn_print)
     Button btn_print;
+    @BindView(R.id.ly_xianjing)
+    LinearLayout ly_xianjing;
+    @BindView(R.id.ly_juhezhifu)
+    LinearLayout ly_juhezhifu;
+    @BindView(R.id.ly_chuxukazhifu)
+    LinearLayout ly_chuxukazhifu;
+
 
     Button btn_jiesuan;//
 
@@ -84,7 +89,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     private boolean hasGaiJia = false;
     private ILingshouScan mLingShouScanImp;
     private Button btn_ok;
-    private Spinner sp_payway;
     private double money = 0.00;
     List<GetSystemBeanResult.SystemJson> mSystemJson;
     private int jiaoRmb = 0;
@@ -144,19 +148,26 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
 
         money = initDouble(3,money);
         et_price.setText("￥"+money);
-        tv_pay_return.setText("0");
-        sp_payway = (Spinner) findViewById(R.id.sp_payway);
         mLingShouScanImp = new LingShouScanImp(this);
-
-        //数据源
-        ArrayList<String> spinners = new ArrayList<>();
-        spinners.add("现金");
-        spinners.add("聚合支付");
-        spinners.add("会员储蓄卡");
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.my_simple_spinner_item, spinners);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_payway.setAdapter(adapter);
         mLingShouScanImp.getSystemInfo();
+        ly_xianjing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ly_juhezhifu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ly_chuxukazhifu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     //打印小票
@@ -247,27 +258,27 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
-                switch (sp_payway.getSelectedItemPosition()){
-                    case 0:
-                        mHan.sendEmptyMessage(0);
-                        break;
-                    case 1:
-                        mHan.sendEmptyMessage(1);
-                        break;
-                    case 2:
-                        if(Config.mMemberInfo!=null){
-                            MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
-                            mLingShouScanImp.sellVipPay(FlowNo,"1",
-                                    mMemberCheckResultItem.getCardNo_TelNo(),
-                                    mMemberCheckResultItem.getPassword(),
-                                    money);
-                        }else{
-                            AlertUtil.showToast("没有会员信息");
-                        }
-                        //mHan.sendEmptyMessage(2);
-                        break;
-
-                }
+//                switch (sp_payway.getSelectedItemPosition()){
+//                    case 0:
+//                        mHan.sendEmptyMessage(0);
+//                        break;
+//                    case 1:
+//                        mHan.sendEmptyMessage(1);
+//                        break;
+//                    case 2:
+//                        if(Config.mMemberInfo!=null){
+//                            MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
+//                            mLingShouScanImp.sellVipPay(FlowNo,"1",
+//                                    mMemberCheckResultItem.getCardNo_TelNo(),
+//                                    mMemberCheckResultItem.getPassword(),
+//                                    money);
+//                        }else{
+//                            AlertUtil.showToast("没有会员信息");
+//                        }
+//                        //mHan.sendEmptyMessage(2);
+//                        break;
+//
+//                }
 
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
@@ -591,41 +602,41 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         try {
             query = true;
             List<HashMap<String,String>> hashMapList = new ArrayList<>();
-            switch (sp_payway.getSelectedItemPosition()){
-                case 0:
-                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
-                        ToastUtils.showShort("填写付款金额有误。");
-                        return;
-                    }
-                    HashMap<String,String> hashMap = new HashMap<>();
-                    hashMap.put("payAmount",et_pay_money.getText().toString());
-                    hashMap.put("pay_type","RMB");
-                    hashMapList.add(hashMap);
-                    if( !tv_pay_return.getText().toString().equals("") && !tv_pay_return.getText().toString().equals("0")){
-                        HashMap<String,String> hashMap1 = new HashMap<>();
-                        hashMap1.put("payAmount",tv_pay_return.getText().toString());
-                        hashMap1.put("pay_type","RMB");
-                        hashMap1.put("pay_way","D");
-                        hashMapList.add(hashMap1);
-                    }
-                    break;
-                case 1:
-                    HashMap<String,String> hashMapZFB = new HashMap<>();
-                    hashMapZFB.put("payAmount",money+"");
-                    hashMapZFB.put("pay_type","ZFB");
-                    hashMapList.add(hashMapZFB);
-                    break;
-               /* case 2:
-                    HashMap<String,String> hashMapWX = new HashMap<>();
-                    hashMapWX.put("payAmount",money+"");
-                    hashMapWX.put("pay_type","WXZ");
-                    hashMapList.add(hashMapWX);
-                    break;*/
-                case 2:
-                    Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
-                    startActivityForResult(mIntent,300);
-                    return;
-            }
+//            switch (sp_payway.getSelectedItemPosition()){
+//                case 0:
+//                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
+//                        ToastUtils.showShort("填写付款金额有误。");
+//                        return;
+//                    }
+//                    HashMap<String,String> hashMap = new HashMap<>();
+//                    hashMap.put("payAmount",et_pay_money.getText().toString());
+//                    hashMap.put("pay_type","RMB");
+//                    hashMapList.add(hashMap);
+//                    if( !tv_pay_return.getText().toString().equals("") && !tv_pay_return.getText().toString().equals("0")){
+//                        HashMap<String,String> hashMap1 = new HashMap<>();
+//                        hashMap1.put("payAmount",tv_pay_return.getText().toString());
+//                        hashMap1.put("pay_type","RMB");
+//                        hashMap1.put("pay_way","D");
+//                        hashMapList.add(hashMap1);
+//                    }
+//                    break;
+//                case 1:
+//                    HashMap<String,String> hashMapZFB = new HashMap<>();
+//                    hashMapZFB.put("payAmount",money+"");
+//                    hashMapZFB.put("pay_type","ZFB");
+//                    hashMapList.add(hashMapZFB);
+//                    break;
+//               /* case 2:
+//                    HashMap<String,String> hashMapWX = new HashMap<>();
+//                    hashMapWX.put("payAmount",money+"");
+//                    hashMapWX.put("pay_type","WXZ");
+//                    hashMapList.add(hashMapWX);
+//                    break;*/
+//                case 2:
+//                    Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
+//                    startActivityForResult(mIntent,300);
+//                    return;
+//            }
             if( hasMoling ){
                 HashMap<String,String> hashMap2 = new HashMap<>();
                 hashMap2.put("payAmount",molingMoney+"");

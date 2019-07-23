@@ -531,8 +531,8 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            SellSubBeanResult.SellSubJsonData mSellSubBeanResult =  mJsonFormatImp.JsonToBean(jsonData,SellSubBeanResult.SellSubJsonData.class);
             if(status.equals(Config.MESSAGE_OK+"")){
+                SellSubBeanResult.SellSubJsonData mSellSubBeanResult =  mJsonFormatImp.JsonToBean(jsonData,SellSubBeanResult.SellSubJsonData.class);
                 mHandler.handleResule(Config.MESSAGE_SELL_SUB,mSellSubBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

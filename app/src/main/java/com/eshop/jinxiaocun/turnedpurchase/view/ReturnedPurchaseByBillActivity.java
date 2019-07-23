@@ -16,6 +16,7 @@ import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
@@ -54,6 +55,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     private List<ReturnedPurchaseResult> mSalesRecordDatas = new ArrayList<>();//销售记录
     private List<PayRecordResult> mPayRecordDatas = new ArrayList<>();//付款记录
     private int modifyQtyPosition =-1;
+    private String mFlowNo;//流水号
 
 
     @Override
@@ -138,6 +140,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     @OnClick(R.id.btn_allReturned)
     public void onClickAllReturned(){
 
+        if(!MyUtils.isOpenNetwork()){
+            AlertUtil.showToast("网络不可用，请检查网络!");
+            return;
+        }
+
         if(mSalesRecordDatas==null || mSalesRecordDatas.size()==0){
             AlertUtil.showToast("没有单据销售记录数据，不能退货！");
         }
@@ -168,6 +175,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     //确定退货（部分商品，即输入了退货数量的商品）
     @OnClick(R.id.btn_sureReturned)
     public void onClickSureReturned(){
+
+        if(!MyUtils.isOpenNetwork()){
+            AlertUtil.showToast("网络不可用，请检查网络!");
+            return;
+        }
 
         if(mSalesRecordDatas==null || mSalesRecordDatas.size()==0){
             AlertUtil.showToast("没有单据销售记录数据，不能退货！");
@@ -299,7 +311,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -341,7 +352,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 reCountReturnMoneys(true);//重新计算应退金额
                 if(mSalesRecordDatas!=null && mSalesRecordDatas.size()>0){
                     //根据单号获取付款记录数据
-                    mServerApi.getPayRecordDatas(mSalesRecordDatas.get(0).getFlow_no());
+                    mFlowNo = mSalesRecordDatas.get(0).getFlow_no();
+                    mServerApi.getPayRecordDatas(mFlowNo);
                 }else{
                     AlertUtil.showToast("该单据下没有销售记录数据,请确认单据号是否正确!");
                     AlertUtil.dismissProgressDialog();
@@ -356,6 +368,21 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 //获取付款记录数据
                 AlertUtil.dismissProgressDialog();
                 mPayRecordDatas = (List<PayRecordResult>) o;
+                break;
+            case LingShouScanActivity.SELL://上传销售流水成功
+                uploadPayFlow();//上传付款流水
+                break;
+            case Config.MESSAGE_UP_PLAY_FLOW://上传付款流水成功
+                mSalesServerApi.sellSub(mFlowNo);//结算
+                break;
+            case Config.MESSAGE_SELL_SUB:
+                //结算完成  即退货完成
+                AlertUtil.dismissProgressDialog();
+                AlertUtil.showToast("退货成功！");
+                mSalesRecordDatas.clear();
+                mPayRecordDatas.clear();
+                mFlowNo = null;
+                mAdapter.add(mSalesRecordDatas);
                 break;
                 
                 

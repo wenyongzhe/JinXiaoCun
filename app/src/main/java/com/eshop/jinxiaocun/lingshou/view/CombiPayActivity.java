@@ -103,6 +103,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     private String memberId = "";
     YouHuiPopupWindow mWindow;
     List<HashMap<String,String>> hashMapList = new ArrayList<>();
+    private static int XIAN_JING_PAY = 101;
+    private static int JU_HE_ZHIFU_PAY = 102;
+    private static int CHU_XU_KA_ZHIFU_PAY = 103;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,19 +156,23 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         ly_xianjing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CombiPayActivity.this,XianJingPayActivity.class);
+                intent.putExtra("money",money);
+                startActivityForResult(intent,XIAN_JING_PAY);
             }
         });
         ly_juhezhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CombiPayActivity.this,XianJingPayActivity.class);
+                startActivityForResult(intent,JU_HE_ZHIFU_PAY);
             }
         });
         ly_chuxukazhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CombiPayActivity.this,XianJingPayActivity.class);
+                startActivityForResult(intent,CHU_XU_KA_ZHIFU_PAY);
             }
         });
     }

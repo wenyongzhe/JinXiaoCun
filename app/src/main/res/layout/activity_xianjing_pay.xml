@@ -48,134 +48,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ly_xianjing"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="left"
-                android:paddingRight="10dp"
-                android:text="现金"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_size22"/>
-
-            <TextView
-                style="@style/TextView_Black"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="right"
-                android:imeOptions="actionSend"
-                android:text="0"
-                android:textColor="@color/text_red"
-                android:textSize="@dimen/txt_size22"
-                />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#44000000"/>
-
-        <LinearLayout
-            android:id="@+id/ly_juhezhifu"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="left"
-                android:paddingRight="10dp"
-                android:text="聚合支付"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_size22"/>
-
-            <TextView
-                style="@style/TextView_Black"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="right"
-                android:imeOptions="actionSend"
-                android:text="0"
-                android:textColor="@color/text_red"
-                android:textSize="@dimen/txt_size22"
-                />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#44000000"/>
-
-        <LinearLayout
-            android:id="@+id/ly_chuxukazhifu"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="left"
-                android:paddingRight="10dp"
-                android:text="储蓄卡支付"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_size22"/>
-
-            <TextView
-                style="@style/TextView_Black"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="right"
-                android:imeOptions="actionSend"
-                android:text="0"
-                android:textColor="@color/text_red"
-                android:textSize="@dimen/txt_size22"
-                />
-
-        </LinearLayout>
-     <!--   <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="left"
-                android:paddingRight="10dp"
-                android:text="支付方式"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_size16"/>
-
-            <Spinner
-                android:id="@+id/sp_payway"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="right"/>
-
-        </LinearLayout>-->
-
-       <!-- <LinearLayout
             android:id="@+id/ly_fukuan_jinge"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -230,7 +102,7 @@
                 android:textSize="@dimen/txt_size20"
                 android:gravity="right|center_vertical"/>
 
-        </LinearLayout>-->
+        </LinearLayout>
 
     </LinearLayout>
 

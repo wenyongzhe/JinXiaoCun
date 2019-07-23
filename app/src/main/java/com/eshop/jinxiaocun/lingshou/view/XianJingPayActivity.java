@@ -82,7 +82,7 @@ public class XianJingPayActivity extends BaseActivity {
         Intent mIntent = new Intent();
         mIntent.putExtra("money",et_pay_money.getText().toString());
         setResult(0,mIntent);
-
+        finish();
     }
 
     @Override

@@ -61,6 +61,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity.SELL;
+
 public class PayActivity extends BaseActivity implements ActionBarClickListener, INetWorResult {
 
     @BindView(R.id.btn_moling)
@@ -789,6 +791,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         switch (resultCode){
             case Config.MESSAGE_PAY_MAN:
                 Config.saleMan = data.getStringExtra("PayMan");
+                break;
+            case SELL:
                 break;
             case Config.MESSAGE_INTENT_ZHEKOU:
                 String zhekou =  data.getStringExtra("countN");

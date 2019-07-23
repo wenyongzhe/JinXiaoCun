@@ -406,9 +406,6 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             case Config.MESSAGE_GET_OPT_AUTH:
                 mGetOptAuthResult = (GetOptAuthResult)o;
                 break;
-            case SELL:
-                mLingShouScanImp.getPluPrice(FlowNo);
-                break;
             case SELL_ZHENDAN_YIJIA:
                 intent = new Intent(this, MoneyDialog.class);
                 startActivityForResult(intent,200);

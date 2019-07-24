@@ -48,6 +48,38 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ly_last_pay"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_last_tips"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:paddingRight="10dp"
+                android:text="还需要支付"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size22"/>
+
+            <TextView
+                android:id="@+id/tv_last_pay"
+                style="@style/TextView_Black"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:imeOptions="actionSend"
+                android:text="0"
+                android:textColor="@color/text_red"
+                android:textSize="@dimen/txt_size22"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ly_xianjing"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -65,13 +97,14 @@
                 android:textSize="@dimen/txt_size22"/>
 
             <TextView
+                android:id="@+id/tv_xianjing"
                 style="@style/TextView_Black"
                 android:layout_weight="10"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
                 android:imeOptions="actionSend"
-                android:text="0"
+                android:text=""
                 android:textColor="@color/text_red"
                 android:textSize="@dimen/txt_size22"
                 />
@@ -101,13 +134,14 @@
                 android:textSize="@dimen/txt_size22"/>
 
             <TextView
+                android:id="@+id/tv_zhuhezhifu"
                 style="@style/TextView_Black"
                 android:layout_weight="10"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
                 android:imeOptions="actionSend"
-                android:text="0"
+                android:text=""
                 android:textColor="@color/text_red"
                 android:textSize="@dimen/txt_size22"
                 />
@@ -138,13 +172,14 @@
                 android:textSize="@dimen/txt_size22"/>
 
             <TextView
+                android:id="@+id/tv_chuxukazhifu"
                 style="@style/TextView_Black"
                 android:layout_weight="10"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
                 android:imeOptions="actionSend"
-                android:text="0"
+                android:text=""
                 android:textColor="@color/text_red"
                 android:textSize="@dimen/txt_size22"
                 />

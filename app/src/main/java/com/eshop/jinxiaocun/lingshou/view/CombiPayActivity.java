@@ -6,16 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,7 +73,16 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     LinearLayout ly_juhezhifu;
     @BindView(R.id.ly_chuxukazhifu)
     LinearLayout ly_chuxukazhifu;
-
+    @BindView(R.id.tv_xianjing)
+    TextView tv_xianjing;
+    @BindView(R.id.tv_zhuhezhifu)
+    TextView tv_zhuhezhifu;
+    @BindView(R.id.tv_chuxukazhifu)
+    TextView tv_chuxukazhifu;
+    @BindView(R.id.tv_last_tips)
+    TextView tv_last_tips;
+    @BindView(R.id.tv_last_pay)
+    TextView tv_last_pay;
 
     Button btn_jiesuan;//
 
@@ -106,6 +109,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     private static int XIAN_JING_PAY = 101;
     private static int JU_HE_ZHIFU_PAY = 102;
     private static int CHU_XU_KA_ZHIFU_PAY = 103;
+    private double xianjing_money = 0;
+    private double zhuhezhifu_money = 0;
+    private double chuxukazhifu_money = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,6 +271,8 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
+                mHan.sendEmptyMessage(0);
+
 //                switch (sp_payway.getSelectedItemPosition()){
 //                    case 0:
 //                        mHan.sendEmptyMessage(0);
@@ -608,7 +616,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     void btn_jiesuan() {
         try {
             query = true;
-            List<HashMap<String,String>> hashMapList = new ArrayList<>();
+//            List<HashMap<String,String>> hashMapList = new ArrayList<>();
 //            switch (sp_payway.getSelectedItemPosition()){
 //                case 0:
 //                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
@@ -732,6 +740,29 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             return;
         }
         switch (resultCode){
+            case Config.XIANJING_RETURN://现金支付
+                xianjing_money = data.getDoubleExtra("money",0);
+                double money_return = data.getDoubleExtra("money_return",0);
+                tv_xianjing.setText(xianjing_money+"");
+
+                HashMap<String,String> hashMap = new HashMap<>();
+                hashMap.put("payAmount",xianjing_money+"");
+                hashMap.put("pay_type","RMB");
+                hashMapList.add(hashMap);
+                if( money_return != 0){
+                    HashMap<String,String> hashMap1 = new HashMap<>();
+                    hashMap1.put("payAmount",money_return+"");
+                    hashMap1.put("pay_type","RMB");
+                    hashMap1.put("pay_way","D");
+                    hashMapList.add(hashMap1);
+                }
+
+                reflashUi();
+                break;
+            case Config.JUHEZHIFU_RETURN://聚合支付
+                break;
+            case Config.CHUXUKAZHIFU_RETURN://储蓄卡支付
+                break;
             case Config.MESSAGE_PAY_MAN:
                 Config.saleMan = data.getStringExtra("PayMan");
                 break;
@@ -773,6 +804,17 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 Config.mMemberInfo =  menber.get(0);
                 break;
         }
+    }
+
+    private void reflashUi(){
+        double last = money-xianjing_money- zhuhezhifu_money -chuxukazhifu_money;
+        if(last<0){
+            tv_last_tips.setText("找零");
+            tv_last_pay.setText((-(money-xianjing_money- zhuhezhifu_money -chuxukazhifu_money))+"");
+        }else{
+            tv_last_pay.setText(money-xianjing_money- zhuhezhifu_money -chuxukazhifu_money+"");
+        }
+
     }
 
     private void reflashGaiJiaItemPrice(){

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
+import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.HashMap;
@@ -80,8 +81,9 @@ public class XianJingPayActivity extends BaseActivity {
             return;
         }
         Intent mIntent = new Intent();
-        mIntent.putExtra("money",et_pay_money.getText().toString());
-        setResult(0,mIntent);
+        mIntent.putExtra("money",Double.parseDouble(et_pay_money.getText().toString()));
+        mIntent.putExtra("money_return",Double.parseDouble(tv_pay_return.getText().toString()));
+        setResult(Config.XIANJING_RETURN,mIntent);
         finish();
     }
 

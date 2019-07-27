@@ -20,6 +20,8 @@ import com.eshop.jinxiaocun.othermodel.bean.PayFlowBean;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
+import com.eshop.jinxiaocun.othermodel.bean.RetSalesRecordBean;
+import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesRecordBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
@@ -235,6 +237,19 @@ public class OtherModelImp implements IOtherModel {
         bean.JsonData.as_flowno = orderNo;//单号
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new SalesRecordInterface());
+    }
+
+    /**
+     * 根据单号获取销售记录数据
+     * @param orderNo 单号
+     */
+    @Override
+    public void getRetSalesRecordDatas(String orderNo) {
+        RetSalesRecordBean bean = new RetSalesRecordBean();
+        bean.JsonData.as_branchNo = Config.branch_no;//门店机构
+        bean.JsonData.as_flowno = orderNo;//单号
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new RetSalesRecordInterface());
     }
 
     /**
@@ -586,6 +601,35 @@ public class OtherModelImp implements IOtherModel {
 
     //获取销售记录
     class SalesRecordInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<SaleFlowRecordResult> resultList = mJsonFormatImp.JsonToList(jsonData, SaleFlowRecordResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_FAIL,"获取销售记录异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //获取可退销售记录
+    class RetSalesRecordInterface implements IResponseListener{
 
         @Override
         public void handleError(Object event) {

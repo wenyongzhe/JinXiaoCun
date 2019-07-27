@@ -61,6 +61,8 @@ public class WebConfig {
     public static final String SaveCountSale = "SaveCountSale";//1.22计次项目销售
     public static final String GetSaleFlow = "GetSaleFlow";//获取销售记录
     public static final String GetPayFlow = "GetPayFlow";//获取付款记录
+    public static final String GetRetSaleFlow = "GetRetSaleFlow";//获取可退销售记录
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

@@ -133,7 +133,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             return;
         }
         AlertUtil.showNoButtonProgressDialog(this,"正在获取单据数据，请稍后...");
-        mServerApi.getSalesRecordDatas(mEditBillNo.getText().toString().trim());
+        mServerApi.getRetSalesRecordDatas(mEditBillNo.getText().toString().trim());
     }
 
     //全退
@@ -241,7 +241,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 mSaleFlowBean.setSale_money(String.format("-%s",goodsInfo.getRe_qty()*goodsInfo.getSale_price()));
             }else{
                 //退部分
-                if(goodsInfo.getRp_Qty()==0){//只退 退货数量大于0的
+                if(goodsInfo.getRp_Qty()==0){//只退退货数量大于0的
                     continue;
                 }
                 mSaleFlowBean.setSale_qnty("-"+MyUtils.convertToString(goodsInfo.getRp_Qty(),"0"));
@@ -258,9 +258,9 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSaleFlowBean.setOper_id(Config.UserName);
             mSaleFlowBean.setOper_date(DateUtility.getCurrentTime());
             mSaleFlowBean.setIsfreshcodefrag("");
-            mSaleFlowBean.setBatch_code("");//批次号  销售记录没有返回？
-            mSaleFlowBean.setBatch_made_date("");//批次生产日期
-            mSaleFlowBean.setBatch_valid_date("");//批次有效期
+            mSaleFlowBean.setBatch_code(goodsInfo.getItem_barcode());//批次号
+            mSaleFlowBean.setBatch_made_date(goodsInfo.getProduce_date());//批次生产日期
+            mSaleFlowBean.setBatch_valid_date(goodsInfo.getValid_date());//批次有效期
             if(i == (mSalesRecordDatas.size()-1)){////表示该单结束标识  1：结束
                 mSaleFlowBean.setbDealFlag("1");
             }else{

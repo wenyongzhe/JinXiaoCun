@@ -2,25 +2,22 @@ package com.eshop.jinxiaocun.othermodel.bean;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2019/7/17
- * Desc:  可退销售记录
+ * Date: 2019/7/27
+ * Desc:  销售记录
  */
-public class ReturnedPurchaseResult {
+public class SaleFlowRecordResult {
 
     private String flow_no;//单据号
-    private String item_no;//商品编码
+    private String item_no; //商品编码
     private String item_name;//商品名称
     private int sale_qnty;//数量
-    private float sale_price;//销售价
-    private float sale_money;//销售金额
+    private float sale_price; //销售价
+    private float sale_money; //销售金额
     private float source_price;//源价
-    private String sell_way;//-销售方式: A销售 B退货 D赠送
-    private int re_qty;//可退数量
-    private int already_re_qty; //已退数量
+    private String sell_way; //-销售方式: A销售 B退货 D赠送
     private String item_barcode;//批次号
     private String produce_date;//生产期
     private String valid_date;//有效期
-    private int rp_Qty;//退货数量
 
     public String getFlow_no() {
         return flow_no;
@@ -86,22 +83,6 @@ public class ReturnedPurchaseResult {
         this.sell_way = sell_way;
     }
 
-    public int getRe_qty() {
-        return re_qty;
-    }
-
-    public void setRe_qty(int re_qty) {
-        this.re_qty = re_qty;
-    }
-
-    public int getAlready_re_qty() {
-        return already_re_qty;
-    }
-
-    public void setAlready_re_qty(int already_re_qty) {
-        this.already_re_qty = already_re_qty;
-    }
-
     public String getItem_barcode() {
         return item_barcode;
     }
@@ -124,13 +105,5 @@ public class ReturnedPurchaseResult {
 
     public void setValid_date(String valid_date) {
         this.valid_date = valid_date;
-    }
-
-    public int getRp_Qty() {
-        return rp_Qty;
-    }
-
-    public void setRp_Qty(int rp_Qty) {
-        this.rp_Qty = rp_Qty;
     }
 }

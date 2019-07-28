@@ -687,7 +687,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                 case 1:
                     HashMap<String,String> hashMapZFB = new HashMap<>();
                     hashMapZFB.put("payAmount",money+"");
-                    hashMapZFB.put("pay_type","ZFB");
+                    hashMapZFB.put("pay_type",tempayway);//支付宝.微信
                     hashMapList.add(hashMapZFB);
                     break;
                /* case 2:

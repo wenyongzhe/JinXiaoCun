@@ -56,6 +56,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     private List<PayRecordResult> mPayRecordDatas = new ArrayList<>();//付款记录
     private int modifyQtyPosition =-1;
     private String mFlowNo;//流水号
+    private boolean mAllReturn;//true为全退，false为退部分
 
 
     @Override
@@ -147,10 +148,23 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
         if(mSalesRecordDatas==null || mSalesRecordDatas.size()==0){
             AlertUtil.showToast("没有单据销售记录数据，不能退货！");
+            return;
         }
 
         if(mPayRecordDatas ==null || mPayRecordDatas.size()==0){
             AlertUtil.showToast("没有单据付款记录数据，不能退货！");
+            return;
+        }
+
+        if(mPayRecordDatas.size()>1){
+            AlertUtil.showAlert(this, "温馨提示", "该单据为组合付款，请到pc端或前台退货！",
+                    "确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                        }
+                    });
+            return;
         }
 
         AlertUtil.showAlert(this, R.string.dialog_title,
@@ -161,7 +175,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                         AlertUtil.dismissDialog();
                         AlertUtil.showNoButtonProgressDialog(ReturnedPurchaseByBillActivity.this,
                                 "正在退货，请稍等...");
-                        uploadSalesFlow(true);
+                        mAllReturn = true;
+                        uploadSalesFlow();
                     }
                 },
                 R.string.cancel, new View.OnClickListener() {
@@ -183,10 +198,23 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
         if(mSalesRecordDatas==null || mSalesRecordDatas.size()==0){
             AlertUtil.showToast("没有单据销售记录数据，不能退货！");
+            return;
         }
 
         if(mPayRecordDatas ==null || mPayRecordDatas.size()==0){
             AlertUtil.showToast("没有单据付款记录数据，不能退货！");
+            return;
+        }
+
+        if(mPayRecordDatas.size()>1){
+            AlertUtil.showAlert(this, "温馨提示", "该单据为组合付款，请到pc端或前台退货！",
+                    "确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUtil.dismissDialog();
+                        }
+                    });
+            return;
         }
 
         boolean isReturn = false;
@@ -208,7 +236,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                         AlertUtil.dismissDialog();
                         AlertUtil.showNoButtonProgressDialog(ReturnedPurchaseByBillActivity.this,
                                 "正在退货，请稍等...");
-                        uploadSalesFlow(false);
+                        mAllReturn = false;
+                        uploadSalesFlow();
                     }
                 },
                 R.string.cancel, new View.OnClickListener() {
@@ -221,9 +250,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
     /**
      * 上传销售流水
-     * @param allReturn true全退 false退部分
      */
-    private void uploadSalesFlow(boolean allReturn){
+    private void uploadSalesFlow(){
         List<SaleFlowBean> salesFlowDatas = new ArrayList<>();
         for(int i=0; i<mSalesRecordDatas.size(); i++){
             SaleFlowBean mSaleFlowBean = new SaleFlowBean();
@@ -236,7 +264,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSaleFlowBean.setSource_price(MyUtils.convertToString(goodsInfo.getSource_price(),"0"));
             mSaleFlowBean.setSale_price(MyUtils.convertToString(goodsInfo.getSale_price(),"0"));
 
-            if(allReturn){//全退
+            if(mAllReturn){//全退
                 mSaleFlowBean.setSale_qnty("-"+MyUtils.convertToString(goodsInfo.getRe_qty(),"0"));
                 mSaleFlowBean.setSale_money(String.format("-%s",goodsInfo.getRe_qty()*goodsInfo.getSale_price()));
             }else{
@@ -261,7 +289,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSaleFlowBean.setBatch_code(goodsInfo.getItem_barcode());//批次号
             mSaleFlowBean.setBatch_made_date(goodsInfo.getProduce_date());//批次生产日期
             mSaleFlowBean.setBatch_valid_date(goodsInfo.getValid_date());//批次有效期
-            if(i == (mSalesRecordDatas.size()-1)){////表示该单结束标识  1：结束
+            if(i == (mSalesRecordDatas.size()-1)){//表示该单结束标识  1：结束
                 mSaleFlowBean.setbDealFlag("1");
             }else{
                 mSaleFlowBean.setbDealFlag("0");
@@ -274,6 +302,19 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
     //上传付款流水
     private void uploadPayFlow(){
+
+        float rpAllMoney=0;//计算部分应退货的总金额
+        for(int i=0; i<mSalesRecordDatas.size(); i++){
+            ReturnedPurchaseResult goodsInfo = mSalesRecordDatas.get(i);
+            if(!mAllReturn){
+                //退部分
+                if(goodsInfo.getRp_Qty()==0){//只退退货数量大于0的
+                    continue;
+                }
+                rpAllMoney+=goodsInfo.getRp_Qty()*goodsInfo.getSale_price();
+            }
+        }
+
         List<PlayFlowBean> playFlowDatas = new ArrayList<>();
         for(int i=0; i<mPayRecordDatas.size(); i++){
             PayRecordResult payInfo = mPayRecordDatas.get(i);
@@ -281,7 +322,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(payInfo.getFlow_no());
             mPlayFlowBean.setFlow_id(1);
-            mPlayFlowBean.setSale_amount(-payInfo.getSale_amount());//销售金额 这里的金额与应退金额有关联？
+            if(mAllReturn) {//全退
+                mPlayFlowBean.setSale_amount(-payInfo.getSale_amount());//销售金额
+            }else{//退部分
+                mPlayFlowBean.setSale_amount(-rpAllMoney);//销售金额
+            }
             mPlayFlowBean.setPay_way(payInfo.getPay_way());//支付方式
             mPlayFlowBean.setSell_way("B");//-销售方式: A销售 B退货 D赠送
 
@@ -290,7 +335,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
             mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);
-            mPlayFlowBean.setPay_amount(-payInfo.getPay_amount());//付款金额 这里的金额与应退金额有关联？
+            if(mAllReturn) {//全退
+                mPlayFlowBean.setPay_amount(-payInfo.getPay_amount());//付款金额
+            }else{//退部分
+                mPlayFlowBean.setPay_amount(-rpAllMoney);//付款金额
+            }
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("9999");
@@ -309,7 +358,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
         }
         mSalesServerApi.upPlayFlow(playFlowDatas);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -384,11 +432,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 mFlowNo = null;
                 mAdapter.add(mSalesRecordDatas);
                 break;
-                
-                
         }
     }
-
 
     @Override
     protected void onDestroy() {

@@ -174,6 +174,10 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         ly_juhezhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(last_pay_money==0){
+                    AlertUtil.showToast("不需要再支付。");
+                    return;
+                }
                 Intent intent = new Intent(CombiPayActivity.this,CaptureActivity.class);
                 startActivityForResult(intent,Config.REQ_QR_CODE);
             }
@@ -181,8 +185,16 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         ly_chuxukazhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
-                startActivityForResult(mIntent,300);
+                if(last_pay_money==0){
+                    AlertUtil.showToast("不需要再支付。");
+                    return;
+                }
+                if(Config.mMemberInfo!=null && !Config.mMemberInfo.getCardNo_TelNo().equals("") ){
+                    mHan.sendEmptyMessage(2);
+                }else{
+                    Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
+                    startActivityForResult(mIntent,300);
+                }
             }
         });
     }

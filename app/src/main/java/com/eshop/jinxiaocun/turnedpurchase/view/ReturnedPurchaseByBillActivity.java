@@ -407,6 +407,10 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                     AlertUtil.dismissProgressDialog();
                 }
                 break;
+            case Config.MESSAGE_FAIL:
+                AlertUtil.showToast((String) o);
+                AlertUtil.dismissProgressDialog();
+                break;
             case Config.MESSAGE_ERROR:
             case Config.RESULT_FAIL:
                 AlertUtil.dismissProgressDialog();

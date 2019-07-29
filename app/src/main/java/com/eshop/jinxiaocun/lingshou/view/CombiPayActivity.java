@@ -322,6 +322,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     return;
                 }
                 if( mNetPlayBeanResult.getReturn_code().equals("000000")){
+                    tv_zhuhezhifu.setText(last_pay_money+"");
                     mHan.sendEmptyMessage(4);
                     AlertUtil.dismissDialog();
                 }else {
@@ -760,6 +761,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             return;
         }
         if(requestCode == 300){
+            tv_chuxukazhifu.setText(last_pay_money+"");
             mHan.sendEmptyMessage(2);
             return;
         }
@@ -966,7 +968,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 if(Config.isPrinterUserName){mes += "会员姓名："+Config.mMemberInfo.getCardName()+"\n";}
                 if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
             }
-            mes += "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n";
+            mes += "门店号: "+Config.posid+"\n单据："+FlowNo+"\n";
             mes += "品名    数量     单价     金额\n";
             mes += "-------------------------------\n";
 
@@ -980,10 +982,21 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                         MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
                         MyUtils.formatDouble2(total1)+"元\n";
             }
-
+            mes += "-------------------------------\n";
             mes += "数量：         "+shuliang+"\n总计：        "+money+"\n";
             mes += "抹零：         "+molingMoney+"\n优惠：        "+youhuiMoney+"\n";
+            if(!tv_xianjing.getText().toString().equals("")){
+                mes += "现金支付："+tv_xianjing.getText().toString()+"\n";
+            }
+            if(!tv_zhuhezhifu.getText().toString().equals("")){
+                mes += "聚合支付："+tv_zhuhezhifu.getText().toString()+"\n";
+            }
+            if(!tv_chuxukazhifu.getText().toString().equals("")){
+                mes += "储蓄卡支付："+tv_chuxukazhifu.getText().toString()+"\n";
+            }
             mes += "-------------------------------\n";
+            mes += "打印时间："+DateUtility.getCurrentTime()+"\n";
+
             if(!Config.mPrintPageFoot.equals("")){mes += "    "+Config.mPrintPageFoot+"\n";}
 
             mes += "\n";

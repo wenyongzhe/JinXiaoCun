@@ -396,7 +396,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     //rtWzfQry();
                     break;
                 case 2:
-                    if(memberId==null || memberId.equals("") || btn_jiesuan.equals("")){
+                    if(Config.mMemberInfo==null || Config.mMemberInfo.getCardNo_TelNo().equals("") ){
                         AlertUtil.showAlert(CombiPayActivity.this,"提示","请点击会员验证会员信息！");
                         return;
                     }

@@ -978,13 +978,13 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
 
                 mes += mGetClassPluResult.getItem_name()+"\n"+
-                        "        "+mGetClassPluResult.getSale_qnty()+mGetClassPluResult.getItem_size()+"     "+
+                        "        "+mGetClassPluResult.getSale_qnty()+"     "+
                         MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
                         MyUtils.formatDouble2(total1)+"元\n";
             }
             mes += "-------------------------------\n";
             mes += "数量：         "+shuliang+"\n总计：        "+money+"\n";
-            mes += "抹零：         "+molingMoney+"\n优惠：        "+youhuiMoney+"\n";
+            mes += "抹零：         "+molingMoney+"\n优惠：         "+youhuiMoney+"\n";
             if(!tv_xianjing.getText().toString().equals("")){
                 mes += "现金支付："+tv_xianjing.getText().toString()+"\n";
             }

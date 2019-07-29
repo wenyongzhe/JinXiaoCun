@@ -978,7 +978,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
 
                 mes += mGetClassPluResult.getItem_name()+"\n"+
-                        "        "+mGetClassPluResult.getSale_qnty()+"     "+
+                        "        "+mGetClassPluResult.getSale_qnty()+"/"+mGetClassPluResult.getItem_size()+"     "+
                         MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
                         MyUtils.formatDouble2(total1)+"元\n";
             }

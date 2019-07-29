@@ -143,6 +143,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             }
         });
         money = getIntent().getDoubleExtra("money",0.0);
+
         FlowNo = getIntent().getStringExtra("FlowNo");
         molingMoney = getIntent().getDoubleExtra("molingMoney",0.0);
         youhuiMoney = getIntent().getDoubleExtra("youhuiMoney",0.0);
@@ -157,6 +158,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
 
         money = initDouble(3,money);
         et_price.setText("￥"+money);
+
+        last_pay_money = money;
+
         mLingShouScanImp = new LingShouScanImp(this);
         mLingShouScanImp.getSystemInfo();
         ly_xianjing.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +310,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     return;
                 }
                 if( mNetPlayBeanResult.getReturn_code().equals("000000")){
-                    mHan.sendEmptyMessage(0);
+                    mHan.sendEmptyMessage(4);
                     AlertUtil.dismissDialog();
                 }else {
                     //ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
@@ -392,12 +396,12 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     //rtWzfQry();
                     break;
                 case 2:
-                    if(memberId==null || btn_jiesuan.equals("")){
+                    if(memberId==null || memberId.equals("") || btn_jiesuan.equals("")){
                         AlertUtil.showAlert(CombiPayActivity.this,"提示","请点击会员验证会员信息！");
                         return;
                     }
                     HashMap<String,String> hashMapVIP = new HashMap<>();
-                    hashMapVIP.put("payAmount",money+"");
+                    hashMapVIP.put("payAmount",last_pay_money+"");
                     hashMapVIP.put("pay_type","SAV");
                     hashMapList.add(hashMapVIP);
                     if( hasMoling ){
@@ -410,6 +414,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     break;
                 case 3:
                     rtWzfQry();
+                    break;
+                case 4:
+                    setPlayFlowBean(hashMapList,Config.mMemberInfo.getCardNo_TelNo());
                     break;
             }
         }
@@ -720,7 +727,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             mLingShouScanImp.RtWzfPay(tempayway,codedContent,FlowNo,temMoney,temMoney);
 
             HashMap<String,String> hashMapZFB = new HashMap<>();
-            hashMapZFB.put("payAmount",money+"");
+            hashMapZFB.put("payAmount",last_pay_money+"");
             hashMapZFB.put("pay_type",tempayway);
             hashMapList.add(hashMapZFB);
 
@@ -817,6 +824,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         if(last_pay_money<=0){
             tv_last_tips.setText("找零");
             tv_last_pay.setText((-last_pay_money)+"");
+            if(last_pay_money==0){
+                tv_last_pay.setText((last_pay_money)+"");
+            }
             btn_jiesuan();
         }else{
             tv_last_tips.setText("还需要支付");

@@ -13,6 +13,7 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
@@ -55,9 +56,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     private List<ReturnedPurchaseResult> mSalesRecordDatas = new ArrayList<>();//销售记录
     private List<PayRecordResult> mPayRecordDatas = new ArrayList<>();//付款记录
     private int modifyQtyPosition =-1;
-    private String mFlowNo;//流水号
     private boolean mAllReturn;//true为全退，false为退部分
-
+    private GetFlowNoBeanResult.FlowNoJson mFlowNoJson;
 
     @Override
     protected int getLayoutId() {
@@ -258,7 +258,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             ReturnedPurchaseResult goodsInfo = mSalesRecordDatas.get(i);
 
             mSaleFlowBean.setBranch_no(Config.branch_no);
-            mSaleFlowBean.setFlow_no(goodsInfo.getFlow_no());
+            mSaleFlowBean.setFlow_no(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));
             mSaleFlowBean.setFlow_id((i+1)+"");
             mSaleFlowBean.setItem_no(goodsInfo.getItem_no());
             mSaleFlowBean.setSource_price(MyUtils.convertToString(goodsInfo.getSource_price(),"0"));
@@ -320,7 +320,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             PayRecordResult payInfo = mPayRecordDatas.get(i);
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();
             mPlayFlowBean.setBranch_no(Config.branch_no);
-            mPlayFlowBean.setFlow_no(payInfo.getFlow_no());
+            mPlayFlowBean.setFlow_no(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));
             mPlayFlowBean.setFlow_id(1);
             if(mAllReturn) {//全退
                 mPlayFlowBean.setSale_amount(-payInfo.getSale_amount());//销售金额
@@ -400,8 +400,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 reCountReturnMoneys(true);//重新计算应退金额
                 if(mSalesRecordDatas!=null && mSalesRecordDatas.size()>0){
                     //根据单号获取付款记录数据
-                    mFlowNo = mSalesRecordDatas.get(0).getFlow_no();
-                    mServerApi.getPayRecordDatas(mFlowNo);
+                    String flowNo = mSalesRecordDatas.get(0).getFlow_no();
+                    mServerApi.getPayRecordDatas(flowNo);
                 }else{
                     AlertUtil.showToast("该单据下没有销售记录数据,请确认单据号是否正确!");
                     AlertUtil.dismissProgressDialog();
@@ -420,12 +420,16 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 //获取付款记录数据
                 AlertUtil.dismissProgressDialog();
                 mPayRecordDatas = (List<PayRecordResult>) o;
+                mSalesServerApi.getFlowNo();//取流水号
+                break;
+            case Config.MESSAGE_FLOW_NO:
+                mFlowNoJson = (GetFlowNoBeanResult.FlowNoJson)o;
                 break;
             case LingShouScanActivity.SELL://上传销售流水成功
                 uploadPayFlow();//上传付款流水
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW://上传付款流水成功
-                mSalesServerApi.sellSub(mFlowNo);//结算
+                mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
                 break;
             case Config.MESSAGE_SELL_SUB:
                 //结算完成  即退货完成
@@ -433,7 +437,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 AlertUtil.showToast("退货成功！");
                 mSalesRecordDatas.clear();
                 mPayRecordDatas.clear();
-                mFlowNo = null;
                 mAdapter.add(mSalesRecordDatas);
                 break;
         }

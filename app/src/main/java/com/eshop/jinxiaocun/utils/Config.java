@@ -104,6 +104,7 @@ public class Config {
     public final static int XIANJING_RETURN = 55;
     public final static int JUHEZHIFU_RETURN = 56;
     public final static int CHUXUKAZHIFU_RETURN = 57;
+    public final static int MESSAGE_CHECKVER= 59;
     public final static int PAY_RECORD_SUCCESS = 58;
 
     public final static String GRANT_BILLDIS_COUNT = "4";//整单折扣
@@ -138,7 +139,7 @@ public class Config {
     //记录连接的蓝牙地址
     public static String BluetoothAddress = "";
 
-    public static String mPrintSize = "";//打印的尺寸
+    public static String mPrintSize = "58";//打印的尺寸
     public static String mPrintNumber = "1";//打印的份数
     public static String mPrintOrderName = "";//打印的单据名称
     public static String mPrintPageHeader = "";//打印的页眉

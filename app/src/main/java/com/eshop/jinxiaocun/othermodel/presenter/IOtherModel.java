@@ -39,4 +39,6 @@ public interface IOtherModel {
     void getRetSalesRecordDatas(String orderNo );
     //根据单号获取付款记录数据
     void getPayRecordDatas(String orderNo );
+    //8.3 判断APP是否升级
+    void CheckVer();
 }

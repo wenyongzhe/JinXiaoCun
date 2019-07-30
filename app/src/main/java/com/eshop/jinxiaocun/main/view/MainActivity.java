@@ -2,6 +2,9 @@ package com.eshop.jinxiaocun.main.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,11 +15,18 @@ import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.lingshou.bean.GetOptAuthResult;
+import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.lingshou.view.CombiPayActivity;
 import com.eshop.jinxiaocun.login.LoginActivity;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
+import com.eshop.jinxiaocun.othermodel.bean.CheckVerResult;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
+import com.eshop.jinxiaocun.utils.CheckVerUtils;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
@@ -31,6 +41,7 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
     private TabView tabView;
     private ILingshouScan mLingShouScanImp;
+    private IOtherModel mIOtherModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +77,12 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
         getLimit();
 
+        checkVer();
+    }
+
+    private void checkVer(){
+        mIOtherModel = new OtherModelImp(this);
+        mIOtherModel.CheckVer();
     }
 
     private void startLogin(){
@@ -150,6 +167,7 @@ public class MainActivity extends BaseActivity implements INetWorResult {
         });
     }
 
+    CheckVerResult.CheckVerJson mCheckVerJson;
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
@@ -159,8 +177,42 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
                 break;
             case Config.MESSAGE_GET_OPT_AUTH:
+                break;
+            case Config.MESSAGE_CHECKVER:
+                mCheckVerJson = (CheckVerResult.CheckVerJson) o;
+                if(mCheckVerJson!=null && mCheckVerJson.bUpdate>0){
+                    AlertUtil.showAlert(MainActivity.this, "提示", "是否更新\n"+
+                            "当前版本："+MyUtils.getAppVersionName(MainActivity.this)+"\n"+
+                            "服务器版本："+mCheckVerJson.ServerVer,
+                            "确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                    AlertUtil.showNoButtonProgressDialog(MainActivity.this,"下载中");
+                                    new Thread(){
+                                        @Override
+                                        public void run() {
+                                            CheckVerUtils mCheckVerUtils = new CheckVerUtils();
+                                            mCheckVerUtils.downLoadFile(MainActivity.this,mCheckVerJson.AppUrl);
+                                            han.sendEmptyMessage(1);
+                                        }
+                                    }.start();
 
+                                }
+                            },R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
+                }
                 break;
         }
     }
+    Handler han = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AlertUtil.dismissProgressDialog();
+        }
+    };
 }

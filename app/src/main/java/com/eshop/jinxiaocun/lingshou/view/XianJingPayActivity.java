@@ -44,6 +44,7 @@ public class XianJingPayActivity extends BaseActivity {
         money = getIntent().getDoubleExtra("money",0.0);
         et_price.setText("￥"+money);
         et_pay_money.setText(MyUtils.formatDouble2(money));
+        et_pay_money.selectAll();
         tv_pay_return.setText("0");
         btn_jiesuan.setOnClickListener(new View.OnClickListener() {
             @Override

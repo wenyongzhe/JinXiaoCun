@@ -5,9 +5,11 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.BaseBean;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.lingshou.bean.CheckVerBean;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.othermodel.bean.CheckVerResult;
 import com.eshop.jinxiaocun.othermodel.bean.CiteOrderBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBeanResult;
@@ -31,6 +33,7 @@ import com.eshop.jinxiaocun.othermodel.bean.WarehouseInfoBeanResult;
 import com.eshop.jinxiaocun.pifaxiaoshou.bean.DanJuMainBeanResultItem;
 import com.eshop.jinxiaocun.othermodel.bean.ReturnedPurchaseResult;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.ReflectionUtils;
 import com.eshop.jinxiaocun.utils.WebConfig;
 
@@ -264,7 +267,6 @@ public class OtherModelImp implements IOtherModel {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PayRecordInterface());
     }
-
 
     //获取业务单据号
     class SheetNoInterface implements IResponseListener {
@@ -685,5 +687,44 @@ public class OtherModelImp implements IOtherModel {
             }
         }
     }
+
+    //判断APP是否升级
+    @Override
+    public void CheckVer() {
+        CheckVerBean bean = new CheckVerBean();
+        bean.JsonData.setNowver(MyUtils.getAppVersionName(Application.getInstance()));
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CheckVerInterface());
+    }
+
+    //判断APP是否升级
+    class CheckVerInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"") || status.equals("1")){
+                    CheckVerResult.CheckVerJson resultList = mJsonFormatImp.JsonToBean(jsonData,CheckVerResult.CheckVerJson.class);
+                    mHandler.handleResule(Config.MESSAGE_CHECKVER,resultList);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"获取失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"接口异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }

@@ -249,7 +249,7 @@ public class OtherModelImp implements IOtherModel {
         bean.JsonData.as_branchNo = Config.branch_no;//门店机构
         bean.JsonData.as_flowno = orderNo;//单号
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new RetSalesRecordInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new RetSalesRecordInterface());
     }
 
     /**
@@ -262,7 +262,7 @@ public class OtherModelImp implements IOtherModel {
         bean.JsonData.as_branchNo = Config.branch_no;//门店机构
         bean.JsonData.as_flowno = orderNo;//单号
         Map map = ReflectionUtils.obj2Map(bean);
-        mINetWork.doPost(WebConfig.getPostWsdlUri(),map,new PayRecordInterface());
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PayRecordInterface());
     }
 
 

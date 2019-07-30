@@ -190,9 +190,14 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     return;
                 }
                 if(Config.mMemberInfo!=null && !Config.mMemberInfo.getCardNo_TelNo().equals("") ){
+                    if(Config.mMemberInfo.getResidual_amt()<last_pay_money){
+                        AlertUtil.showToast("余额不足！");
+                        return;
+                    }
                     mHan.sendEmptyMessage(2);
                 }else{
                     Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
+                    mIntent.putExtra("last_pay_money",last_pay_money);
                     startActivityForResult(mIntent,300);
                 }
             }
@@ -423,6 +428,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                         hashMap2.put("pay_type","CHG");
                         hashMapList.add(hashMap2);
                     }
+                    tv_chuxukazhifu.setText(last_pay_money+"");
                     setPlayFlowBean(hashMapList,Config.mMemberInfo.getCardNo_TelNo());
                     break;
                 case 3:
@@ -634,6 +640,10 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
 
     void btn_jiesuan() {
         try {
+            if(last_pay_money>0){
+                AlertUtil.showToast("还需要支付："+last_pay_money+"元");
+                return;
+            }
             query = true;
 //            List<HashMap<String,String>> hashMapList = new ArrayList<>();
 //            switch (sp_payway.getSelectedItemPosition()){
@@ -761,7 +771,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             return;
         }
         if(requestCode == 300){
-            tv_chuxukazhifu.setText(last_pay_money+"");
             mHan.sendEmptyMessage(2);
             return;
         }
@@ -771,6 +780,11 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 double money_return = data.getDoubleExtra("money_return",0);
                 tv_xianjing.setText(xianjing_money+"");
 
+                for(int i=0; i<hashMapList.size(); i++){
+                    if(hashMapList.get(i).get("pay_type").equals("RMB")){
+                        hashMapList.remove(i);
+                    }
+                }
                 HashMap<String,String> hashMap = new HashMap<>();
                 hashMap.put("payAmount",xianjing_money+"");
                 hashMap.put("pay_type","RMB");
@@ -837,14 +851,14 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         last_pay_money = money-xianjing_money- zhuhezhifu_money -chuxukazhifu_money;
         if(last_pay_money<=0){
             tv_last_tips.setText("找零");
-            tv_last_pay.setText((-last_pay_money)+"");
+            tv_last_pay.setText(MyUtils.formatDouble2(-last_pay_money));
             if(last_pay_money==0){
-                tv_last_pay.setText((last_pay_money)+"");
+                tv_last_pay.setText(MyUtils.formatDouble2(last_pay_money));
             }
             btn_jiesuan();
         }else{
             tv_last_tips.setText("还需要支付");
-            tv_last_pay.setText(last_pay_money+"");
+            tv_last_pay.setText(MyUtils.formatDouble2(last_pay_money));
         }
 
     }

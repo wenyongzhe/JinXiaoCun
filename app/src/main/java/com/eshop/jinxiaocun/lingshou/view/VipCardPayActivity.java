@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.utils.Config;
@@ -10,9 +11,28 @@ import java.util.List;
 
 public class VipCardPayActivity extends SaveMemberActivity {
 
+    double last_pay_money = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        last_pay_money = getIntent().getDoubleExtra("last_pay_money",0);
+    }
+
+    @Override
+    public void onClickOK() {
+        if (TextUtils.isEmpty(mTvCardNumber.getText().toString().trim())) {
+            AlertUtil.showToast("请查询会员号");
+            return;
+        }
+        if (data != null && data.size()>0) {
+            if(data.get(0).getResidual_amt()<last_pay_money){
+                AlertUtil.showToast("余额不足！");
+                return;
+            }
+            Config.mMemberInfo=data.get(0);//记录最近一次会员信息  供销售结算时使用
+        }
+        finish();
     }
 
     @Override

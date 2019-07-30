@@ -675,7 +675,7 @@ public class OtherModelImp implements IOtherModel {
             try {
                 if(status.equals(Config.MESSAGE_OK+"")){
                     List<PayRecordResult> resultList = mJsonFormatImp.JsonToList(jsonData,PayRecordResult.class);
-                    mHandler.handleResule(Config.RESULT_SUCCESS,resultList);
+                    mHandler.handleResule(Config.PAY_RECORD_SUCCESS,resultList);
                 }else{
                     mHandler.handleResule(Config.RESULT_FAIL,"获取付款记录失败: "+msg);
                 }

@@ -13,11 +13,15 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
+import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
+import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
+import com.eshop.jinxiaocun.lingshou.view.PayActivity;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
@@ -29,6 +33,7 @@ import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
 import com.j256.ormlite.field.types.BooleanObjectType;
+import com.zxing.android.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +56,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     ListView mListView;
 
     private IOtherModel mServerApi;
+    private IMemberList mMemberApi;
     private ILingshouScan mSalesServerApi;
     private ReturnedPurchaseByBillAdapter mAdapter;
     private List<ReturnedPurchaseResult> mSalesRecordDatas = new ArrayList<>();//销售记录
@@ -58,6 +64,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     private int modifyQtyPosition =-1;
     private boolean mAllReturn;//true为全退，false为退部分
     private GetFlowNoBeanResult.FlowNoJson mFlowNoJson;
+    private float mRpAllMoney=0;//退货的总金额
 
     @Override
     protected int getLayoutId() {
@@ -90,6 +97,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     @Override
     protected void initData() {
         mServerApi = new OtherModelImp(this);
+        mMemberApi = new MemberImp(this);
         mSalesServerApi = new LingShouScanImp(this);
     }
 
@@ -323,8 +331,10 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setFlow_no(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));
             mPlayFlowBean.setFlow_id(1);
             if(mAllReturn) {//全退
+                mRpAllMoney = -payInfo.getSale_amount();
                 mPlayFlowBean.setSale_amount(-payInfo.getSale_amount());//销售金额
             }else{//退部分
+                mRpAllMoney = -rpAllMoney;
                 mPlayFlowBean.setSale_amount(-rpAllMoney);//销售金额
             }
             mPlayFlowBean.setPay_way(payInfo.getPay_way());//支付方式
@@ -359,6 +369,52 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
         mSalesServerApi.upPlayFlow(playFlowDatas);
     }
 
+    //退款
+    private void returnMoney(){
+        if(mPayRecordDatas==null || mPayRecordDatas.size()==0){
+            return;
+        }
+
+        PayRecordResult payInfo = mPayRecordDatas.get(0);
+        if("RMB".equals(payInfo.getPay_way())){//现金支付直接结算
+            mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
+            return;
+        }else if("SAV".equals(payInfo.getPay_way())){//会员支付
+            rechargeData(payInfo.getCard_no(),mRpAllMoney);
+            return;
+        }
+
+        //调用扫描二维码获取授权码
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivityForResult(intent, Config.REQ_QR_CODE);
+
+    }
+
+    //扫描授权杩返回结果处理
+    private void zxingScan(String codedContent){
+        //get(0)目前只能存在一种付款记录，多种付款记录则是组合付款目前还没有方案处理
+        PayRecordResult payInfo = mPayRecordDatas.get(0);
+
+        mSalesServerApi.RtWzfPay(payInfo.getPay_way(),codedContent,MyUtils.formatFlowNo(mFlowNoJson.getFlowNo())
+                ,mRpAllMoney+"",mRpAllMoney+"");
+    }
+
+    private void rechargeData(String cardNo,float money){
+        MemberRechargeBean bean = new MemberRechargeBean();
+        bean.JsonData.BranchNo = Config.branch_no;
+        bean.JsonData.UserId = Config.UserId;
+        bean.JsonData.CardNo = cardNo;
+        //充值金额(有可能包含赠送金额)
+        bean.JsonData.AddMoney = money;
+        //实付金额
+        bean.JsonData.PayMoney = money;
+        bean.JsonData.FlowNo = MyUtils.formatFlowNo(mFlowNoJson.getFlowNo());//"流水号"
+        bean.JsonData.PayWay = "RMB";//支付方式  后续需要改成多种支付方式，跟销售一样
+        bean.JsonData.Memo = "商品退款";
+
+        mMemberApi.setMemberRechargeData(bean);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -387,6 +443,9 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
         }
 
+        else if(requestCode == Config.REQ_QR_CODE && data != null){
+            zxingScan(data.getStringExtra("codedContent"));
+        }
 
     }
 
@@ -416,12 +475,12 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
-            case Config.RESULT_SUCCESS:
+            case Config.PAY_RECORD_SUCCESS:
                 //获取付款记录数据
                 AlertUtil.dismissProgressDialog();
                 mPayRecordDatas = (List<PayRecordResult>) o;
                 break;
-            case Config.MESSAGE_FLOW_NO:
+            case Config.MESSAGE_FLOW_NO://获取流水号
                 mFlowNoJson = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mFlowNoJson!=null && !TextUtils.isEmpty(mFlowNoJson.getFlowNo())){
                     uploadSalesFlow();
@@ -434,6 +493,14 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 uploadPayFlow();//上传付款流水
                 break;
             case Config.MESSAGE_UP_PLAY_FLOW://上传付款流水成功
+                returnMoney();//发起退款
+//                mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
+//                //调用扫描二维码获取授权码
+//                Intent intent = new Intent(this, CaptureActivity.class);
+//                startActivityForResult(intent, Config.REQ_QR_CODE);
+                break;
+            case Config.MESSAGE_NET_PAY_RETURN://聚合支付成功
+            case Config.RESULT_SUCCESS://会员充值（退款退到会员卡）
                 mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
                 break;
             case Config.MESSAGE_SELL_SUB:

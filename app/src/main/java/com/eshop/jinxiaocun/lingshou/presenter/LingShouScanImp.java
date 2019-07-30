@@ -271,8 +271,8 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleResultJson(String status, String Msg, String jsonData) {
-            NetPlayBeanResult mNetPlayBeanResult =  mJsonFormatImp.JsonToBean(jsonData,NetPlayBeanResult.class);
             if(status.equals(Config.MESSAGE_OK+"")){
+                NetPlayBeanResult mNetPlayBeanResult =  mJsonFormatImp.JsonToBean(jsonData,NetPlayBeanResult.class);
                 mHandler.handleResule(Config.MESSAGE_NET_PAY_RETURN,mNetPlayBeanResult);
             }else{
                 mHandler.handleResule(Config.MESSAGE_ERROR,Msg);

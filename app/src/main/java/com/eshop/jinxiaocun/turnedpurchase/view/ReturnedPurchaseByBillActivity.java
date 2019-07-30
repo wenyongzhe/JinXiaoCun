@@ -374,7 +374,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
         if(mPayRecordDatas==null || mPayRecordDatas.size()==0){
             return;
         }
-
+        //get(0)目前只能存在一种付款记录，多种付款记录则是组合付款目前还没有方案处理
         PayRecordResult payInfo = mPayRecordDatas.get(0);
         if("RMB".equals(payInfo.getPay_way())){//现金支付直接结算
             mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
@@ -383,20 +383,10 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             rechargeData(payInfo.getCard_no(),mRpAllMoney);
             return;
         }
-
-        //调用扫描二维码获取授权码
-        Intent intent = new Intent(this, CaptureActivity.class);
-        startActivityForResult(intent, Config.REQ_QR_CODE);
-
-    }
-
-    //扫描授权杩返回结果处理
-    private void zxingScan(String codedContent){
-        //get(0)目前只能存在一种付款记录，多种付款记录则是组合付款目前还没有方案处理
-        PayRecordResult payInfo = mPayRecordDatas.get(0);
-
-        mSalesServerApi.RtWzfPay(payInfo.getPay_way(),codedContent,MyUtils.formatFlowNo(mFlowNoJson.getFlowNo())
+        //auth_code就是付款记录的里的备注信息
+        mSalesServerApi.RtWzfPay(payInfo.getPay_way(),payInfo.getMemo(),MyUtils.formatFlowNo(mFlowNoJson.getFlowNo())
                 ,mRpAllMoney+"",mRpAllMoney+"");
+
     }
 
     private void rechargeData(String cardNo,float money){
@@ -441,10 +431,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             reCountReturnMoneys(false);//重新计算应退金额
             mAdapter.add(mSalesRecordDatas);
 
-        }
-
-        else if(requestCode == Config.REQ_QR_CODE && data != null){
-            zxingScan(data.getStringExtra("codedContent"));
         }
 
     }

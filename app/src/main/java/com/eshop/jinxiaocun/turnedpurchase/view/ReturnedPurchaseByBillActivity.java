@@ -176,7 +176,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                         AlertUtil.showNoButtonProgressDialog(ReturnedPurchaseByBillActivity.this,
                                 "正在退货，请稍等...");
                         mAllReturn = true;
-                        uploadSalesFlow();
+                        mSalesServerApi.getFlowNo();//取流水号
                     }
                 },
                 R.string.cancel, new View.OnClickListener() {
@@ -237,7 +237,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                         AlertUtil.showNoButtonProgressDialog(ReturnedPurchaseByBillActivity.this,
                                 "正在退货，请稍等...");
                         mAllReturn = false;
-                        uploadSalesFlow();
+                        mSalesServerApi.getFlowNo();//取流水号
                     }
                 },
                 R.string.cancel, new View.OnClickListener() {
@@ -420,10 +420,15 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                 //获取付款记录数据
                 AlertUtil.dismissProgressDialog();
                 mPayRecordDatas = (List<PayRecordResult>) o;
-                mSalesServerApi.getFlowNo();//取流水号
                 break;
             case Config.MESSAGE_FLOW_NO:
                 mFlowNoJson = (GetFlowNoBeanResult.FlowNoJson)o;
+                if(mFlowNoJson!=null && !TextUtils.isEmpty(mFlowNoJson.getFlowNo())){
+                    uploadSalesFlow();
+                }else{
+                    AlertUtil.dismissProgressDialog();
+                    AlertUtil.showToast("流水号为空!");
+                }
                 break;
             case LingShouScanActivity.SELL://上传销售流水成功
                 uploadPayFlow();//上传付款流水

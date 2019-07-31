@@ -24,6 +24,7 @@ import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.view.LingShouCreatAtivity;
+import com.eshop.jinxiaocun.lingshou.view.VipCardPayCaptureActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.utils.NfcUtils;
@@ -105,7 +106,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         iv_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MemberCheckActivity.this, CaptureActivity.class);
+                Intent intent = new Intent(MemberCheckActivity.this, VipCardPayCaptureActivity.class);
                 startActivityForResult(intent, Config.REQ_QR_CODE);
             }
         });
@@ -143,7 +144,6 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
     //搜索
     @OnClick(R.id.iv_search)
     public void onClickSearch() {
-        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         sercheVIPInfo();
     }
 
@@ -152,6 +152,7 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
             AlertUtil.showToast("请输入卡号/手机号/姓名");
             return;
         }
+        AlertUtil.showNoButtonProgressDialog(this,"正在读取卡信息，请稍后...");
         mApi.getMemberCheckData(mEtSearch.getText().toString().trim());
         hideSoftInput();
     }
@@ -208,9 +209,12 @@ public class MemberCheckActivity extends CommonBaseActivity implements INetWorRe
         if (requestCode == Config.REQ_QR_CODE && data != null) {
             String codedContent = data.getStringExtra("codedContent");
             if (codedContent != null && !codedContent.equals("")) {
-                getElecCradNo(codedContent);
-//                mEtSearch.setText(codedContent);
-//                sercheVIPInfo();
+                if(data.getBooleanExtra("isECard",false)){
+                    getElecCradNo(codedContent);
+                }else {
+                    mEtSearch.setText(codedContent);
+                    onClickSearch();
+                }
             }
             return;
         }

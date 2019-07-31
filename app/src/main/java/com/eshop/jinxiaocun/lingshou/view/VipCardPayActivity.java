@@ -1,17 +1,26 @@
 package com.eshop.jinxiaocun.lingshou.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.zxing.android.CaptureActivity;
 
 import java.util.List;
 
 public class VipCardPayActivity extends SaveMemberActivity {
 
     double last_pay_money = 0;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_vip_card_pay;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,33 @@ public class VipCardPayActivity extends SaveMemberActivity {
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;
+        }
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        iv_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(VipCardPayActivity.this, VipCardPayCaptureActivity.class);
+                startActivityForResult(intent, Config.REQ_QR_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Config.REQ_QR_CODE && data != null) {
+            String codedContent = data.getStringExtra("codedContent");
+            if(codedContent != null && !codedContent.equals("")){
+                if(data.getBooleanExtra("isECard",false)){
+                    getElecCradNo(codedContent);
+                }else {
+                    mEtSearch.setText(codedContent);
+                    onClickSearch();
+                }
+            }
         }
     }
 }

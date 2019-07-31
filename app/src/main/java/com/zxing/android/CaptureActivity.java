@@ -31,7 +31,7 @@ import java.util.Map;
  * 这个activity打开相机，在后台线程做常规的扫描；它绘制了一个结果view来帮助正确地显示条形码，在扫描的时候显示反馈信息，
  * 然后在扫描成功的时候覆盖扫描结果
  */
-public final class CaptureActivity extends Activity implements
+public class CaptureActivity extends Activity implements
         SurfaceHolder.Callback {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
@@ -40,17 +40,17 @@ public final class CaptureActivity extends Activity implements
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
-    private boolean hasSurface;
+    protected boolean hasSurface;
     private IntentSource source;
     private Collection<BarcodeFormat> decodeFormats;
     private Map<DecodeHintType, ?> decodeHints;
     private String characterSet;
     // 电量控制
-    private InactivityTimer inactivityTimer;
+    protected InactivityTimer inactivityTimer;
     // 声音、震动控制
-    private BeepManager beepManager;
+    protected BeepManager beepManager;
 
-    private ImageButton imageButton_back;
+    protected ImageButton imageButton_back;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;

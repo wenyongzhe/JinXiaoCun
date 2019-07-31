@@ -301,6 +301,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/MyDialogStyleBottom" />
         <activity android:name="com.zxing.android.CaptureActivity" />
+        <activity android:name="com.eshop.jinxiaocun.lingshou.view.VipCardPayCaptureActivity" />
         <activity android:name=".lingshou.view.VipPayActivity" />
         <activity android:name=".lingshou.view.PayActivity" />
         <activity android:name=".lingshou.view.CombiPayActivity" />

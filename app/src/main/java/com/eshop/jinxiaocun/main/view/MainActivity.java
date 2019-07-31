@@ -41,7 +41,6 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
     private TabView tabView;
     private ILingshouScan mLingShouScanImp;
-    private IOtherModel mIOtherModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +76,8 @@ public class MainActivity extends BaseActivity implements INetWorResult {
 
         getLimit();
 
-        checkVer();
     }
 
-    private void checkVer(){
-        mIOtherModel = new OtherModelImp(this);
-        mIOtherModel.CheckVer();
-    }
 
     private void startLogin(){
         Intent intent = new Intent();
@@ -178,41 +172,6 @@ public class MainActivity extends BaseActivity implements INetWorResult {
                 break;
             case Config.MESSAGE_GET_OPT_AUTH:
                 break;
-            case Config.MESSAGE_CHECKVER:
-                mCheckVerJson = (CheckVerResult.CheckVerJson) o;
-                if(mCheckVerJson!=null && mCheckVerJson.bUpdate>0){
-                    AlertUtil.showAlert(MainActivity.this, "提示", "是否更新\n"+
-                            "当前版本："+MyUtils.getAppVersionName(MainActivity.this)+"\n"+
-                            "服务器版本："+mCheckVerJson.ServerVer,
-                            "确定", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlertUtil.dismissDialog();
-                                    AlertUtil.showNoButtonProgressDialog(MainActivity.this,"下载中");
-                                    new Thread(){
-                                        @Override
-                                        public void run() {
-                                            CheckVerUtils mCheckVerUtils = new CheckVerUtils();
-                                            mCheckVerUtils.downLoadFile(MainActivity.this,mCheckVerJson.AppUrl);
-                                            han.sendEmptyMessage(1);
-                                        }
-                                    }.start();
-
-                                }
-                            },R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlertUtil.dismissDialog();
-                                }
-                            });
-                }
-                break;
         }
     }
-    Handler han = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            AlertUtil.dismissProgressDialog();
-        }
-    };
 }

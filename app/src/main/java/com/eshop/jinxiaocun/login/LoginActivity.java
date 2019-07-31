@@ -22,11 +22,16 @@ import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.BaseActivity;
 import com.eshop.jinxiaocun.login.Bean.LoginBeanResult;
 import com.eshop.jinxiaocun.main.view.MainActivity;
+import com.eshop.jinxiaocun.othermodel.bean.CheckVerResult;
+import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
+import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.utils.AidlUtil;
+import com.eshop.jinxiaocun.utils.CheckVerUtils;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.ConfigureParamSP;
 import com.eshop.jinxiaocun.utils.MyUtils;
+import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.PassWordDialog;
 
 
@@ -62,10 +67,14 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
     ProgressDialog progressDialog;
     ILogin loginAction;
+    private IOtherModel mIOtherModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkVer();
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -122,7 +131,10 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
     }
 
-
+    private void checkVer(){
+        mIOtherModel = new OtherModelImp(this);
+        mIOtherModel.CheckVer();
+    }
 
     @Override
     protected void loadData() {
@@ -251,6 +263,44 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
             case Config.DISS_PROGRESS:
                 closeLoadingDialog();
                 break;
+            case Config.MESSAGE_CHECKVER:
+                mCheckVerJson = (CheckVerResult.CheckVerJson) o;
+                if(mCheckVerJson!=null && mCheckVerJson.bUpdate>0){
+                    AlertUtil.showAlert(LoginActivity.this, "提示", "是否更新\n"+
+                                    "当前版本："+MyUtils.getAppVersionName(LoginActivity.this)+"\n"+
+                                    "服务器版本："+mCheckVerJson.ServerVer,
+                            "确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                    AlertUtil.showNoButtonProgressDialog(LoginActivity.this,"下载中");
+                                    new Thread(){
+                                        @Override
+                                        public void run() {
+                                            CheckVerUtils mCheckVerUtils = new CheckVerUtils();
+                                            mCheckVerUtils.downLoadFile(LoginActivity.this,mCheckVerJson.AppUrl);
+                                            han.sendEmptyMessage(1);
+                                        }
+                                    }.start();
+
+                                }
+                            },R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
+                }
+                break;
+
         }
     }
+    CheckVerResult.CheckVerJson mCheckVerJson;
+    Handler han = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AlertUtil.dismissProgressDialog();
+        }
+    };
+
 }

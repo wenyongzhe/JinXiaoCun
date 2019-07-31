@@ -55,7 +55,7 @@ public class HomeFragment extends BaseFragment {
 //            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
             R.drawable.peisong,
-            R.drawable.tbgl
+            R.drawable.xsqd
     };
     private int[] nameIds = {
             R.string.item_message_lingshou,

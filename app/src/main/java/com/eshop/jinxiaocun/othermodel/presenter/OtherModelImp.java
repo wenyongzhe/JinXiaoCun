@@ -9,6 +9,8 @@ import com.eshop.jinxiaocun.lingshou.bean.CheckVerBean;
 import com.eshop.jinxiaocun.netWork.httpDB.INetWork;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 import com.eshop.jinxiaocun.netWork.httpDB.NetWorkImp;
+import com.eshop.jinxiaocun.othermodel.bean.CashierCheckBean;
+import com.eshop.jinxiaocun.othermodel.bean.CashierCheckResult;
 import com.eshop.jinxiaocun.othermodel.bean.CheckVerResult;
 import com.eshop.jinxiaocun.othermodel.bean.CiteOrderBean;
 import com.eshop.jinxiaocun.othermodel.bean.CustomerInfoBean;
@@ -24,6 +26,8 @@ import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.RetSalesRecordBean;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.SalesCheckBean;
+import com.eshop.jinxiaocun.othermodel.bean.SalesCheckResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesRecordBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetCheckBean;
 import com.eshop.jinxiaocun.othermodel.bean.SheetNoBeanResult;
@@ -267,6 +271,40 @@ public class OtherModelImp implements IOtherModel {
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PayRecordInterface());
     }
+
+    /**
+     * 销售查询
+     * @param beginTime  开始时间
+     * @param endTime 结束时间
+     */
+    @Override
+    public void getSalesCheckDatas(String beginTime, String endTime) {
+        SalesCheckBean bean = new SalesCheckBean();
+        bean.JsonData.BranchNo = Config.branch_no;//门店机构
+        bean.JsonData.POSId = Config.posid;
+        bean.JsonData.UserId = Config.UserId;
+        bean.JsonData.BeginTime = beginTime;
+        bean.JsonData.EndTime = endTime;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SalesCheckInterface());
+    }
+    /**
+     * 收银对账
+     * @param beginTime  开始时间
+     * @param endTime 结束时间
+     */
+    @Override
+    public void getSydzDatas(String beginTime, String endTime) {
+        CashierCheckBean bean = new CashierCheckBean();
+        bean.JsonData.BranchNo = Config.branch_no;//门店机构
+        bean.JsonData.POSId = Config.posid;
+        bean.JsonData.UserId = Config.UserId;
+        bean.JsonData.BeginTime = beginTime;
+        bean.JsonData.EndTime = endTime;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CashierCheckInterface());
+    }
+
 
     //获取业务单据号
     class SheetNoInterface implements IResponseListener {
@@ -726,5 +764,62 @@ public class OtherModelImp implements IOtherModel {
         }
     }
 
+    //销售查询
+    class SalesCheckInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    SalesCheckResult resultList = mJsonFormatImp.JsonToBean(jsonData,SalesCheckResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"获取数据失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"获取数据异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //收银对账
+    class CashierCheckInterface implements IResponseListener{
+
+        @Override
+        public void handleError(Object event) {
+
+        }
+
+        @Override
+        public void handleResult(Response event, String result) {
+
+        }
+
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    CashierCheckResult resultList = mJsonFormatImp.JsonToBean(jsonData,CashierCheckResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"获取数据失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"获取数据异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

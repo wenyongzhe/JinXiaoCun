@@ -41,4 +41,10 @@ public interface IOtherModel {
     void getPayRecordDatas(String orderNo );
     //8.3 判断APP是否升级
     void CheckVer();
+
+    //销售查询7.1
+    void getSalesCheckDatas(String beginTime ,String endTime);
+    //收银对账7.2
+    void getSydzDatas(String beginTime ,String endTime);
+
 }

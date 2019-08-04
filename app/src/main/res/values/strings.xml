@@ -51,6 +51,7 @@
     <string name="menu_qudan">销售取单</string>
     <string name="menu_jichi_manage">会员计次</string>
     <string name="menu_returned_purchase_by_bill">按单退货</string>
+    <string name="menu_sales_check">销售查询</string>
 
     <!--销售-->
     <string name="item_title_xiaoshoudan">销售单</string>

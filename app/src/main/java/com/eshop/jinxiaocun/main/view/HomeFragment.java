@@ -29,6 +29,7 @@ import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaOrderListActivity;
+import com.eshop.jinxiaocun.reportforms.view.SalesCheckActivity;
 import com.eshop.jinxiaocun.stock.view.GoodDetailCheckActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
 import com.eshop.jinxiaocun.turnedpurchase.view.ReturnedPurchaseByBillActivity;
@@ -52,9 +53,9 @@ public class HomeFragment extends BaseFragment {
             R.drawable.pandian,
             R.drawable.caigou,
             R.drawable.kcgl,
-//            R.drawable.tbgl,
             R.drawable.xiaoshoupifa,
             R.drawable.peisong,
+            R.drawable.xsqd,
             R.drawable.xsqd
     };
     private int[] nameIds = {
@@ -66,8 +67,8 @@ public class HomeFragment extends BaseFragment {
             R.string.menu_shanpingchaxun,
             R.string.menu_pifa_xiaoshou,
             R.string.menu_peisong_manager,
-            R.string.menu_returned_purchase_by_bill
-//            R.string.menu_diaobo_manage,
+            R.string.menu_returned_purchase_by_bill,
+            R.string.menu_sales_check
 //            R.string.menu_peisong_manager,
     };
 
@@ -140,6 +141,10 @@ public class HomeFragment extends BaseFragment {
                 break;
             case 8:
                 intent.setClass(Application.mContext, ReturnedPurchaseByBillActivity.class);
+                startActivity(intent);
+                break;
+            case 9:
+                intent.setClass(Application.mContext, SalesCheckActivity.class);
                 startActivity(intent);
                 break;
 //            case 8://记次

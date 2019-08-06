@@ -429,6 +429,10 @@
             android:name=".reportforms.view.SalesCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".reportforms.view.CashierCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
     </application>
 

@@ -41,7 +41,9 @@ public class ReportFormManagerActivity extends CommonBaseActivity {
     //收银对账
     @OnClick(R.id.tv_cashierCheck)
     public void onClickCashierCheck(){
-
+        Intent intent = new Intent();
+        intent.setClass(Application.mContext, CashierCheckActivity.class);
+        startActivity(intent);
     }
 
 

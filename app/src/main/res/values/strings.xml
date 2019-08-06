@@ -60,8 +60,7 @@
     <string name="item_message_tuihuo">退货、换货</string>
     <string name="item_title_lingshou">门店收款</string>
     <string name="item_message_lingshou">零售</string>
-    <string name="sales_check">销售查询</string>
-    <string name="cashier_check">收银对账</string>
+
 
     <!-- 登录 -->
     <string name="login">登录</string>
@@ -75,6 +74,12 @@
     <string name="params_setting">系统设置</string>
     <string name="btnSave">保存</string>
     <string name="btnTest">测试</string>
+
+    <!--业务查询-->
+    <string name="sales_check">销售查询</string>
+    <string name="cashier_check">收银对账</string>
+    <string name="account_checking">对   账</string>
+
 
     <!--  DeviceListActivity -->
     <string name="scanning">扫描设备…</string>

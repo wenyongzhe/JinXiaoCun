@@ -29,6 +29,7 @@ import com.eshop.jinxiaocun.piandian.view.PandianManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PiFaXiaoshouDanScanActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaManagerActivity;
 import com.eshop.jinxiaocun.pifaxiaoshou.view.PifaOrderListActivity;
+import com.eshop.jinxiaocun.reportforms.view.ReportFormManagerActivity;
 import com.eshop.jinxiaocun.reportforms.view.SalesCheckActivity;
 import com.eshop.jinxiaocun.stock.view.GoodDetailCheckActivity;
 import com.eshop.jinxiaocun.stock.view.StockCheckActivity;
@@ -144,7 +145,7 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case 9:
-                intent.setClass(Application.mContext, SalesCheckActivity.class);
+                intent.setClass(Application.mContext, ReportFormManagerActivity.class);
                 startActivity(intent);
                 break;
 //            case 8://记次

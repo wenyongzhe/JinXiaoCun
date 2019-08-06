@@ -79,7 +79,7 @@
     <string name="sales_check">销售查询</string>
     <string name="cashier_check">收银对账</string>
     <string name="account_checking">对   账</string>
-
+    <string name="println_hint">温馨提示：点击销售流水可补打小票</string>
 
     <!--  DeviceListActivity -->
     <string name="scanning">扫描设备…</string>

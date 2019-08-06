@@ -1,9 +1,11 @@
 package com.eshop.jinxiaocun.reportforms.view;
 
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.othermodel.bean.SalesCheckResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
@@ -65,7 +67,7 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     @Override
     protected void initData() {
         mApi = new OtherModelImp(this);
-        getSalesCheckData();
+        //getSalesCheckData();
     }
 
     //获取销售查询数据
@@ -126,7 +128,9 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     //点击今日销售
     @OnClick(R.id.tv_todaySales)
     public void onClickTodaySales(){
-
+        Intent intent = new Intent();
+        intent.setClass(Application.mContext, TodaySalesActivity.class);
+        startActivity(intent);
     }
 
     //点击今日收款

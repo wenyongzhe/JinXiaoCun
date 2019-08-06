@@ -101,7 +101,7 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
         public void onDateTimeCancel() {}
     };
 
-    @OnClick(R.id.tv_end_date)
+    @OnClick(R.id.tv_endDate)
     void OnEndDate(){
         new SlideDateTimePicker.Builder(this.getSupportFragmentManager())
                 .setListener(listenerEnd)

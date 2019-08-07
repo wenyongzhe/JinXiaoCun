@@ -238,8 +238,8 @@ public class LingShouScanImp implements ILingshouScan {
         mNetPlayBean.getJsonData().setAs_posid(Config.posid);
         mNetPlayBean.getJsonData().setPay_amount(payAmount);
         mNetPlayBean.getJsonData().setTotal_amount(totalAmount);
-//        mNetPlayBean.getJsonData().setPay_amount("0.01");
-//        mNetPlayBean.getJsonData().setTotal_amount("0.01");
+        mNetPlayBean.getJsonData().setPay_amount("0.01");
+        mNetPlayBean.getJsonData().setTotal_amount("0.01");
         if(payWay.equals("ZFB")){
             mNetPlayBean.getJsonData().setPay_type("ALIPAY");
             mNetPlayBean.getJsonData().setOrder_title("支付宝支付");

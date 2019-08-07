@@ -7,7 +7,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 22
         versionCode 190731
-        versionName "v1.0 190731"//{"ServerVer":"v2.0 190723","bUpdate":1,"AppUrl":"https://www.baidu.com"}
+        versionName "v1.0 190807"//{"ServerVer":"v2.0 190723","bUpdate":1,"AppUrl":"https://www.baidu.com"}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {

@@ -112,6 +112,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     private double xianjing_money = 0;
     private double zhuhezhifu_money = 0;
     private double chuxukazhifu_money = 0;
+    private int whaPayWay = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +167,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         ly_xianjing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                whaPayWay = 1;
                 Intent intent = new Intent(CombiPayActivity.this,XianJingPayActivity.class);
                 intent.putExtra("money",money);
                 startActivityForResult(intent,XIAN_JING_PAY);
@@ -178,6 +180,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     AlertUtil.showToast("不需要再支付。");
                     return;
                 }
+                whaPayWay = 2;
                 Intent intent = new Intent(CombiPayActivity.this,CaptureActivity.class);
                 startActivityForResult(intent,Config.REQ_QR_CODE);
             }
@@ -200,6 +203,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     mIntent.putExtra("last_pay_money",last_pay_money);
                     startActivityForResult(mIntent,300);
                 }
+                whaPayWay = 3;
             }
         });
     }
@@ -281,12 +285,12 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                         });
                 //AlertUtil.showAlert(PayActivity.this,"提示",(String)o);
                 break;
-            case Config.MESSAGE_VIP_PAY_RESULT:
-                mVipPayBeanResult = (VipPayBeanResult)o;
-                //setResult(Config.MESSAGE_VIP_PAY_RESULT);
-                mHan.sendEmptyMessage(0);
-                //sellOk();
-                break;
+//            case Config.MESSAGE_VIP_PAY_RESULT:
+//                mVipPayBeanResult = (VipPayBeanResult)o;
+//                //setResult(Config.MESSAGE_VIP_PAY_RESULT);
+//                mHan.sendEmptyMessage(0);
+//                //sellOk();
+//                break;
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
                 break;
@@ -294,27 +298,24 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
                 mHan.sendEmptyMessage(0);
 
-//                switch (sp_payway.getSelectedItemPosition()){
+                switch (whaPayWay){
 //                    case 0:
 //                        mHan.sendEmptyMessage(0);
 //                        break;
 //                    case 1:
 //                        mHan.sendEmptyMessage(1);
 //                        break;
-//                    case 2:
-//                        if(Config.mMemberInfo!=null){
-//                            MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
-//                            mLingShouScanImp.sellVipPay(FlowNo,"1",
-//                                    mMemberCheckResultItem.getCardNo_TelNo(),
-//                                    mMemberCheckResultItem.getPassword(),
-//                                    money);
-//                        }else{
-//                            AlertUtil.showToast("没有会员信息");
-//                        }
-//                        //mHan.sendEmptyMessage(2);
-//                        break;
-//
-//                }
+                    case 3:
+                        if(Config.mMemberInfo!=null){
+                            MemberCheckResultItem mMemberCheckResultItem =  Config.mMemberInfo;
+                            mLingShouScanImp.sellVipPay(FlowNo,"1",
+                                    mMemberCheckResultItem.getCardNo_TelNo(),
+                                    mMemberCheckResultItem.getPassword(),
+                                    last_pay_money);
+                        }
+                        break;
+
+                }
 
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://网络付款返回
@@ -343,11 +344,11 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                                     }
                                 });
                     }else{
-                        AlertUtil.showAlert(CombiPayActivity.this, "提示", "结算处理 "+mNetPlayBeanResult.getReturn_msg(),
+                        AlertUtil.showAlert(CombiPayActivity.this, "提示", "结算失败 "+mNetPlayBeanResult.getReturn_msg(),
                                 "确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        query = false;
+                                        //query = false;
                                         AlertUtil.dismissDialog();
                                     }
                                 });
@@ -435,7 +436,11 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     rtWzfQry();
                     break;
                 case 4:
-                    setPlayFlowBean(hashMapList,Config.mMemberInfo.getCardNo_TelNo());
+                    if(Config.mMemberInfo!=null){
+                        setPlayFlowBean(hashMapList,Config.mMemberInfo.getCardNo_TelNo());
+                    }else{
+                        setPlayFlowBean(hashMapList,"");
+                    }
                     break;
             }
         }
@@ -747,13 +752,13 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             }
 
             temMoney = money+"";
-            mLingShouScanImp.RtWzfPay(tempayway,codedContent,FlowNo,temMoney,temMoney);
 
             HashMap<String,String> hashMapZFB = new HashMap<>();
             hashMapZFB.put("payAmount",last_pay_money+"");
             hashMapZFB.put("pay_type",tempayway);
             hashMapList.add(hashMapZFB);
 
+            mLingShouScanImp.RtWzfPay(tempayway,codedContent,FlowNo,temMoney,temMoney);
             return true;
         }
         return false;
@@ -929,19 +934,21 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             PlayFlowBean mPlayFlowBean = new PlayFlowBean();
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(FlowNo);
-            mPlayFlowBean.setFlow_id(1);
-            mPlayFlowBean.setSale_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));
+            mPlayFlowBean.setFlow_id(i+1);
+            mPlayFlowBean.setSale_amount(money);
             mPlayFlowBean.setPay_way(hashMap.get(i).get("pay_type"));
             if(hashMap.get(i).get("Sell_way")==null || hashMap.get(i).get("Sell_way").equals("")){
                 mPlayFlowBean.setSell_way("A");
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
-            mPlayFlowBean.setCard_no(mCard_no);
-            if(Config.mMemberInfo==null){
-                mPlayFlowBean.setVip_no("");
-            }else{
-                mPlayFlowBean.setVip_no(Config.mMemberInfo.getCardNo_TelNo());
+            //mPlayFlowBean.setCard_no(mCard_no);
+            if(mPlayFlowBean.getPay_way().equals("SAV")){
+                if(Config.mMemberInfo==null){
+                    mPlayFlowBean.setVip_no("");
+                }else{
+                    mPlayFlowBean.setVip_no(Config.mMemberInfo.getCardNo_TelNo());
+                }
             }
             mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);

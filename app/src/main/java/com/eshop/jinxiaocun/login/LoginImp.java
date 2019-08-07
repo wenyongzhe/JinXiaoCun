@@ -129,6 +129,7 @@ public class LoginImp implements ILogin {
                 }else{
                     Config.posid = jsonBean.getPosid();
                     Config.branch_no = jsonBean.getBranch_no();
+//                    Config.branch_no = "000001";
                     Config.soft_name = jsonBean.getSoft_name();
                     mHandler.handleResule(Config.MESSAGE_OK,jsonBean);
                 }

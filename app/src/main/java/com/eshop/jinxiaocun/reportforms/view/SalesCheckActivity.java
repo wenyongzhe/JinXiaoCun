@@ -67,7 +67,7 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     @Override
     protected void initData() {
         mApi = new OtherModelImp(this);
-        //getSalesCheckData();
+        getSalesCheckData();
     }
 
     //获取销售查询数据

@@ -769,14 +769,10 @@ public class OtherModelImp implements IOtherModel {
 
         @Override
         public void handleError(Object event) {
-
         }
-
         @Override
         public void handleResult(Response event, String result) {
-
         }
-
         @Override
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
@@ -784,10 +780,10 @@ public class OtherModelImp implements IOtherModel {
                     SalesCheckResult resultList = mJsonFormatImp.JsonToBean(jsonData,SalesCheckResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
-                    mHandler.handleResule(Config.RESULT_FAIL,"获取数据失败: "+msg);
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"获取数据失败: "+msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.RESULT_FAIL,"获取数据异常: "+e.getMessage());
+                mHandler.handleResule(Config.MESSAGE_ERROR,"获取数据异常: "+e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -797,15 +793,9 @@ public class OtherModelImp implements IOtherModel {
     class CashierCheckInterface implements IResponseListener{
 
         @Override
-        public void handleError(Object event) {
-
-        }
-
+        public void handleError(Object event) { }
         @Override
-        public void handleResult(Response event, String result) {
-
-        }
-
+        public void handleResult(Response event, String result) { }
         @Override
         public void handleResultJson(String status, String msg, String jsonData) {
             try {
@@ -813,10 +803,10 @@ public class OtherModelImp implements IOtherModel {
                     CashierCheckResult resultList = mJsonFormatImp.JsonToBean(jsonData,CashierCheckResult.class);
                     mHandler.handleResule(Config.MESSAGE_OK,resultList);
                 }else{
-                    mHandler.handleResule(Config.RESULT_FAIL,"获取数据失败: "+msg);
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"获取数据失败: "+msg);
                 }
             } catch (Exception e) {
-                mHandler.handleResule(Config.RESULT_FAIL,"获取数据异常: "+e.getMessage());
+                mHandler.handleResule(Config.MESSAGE_ERROR,"获取数据异常: "+e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -942,11 +942,12 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             }else{
                 mPlayFlowBean.setSell_way(hashMap.get(i).get("Sell_way"));
             }
-            //mPlayFlowBean.setCard_no(mCard_no);
+
             if(mPlayFlowBean.getPay_way().equals("SAV")){
                 if(Config.mMemberInfo==null){
                     mPlayFlowBean.setVip_no("");
                 }else{
+                    mPlayFlowBean.setCard_no(Config.mMemberInfo.getCardNo_TelNo());
                     mPlayFlowBean.setVip_no(Config.mMemberInfo.getCardNo_TelNo());
                 }
             }

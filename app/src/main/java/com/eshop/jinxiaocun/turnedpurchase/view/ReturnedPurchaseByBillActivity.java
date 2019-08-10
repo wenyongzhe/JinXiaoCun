@@ -380,7 +380,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
             return;
         }else if("SAV".equals(payInfo.getPay_way())){//会员支付
-            rechargeData(payInfo.getCard_no(),mRpAllMoney);
+            rechargeData(payInfo.getCard_no(),-mRpAllMoney);
             return;
         }
         //auth_code就是付款记录的里的备注信息

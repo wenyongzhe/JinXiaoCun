@@ -8,28 +8,27 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
-import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.reportforms.bean.TodayGatheringInfo;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
+import com.eshop.jinxiaocun.widget.NoScrollListView;
 
 import java.util.List;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2019/8/6
+ * Date: 2019/8/12
  * Desc:
  */
-public class TodaySalesGoodsAdapter extends BaseAdapter {
+public class TodayGatheringAdapter extends BaseAdapter {
 
-    private List<SaleFlowRecordResult> mListInfo;
+    private List<TodayGatheringInfo> mListInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
     private Context mContext;
-
-    public TodaySalesGoodsAdapter(Context context, List<SaleFlowRecordResult> listInfo) {
-        this.mListInfo = listInfo;
+    public TodayGatheringAdapter(Context context, List<TodayGatheringInfo> listInfo) {
         mContext = context;
-        inflater = LayoutInflater.from(Application.mContext);
+        this.mListInfo = listInfo;
+        inflater = LayoutInflater.from(mContext);
     }
 
     @Override
@@ -50,22 +49,21 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_sales_goods,parent,false);
+            convertView = inflater.inflate(R.layout.item_today_gathering,parent,false);
         }
 
 
-        TextView goodsName = ViewHolderUtils.get(convertView, R.id.tv_goodsName);
-        TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);
-        TextView price = ViewHolderUtils.get(convertView, R.id.tv_price);
-        TextView allMoney = ViewHolderUtils.get(convertView, R.id.tv_allMoney);
+        TextView billNo = ViewHolderUtils.get(convertView, R.id.tv_billNo);
+        TextView billDate = ViewHolderUtils.get(convertView, R.id.tv_billDate);
+        NoScrollListView listView = ViewHolderUtils.get(convertView, R.id.lv_salesGoods);
 
-        SaleFlowRecordResult info = mListInfo.get(position);
+        TodayGatheringInfo info = mListInfo.get(position);
 
-        goodsName.setText(info.getItem_name());
-        int account = info.getSale_qnty();
-        qty.setText(account+"/件");
-        price.setText("￥"+info.getSale_price());
-        allMoney.setText("￥"+account*info.getSale_price());
+        billNo.setText(info.getBillNo());
+        billDate.setText(info.getBillDate());
+
+        TodayPayRecordAdapter adapter = new TodayPayRecordAdapter(info.getSalesGoodsInfos());
+        listView.setAdapter(adapter);
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -75,7 +73,7 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(List<SaleFlowRecordResult> listInfo) {
+    public void add(List<TodayGatheringInfo> listInfo) {
         this.mListInfo = listInfo;
         notifyDataSetChanged();
     }

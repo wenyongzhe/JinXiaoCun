@@ -37,7 +37,7 @@ public class TodaySalesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return mListInfo.size();
     }
 
     @Override
@@ -61,13 +61,12 @@ public class TodaySalesAdapter extends BaseAdapter {
         TextView billDate = ViewHolderUtils.get(convertView, R.id.tv_billDate);
         NoScrollListView listView = ViewHolderUtils.get(convertView, R.id.lv_salesGoods);
 
-//        TodaySalesInfo info = mListInfo.get(position);
+        TodaySalesInfo info = mListInfo.get(position);
 
-        billNo.setText("TDS0000"+position);
-        billDate.setText(DateUtility.getCurrentTime());
+        billNo.setText(info.getBillNo());
+        billDate.setText(info.getBillDate());
 
-        List<SalesGoodsInfo> goodsInfoList = new ArrayList<>();
-        TodaySalesGoodsAdapter adapter = new TodaySalesGoodsAdapter(mContext,goodsInfoList);
+        TodaySalesGoodsAdapter adapter = new TodaySalesGoodsAdapter(mContext,info.getSalesGoodsInfos());
         listView.setAdapter(adapter);
 
         if (itemClickPosition == position) {

@@ -55,7 +55,7 @@
         />
 
     <ListView
-        android:id="@+id/lv_salesData"
+        android:id="@+id/lv_cashierData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/divider"

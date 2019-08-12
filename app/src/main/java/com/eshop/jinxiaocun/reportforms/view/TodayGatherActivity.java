@@ -12,11 +12,11 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
-import com.eshop.jinxiaocun.reportforms.adapter.TodaySalesAdapter;
-import com.eshop.jinxiaocun.reportforms.bean.TodaySalesInfo;
+import com.eshop.jinxiaocun.reportforms.adapter.TodayGatheringAdapter;
+import com.eshop.jinxiaocun.reportforms.bean.TodayGatheringInfo;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
@@ -31,31 +31,31 @@ import butterknife.OnClick;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2019/8/6
- * Desc:
+ * Date: 2019/8/12
+ * Desc: 今日收款
  */
-public class TodaySalesActivity extends CommonBaseActivity implements INetWorResult {
+public class TodayGatherActivity extends CommonBaseActivity implements INetWorResult {
 
     @BindView(R.id.et_billNo)
     EditText mEtBillNo;
 
-    @BindView(R.id.lv_salesData)
+    @BindView(R.id.lv_cashierData)
     ListView mListView;
 
     private IOtherModel mServerApi;
-    private TodaySalesAdapter mAdapter;
-    private List<TodaySalesInfo> mDataList = new ArrayList<>();
+    private TodayGatheringAdapter mAdapter;
+    private List<TodayGatheringInfo> mDataList = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_today_sales;
+        return R.layout.activity_today_gathering;
     }
 
 
     //初始化控件
     @Override
     protected void initView() {
-        setTopToolBar("今天销售", R.mipmap.ic_left_light, "", 0, "");
+        setTopToolBar("今日收款", R.mipmap.ic_left_light, "", 0, "");
 
 
         mEtBillNo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -71,7 +71,7 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
             }
         });
 
-        mAdapter = new TodaySalesAdapter(this,mDataList);
+        mAdapter = new TodayGatheringAdapter(this,mDataList);
         mListView.setAdapter(mAdapter);
 
     }
@@ -103,12 +103,12 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
             AlertUtil.showToast("网络不可用，请检查网络!");
             return;
         }
-        AlertUtil.showNoButtonProgressDialog(this,"正在获取销售数据，请稍后...");
-        mServerApi.getSalesRecordDatas(billNo);
+        AlertUtil.showNoButtonProgressDialog(this,"正在获取收款数据，请稍后...");
+        mServerApi.getPayRecordDatas(billNo);
     }
 
     //根据返回的销售记录，单据相同算一组，并刷新UI
-    private void refreshData(List<SaleFlowRecordResult> dataList){
+    private void refreshData(List<PayRecordResult> dataList){
         mDataList.clear();
 
         if(dataList==null){
@@ -118,23 +118,23 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         //缓存不相同的单据号
         Set<String> billNoList = new HashSet<>();
-        for (SaleFlowRecordResult item : dataList) {
+        for (PayRecordResult item : dataList) {
             billNoList.add(item.getFlow_no());
         }
 
         //合并相同的单据商品
         for (String billNo : billNoList) {
-            List<SaleFlowRecordResult> sameGoodsList = new ArrayList<>();
-            for (SaleFlowRecordResult item : dataList) {
+            List<PayRecordResult> sameGoodsList = new ArrayList<>();
+            for (PayRecordResult item : dataList) {
                 if(billNo.equals(item.getFlow_no())){
                     sameGoodsList.add(item);
                 }
             }
             if(sameGoodsList.size()>0){
-                TodaySalesInfo info = new TodaySalesInfo();
+                TodayGatheringInfo info = new TodayGatheringInfo();
                 info.setBillNo(sameGoodsList.get(0).getFlow_no());
-                info.setBillDate(sameGoodsList.get(0).getValid_date());
-                info.setSalesGoodsInfos(sameGoodsList);
+                info.setBillDate(sameGoodsList.get(0).getOper_date());
+                info.setPayRecordInfos(sameGoodsList);
                 mDataList.add(info);
             }
         }
@@ -155,12 +155,12 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
-            case Config.MESSAGE_OK://获取单据的销售记录
-                List<SaleFlowRecordResult> resultList = (List<SaleFlowRecordResult>) o;
+            case Config.PAY_RECORD_SUCCESS://获取单据的付款记录
+                List<PayRecordResult> resultList = (List<PayRecordResult>) o;
                 refreshData(resultList);
                 AlertUtil.dismissProgressDialog();
                 break;
-            case Config.MESSAGE_FAIL:
+            case Config.RESULT_FAIL:
                 AlertUtil.showToast((String) o);
                 AlertUtil.dismissProgressDialog();
                 break;

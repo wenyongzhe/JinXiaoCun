@@ -1,19 +1,20 @@
 package com.eshop.jinxiaocun.reportforms.bean;
 
+import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
 
 import java.util.List;
 
 /**
  * Author: 安仔夏天勤奋
- * Date: 2019/8/6
- * Desc:
+ * Date: 2019/8/12
+ * Desc: 今日收款数据
  */
-public class TodaySalesInfo {
+public class TodayGatheringInfo {
 
     private String billNo;//单据号
     private String billDate;//单据日期
-    private List<SaleFlowRecordResult> salesGoodsInfos;//销售商品信息
+    private List<PayRecordResult> payRecordInfos;//付款信息
 
     public String getBillNo() {
         return billNo;
@@ -31,11 +32,11 @@ public class TodaySalesInfo {
         this.billDate = billDate;
     }
 
-    public List<SaleFlowRecordResult> getSalesGoodsInfos() {
-        return salesGoodsInfos;
+    public List<PayRecordResult> getPayRecordInfos() {
+        return payRecordInfos;
     }
 
-    public void setSalesGoodsInfos(List<SaleFlowRecordResult> salesGoodsInfos) {
-        this.salesGoodsInfos = salesGoodsInfos;
+    public void setPayRecordInfos(List<PayRecordResult> payRecordInfos) {
+        this.payRecordInfos = payRecordInfos;
     }
 }

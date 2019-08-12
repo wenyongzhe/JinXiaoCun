@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
-            android:text="今日销售:"
+            android:text="销售总额:"
             android:textSize="16sp" />
 
         <TextView
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
-            android:text="今日收款:"
+            android:text="收款总额:"
             android:textSize="16sp" />
 
         <TextView
@@ -147,10 +147,14 @@
 
 
 
+
+
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="40dp"
+        android:visibility="gone"
         android:background="@color/line"
         />
     <LinearLayout
@@ -158,6 +162,7 @@
         android:layout_height="@dimen/layout_item_height_35"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -181,6 +186,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:visibility="gone"
         android:background="@color/line"
         />
     <LinearLayout
@@ -188,6 +194,7 @@
         android:layout_height="@dimen/layout_item_height_35"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -211,6 +218,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:visibility="gone"
         android:background="@color/line"
         />
 

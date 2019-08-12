@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
@@ -19,16 +19,14 @@ import java.util.List;
  * Date: 2019/8/6
  * Desc:
  */
-public class TodaySalesGoodsAdapter extends BaseAdapter {
+public class TodayPayRecordAdapter extends BaseAdapter {
 
-    private List<SaleFlowRecordResult> mListInfo;
+    private List<PayRecordResult> mListInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
-    private Context mContext;
 
-    public TodaySalesGoodsAdapter(Context context, List<SaleFlowRecordResult> listInfo) {
+    public TodayPayRecordAdapter(List<PayRecordResult> listInfo) {
         this.mListInfo = listInfo;
-        mContext = context;
         inflater = LayoutInflater.from(Application.mContext);
     }
 
@@ -50,22 +48,17 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_sales_goods,parent,false);
+            convertView = inflater.inflate(R.layout.item_today_pay_record,parent,false);
         }
 
 
-        TextView goodsName = ViewHolderUtils.get(convertView, R.id.tv_goodsName);
-        TextView qty = ViewHolderUtils.get(convertView, R.id.tv_qty);
-        TextView price = ViewHolderUtils.get(convertView, R.id.tv_price);
+        TextView sales = ViewHolderUtils.get(convertView, R.id.tv_sales);
         TextView allMoney = ViewHolderUtils.get(convertView, R.id.tv_allMoney);
 
-        SaleFlowRecordResult info = mListInfo.get(position);
+        PayRecordResult info = mListInfo.get(position);
 
-        goodsName.setText(info.getItem_name());
-        int account = info.getSale_qnty();
-        qty.setText(account+"/件");
-        price.setText("￥"+info.getSale_price());
-        allMoney.setText("￥"+account*info.getSale_price());
+        sales.setText("销售");
+        allMoney.setText("￥"+info.getSale_amount());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -75,7 +68,7 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(List<SaleFlowRecordResult> listInfo) {
+    public void add(List<PayRecordResult> listInfo) {
         this.mListInfo = listInfo;
         notifyDataSetChanged();
     }

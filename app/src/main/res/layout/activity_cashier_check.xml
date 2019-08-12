@@ -83,7 +83,22 @@
         android:textSize="@dimen/txt_size20"
         />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
+        <TextView
+            android:id="@+id/tv_cashierCheckContent"
+            style="@style/TextView_Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="16sp" />
+
+    </ScrollView>
 
 
 </LinearLayout>

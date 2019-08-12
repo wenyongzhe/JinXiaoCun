@@ -34,6 +34,8 @@ public class CashierCheckActivity extends CommonBaseActivity implements INetWorR
     TextView mTvStartDate;
     @BindView(R.id.tv_endDate)
     TextView mTvEndDate;
+    @BindView(R.id.tv_cashierCheckContent)
+    TextView mTvContent;
 
     private IOtherModel mApi;
 
@@ -123,7 +125,7 @@ public class CashierCheckActivity extends CommonBaseActivity implements INetWorR
                 AlertUtil.dismissProgressDialog();
                 CashierCheckResult data = (CashierCheckResult) o;
                 if(data!=null){
-
+                    mTvContent.setText(data.getRepDetail());
                 }else{
                     AlertUtil.showToast("没有收银对账数据!");
                 }

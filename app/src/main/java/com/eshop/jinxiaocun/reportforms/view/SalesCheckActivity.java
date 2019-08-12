@@ -15,6 +15,7 @@ import com.eshop.jinxiaocun.slidedatetimepicker.SlideDateTimePicker;
 import com.eshop.jinxiaocun.utils.CommonUtility;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
+import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
 import java.text.SimpleDateFormat;
@@ -136,7 +137,9 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     //点击今日收款
     @OnClick(R.id.tv_todayGathering)
     public void onClickTodayGathering(){
-
+        Intent intent = new Intent();
+        intent.setClass(Application.mContext, TodayGatherActivity.class);
+        startActivity(intent);
     }
 
     //网络返回数据处理
@@ -147,7 +150,8 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
                 AlertUtil.dismissProgressDialog();
                 SalesCheckResult data = (SalesCheckResult) o;
                 if(data!=null){
-
+                    mTvTodaySales.setText(String.format("￥%s",MyUtils.convertToString(data.getSaleSum(),"0")));
+                    mTvTodayGathering.setText(String.format("￥%s",MyUtils.convertToString(data.getPaySum(),"0")));
                 }else{
                     AlertUtil.showToast("没有销售数据!");
                 }

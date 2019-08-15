@@ -62,7 +62,7 @@ public class TodayGatheringAdapter extends BaseAdapter {
         billNo.setText(info.getBillNo());
         billDate.setText(info.getBillDate());
 
-        TodayPayRecordAdapter adapter = new TodayPayRecordAdapter(info.getSalesGoodsInfos());
+        TodayPayRecordAdapter adapter = new TodayPayRecordAdapter(info.getPayRecordInfos());
         listView.setAdapter(adapter);
 
         if (itemClickPosition == position) {

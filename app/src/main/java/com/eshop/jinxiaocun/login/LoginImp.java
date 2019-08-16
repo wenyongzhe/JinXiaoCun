@@ -57,6 +57,10 @@ public class LoginImp implements ILogin {
 
     @Override
     public void registDevice() {
+        if(DeviceUtils.getMacAddress()==null || DeviceUtils.getMacAddress().equals("")){
+            mHandler.handleResule(Config.MESSAGE_ERROR,"获取MAC地址失败");
+            return;
+        }
         RegistBean mRegistBean = new RegistBean();
         mRegistBean.getJsonData().setiDevID(Config.DeviceID + DeviceUtils.getMacAddress());
         Map map = ReflectionUtils.obj2Map(mRegistBean);

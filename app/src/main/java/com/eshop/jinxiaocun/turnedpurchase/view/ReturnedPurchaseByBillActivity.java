@@ -289,7 +289,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSaleFlowBean.setSpec_flag("");
             mSaleFlowBean.setSpec_sheet_no("");
             mSaleFlowBean.setPosid(Config.posid);
-            mSaleFlowBean.setVoucher_no("");
+            mSaleFlowBean.setVoucher_no(goodsInfo.getFlow_no());//引单号 （原单据号）
             mSaleFlowBean.setCounter_no("");
             mSaleFlowBean.setOper_id(Config.UserName);
             mSaleFlowBean.setOper_date(DateUtility.getCurrentTime());
@@ -350,7 +350,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             }else{//退部分
                 mPlayFlowBean.setPay_amount(-rpAllMoney);//付款金额
             }
-            mPlayFlowBean.setVoucher_no("");
+            mPlayFlowBean.setVoucher_no(payInfo.getFlow_no());//引单号（原单据号）
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("9999");
             mPlayFlowBean.setOper_id(Config.UserName);

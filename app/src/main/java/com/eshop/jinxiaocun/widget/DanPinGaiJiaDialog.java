@@ -98,10 +98,10 @@ public class DanPinGaiJiaDialog extends Activity {
             return;
         }
 
-        if (Integer.decode(et_newprice.getText().toString().trim())>oldPrice || Integer.decode(et_newprice.getText().toString().trim())<(oldPrice-limit)) {
-            MyUtils.showToast("请输入系统设置的金额！", this);
-            return;
-        }
+//        if (Integer.decode(et_newprice.getText().toString().trim())>oldPrice || Integer.decode(et_newprice.getText().toString().trim())<(oldPrice-limit)) {
+//            MyUtils.showToast("请输入系统设置的金额！", this);
+//            return;
+//        }
 
         String countN = et_newprice.getText().toString().trim();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

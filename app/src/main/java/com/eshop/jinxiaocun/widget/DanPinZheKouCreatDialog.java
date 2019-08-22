@@ -203,8 +203,12 @@ public class DanPinZheKouCreatDialog extends Activity {
             MyUtils.showToast("请输入折扣！", this);
             return;
         }
+        if (et_value.getText().toString().contains(".")) {
+            MyUtils.showToast("折扣请不要输入小数！", this);
+            return;
+        }
 
-        if (!tv_count.getText().toString().trim().equals("") && Integer.decode(tv_count.getText().toString().trim())<0) {
+        if (!tv_count.getText().toString().trim().equals("") && Float.parseFloat(tv_count.getText().toString().trim())<0) {
             MyUtils.showToast("请输入大于0的数量！", this);
             return;
         }
@@ -219,10 +223,10 @@ public class DanPinZheKouCreatDialog extends Activity {
             return;
         }
 
-        if (Double.parseDouble(et_oldprice.getText().toString().trim())>oldPrice || (oldPrice-Double.parseDouble(et_oldprice.getText().toString().trim()))<yijialimit) {
-            MyUtils.showToast("请输入系统设置的金额！", this);
-            return;
-        }
+//        if (Double.parseDouble(et_oldprice.getText().toString().trim())>oldPrice || (oldPrice-Double.parseDouble(et_oldprice.getText().toString().trim()))<yijialimit) {
+//            MyUtils.showToast("请输入系统设置的金额！", this);
+//            return;
+//        }
 
         if(!et_oldprice.getText().toString().trim().equals(MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price_beforModify())))){
             if(Integer.decode(et_value.getText().toString())<100){

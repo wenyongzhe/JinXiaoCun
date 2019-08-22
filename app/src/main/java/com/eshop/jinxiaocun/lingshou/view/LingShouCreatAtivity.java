@@ -372,11 +372,11 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     private void reflashList() {
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
-        int goodTotal = 0;
+        float goodTotal = 0;
         for (int i = 0; i < mListData.size(); i++) {
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
-            goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
+            goodTotal += Float.parseFloat(mGetClassPluResult.getSale_qnty());
         }
         String totalStr = MyUtils.formatDouble2(total) + "";
         if ((totalStr.length() - totalStr.indexOf(".")) > 3) {

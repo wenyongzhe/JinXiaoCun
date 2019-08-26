@@ -158,6 +158,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mPlayFlowBeanList = new ArrayList<>();
         mLingShouScanImp = new LingShouScanImp(this);
         mIOtherModel = new OtherModelImp(this);
+        AlertUtil.showNoButtonProgressDialog(this,"正在获取单据号");
         mLingShouScanImp.getFlowNo();
         mLingShouScanImp.getOptAuth(Config.GRANT_ITEM_JINE);
     }
@@ -270,6 +271,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 AlertUtil.showAlert(LingShouScanActivity.this,"提示", (String) o);
                 break;
             case Config.MESSAGE_ERROR:
+                AlertUtil.dismissProgressDialog();
                 AlertUtil.showAlert(LingShouScanActivity.this,"提示","请求失败");
                 break;
             case Config.MESSAGE_PICI:
@@ -302,6 +304,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 }
                 break;
             case Config.MESSAGE_FLOW_NO:
+                AlertUtil.dismissProgressDialog();
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
                     FlowNo = mGetFlowNoBeanResult.getFlowNo();

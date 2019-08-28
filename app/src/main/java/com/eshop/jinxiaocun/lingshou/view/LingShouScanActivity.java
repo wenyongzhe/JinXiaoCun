@@ -1100,6 +1100,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             ToastUtils.showShort("请选择商品");
             return;
         }
+        if(FlowNo==null || FlowNo.equals("")){
+            AlertUtil.showToast("流水号获取失败。");
+            return;
+        }
         isOk = true;
         setSaleFlowBean();
         Intent mIntent = new Intent(this,CombiPayActivity.class);

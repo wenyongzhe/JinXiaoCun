@@ -46,5 +46,10 @@ public interface IOtherModel {
     void getSalesCheckDatas(String beginTime ,String endTime);
     //收银对账7.2
     void getSydzDatas(String beginTime ,String endTime);
-
+    //7.3查询付款记录
+    void getPayQuery(String beginTime ,String endTime,String flowNo,int perNum,int pageNum);
+    //7.4查询销售记录
+    void getSaleQuery(String beginTime ,String endTime,String flowNo,int perNum,int pageNum);
+    //7.5付款方式汇总
+    void getPayWay(String beginTime ,String endTime);
 }

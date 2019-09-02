@@ -9,15 +9,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.reportforms.adapter.TodayGatheringAdapter;
 import com.eshop.jinxiaocun.reportforms.bean.TodayGatheringInfo;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
@@ -45,6 +48,10 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
     private IOtherModel mServerApi;
     private TodayGatheringAdapter mAdapter;
     private List<TodayGatheringInfo> mDataList = new ArrayList<>();
+    private int mPageNum=1;
+    private int mPerNum = MyUtils.convertToInt(Config.PerNum,50);
+    private final String mStartDate = DateUtility.getCurrentDate()+" 00:00";
+    private final String mEndDate = DateUtility.getCurrentDate()+" 23:59";
 
     @Override
     protected int getLayoutId() {
@@ -56,7 +63,6 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
     @Override
     protected void initView() {
         setTopToolBar("今日收款", R.mipmap.ic_left_light, "", 0, "");
-
 
         mEtBillNo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -80,7 +86,6 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
     @Override
     protected void initData() {
         mServerApi = new OtherModelImp(this);
-        loadData("");
     }
 
     //搜索
@@ -104,11 +109,11 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
             return;
         }
         AlertUtil.showNoButtonProgressDialog(this,"正在获取收款数据，请稍后...");
-        mServerApi.getPayRecordDatas(billNo);
+        mServerApi.getPayQuery(mStartDate,mEndDate,billNo,mPerNum,mPageNum);
     }
 
     //根据返回的销售记录，单据相同算一组，并刷新UI
-    private void refreshData(List<PayRecordResult> dataList){
+    private void refreshData(List<PayQueryBeanResult> dataList){
         mDataList.clear();
 
         if(dataList==null){
@@ -118,14 +123,14 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
 
         //缓存不相同的单据号
         Set<String> billNoList = new HashSet<>();
-        for (PayRecordResult item : dataList) {
+        for (PayQueryBeanResult item : dataList) {
             billNoList.add(item.getFlow_no());
         }
 
         //合并相同的单据商品
         for (String billNo : billNoList) {
-            List<PayRecordResult> sameGoodsList = new ArrayList<>();
-            for (PayRecordResult item : dataList) {
+            List<PayQueryBeanResult> sameGoodsList = new ArrayList<>();
+            for (PayQueryBeanResult item : dataList) {
                 if(billNo.equals(item.getFlow_no())){
                     sameGoodsList.add(item);
                 }
@@ -141,6 +146,9 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
 
         //刷新UI
         mAdapter.add(mDataList);
+        if(mDataList.size()==0){
+            ToastUtils.showShort("今日暂时没有销售记录数据!");
+        }
 
     }
 
@@ -155,8 +163,8 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
-            case Config.PAY_RECORD_SUCCESS://获取单据的付款记录
-                List<PayRecordResult> resultList = (List<PayRecordResult>) o;
+            case Config.MESSAGE_OK://获取单据的付款记录
+                List<PayQueryBeanResult> resultList = (List<PayQueryBeanResult>) o;
                 refreshData(resultList);
                 AlertUtil.dismissProgressDialog();
                 break;

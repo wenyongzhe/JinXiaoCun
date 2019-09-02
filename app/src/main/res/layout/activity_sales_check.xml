@@ -147,80 +147,84 @@
 
 
 
-
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="40dp"
-        android:visibility="gone"
-        android:background="@color/line"
-        />
     <LinearLayout
+        android:id="@+id/ll_payWay"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_item_height_35"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        >
 
-        <TextView
-            style="@style/TextView_Grey"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:text="银行卡"
-            android:textSize="16sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/line"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_item_height_35"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_bankCard"
-            style="@style/TextView_Black"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="￥9999.99"
-            android:paddingRight="32dp"
-            android:gravity="center_vertical|right" />
+            <TextView
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="10dp"
+                android:text="银行卡:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_bankCard"
+                style="@style/TextView_Black"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="￥9999.99"
+                android:paddingRight="32dp"
+                android:gravity="center_vertical|right" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_item_height_35"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextView_Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="10dp"
+                android:text="人民币现金:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_rmbCash"
+                style="@style/TextView_Black"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="￥9999.99"
+                android:paddingRight="32dp"
+                android:gravity="center_vertical|right" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:visibility="gone"
+            android:background="@color/line"
+            />
+
+
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:visibility="gone"
-        android:background="@color/line"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_item_height_35"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:visibility="gone"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextView_Grey"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:text="人民币现金"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_rmbCash"
-            style="@style/TextView_Black"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="￥9999.99"
-            android:paddingRight="32dp"
-            android:gravity="center_vertical|right" />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:visibility="gone"
-        android:background="@color/line"
-        />
 
 
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBeanResult;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
 import java.util.List;
@@ -21,12 +22,12 @@ import java.util.List;
  */
 public class TodaySalesGoodsAdapter extends BaseAdapter {
 
-    private List<SaleFlowRecordResult> mListInfo;
+    private List<SaleQueryBeanResult> mListInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
     private Context mContext;
 
-    public TodaySalesGoodsAdapter(Context context, List<SaleFlowRecordResult> listInfo) {
+    public TodaySalesGoodsAdapter(Context context, List<SaleQueryBeanResult> listInfo) {
         this.mListInfo = listInfo;
         mContext = context;
         inflater = LayoutInflater.from(Application.mContext);
@@ -59,7 +60,7 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
         TextView price = ViewHolderUtils.get(convertView, R.id.tv_price);
         TextView allMoney = ViewHolderUtils.get(convertView, R.id.tv_allMoney);
 
-        SaleFlowRecordResult info = mListInfo.get(position);
+        SaleQueryBeanResult info = mListInfo.get(position);
 
         goodsName.setText(info.getItem_name());
         int account = info.getSale_qnty();
@@ -75,7 +76,7 @@ public class TodaySalesGoodsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(List<SaleFlowRecordResult> listInfo) {
+    public void add(List<SaleQueryBeanResult> listInfo) {
         this.mListInfo = listInfo;
         notifyDataSetChanged();
     }

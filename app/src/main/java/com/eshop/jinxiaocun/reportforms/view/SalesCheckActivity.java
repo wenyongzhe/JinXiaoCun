@@ -1,12 +1,16 @@
 package com.eshop.jinxiaocun.reportforms.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.othermodel.bean.PayWayBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesCheckResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
@@ -21,6 +25,7 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,6 +47,8 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     @BindView(R.id.tv_todayGathering)
     TextView mTvTodayGathering;//今日收款
 
+    @BindView(R.id.ll_payWay)
+    LinearLayout mLayPayWay;
     @BindView(R.id.tv_bankCard)
     TextView mTvBankCard;//银行卡
     @BindView(R.id.tv_rmbCash)
@@ -69,6 +76,38 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     protected void initData() {
         mApi = new OtherModelImp(this);
         getSalesCheckData();
+    }
+
+    //处理付款方式
+    private void handleTodayData(List<PayWayBeanResult> resultList){
+        if(resultList==null || resultList.size()==0){
+            mLayPayWay.setVisibility(View.GONE);
+            return;
+        }
+        mLayPayWay.setVisibility(View.VISIBLE);
+
+        float totalRMB=0;
+        float totalCard=0;
+        for (PayWayBeanResult item : resultList) {
+            if("RMB".equals(item.getPay_way())){
+                totalRMB+= item.getPay_amount();
+            }
+            //储值卡
+            else if("SAV".equals(item.getPay_way())){
+                totalCard+= item.getPay_amount();
+            }
+            //线下微支付
+            else if("WXF".equals(item.getPay_way())){
+                totalCard+= item.getPay_amount();
+            }
+            //付款宝
+            else if("ZFB".equals(item.getPay_way())){
+                totalCard+= item.getPay_amount();
+            }
+        }
+
+        mTvRMBCash.setText(String.format("￥%s",MyUtils.convertToString(totalRMB,"0")));
+        mTvBankCard.setText(String.format("￥%s",MyUtils.convertToString(totalCard,"0")));
     }
 
     //获取销售查询数据
@@ -147,16 +186,23 @@ public class SalesCheckActivity extends CommonBaseActivity implements INetWorRes
     public void handleResule(int flag, Object o) {
         switch (flag) {
             case Config.MESSAGE_OK:
-                AlertUtil.dismissProgressDialog();
                 SalesCheckResult data = (SalesCheckResult) o;
                 if(data!=null){
                     mTvTodaySales.setText(String.format("￥%s",MyUtils.convertToString(data.getSaleSum(),"0")));
                     mTvTodayGathering.setText(String.format("￥%s",MyUtils.convertToString(data.getPaySum(),"0")));
+                    mApi.getPayWay(mTvStartDate.getText().toString(),mTvEndDate.getText().toString());
                 }else{
+                    AlertUtil.dismissProgressDialog();
                     AlertUtil.showToast("没有销售数据!");
                 }
                 break;
+            case Config.RESULT_SUCCESS://获取付款方式汇总
+                AlertUtil.dismissProgressDialog();
+                List<PayWayBeanResult> resultList = (List<PayWayBeanResult>) o;
+                handleTodayData(resultList);
+                break;
             case Config.MESSAGE_ERROR:
+            case Config.RESULT_FAIL:
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
                 break;

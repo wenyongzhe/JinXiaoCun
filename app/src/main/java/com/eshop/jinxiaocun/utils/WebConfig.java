@@ -65,6 +65,10 @@ public class WebConfig {
     public static final String CheckVer = "CheckVer";// 判断APP是否升级
     public static final String GetSellRep = "GetSellRep";//销售查询
     public static final String GetSydz = "GetSydz";//收银对账
+    public static final String GETSALEQUERY="GetSaleQuery";//查询销售记录
+    public static final String GETPAYQUERY="GetPayQuery";//查询付款记录
+    public static final String GETPAYWAY="GetPayWay";//付款方式汇总
+
 
     public static String getPosLogin() {
         return POS_LOGIN;

@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.reportforms.bean;
 
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
 
@@ -14,7 +15,7 @@ public class TodayGatheringInfo {
 
     private String billNo;//单据号
     private String billDate;//单据日期
-    private List<PayRecordResult> payRecordInfos;//付款信息
+    private List<PayQueryBeanResult> payRecordInfos;//付款信息
 
     public String getBillNo() {
         return billNo;
@@ -32,11 +33,11 @@ public class TodayGatheringInfo {
         this.billDate = billDate;
     }
 
-    public List<PayRecordResult> getPayRecordInfos() {
+    public List<PayQueryBeanResult> getPayRecordInfos() {
         return payRecordInfos;
     }
 
-    public void setPayRecordInfos(List<PayRecordResult> payRecordInfos) {
+    public void setPayRecordInfos(List<PayQueryBeanResult> payRecordInfos) {
         this.payRecordInfos = payRecordInfos;
     }
 }

@@ -21,11 +21,17 @@ import com.eshop.jinxiaocun.othermodel.bean.OrderDetailBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBean;
 import com.eshop.jinxiaocun.othermodel.bean.OrderGoodsPriceBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.PayFlowBean;
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBean;
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.PayWayBean;
+import com.eshop.jinxiaocun.othermodel.bean.PayWayBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderBean;
 import com.eshop.jinxiaocun.othermodel.bean.ProviderInfoBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.RetSalesRecordBean;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBean;
+import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesCheckBean;
 import com.eshop.jinxiaocun.othermodel.bean.SalesCheckResult;
 import com.eshop.jinxiaocun.othermodel.bean.SalesRecordBean;
@@ -303,6 +309,65 @@ public class OtherModelImp implements IOtherModel {
         bean.JsonData.EndTime = endTime;
         Map map = ReflectionUtils.obj2Map(bean);
         mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new CashierCheckInterface());
+    }
+
+    /**
+     *  7.3查询付款记录
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param flowNo 小票号
+     * @param perNum 每页显示的数量
+     * @param pageNum 页数
+     */
+    @Override
+    public void getPayQuery(String beginTime, String endTime, String flowNo, int perNum, int pageNum) {
+        PayQueryBean bean = new PayQueryBean();
+        bean.JsonData.as_branchno = Config.branch_no;//门店机构
+        bean.JsonData.oper_id = Config.UserId;//操作员
+        bean.JsonData.start_date = beginTime;
+        bean.JsonData.end_date = endTime;
+        bean.JsonData.flow_no = flowNo;
+        bean.JsonData.PerNum = perNum;
+        bean.JsonData.PageNum = pageNum;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PayQueryInterface());
+    }
+    /**
+     *  7.4 查询销售记录
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param flowNo 小票号
+     * @param perNum 每页显示的数量
+     * @param pageNum 页数
+     */
+    @Override
+    public void getSaleQuery(String beginTime, String endTime, String flowNo, int perNum, int pageNum) {
+        SaleQueryBean bean = new SaleQueryBean();
+        bean.JsonData.as_branchno = Config.branch_no;//门店机构
+        bean.JsonData.oper_id = Config.UserId;//操作员
+        bean.JsonData.start_date = beginTime;
+        bean.JsonData.end_date = endTime;
+        bean.JsonData.flow_no = flowNo;
+        bean.JsonData.PerNum = perNum;
+        bean.JsonData.PageNum = pageNum;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new SaleQueryInterface());
+    }
+
+    /**
+     * 付款方式汇总
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     */
+    @Override
+    public void getPayWay(String beginTime, String endTime) {
+        PayWayBean bean = new PayWayBean();
+        bean.JsonData.as_branchno = Config.branch_no;//门店机构
+        bean.JsonData.oper_id = Config.UserId;//操作员
+        bean.JsonData.start_date = beginTime;
+        bean.JsonData.end_date = endTime;
+        Map map = ReflectionUtils.obj2Map(bean);
+        mINetWork.doGet(WebConfig.getGetWsdlUri(),map,new PayWayInterface());
     }
 
 
@@ -807,6 +872,72 @@ public class OtherModelImp implements IOtherModel {
                 }
             } catch (Exception e) {
                 mHandler.handleResule(Config.MESSAGE_ERROR,"获取数据异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //查询付款记录
+    class PayQueryInterface implements IResponseListener{
+        @Override
+        public void handleError(Object event) { }
+        @Override
+        public void handleResult(Response event, String result) { }
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PayQueryBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,PayQueryBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"查询付款记录失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,"查询付款记录异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //查询销售记录 7.4
+    class SaleQueryInterface implements IResponseListener{
+        @Override
+        public void handleError(Object event) { }
+        @Override
+        public void handleResult(Response event, String result) { }
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<SaleQueryBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,SaleQueryBeanResult.class);
+                    mHandler.handleResule(Config.MESSAGE_OK,resultList);
+                }else{
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"查询销售记录失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.MESSAGE_ERROR,"查询销售记录异常: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //付款方式汇总 7.5
+    class PayWayInterface implements IResponseListener{
+        @Override
+        public void handleError(Object event) { }
+        @Override
+        public void handleResult(Response event, String result) { }
+        @Override
+        public void handleResultJson(String status, String msg, String jsonData) {
+            try {
+                if(status.equals(Config.MESSAGE_OK+"")){
+                    List<PayWayBeanResult> resultList = mJsonFormatImp.JsonToList(jsonData,PayWayBeanResult.class);
+                    mHandler.handleResule(Config.RESULT_SUCCESS,resultList);
+                }else{
+                    mHandler.handleResule(Config.RESULT_FAIL,"获取付款方式汇总失败: "+msg);
+                }
+            } catch (Exception e) {
+                mHandler.handleResule(Config.RESULT_FAIL,"获取付款方式汇总异常: "+e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -9,15 +9,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.reportforms.adapter.TodaySalesAdapter;
 import com.eshop.jinxiaocun.reportforms.bean.TodaySalesInfo;
 import com.eshop.jinxiaocun.utils.Config;
+import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 
@@ -45,18 +48,20 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
     private IOtherModel mServerApi;
     private TodaySalesAdapter mAdapter;
     private List<TodaySalesInfo> mDataList = new ArrayList<>();
+    private int mPageNum=1;
+    private int mPerNum = MyUtils.convertToInt(Config.PerNum,50);
+    private final String mStartDate = DateUtility.getCurrentDate()+" 00:00";
+    private final String mEndDate = DateUtility.getCurrentDate()+" 23:59";
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_today_sales;
     }
 
-
     //初始化控件
     @Override
     protected void initView() {
         setTopToolBar("今天销售", R.mipmap.ic_left_light, "", 0, "");
-
 
         mEtBillNo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -80,7 +85,6 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
     @Override
     protected void initData() {
         mServerApi = new OtherModelImp(this);
-        loadData("");
     }
 
     //搜索
@@ -104,11 +108,11 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
             return;
         }
         AlertUtil.showNoButtonProgressDialog(this,"正在获取销售数据，请稍后...");
-        mServerApi.getSalesRecordDatas(billNo);
+        mServerApi.getSaleQuery(mStartDate,mEndDate,billNo,mPerNum,mPageNum);
     }
 
     //根据返回的销售记录，单据相同算一组，并刷新UI
-    private void refreshData(List<SaleFlowRecordResult> dataList){
+    private void refreshData(List<SaleQueryBeanResult> dataList){
         mDataList.clear();
 
         if(dataList==null){
@@ -118,14 +122,14 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         //缓存不相同的单据号
         Set<String> billNoList = new HashSet<>();
-        for (SaleFlowRecordResult item : dataList) {
+        for (SaleQueryBeanResult item : dataList) {
             billNoList.add(item.getFlow_no());
         }
 
         //合并相同的单据商品
         for (String billNo : billNoList) {
-            List<SaleFlowRecordResult> sameGoodsList = new ArrayList<>();
-            for (SaleFlowRecordResult item : dataList) {
+            List<SaleQueryBeanResult> sameGoodsList = new ArrayList<>();
+            for (SaleQueryBeanResult item : dataList) {
                 if(billNo.equals(item.getFlow_no())){
                     sameGoodsList.add(item);
                 }
@@ -133,7 +137,7 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
             if(sameGoodsList.size()>0){
                 TodaySalesInfo info = new TodaySalesInfo();
                 info.setBillNo(sameGoodsList.get(0).getFlow_no());
-                info.setBillDate(sameGoodsList.get(0).getValid_date());
+                info.setBillDate(sameGoodsList.get(0).getOper_date());
                 info.setSalesGoodsInfos(sameGoodsList);
                 mDataList.add(info);
             }
@@ -141,6 +145,9 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         //刷新UI
         mAdapter.add(mDataList);
+        if(mDataList.size()==0){
+            ToastUtils.showShort("今日暂时没有收款记录数据!");
+        }
 
     }
 
@@ -156,7 +163,7 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
     public void handleResule(int flag, Object o) {
         switch (flag) {
             case Config.MESSAGE_OK://获取单据的销售记录
-                List<SaleFlowRecordResult> resultList = (List<SaleFlowRecordResult>) o;
+                List<SaleQueryBeanResult> resultList = (List<SaleQueryBeanResult>) o;
                 refreshData(resultList);
                 AlertUtil.dismissProgressDialog();
                 break;

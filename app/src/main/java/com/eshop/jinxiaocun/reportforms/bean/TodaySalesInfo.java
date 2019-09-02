@@ -1,6 +1,7 @@
 package com.eshop.jinxiaocun.reportforms.bean;
 
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
+import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBeanResult;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class TodaySalesInfo {
 
     private String billNo;//单据号
     private String billDate;//单据日期
-    private List<SaleFlowRecordResult> salesGoodsInfos;//销售商品信息
+    private List<SaleQueryBeanResult> salesGoodsInfos;//销售商品信息
 
     public String getBillNo() {
         return billNo;
@@ -31,11 +32,11 @@ public class TodaySalesInfo {
         this.billDate = billDate;
     }
 
-    public List<SaleFlowRecordResult> getSalesGoodsInfos() {
+    public List<SaleQueryBeanResult> getSalesGoodsInfos() {
         return salesGoodsInfos;
     }
 
-    public void setSalesGoodsInfos(List<SaleFlowRecordResult> salesGoodsInfos) {
+    public void setSalesGoodsInfos(List<SaleQueryBeanResult> salesGoodsInfos) {
         this.salesGoodsInfos = salesGoodsInfos;
     }
 }

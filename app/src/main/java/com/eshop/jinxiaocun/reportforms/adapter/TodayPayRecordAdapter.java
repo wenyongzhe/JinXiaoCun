@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.view.Application;
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 
@@ -21,11 +22,11 @@ import java.util.List;
  */
 public class TodayPayRecordAdapter extends BaseAdapter {
 
-    private List<PayRecordResult> mListInfo;
+    private List<PayQueryBeanResult> mListInfo;
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
 
-    public TodayPayRecordAdapter(List<PayRecordResult> listInfo) {
+    public TodayPayRecordAdapter(List<PayQueryBeanResult> listInfo) {
         this.mListInfo = listInfo;
         inflater = LayoutInflater.from(Application.mContext);
     }
@@ -55,10 +56,10 @@ public class TodayPayRecordAdapter extends BaseAdapter {
         TextView sales = ViewHolderUtils.get(convertView, R.id.tv_sales);
         TextView allMoney = ViewHolderUtils.get(convertView, R.id.tv_allMoney);
 
-        PayRecordResult info = mListInfo.get(position);
+        PayQueryBeanResult info = mListInfo.get(position);
 
         sales.setText("销售");
-        allMoney.setText("￥"+info.getSale_amount());
+        allMoney.setText("￥"+info.getTotal_amount());
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -68,7 +69,7 @@ public class TodayPayRecordAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(List<PayRecordResult> listInfo) {
+    public void add(List<PayQueryBeanResult> listInfo) {
         this.mListInfo = listInfo;
         notifyDataSetChanged();
     }

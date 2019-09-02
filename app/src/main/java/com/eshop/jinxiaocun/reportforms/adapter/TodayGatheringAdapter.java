@@ -25,12 +25,15 @@ public class TodayGatheringAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
     private Context mContext;
+    private PrintCallback mPrintCallback;
     public TodayGatheringAdapter(Context context, List<TodayGatheringInfo> listInfo) {
         mContext = context;
         this.mListInfo = listInfo;
         inflater = LayoutInflater.from(mContext);
     }
-
+    public void setCallbck(PrintCallback printCallback){
+        mPrintCallback = printCallback;
+    }
     @Override
     public int getCount() {
         return mListInfo.size();
@@ -51,19 +54,26 @@ public class TodayGatheringAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_today_gathering,parent,false);
         }
-
-
         TextView billNo = ViewHolderUtils.get(convertView, R.id.tv_billNo);
         TextView billDate = ViewHolderUtils.get(convertView, R.id.tv_billDate);
         NoScrollListView listView = ViewHolderUtils.get(convertView, R.id.lv_salesGoods);
 
-        TodayGatheringInfo info = mListInfo.get(position);
+        final TodayGatheringInfo info = mListInfo.get(position);
 
         billNo.setText(info.getBillNo());
         billDate.setText(info.getBillDate());
 
         TodayPayRecordAdapter adapter = new TodayPayRecordAdapter(info.getPayRecordInfos());
         listView.setAdapter(adapter);
+
+        billNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPrintCallback!=null){
+                    mPrintCallback.onClickBillNo(info);
+                }
+            }
+        });
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -84,5 +94,8 @@ public class TodayGatheringAdapter extends BaseAdapter {
 
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
+    }
+    public  interface PrintCallback {
+        void onClickBillNo(TodayGatheringInfo item);
     }
 }

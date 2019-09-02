@@ -79,6 +79,12 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
         });
 
         mAdapter = new TodaySalesAdapter(this,mDataList);
+        mAdapter.setCallbck(new TodaySalesAdapter.PrintCallback() {
+            @Override
+            public void onClickBillNo(TodaySalesInfo item) {
+                onPrintData(item);
+            }
+        });
         mListView.setAdapter(mAdapter);
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
             @Override
@@ -121,7 +127,6 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
         loadData(mEtBillNo.getText().toString().trim());
 
     }
-
 
     //加载数据
     private void loadData(String billNo){
@@ -203,4 +208,11 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         }
     }
+
+    //打印小票
+    private void onPrintData(TodaySalesInfo data){
+
+    }
+
+
 }

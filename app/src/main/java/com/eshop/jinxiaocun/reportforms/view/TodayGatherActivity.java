@@ -80,6 +80,12 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
         });
 
         mAdapter = new TodayGatheringAdapter(this,mDataList);
+        mAdapter.setCallbck(new TodayGatheringAdapter.PrintCallback() {
+            @Override
+            public void onClickBillNo(TodayGatheringInfo item) {
+                onPrintData(item);
+            }
+        });
         mListView.setAdapter(mAdapter);
 
         mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
@@ -204,4 +210,10 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
 
         }
     }
+
+    //打印小票
+    private void onPrintData(TodayGatheringInfo data){
+
+    }
+
 }

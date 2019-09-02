@@ -1,8 +1,6 @@
 package com.eshop.jinxiaocun.reportforms.bean;
 
 import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
-import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
-import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
 
 import java.util.List;
 

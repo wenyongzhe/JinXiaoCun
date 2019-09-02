@@ -8,14 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
-import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.reportforms.bean.SalesGoodsInfo;
 import com.eshop.jinxiaocun.reportforms.bean.TodaySalesInfo;
-import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.ViewHolderUtils;
 import com.eshop.jinxiaocun.widget.NoScrollListView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,12 +24,15 @@ public class TodaySalesAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int itemClickPosition = -1;
     private Context mContext;
+    private PrintCallback mPrintCallback;
     public TodaySalesAdapter(Context context, List<TodaySalesInfo> listInfo) {
         mContext = context;
         this.mListInfo = listInfo;
         inflater = LayoutInflater.from(mContext);
     }
-
+    public void setCallbck(PrintCallback printCallback){
+        mPrintCallback = printCallback;
+    }
     @Override
     public int getCount() {
         return mListInfo.size();
@@ -61,13 +59,22 @@ public class TodaySalesAdapter extends BaseAdapter {
         TextView billDate = ViewHolderUtils.get(convertView, R.id.tv_billDate);
         NoScrollListView listView = ViewHolderUtils.get(convertView, R.id.lv_salesGoods);
 
-        TodaySalesInfo info = mListInfo.get(position);
+        final TodaySalesInfo info = mListInfo.get(position);
 
         billNo.setText(info.getBillNo());
         billDate.setText(info.getBillDate());
 
         TodaySalesGoodsAdapter adapter = new TodaySalesGoodsAdapter(mContext,info.getSalesGoodsInfos());
         listView.setAdapter(adapter);
+
+        billNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPrintCallback!=null){
+                    mPrintCallback.onClickBillNo(info);
+                }
+            }
+        });
 
         if (itemClickPosition == position) {
             convertView.setBackgroundResource(R.color.list_background);
@@ -89,4 +96,9 @@ public class TodaySalesAdapter extends BaseAdapter {
     public void setItemClickPosition(int itemClickPosition) {
         this.itemClickPosition = itemClickPosition;
     }
+
+    public  interface PrintCallback {
+        void onClickBillNo(TodaySalesInfo item);
+    }
+
 }

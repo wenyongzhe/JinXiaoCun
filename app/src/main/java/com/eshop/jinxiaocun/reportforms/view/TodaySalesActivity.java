@@ -23,6 +23,7 @@ import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
+import com.eshop.jinxiaocun.widget.RefreshListView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,11 +44,12 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
     EditText mEtBillNo;
 
     @BindView(R.id.lv_salesData)
-    ListView mListView;
+    RefreshListView mListView;
 
     private IOtherModel mServerApi;
     private TodaySalesAdapter mAdapter;
     private List<TodaySalesInfo> mDataList = new ArrayList<>();
+    private int mTotPage=0;//总页数
     private int mPageNum=1;
     private int mPerNum = MyUtils.convertToInt(Config.PerNum,50);
     private final String mStartDate = DateUtility.getCurrentDate()+" 00:00";
@@ -78,6 +80,26 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         mAdapter = new TodaySalesAdapter(this,mDataList);
         mListView.setAdapter(mAdapter);
+        mListView.setonTopRefreshListener(new RefreshListView.OnTopRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPageNum = 1;
+                onClickSearch();
+            }
+        });
+
+        mListView.setonBottomRefreshListener(new RefreshListView.OnBottomRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPageNum ++;
+                if(mPageNum>mTotPage){
+                    mListView.onRefreshComplete();
+                    ToastUtils.showShort("已是最后一页");
+                    return;
+                }
+                onClickSearch();
+            }
+        });
 
     }
 
@@ -113,11 +135,22 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
     //根据返回的销售记录，单据相同算一组，并刷新UI
     private void refreshData(List<SaleQueryBeanResult> dataList){
-        mDataList.clear();
+
+        mListView.onRefreshComplete();
 
         if(dataList==null){
+            mDataList.clear();
             mAdapter.add(mDataList);
             return;
+        }
+
+        if(mPageNum==1 && dataList.size()==0){
+            ToastUtils.showShort("今日暂时没有销售记录数据!");
+            return;
+        }
+
+        if(dataList.size()>0){//获取总页数
+            mTotPage = dataList.get(0).getTotpage();
         }
 
         //缓存不相同的单据号
@@ -145,10 +178,6 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
         //刷新UI
         mAdapter.add(mDataList);
-        if(mDataList.size()==0){
-            ToastUtils.showShort("今日暂时没有收款记录数据!");
-        }
-
     }
 
     /*隐藏软键盘*/

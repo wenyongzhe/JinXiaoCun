@@ -54,7 +54,7 @@
         android:gravity="center"
         />
 
-    <ListView
+    <com.eshop.jinxiaocun.widget.RefreshListView
         android:id="@+id/lv_cashierData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

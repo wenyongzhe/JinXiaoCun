@@ -1,5 +1,7 @@
 package com.eshop.jinxiaocun.reportforms.view;
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -12,18 +14,23 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
+import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
+import com.eshop.jinxiaocun.othermodel.bean.PayQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.bean.SaleFlowRecordResult;
 import com.eshop.jinxiaocun.othermodel.bean.SaleQueryBeanResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
 import com.eshop.jinxiaocun.reportforms.adapter.TodaySalesAdapter;
+import com.eshop.jinxiaocun.reportforms.bean.TodayGatheringInfo;
 import com.eshop.jinxiaocun.reportforms.bean.TodaySalesInfo;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.RefreshListView;
+import com.landicorp.android.eptapi.device.Printer;
+import com.landicorp.android.eptapi.exception.RequestException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -211,8 +218,120 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
 
     //打印小票
     private void onPrintData(TodaySalesInfo data){
+        Print_Ex( data);
+    }
+
+    /**
+     * 打印自定义小票
+     */
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex(TodaySalesInfo data) {
+        if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            return;
+        }
+        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
+            int shuliang = 0;
+            String mes = "";
+
+            if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
+            if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
+            if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}
+            if(Config.mMemberInfo != null){
+                if(Config.isPrinterCardNo){mes += "会员卡号："+Config.mMemberInfo.getCardNo_TelNo()+"\n";}
+                if(Config.isPrinterUserName){mes += "会员姓名："+Config.mMemberInfo.getCardName()+"\n";}
+                if(Config.isPrinterUserTel){mes += "客户联系方式："+Config.mMemberInfo.getVip_tel()+" "+Config.mMemberInfo.getMobile()+"\n";}
+            }
+            mes += "门店号: "+Config.posid+"\n单据："+data.getBillNo()+"\n";
+            mes += "品名    数量     单价     金额\n";
+            mes += "-------------------------------\n";
+
+            for(int i=0; i<data.getSalesGoodsInfos().size(); i++){
+                SaleQueryBeanResult mSaleQueryBeanResult = data.getSalesGoodsInfos().get(i);
+                Float total1 = mSaleQueryBeanResult.getSale_qnty()*mSaleQueryBeanResult.getSale_price();
+
+                mes += mSaleQueryBeanResult.getItem_name()+"\n"+
+                        "        "+mSaleQueryBeanResult.getSale_qnty()+"     "+
+                        MyUtils.formatDouble2(mSaleQueryBeanResult.getSale_price())+"元    "+
+                        MyUtils.formatFloat2(total1)+"元\n";
+            }
+            mes += "-------------------------------\n";
+            mes += "打印时间："+DateUtility.getCurrentTime()+"\n";
+
+            if(!Config.mPrintPageFoot.equals("")){mes += "    "+Config.mPrintPageFoot+"\n";}
+
+            mes += "\n";
+            mes += "\n";
+            //AidlUtil.getInstance().printText(mes, 24, false, false);
+            print(mes);
+        }
 
     }
 
+    /**
+     * POS 签购单打印
+     */
+    public void print(final String mes){
+        /** 1、创建 Printer.Progress 实例 */
+        Printer.Progress progress = new Printer.Progress() {
+            /** 2、在 Printer.Progress 的 doPrint 方法中设置签购单的打印样式 */
+            @Override
+            public void doPrint(Printer printer) throws Exception {
+                /** 设置打印格式 */
+                Printer.Format format = new Printer.Format();
+                /** 中文字符打印,此处使用 16x16 点,1 倍宽&&1 倍高
+                 */
+                format.setHzScale(Printer.Format.HZ_SC1x1);
+                format.setHzSize(Printer.Format.HZ_DOT24x24);
+                printer.setFormat(format);
+                printer.printText(mes);
+                /** 进纸 2 行
+                 */
+                printer.feedLine(2);
+            }
+            @Override
+            public void onFinish(int code) {
+                /** Printer.ERROR_NONE 即打印成功 */
+                if (code == Printer.ERROR_NONE) {
+                    AlertUtil.showToast("打印成功!");
+                }
+                else {
+                    AlertUtil.showToast("[打印失败]"+getErrorDescription(code));
+                }
+            }
+            /** 根据错误码获取相应错误提示
+             * @param code 错误码
+             * @return 错误提示
+             */
+            public String getErrorDescription(int code) {
+                switch(code) {
+                    case Printer.ERROR_PAPERENDED: return "Paper-out, the operation is invalid this time";
+                    case Printer.ERROR_HARDERR: return "Hardware fault, can not find HP signal";
+                    case Printer.ERROR_OVERHEAT: return "Overheat";
+                    case Printer.ERROR_BUFOVERFLOW: return "The operation buffer mode position is out of range";
+                    case Printer.ERROR_LOWVOL: return "Low voltage protect";
+                    case Printer.ERROR_PAPERENDING: return "Paper-out, permit the latter operation";
+                    case Printer.ERROR_MOTORERR: return "The printer core fault (too fast or too slow)";
+                    case Printer.ERROR_PENOFOUND: return "Automatic positioning did not find the alignment position, the paper back to its original position";
+                    case Printer.ERROR_PAPERJAM: return "paper got jammed";
+                    case Printer.ERROR_NOBM: return "Black mark not found";
+                    case Printer.ERROR_BUSY: return "The printer is busy";
+                    case Printer.ERROR_BMBLACK: return "Black label detection to black signal";
+                    case Printer.ERROR_WORKON: return "The printer power is open";
+                    case Printer.ERROR_LIFTHEAD: return "Printer head lift";
+                    case Printer.ERROR_LOWTEMP: return "Low temperature protect";
+                }
+                return "unknown error ("+code+")";
+            }
+            @Override
+            public void onCrash() {
+            }
+        };
+        /** 3、启动打印 */
+        try {
+            progress.start();
+        } catch (RequestException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

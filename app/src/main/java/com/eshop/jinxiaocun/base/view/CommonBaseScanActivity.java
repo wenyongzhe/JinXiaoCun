@@ -67,6 +67,9 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     protected boolean modifyPriceBefore(){return false;}//修价格前
     protected void modifyPriceAfter(){}
 
+    private String sunmi_action="com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED";
+    private String sunmi_data="data";
+
     @Override
     protected int getLayoutId() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -95,6 +98,7 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         /////////////////条码
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
+        scanDataIntentFilter.addAction(sunmi_action);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
 //        try {
 //            mBarcodeScan = new BarcodeScan(this);
@@ -119,6 +123,12 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
                     return;
                 }
                 scanResultData(str);
+            }else if(action.equals(sunmi_action)){
+                String code = intent.getStringExtra(sunmi_data);
+                if(!scanBefore()){
+                    return;
+                }
+                scanResultData(code);
             }
         }
     };

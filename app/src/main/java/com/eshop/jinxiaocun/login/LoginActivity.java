@@ -106,8 +106,8 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
 
         //测试时设置默认密码
         editUser.setText("1001");
-        editPassword.setText("1001");
-        editPassword.setSelection(editPassword.length());
+//        editPassword.setText("1001");
+//        editPassword.setSelection(editPassword.length());
 
         mCbShowPSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

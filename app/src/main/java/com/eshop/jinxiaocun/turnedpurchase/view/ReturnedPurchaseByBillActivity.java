@@ -440,7 +440,22 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     public void handleResule(int flag, Object o) {
         switch (flag){
             case Config.MESSAGE_OK://获取单据的销售记录
-                mSalesRecordDatas = (List<ReturnedPurchaseResult>) o;
+                List<ReturnedPurchaseResult> resultList = (List<ReturnedPurchaseResult>) o;
+                if(resultList==null||resultList.size()==0){
+                    AlertUtil.showToast("该单据下没有销售记录数据,请确认单据号是否正确!");
+                    AlertUtil.dismissProgressDialog();
+                    break;
+                }
+
+                mSalesRecordDatas.clear();
+                //找出可退的单据
+                for (ReturnedPurchaseResult item : resultList) {
+                    if(item.getRe_qty()<0 || item.getSale_qnty()==0 || item.getRe_qty()>item.getSale_qnty()){
+                        //可退数量超过销售数量不可退 和 销售数量的商品不可退
+                    }else{
+                        mSalesRecordDatas.add(item);
+                    }
+                }
                 mAdapter.add(mSalesRecordDatas);
                 reCountReturnMoneys(true);//重新计算应退金额
                 if(mSalesRecordDatas!=null && mSalesRecordDatas.size()>0){
@@ -448,7 +463,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
                     String flowNo = mSalesRecordDatas.get(0).getFlow_no();
                     mServerApi.getPayRecordDatas(flowNo);
                 }else{
-                    AlertUtil.showToast("该单据下没有销售记录数据,请确认单据号是否正确!");
+                    AlertUtil.showToast("该单据下没有可退的销售记录数据!");
                     AlertUtil.dismissProgressDialog();
                 }
                 break;

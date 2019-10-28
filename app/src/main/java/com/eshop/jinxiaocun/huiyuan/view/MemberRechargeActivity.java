@@ -266,6 +266,12 @@ public class MemberRechargeActivity extends CommonBaseActivity implements INetWo
                 mFlowNoJson = (GetFlowNoBeanResult.FlowNoJson)o;
                 break;
             case Config.RESULT_SUCCESS:
+
+                if(mFlowNoJson != null ){
+                    int f = MyUtils.convertToInt(mFlowNoJson.getFlowNo(),0)+1;
+                    mFlowNoJson.setFlowNo(MyUtils.convertToString(f,"0"));
+                }
+
                 AlertUtil.dismissProgressDialog();
                 AlertUtil.showToast(o.toString());
 

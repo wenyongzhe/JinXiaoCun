@@ -161,6 +161,11 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
             return;
         }
 
+        //每次刷新都清除原来的数据
+        if(mPageNum==1){
+            mDataList.clear();
+        }
+
         if(dataList.size()>0){//获取总页数
             mTotPage = dataList.get(0).getTotpage();
         }

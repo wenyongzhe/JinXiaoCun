@@ -156,6 +156,11 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
             return;
         }
 
+        //每次刷新都清除原来的数据
+        if(mPageNum==1){
+            mDataList.clear();
+        }
+
         if(mPageNum==1 && dataList.size()==0){
             ToastUtils.showShort("今日暂时没有销售记录数据!");
             return;

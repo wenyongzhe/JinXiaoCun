@@ -24,6 +24,8 @@ public class ConfigureParamSP {
 	public final static String KEY_PRINTER_USER_TEL = "printerUserTel";//打印客户联系方式
 	public final static String KEY_PRINTER_CASHIER = "printerCashier";//打印收银员
 
+	public final static String KEY_USERCODE = "userCode";
+
 	private static ConfigureParamSP instance;
 	public static ConfigureParamSP getInstance() {
 		if (null == instance) {

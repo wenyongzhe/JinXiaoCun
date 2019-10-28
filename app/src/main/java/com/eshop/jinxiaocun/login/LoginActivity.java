@@ -100,12 +100,13 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
         tv_version.setText(CommonUtility.getInstance().GetAppVersion(this));
         tv_deviceid.setText(Config.DeviceID);
 
+        Config.UserCode = ConfigureParamSP.getInstance().getValue(this,ConfigureParamSP.KEY_USERCODE, "1001");
         editUser.setText(Config.UserCode);
         if (!editUser.getText().toString().equals(""))
             editPassword.requestFocus();
 
         //测试时设置默认密码
-        editUser.setText("1001");
+//        editUser.setText("1001");
 //        editPassword.setText("1001");
 //        editPassword.setSelection(editPassword.length());
 
@@ -251,6 +252,7 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 Config.UserName = editUser.getText().toString().trim();
                 Config.UserId = editUser.getText().toString().trim();
                 Config.PassWord = editPassword.getText().toString().trim();
+                ConfigureParamSP.getInstance().saveValue(this,ConfigureParamSP.KEY_USERCODE, Config.UserId);
                 //ToastUtils.showLong("登录成功！");
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);

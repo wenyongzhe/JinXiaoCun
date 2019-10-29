@@ -273,15 +273,15 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSaleFlowBean.setSale_price(MyUtils.convertToString(goodsInfo.getSale_price(),"0"));
 
             if(mAllReturn){//全退
-                mSaleFlowBean.setSale_qnty("-"+MyUtils.convertToString(goodsInfo.getRe_qty(),"0"));
-                mSaleFlowBean.setSale_money(String.format("-%s",goodsInfo.getRe_qty()*goodsInfo.getSale_price()));
+                mSaleFlowBean.setSale_qnty(MyUtils.convertToString(goodsInfo.getRe_qty(),"0"));
+                mSaleFlowBean.setSale_money(String.format("%s",goodsInfo.getRe_qty()*goodsInfo.getSale_price()));
             }else{
                 //退部分
                 if(goodsInfo.getRp_Qty()==0){//只退退货数量大于0的
                     continue;
                 }
-                mSaleFlowBean.setSale_qnty("-"+MyUtils.convertToString(goodsInfo.getRp_Qty(),"0"));
-                mSaleFlowBean.setSale_money(String.format("-%s",goodsInfo.getRp_Qty()*goodsInfo.getSale_price()));
+                mSaleFlowBean.setSale_qnty(MyUtils.convertToString(goodsInfo.getRp_Qty(),"0"));
+                mSaleFlowBean.setSale_money(String.format("%s",goodsInfo.getRp_Qty()*goodsInfo.getSale_price()));
             }
 
             mSaleFlowBean.setSell_way("B");//销售方式: A销售 B退货 D赠送

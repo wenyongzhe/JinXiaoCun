@@ -6,7 +6,7 @@ android {
         applicationId "com.eshop.jinxiaocun"
         minSdkVersion 18
         targetSdkVersion 22
-        versionCode 190816
+        versionCode 191029
         versionName "v2.0 191029"//{"ServerVer":"v2.0 190723","bUpdate":1,"AppUrl":"https://www.baidu.com"}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

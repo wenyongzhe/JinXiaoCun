@@ -35,6 +35,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.eshop.jinxiaocun.base.view.BaseScanActivity.EXTRA_BARCODE_STRING;
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.ACTION_BROADCAST_RECEIVER;
+
 /**
  * @Author Lu An
  * 创建时间  2018/10/12
@@ -240,6 +243,14 @@ public class CiteOrderListActivity extends CommonBaseListActivity implements INe
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                mEtStartDate.setText(str);
+                mPageIndex = 1;
+                mOperIdOrOrderNo = str;
+                getCiteOrderData();
+            }
+
             if (action.equals("ACTION_BAR_SCAN")) {
                 String str_OperIdOrOrderNo = intent.getStringExtra("EXTRA_SCAN_DATA");
                 mEtStartDate.setText(str_OperIdOrOrderNo);

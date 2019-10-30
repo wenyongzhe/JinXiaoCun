@@ -22,6 +22,8 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.eshop.jinxiaocun.base.view.BaseScanActivity.EXTRA_BARCODE_STRING;
+
 /**
  * Author: 安仔夏天勤奋
  * Date: 2018/9/9
@@ -53,6 +55,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
     @BindView(R.id.tv_ZJE)
     protected TextView mTvZje;//总金额
 
+    public static final String ACTION_BROADCAST_RECEIVER = "com.android.decodewedge.decode_action";
+    public static final String CATEGORY_BROADCAST_RECEIVER = "com.android.decodewedge.decode_category";
 
     protected BarcodeScan mBarcodeScan;//扫描控制
     protected abstract @LayoutRes int getLayoutContentId();
@@ -99,6 +103,8 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction("ACTION_BAR_SCAN");
         scanDataIntentFilter.addAction(sunmi_action);
+        scanDataIntentFilter.addAction(ACTION_BROADCAST_RECEIVER);
+        scanDataIntentFilter.addCategory(CATEGORY_BROADCAST_RECEIVER);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
 //        try {
 //            mBarcodeScan = new BarcodeScan(this);
@@ -117,6 +123,14 @@ public abstract class CommonBaseScanActivity extends CommonBaseActivity implemen
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
+
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                if(!scanBefore()){
+                    return;
+                }
+                scanResultData(str);
+            }
             if (action.equals("ACTION_BAR_SCAN")) {
                 String str = intent.getStringExtra("EXTRA_SCAN_DATA");
                 if(!scanBefore()){

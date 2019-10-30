@@ -49,7 +49,7 @@
 
             <LinearLayout
                 android:id="@+id/li"
-                android:layout_width="215dp"
+                android:layout_width="195dp"
                 android:layout_height="45dp"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
@@ -79,7 +79,7 @@
                 android:id="@+id/bt_next"
                 android:text="@string/bt_go_sell"
                 android:background="@color/colorPrimaryDark"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="30dp"
                 android:layout_width="100dp"
                 android:layout_height="match_parent" />
         </LinearLayout>

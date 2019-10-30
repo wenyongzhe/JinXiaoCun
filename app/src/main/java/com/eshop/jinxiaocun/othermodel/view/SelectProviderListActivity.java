@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.eshop.jinxiaocun.base.view.BaseScanActivity.EXTRA_BARCODE_STRING;
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.ACTION_BROADCAST_RECEIVER;
+
 /**
  * Author: 安仔夏天勤奋
  * Date: 2018/9/28
@@ -124,6 +128,10 @@ public class SelectProviderListActivity extends CommonBaseListActivity implement
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                scanResultData(str);
+            }
             if (action.equals("ACTION_BAR_SCAN")) {
                 String str = intent.getStringExtra("EXTRA_SCAN_DATA");
                 scanResultData(str);

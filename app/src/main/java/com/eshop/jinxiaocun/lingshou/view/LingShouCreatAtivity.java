@@ -55,6 +55,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.ACTION_BROADCAST_RECEIVER;
+
 public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
@@ -128,6 +130,12 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
     private BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                et_barcode.setText(str);
+                return;
+            }
             String barcode = intent.getStringExtra("scannerdata");
             Log.e("", "--" + barcode);
             et_barcode.setText(barcode);

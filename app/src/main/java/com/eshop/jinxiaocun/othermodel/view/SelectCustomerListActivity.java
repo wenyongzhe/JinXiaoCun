@@ -27,6 +27,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static com.eshop.jinxiaocun.base.view.BaseScanActivity.EXTRA_BARCODE_STRING;
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.ACTION_BROADCAST_RECEIVER;
+
 public class SelectCustomerListActivity extends CommonBaseListActivity implements INetWorResult {
 
     @BindView(R.id.et_barcode)
@@ -116,6 +119,11 @@ public class SelectCustomerListActivity extends CommonBaseListActivity implement
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                scanResultData(str);
+            }
+
             if (action.equals("ACTION_BAR_SCAN")) {
                 String str = intent.getStringExtra("EXTRA_SCAN_DATA");
                 scanResultData(str);

@@ -29,6 +29,9 @@ import android.hardware.BarcodeScan;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.ACTION_BROADCAST_RECEIVER;
+import static com.eshop.jinxiaocun.base.view.CommonBaseScanActivity.CATEGORY_BROADCAST_RECEIVER;
+
 public abstract class BaseScanActivity extends BaseActivity implements ActionBarClickListener ,DecoderHelperListener {
 
     protected UpMainBean mUpMainBean;
@@ -43,6 +46,7 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
 
     public DecoderHelper mDecoderHelper=null;
     private static final String ACTION_DATA_CODE_RECEIVED = "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED";
+    public static final String EXTRA_BARCODE_STRING = "com.android.decode.intentwedge.barcode_string";
     private static final String ACTION_BAR_SCAN = "ACTION_BAR_SCAN";
     private static final String DATA = "data";
 
@@ -60,11 +64,13 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         /////////////////条码
         IntentFilter scanDataIntentFilter = new IntentFilter();
         scanDataIntentFilter.addAction(ACTION_DATA_CODE_RECEIVED);
+        scanDataIntentFilter.addAction(ACTION_BROADCAST_RECEIVER);
+        scanDataIntentFilter.addCategory(CATEGORY_BROADCAST_RECEIVER);
         registerReceiver(mScanDataReceiver, scanDataIntentFilter);
         try {
             if(Config.DEVICE_TYPE != 1){
-                mBarcodeScan = new BarcodeScan(this);
-                mBarcodeScan.open();
+//                mBarcodeScan = new BarcodeScan(this);
+//                mBarcodeScan.open();
             }
 
             mDecoderHelper = DecoderHelper.getInstance(this);
@@ -129,6 +135,10 @@ public abstract class BaseScanActivity extends BaseActivity implements ActionBar
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             String action = intent.getAction();
+            if (action.equals(ACTION_BROADCAST_RECEIVER)) {
+                String str = intent.getStringExtra(EXTRA_BARCODE_STRING);
+                scanData(str);
+            }
             if (action.equals(ACTION_DATA_CODE_RECEIVED)) {
                 String str = intent.getStringExtra(DATA);
                 scanData(str);

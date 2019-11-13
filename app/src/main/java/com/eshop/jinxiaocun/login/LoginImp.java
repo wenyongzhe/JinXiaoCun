@@ -1,5 +1,6 @@
 package com.eshop.jinxiaocun.login;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
@@ -90,11 +91,16 @@ public class LoginImp implements ILogin {
                 mHandler.handleResule(Config.DISS_PROGRESS,null);
                 LoginBeanResult jsonBean = mJsonFormatImp.JsonToBean(jsonData, LoginBeanResult.class);
                 if(status.equals(Config.MESSAGE_OK+"")){
-                    if(jsonBean.getResult().equals("Y")){
-                        mHandler.handleResule(Config.MESSAGE_INTENT,jsonBean);
+                    if(jsonBean!=null){
+                        if(jsonBean.getResult().equals("Y")){
+                            mHandler.handleResule(Config.MESSAGE_INTENT,jsonBean);
+                        }else{
+                            mHandler.handleResule(Config.MESSAGE_ERROR,jsonBean.getMessage());
+                        }
                     }else{
-                        mHandler.handleResule(Config.MESSAGE_ERROR,jsonBean.getMessage());
+                        mHandler.handleResule(Config.MESSAGE_ERROR,"登录成功，但返回jsonData为空");
                     }
+
                 }else{
                     mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
                 }
@@ -123,13 +129,20 @@ public class LoginImp implements ILogin {
 
             try {
                 mHandler.handleResule(Config.DISS_PROGRESS,null);
+
                 RegistBeanResult.RegistJson jsonBean = mJsonFormatImp.JsonToBean(jsonData, RegistBeanResult.RegistJson.class);
                 if( (!status.equals(Config.MESSAGE_OK+"") && jsonBean==null) ||
                         (jsonBean!=null && jsonBean.getResult().equals("N")) ){
                     /*Config.posid = "1001";
                     Config.branch_no = "000101";*/
                     Config.soft_name = "智能移动POS";
-                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败 "+jsonBean.getMessage()==null?"":jsonBean.getMessage());
+                    String errorMsg;
+                    if(jsonBean==null){
+                        errorMsg ="返回jsonData数据为空";
+                    }else{
+                        errorMsg = TextUtils.isEmpty(jsonBean.getMessage())?"未返回错误提示":jsonBean.getMessage();
+                    }
+                    mHandler.handleResule(Config.MESSAGE_ERROR,"注册失败: "+errorMsg);
                 }else{
                     Config.posid = jsonBean.getPosid();
                     Config.branch_no = jsonBean.getBranch_no();

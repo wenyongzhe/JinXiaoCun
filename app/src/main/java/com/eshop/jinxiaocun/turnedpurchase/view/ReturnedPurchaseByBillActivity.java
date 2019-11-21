@@ -331,11 +331,11 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setFlow_no(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));
             mPlayFlowBean.setFlow_id(1);
             if(mAllReturn) {//全退
-                mRpAllMoney = -payInfo.getSale_amount();
-                mPlayFlowBean.setSale_amount(-payInfo.getSale_amount());//销售金额
+                mRpAllMoney = payInfo.getSale_amount();
+                mPlayFlowBean.setSale_amount(payInfo.getSale_amount());//销售金额
             }else{//退部分
-                mRpAllMoney = -rpAllMoney;
-                mPlayFlowBean.setSale_amount(-rpAllMoney);//销售金额
+                mRpAllMoney = rpAllMoney;
+                mPlayFlowBean.setSale_amount(rpAllMoney);//销售金额
             }
             mPlayFlowBean.setPay_way(payInfo.getPay_way());//支付方式
             mPlayFlowBean.setSell_way("B");//-销售方式: A销售 B退货 D赠送
@@ -346,9 +346,9 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);
             if(mAllReturn) {//全退
-                mPlayFlowBean.setPay_amount(-payInfo.getPay_amount());//付款金额
+                mPlayFlowBean.setPay_amount(payInfo.getPay_amount());//付款金额
             }else{//退部分
-                mPlayFlowBean.setPay_amount(-rpAllMoney);//付款金额
+                mPlayFlowBean.setPay_amount(rpAllMoney);//付款金额
             }
             mPlayFlowBean.setVoucher_no(payInfo.getFlow_no());//引单号（原单据号）
             mPlayFlowBean.setPosid(Config.posid);
@@ -380,12 +380,12 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
             return;
         }else if("SAV".equals(payInfo.getPay_way())){//会员支付
-            rechargeData(payInfo.getCard_no(),-mRpAllMoney);
+            rechargeData(payInfo.getCard_no(),mRpAllMoney);
             return;
         }
         //auth_code就是付款记录的里的备注信息
         mSalesServerApi.RtWzfPay(payInfo.getPay_way(),payInfo.getMemo(),MyUtils.formatFlowNo(mFlowNoJson.getFlowNo())
-                ,mRpAllMoney+"",mRpAllMoney+"");
+                ,"-"+mRpAllMoney,"-"+mRpAllMoney);
 
     }
 

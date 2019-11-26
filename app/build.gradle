@@ -6,8 +6,8 @@ android {
         applicationId "com.eshop.jinxiaocun"
         minSdkVersion 18
         targetSdkVersion 22
-        versionCode 191105
-        versionName "v2.0 191105"//{"ServerVer":"v2.0 190723","bUpdate":1,"AppUrl":"https://www.baidu.com"}
+        versionCode 191126
+        versionName "v2.0 191126"//{"ServerVer":"v2.0 190723","bUpdate":1,"AppUrl":"https://www.baidu.com"}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -27,7 +27,11 @@ android {
     }
     buildToolsVersion '28.0.0'
 
-
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "石油_${variant.versionName}.apk"
+        }
+    }
 }
 
 dependencies {

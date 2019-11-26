@@ -134,6 +134,23 @@ public class AlertUtil {
 		mDialog.show();
 	}
 
+	public static void showAlertSingle(Context paramContext,int title,
+									   CharSequence message, int positiveText,
+									   View.OnClickListener listener) {
+		mContext = paramContext;
+		if (mDialog != null && mDialog.isShowing()) {
+			return;
+		}
+		mDialog = new CustomDialog(paramContext, R.style.cusdom_dialog_whitebg);
+		dimBehind(mDialog);
+		mDialog.setTitle(title);
+		mDialog.setMessage(message);
+		mDialog.setPositiveButton(positiveText, listener);
+		mDialog.setNegativeButtonVisibility(View.GONE);
+		mDialog.setCancelable(false);
+		mDialog.show();
+	}
+
 	// 无按钮dialog
 	public static ProgressDialog showNoButtonProgressDialog(Context context,
                                                             String message) {

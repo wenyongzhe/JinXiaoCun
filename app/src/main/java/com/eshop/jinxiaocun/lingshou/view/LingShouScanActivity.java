@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.PopupWindowCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -41,6 +42,7 @@ import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
+import com.eshop.jinxiaocun.login.LoginActivity;
 import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBean;
 import com.eshop.jinxiaocun.othermodel.bean.GoodsPiciInfoBeanResult;
@@ -307,8 +309,23 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 AlertUtil.dismissProgressDialog();
                 GetFlowNoBeanResult.FlowNoJson mGetFlowNoBeanResult = (GetFlowNoBeanResult.FlowNoJson)o;
                 if(mGetFlowNoBeanResult != null ){
-                    FlowNo = mGetFlowNoBeanResult.getFlowNo();
-                    FlowNo = MyUtils.formatFlowNo(FlowNo);
+                    //门店号和机器号 都要有值 没有值则注册时有可以没有返回 要重新登录
+                    if(TextUtils.isEmpty(Config.posid)||TextUtils.isEmpty(Config.branch_no)){
+                        AlertUtil.showAlertSingle(this,
+                                R.string.dialog_title,
+                                "门店号或机器号为空，请退出界面，重新登录!",
+                                R.string.ok, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertUtil.dismissDialog();
+                                        finish();
+                                    }
+                                });
+                    }else{
+                        FlowNo = mGetFlowNoBeanResult.getFlowNo();
+                        FlowNo = MyUtils.formatFlowNo(FlowNo);
+                    }
+
                 }
                 break;
             case Config.MESSAGE_BILL_DISCOUNT_RETURN:

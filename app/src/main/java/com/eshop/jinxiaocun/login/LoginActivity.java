@@ -66,7 +66,6 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
     @BindView(R.id.btn_systemset)
     Button btn_systemset;
 
-    ProgressDialog progressDialog;
     ILogin loginAction;
     private IOtherModel mIOtherModel;
 
@@ -254,10 +253,25 @@ public class LoginActivity extends BaseActivity implements INetWorResult {
                 Config.PassWord = editPassword.getText().toString().trim();
                 ConfigureParamSP.getInstance().saveValue(this,ConfigureParamSP.KEY_USERCODE, Config.UserId);
                 //ToastUtils.showLong("登录成功！");
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                //门店号和机器号 都要存在 没有存在则注册时有可以没有返回
+                if(TextUtils.isEmpty(Config.posid)||TextUtils.isEmpty(Config.branch_no)){
+                    AlertUtil.showAlertSingle(LoginActivity.this,
+                            R.string.dialog_title,
+                            "门店号或机器号返回为空，不能登录请检查接口返回数据!",
+                            R.string.ok, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertUtil.dismissDialog();
+                                }
+                            });
+                }else{
+                    Intent intent = new Intent();
+                    intent.setClass(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
                 break;
             case Config.SHOW_PROGRESS:
                 showLoadingDialog("",true);

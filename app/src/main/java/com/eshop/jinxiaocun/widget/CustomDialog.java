@@ -25,6 +25,7 @@ class CustomDialog extends Dialog {
 	private TextView positiveButton;
 	private TextView negativeButton;
 	private View mLayout;
+	private View dividerView;
 
 	CustomDialog(Context context, int theme) {
 		super(context, theme);
@@ -43,6 +44,8 @@ class CustomDialog extends Dialog {
 				.findViewById(R.id.positiveButton));
 		this.negativeButton = ((TextView) this.mLayout
 				.findViewById(R.id.negativeButton));
+		this.dividerView = this.mLayout
+				.findViewById(R.id.dividerView);
 	}
 
 	void setMessage(CharSequence message) {
@@ -89,6 +92,11 @@ class CustomDialog extends Dialog {
 
 	void setPositiveButton(View.OnClickListener listener) {
 		this.positiveButton.setOnClickListener(listener);
+	}
+
+	public void setNegativeButtonVisibility(int visibility) {
+		negativeButton.setVisibility(visibility);
+		dividerView.setVisibility(visibility);
 	}
 
 	void setNegativeButtonDisable(boolean is){

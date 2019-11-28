@@ -356,7 +356,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setOper_id(Config.UserName);
             mPlayFlowBean.setSale_man(Config.saleMan);
             mPlayFlowBean.setShift_no("");
-            mPlayFlowBean.setOper_date(payInfo.getOper_date());
+            mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
             mPlayFlowBean.setMemo("");
             mPlayFlowBean.setWorderno("");
             if((i+1) == mPayRecordDatas.size()){

@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
-import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.huiyuan.bean.MemberRechargeBean;
 import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
 import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
@@ -32,8 +30,6 @@ import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
 import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.ModifyCountDialog;
-import com.j256.ormlite.field.types.BooleanObjectType;
-import com.zxing.android.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +52,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     ListView mListView;
 
     private IOtherModel mServerApi;
-    private IMemberList mMemberApi;
     private ILingshouScan mSalesServerApi;
     private ReturnedPurchaseByBillAdapter mAdapter;
     private List<ReturnedPurchaseResult> mSalesRecordDatas = new ArrayList<>();//销售记录
@@ -97,7 +92,6 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     @Override
     protected void initData() {
         mServerApi = new OtherModelImp(this);
-        mMemberApi = new MemberImp(this);
         mSalesServerApi = new LingShouScanImp(this);
     }
 
@@ -390,19 +384,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     }
 
     private void rechargeData(String cardNo,float money){
-        MemberRechargeBean bean = new MemberRechargeBean();
-        bean.JsonData.BranchNo = Config.branch_no;
-        bean.JsonData.UserId = Config.UserId;
-        bean.JsonData.CardNo = cardNo;
-        //充值金额(有可能包含赠送金额)
-        bean.JsonData.AddMoney = money;
-        //实付金额
-        bean.JsonData.PayMoney = money;
-        bean.JsonData.FlowNo = MyUtils.formatFlowNo(mFlowNoJson.getFlowNo());//"流水号"
-        bean.JsonData.PayWay = "RMB";//支付方式  后续需要改成多种支付方式，跟销售一样
-        bean.JsonData.Memo = "商品退款";
-
-        mMemberApi.setMemberRechargeData(bean);
+        mSalesServerApi.sellVipPay(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()),"4",cardNo,"",(double)money);
     }
 
     @Override
@@ -501,7 +483,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 //                startActivityForResult(intent, Config.REQ_QR_CODE);
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://聚合支付成功
-            case Config.RESULT_SUCCESS://会员充值（退款退到会员卡）
+            case Config.MESSAGE_VIP_PAY_RESULT://会员扣款（储值冲正）
                 mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
                 break;
             case Config.MESSAGE_SELL_SUB:

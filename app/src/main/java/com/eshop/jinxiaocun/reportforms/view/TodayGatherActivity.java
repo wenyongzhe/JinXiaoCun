@@ -234,9 +234,21 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
         if( !BluetoothAdapter.getDefaultAdapter().isEnabled()){
             return;
         }
+
+        int maxLength = 25;
+        String title = "收款重打";
+        if(MyUtils.length(title)<maxLength){
+            int beginLength = (maxLength-MyUtils.length(title))>>1;
+            int endLength=beginLength;
+            if(beginLength%2!=0){
+                endLength+=1;
+            }
+            title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
+        }
+
         for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
             int shuliang = 0;
-            String mes = "";
+            String mes = title+"\n\n\n";
 
             if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
             if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}

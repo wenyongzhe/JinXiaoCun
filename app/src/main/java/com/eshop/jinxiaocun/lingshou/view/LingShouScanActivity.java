@@ -529,6 +529,19 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     SendDataByte(Command.ESC_Align);
                     Command.GS_ExclamationMark[2] = 0x00;
                     SendDataByte(Command.GS_ExclamationMark);
+
+                    int maxLength = 25;
+                    String title = "销售详细小票";
+                    if(MyUtils.length(title)<maxLength){
+                        int beginLength = (maxLength-MyUtils.length(title))>>1;
+                        int endLength=beginLength;
+                        if(beginLength%2!=0){
+                            endLength+=1;
+                        }
+                        title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"")+"\n\n\n";
+                    }
+                    SendDataByte(title.getBytes("GBK"));
+
                     String mes = "";
                     int shuliang = 0;
                     mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";

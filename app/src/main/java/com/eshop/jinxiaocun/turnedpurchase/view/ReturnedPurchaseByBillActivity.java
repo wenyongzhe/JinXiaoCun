@@ -356,7 +356,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
             mPlayFlowBean.setOper_id(Config.UserName);
             mPlayFlowBean.setSale_man(Config.saleMan);
             mPlayFlowBean.setShift_no("");
-            mPlayFlowBean.setOper_date(payInfo.getOper_date());
+            mPlayFlowBean.setOper_date(DateUtility.getCurrentTime());
             mPlayFlowBean.setMemo("");
             mPlayFlowBean.setWorderno("");
             if((i+1) == mPayRecordDatas.size()){
@@ -390,19 +390,8 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
     }
 
     private void rechargeData(String cardNo,float money){
-        MemberRechargeBean bean = new MemberRechargeBean();
-        bean.JsonData.BranchNo = Config.branch_no;
-        bean.JsonData.UserId = Config.UserId;
-        bean.JsonData.CardNo = cardNo;
-        //充值金额(有可能包含赠送金额)
-        bean.JsonData.AddMoney = money;
-        //实付金额
-        bean.JsonData.PayMoney = money;
-        bean.JsonData.FlowNo = MyUtils.formatFlowNo(mFlowNoJson.getFlowNo());//"流水号"
-        bean.JsonData.PayWay = "RMB";//支付方式  后续需要改成多种支付方式，跟销售一样
-        bean.JsonData.Memo = "商品退款";
-
-        mMemberApi.setMemberRechargeData(bean);
+        //会员退款改用会员扣款储值冲正
+        mSalesServerApi.sellVipPay(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()),"4",cardNo,"",(double)money);
     }
 
     @Override
@@ -501,7 +490,7 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 //                startActivityForResult(intent, Config.REQ_QR_CODE);
                 break;
             case Config.MESSAGE_NET_PAY_RETURN://聚合支付成功
-            case Config.RESULT_SUCCESS://会员充值（退款退到会员卡）
+            case Config.MESSAGE_VIP_PAY_RESULT://会员扣款（储值冲正）
                 mSalesServerApi.sellSub(MyUtils.formatFlowNo(mFlowNoJson.getFlowNo()));//结算
                 break;
             case Config.MESSAGE_SELL_SUB:

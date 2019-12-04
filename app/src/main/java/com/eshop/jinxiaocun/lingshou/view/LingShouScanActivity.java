@@ -141,7 +141,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     private String Pay_way2 = "";
     private boolean isVipPay = false;
     YouHuiPopupWindow mWindow;
-    private int goodTotal = 0;
+    private float goodTotal = 0;
     List<GetSystemBeanResult.SystemJson> mSystemJson;
 
     @Override
@@ -1014,14 +1014,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
     }
 
     private void reflashList(){
-        goodTotal = 0;
+        goodTotal = 0f;
         mScanAdapter.notifyDataSetChanged();
         total = 0.0;
         double befor_youhui_money = 0.0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
             total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
-            goodTotal += Integer.decode(mGetClassPluResult.getSale_qnty());
+            goodTotal += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
         }
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);

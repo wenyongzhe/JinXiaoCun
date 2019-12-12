@@ -51,7 +51,9 @@ public class DanPinZheKouDialog extends Activity {
             mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
             mGetClassPluResultList = (List<GetClassPluResult>) getIntent().getSerializableExtra("GetClassPluResult");
             txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
-            txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
+            txtCountN.setHint(
+                    MyUtils.convertToDouble(mLimitdiscount,0d)*100+"-"+
+                    MyUtils.convertToDouble(mSavediscount,0d)*100);
         }catch (Exception e){
         }
 
@@ -76,7 +78,7 @@ public class DanPinZheKouDialog extends Activity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    double price = Double.parseDouble(charSequence.toString().trim());
+                    double price = MyUtils.convertToDouble(charSequence.toString().trim(),0d);
                     if(price>0){
                         tv_newprice.setText("￥"+MyUtils.formatDouble2(oldPrice*price/100));
                     }

@@ -247,10 +247,8 @@ public class TodayGatherActivity extends CommonBaseActivity implements INetWorRe
         }
 
 
-        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
-            int shuliang = 0;
+        for(int j=0; j<MyUtils.convertToInt(Config.mPrintNumber,0); j++){
             String mes = title+"\n\n\n";
-
             if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
             if(!Config.mPrintOrderName.equals("")){mes += Config.mPrintOrderName+"\n";}
             if(Config.isPrinterCashier){mes += "收银员："+Config.UserName+"\n";}

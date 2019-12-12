@@ -77,13 +77,14 @@ public class XianJingPayActivity extends BaseActivity {
     }
 
     private void btn_jiesuan() {
-        if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<0){
+        if(et_pay_money.getText().toString().equals("") ||
+                MyUtils.convertToDouble(et_pay_money.getText().toString(),0d)<0){
             ToastUtils.showShort("填写付款金额有误。");
             return;
         }
         Intent mIntent = new Intent();
-        mIntent.putExtra("money",Double.parseDouble(et_pay_money.getText().toString()));
-        mIntent.putExtra("money_return",Double.parseDouble(tv_pay_return.getText().toString()));
+        mIntent.putExtra("money",MyUtils.convertToDouble(et_pay_money.getText().toString(),0d));
+        mIntent.putExtra("money_return",MyUtils.convertToDouble(tv_pay_return.getText().toString(),0d));
         setResult(Config.XIANJING_RETURN,mIntent);
         finish();
     }

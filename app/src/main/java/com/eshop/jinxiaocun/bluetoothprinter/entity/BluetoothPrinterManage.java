@@ -357,7 +357,7 @@ public class BluetoothPrinterManage {
                         MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
                 float totalMoney = MyUtils.convertToFloat(mGetClassPluResult.getSale_price(),0f) *
                         MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
-                qty += Integer.decode(mGetClassPluResult.getSale_qnty());
+                qty += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0);
                 content.append(mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "
                         +mGetClassPluResult.getSale_price()+"     "+totalMoney+"\n");
             }

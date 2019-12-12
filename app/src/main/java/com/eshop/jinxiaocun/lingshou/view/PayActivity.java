@@ -504,25 +504,25 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     break;
                 case "1":
                     if(fenRmb != 0){
-                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         money -= molingMoney;
                         hasMoling = true;
                     }
                     break;
                 case "2":
                     if(jiaoRmb != 0){
-                        molingMoney = Double.parseDouble("0."+jiaoRmb);
+                        molingMoney = MyUtils.convertToDouble("0."+jiaoRmb,0d);
                         hasMoling = true;
                     }
                     if(fenRmb != 0){
-                        molingMoney += Double.parseDouble("0.0"+fenRmb);
+                        molingMoney += MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         hasMoling = true;
                     }
                     money -= molingMoney;
                     break;
                 case "3":
                     if(jiaoRmb != 0 || fenRmb != 0){
-                        molingMoney = Double.parseDouble("0."+jiaoRmb+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0."+jiaoRmb+fenRmb,0d);
                         if(jiaoRmb>=5){
                             money = money-molingMoney+1;
                         }else {
@@ -534,7 +534,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
                     break;
                 case "4":
                     if(fenRmb != 0){
-                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         if(fenRmb>=5){
                             money = money-molingMoney+0.100;
                         }else {
@@ -560,7 +560,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         String totalStr = moneyTem+"";
         if((totalStr.length()-totalStr.indexOf("."))>leng){
             totalStr = totalStr.substring(0,totalStr.indexOf(".")+(leng));
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem = MyUtils.convertToDouble(totalStr,0d);
         }
         return moneyTem;
     }
@@ -570,11 +570,11 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         int dd= totalStr.length()-totalStr.indexOf(".");
         if((totalStr.length()-totalStr.indexOf("."))==2){
             totalStr = totalStr+"0001";
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem = MyUtils.convertToDouble(totalStr,0d);
         }
         if((totalStr.length()-totalStr.indexOf("."))==3){
             totalStr = totalStr+"0001";
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem = MyUtils.convertToDouble(totalStr,0d);
         }
         return moneyTem;
     }
@@ -668,7 +668,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             List<HashMap<String,String>> hashMapList = new ArrayList<>();
             switch (sp_payway.getSelectedItemPosition()){
                 case 0:
-                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
+                    if(et_pay_money.getText().toString().equals("") ||
+                            MyUtils.convertToDouble(et_pay_money.getText().toString(),0d)<money){
                         ToastUtils.showShort("填写付款金额有误。");
                         return;
                     }
@@ -865,7 +866,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
 
-            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            String money = MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f)*
+                    MyUtils.convertToFloat(mGetClassPluResult.getSale_price(),0f)+"";
             mSaleFlowBean.setSale_money(money);
             mSaleFlowBean.setSell_way("A");
             mSaleFlowBean.setSale_man(Config.saleMan);
@@ -901,7 +903,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             mPlayFlowBean.setBranch_no(Config.branch_no);
             mPlayFlowBean.setFlow_no(FlowNo);
             mPlayFlowBean.setFlow_id(1);
-            mPlayFlowBean.setSale_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));
+            mPlayFlowBean.setSale_amount(MyUtils.convertToFloat(hashMap.get(i).get("payAmount"),0f));
             mPlayFlowBean.setPay_way(hashMap.get(i).get("pay_type"));
             if(hashMap.get(i).get("Sell_way")==null || hashMap.get(i).get("Sell_way").equals("")){
                 mPlayFlowBean.setSell_way("A");
@@ -916,7 +918,7 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
             }
             mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);
-            mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额
+            mPlayFlowBean.setPay_amount(MyUtils.convertToFloat(hashMap.get(i).get("payAmount"),0f));//付款金额
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("9999");
@@ -952,8 +954,8 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
         Config.isPrinterUserTel = ;
         Config.isPrinterCashier = ;*/
 
-        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
-            int shuliang = 0;
+        for(int j=0; j<MyUtils.convertToInt(Config.mPrintNumber,0); j++){
+            float shuliang = 0;
             String mes = "";
 
             if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
@@ -970,12 +972,13 @@ public class PayActivity extends BaseActivity implements ActionBarClickListener,
 
             for(int i=0; i<mListData.size(); i++){
                 GetClassPluResult mGetClassPluResult = mListData.get(i);
-                Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-                shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                Double total1 = MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0)
+                        *MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0);
+                shuliang += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
 
                 mes += mGetClassPluResult.getItem_name()+"\n"+
                         "        "+mGetClassPluResult.getSale_qnty()+mGetClassPluResult.getItem_size()+"     "+
-                        MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
+                        MyUtils.formatDouble2(MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d))+"元    "+
                         MyUtils.formatDouble2(total1)+"元\n";
             }
 

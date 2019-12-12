@@ -485,25 +485,25 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     break;
                 case "1":
                     if(fenRmb != 0){
-                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         money -= molingMoney;
                         hasMoling = true;
                     }
                     break;
                 case "2":
                     if(jiaoRmb != 0){
-                        molingMoney = Double.parseDouble("0."+jiaoRmb);
+                        molingMoney = MyUtils.convertToDouble("0."+jiaoRmb,0d);
                         hasMoling = true;
                     }
                     if(fenRmb != 0){
-                        molingMoney += Double.parseDouble("0.0"+fenRmb);
+                        molingMoney += MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         hasMoling = true;
                     }
                     money -= molingMoney;
                     break;
                 case "3":
                     if(jiaoRmb != 0 || fenRmb != 0){
-                        molingMoney = Double.parseDouble("0."+jiaoRmb+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0."+jiaoRmb+fenRmb,0d);
                         if(jiaoRmb>=5){
                             money = money-molingMoney+1;
                         }else {
@@ -515,7 +515,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     break;
                 case "4":
                     if(fenRmb != 0){
-                        molingMoney = Double.parseDouble("0.0"+fenRmb);
+                        molingMoney = MyUtils.convertToDouble("0.0"+fenRmb,0d);
                         if(fenRmb>=5){
                             money = money-molingMoney+0.100;
                         }else {
@@ -541,7 +541,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         String totalStr = moneyTem+"";
         if((totalStr.length()-totalStr.indexOf("."))>leng){
             totalStr = totalStr.substring(0,totalStr.indexOf(".")+(leng));
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem = MyUtils.convertToDouble(totalStr,0d);
         }
         return moneyTem;
     }
@@ -551,11 +551,11 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         int dd= totalStr.length()-totalStr.indexOf(".");
         if((totalStr.length()-totalStr.indexOf("."))==2){
             totalStr = totalStr+"0001";
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem =  MyUtils.convertToDouble(totalStr,0d);
         }
         if((totalStr.length()-totalStr.indexOf("."))==3){
             totalStr = totalStr+"0001";
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem =  MyUtils.convertToDouble(totalStr,0d);
         }
         return moneyTem;
     }
@@ -899,7 +899,8 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
 
-            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            String money = MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f)*
+                    MyUtils.convertToFloat(mGetClassPluResult.getSale_price(),0f)+"";
             mSaleFlowBean.setSale_money(money);
             mSaleFlowBean.setSell_way("A");
             mSaleFlowBean.setSale_man(Config.saleMan);
@@ -953,7 +954,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             }
             mPlayFlowBean.setCoin_no("");
             mPlayFlowBean.setCoin_rate(1);
-            mPlayFlowBean.setPay_amount(Float.parseFloat(hashMap.get(i).get("payAmount")));//付款金额
+            mPlayFlowBean.setPay_amount(MyUtils.convertToFloat(hashMap.get(i).get("payAmount"),0f));//付款金额
             mPlayFlowBean.setVoucher_no("");
             mPlayFlowBean.setPosid(Config.posid);
             mPlayFlowBean.setCounter_no("9999");
@@ -990,8 +991,8 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             title = MyUtils.rpad(beginLength,"")+title+MyUtils.rpad(endLength,"");
         }
 
-        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
-            int shuliang = 0;
+        for(int j=0; j<MyUtils.convertToInt(Config.mPrintNumber,0); j++){
+            float shuliang = 0;
             String mes = title+"\n\n\n";
 
             if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
@@ -1008,12 +1009,13 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
 
             for(int i=0; i<mListData.size(); i++){
                 GetClassPluResult mGetClassPluResult = mListData.get(i);
-                Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-                shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                Double total1 = MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d)
+                        *MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d);
+                shuliang += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
 
                 mes += mGetClassPluResult.getItem_name()+"\n"+
                         "        "+mGetClassPluResult.getSale_qnty()+"/"+mGetClassPluResult.getItem_size()+"     "+
-                        MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
+                        MyUtils.formatDouble2(MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d))+"元    "+
                         MyUtils.formatDouble2(total1)+"元\n";
             }
             mes += "-------------------------------\n";

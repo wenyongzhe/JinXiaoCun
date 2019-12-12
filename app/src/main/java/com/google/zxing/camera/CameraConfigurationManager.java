@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.eshop.jinxiaocun.utils.MyUtils;
+
 import java.util.regex.Pattern;
 
 final class CameraConfigurationManager {
@@ -180,7 +182,7 @@ final class CameraConfigurationManager {
       stringValue = stringValue.trim();
       double value;
       try {
-        value = Double.parseDouble(stringValue);
+        value = MyUtils.convertToDouble(stringValue,0d);
       } catch (NumberFormatException nfe) {
         return tenDesiredZoom;
       }
@@ -219,7 +221,7 @@ final class CameraConfigurationManager {
     String maxZoomString = parameters.get("max-zoom");
     if (maxZoomString != null) {
       try {
-        int tenMaxZoom = (int) (10.0 * Double.parseDouble(maxZoomString));
+        int tenMaxZoom = (int) (10.0 * MyUtils.convertToDouble(maxZoomString,0d));
         if (tenDesiredZoom > tenMaxZoom) {
           tenDesiredZoom = tenMaxZoom;
         }
@@ -248,7 +250,7 @@ final class CameraConfigurationManager {
     String motZoomStepString = parameters.get("mot-zoom-step");
     if (motZoomStepString != null) {
       try {
-        double motZoomStep = Double.parseDouble(motZoomStepString.trim());
+        double motZoomStep = MyUtils.convertToDouble(motZoomStepString.trim(),0d);
         int tenZoomStep = (int) (10.0 * motZoomStep);
         if (tenZoomStep > 1) {
           tenDesiredZoom -= tenDesiredZoom % tenZoomStep;

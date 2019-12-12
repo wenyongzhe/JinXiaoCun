@@ -38,7 +38,8 @@ public class ZheKouDialog extends Activity {
             mSavediscount = getIntent().getStringExtra("Savediscount");
             mLimitdiscount = getIntent().getStringExtra("Limitdiscount");
             txtCountN.setHintTextColor(getResources().getColor(R.color.mid_gray));
-            txtCountN.setHint(Double.parseDouble(mLimitdiscount)*100+"-"+Double.parseDouble(mSavediscount)*100);
+            txtCountN.setHint(MyUtils.convertToDouble(mLimitdiscount,0)*100+"-"+
+                    MyUtils.convertToDouble(mSavediscount,0d)*100);
         }catch (Exception e){
         }
 
@@ -87,7 +88,8 @@ public class ZheKouDialog extends Activity {
             return;
         }
 
-        if (Integer.decode(txtCountN.getText().toString().trim())<0 || Integer.decode(txtCountN.getText().toString().trim())>100) {
+        if (MyUtils.convertToInt(txtCountN.getText().toString().trim(),0)<0 ||
+                MyUtils.convertToInt(txtCountN.getText().toString().trim(),0)>100) {
             MyUtils.showToast("请输入大于0小于等于100的折扣！", this);
             return;
         }

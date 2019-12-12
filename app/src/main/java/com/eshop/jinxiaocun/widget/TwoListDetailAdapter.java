@@ -1,7 +1,6 @@
 package com.eshop.jinxiaocun.widget;
 
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,8 @@ import android.widget.TextView;
 
 import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.bean.GetClassPluResult;
-import com.eshop.jinxiaocun.base.bean.ListBean;
 import com.eshop.jinxiaocun.base.view.Application;
-import com.eshop.jinxiaocun.pifaxiaoshou.bean.GoodGetBeanResult;
-import com.eshop.jinxiaocun.utils.ViewHolderUtils;
+import com.eshop.jinxiaocun.utils.MyUtils;
 
 import java.util.List;
 
@@ -127,15 +124,15 @@ public class TwoListDetailAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 GetClassPluResult mGetClassPluResult2 = listInfo.get(id);
-                int mun = Integer.decode(mGetClassPluResult2.getSale_qnty())+1;
-                if(mun==1){
+                float mun = MyUtils.convertToFloat(mGetClassPluResult2.getSale_qnty(),0f)+1;
+                if(mun==1f){
                     mGetClassPluResult2.setSale_qnty(mun+"");
                     selectList.add(mGetClassPluResult2);
                 }else if(mun>1){
                     for(int j=0; j<selectList.size(); j++) {
                         GetClassPluResult mGetClassPluResult = selectList.get(j);
                         if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
-                            int mun2 = Integer.decode(mGetClassPluResult.getSale_qnty())+1;
+                            float mun2 = MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f)+1;
                             mGetClassPluResult.setSale_qnty(mun2+"");
                         }
                     }
@@ -147,8 +144,8 @@ public class TwoListDetailAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 GetClassPluResult mGetClassPluResult2 = listInfo.get(position);
-                int mun = Integer.decode(mGetClassPluResult2.getSale_qnty())-1;
-                if(mun<1){
+                float mun = MyUtils.convertToFloat(mGetClassPluResult2.getSale_qnty(),0f)-1;
+                if(mun<1f){
                     mGetClassPluResult2.setSale_qnty("0");
                     for(int i=0; i<selectList.size(); i++){
                         if(mGetClassPluResult2.getItem_no().equals(selectList.get(i).getItem_no())){
@@ -160,7 +157,7 @@ public class TwoListDetailAdapter extends BaseAdapter {
                     for(int j=0; j<selectList.size(); j++) {
                         GetClassPluResult mGetClassPluResult = selectList.get(j);
                         if (mGetClassPluResult.getItem_no().trim().equalsIgnoreCase(mGetClassPluResult2.getItem_no().trim())) {
-                            int mun2 = Integer.decode(mGetClassPluResult.getSale_qnty())-1;
+                            float mun2 = MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f)-1;
                             mGetClassPluResult.setSale_qnty(mun2+"");
                         }
                     }

@@ -31,7 +31,7 @@ public class LingShouPrintSettingActivity extends PrinterSettingActivity {
 
     @Override
     public void gotoPrintPreview() {
-        int shuliang = 0;
+        float shuliang = 0;
         String mes = "";
 
         if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}
@@ -48,12 +48,13 @@ public class LingShouPrintSettingActivity extends PrinterSettingActivity {
 
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
-            Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-            shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+            Double total1 = MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d)
+                    *MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d);
+            shuliang += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
 
             mes += mGetClassPluResult.getItem_name()+"\n"+
                     "        "+mGetClassPluResult.getSale_qnty()+mGetClassPluResult.getItem_size()+"     "+
-                    MyUtils.formatDouble2(Double.parseDouble(mGetClassPluResult.getSale_price()))+"元    "+
+                    MyUtils.formatDouble2(MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d))+"元    "+
                     MyUtils.formatDouble2(total1)+"元\n";
         }
 

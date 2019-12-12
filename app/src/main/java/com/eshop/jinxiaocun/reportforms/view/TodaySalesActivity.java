@@ -248,8 +248,7 @@ public class TodaySalesActivity extends CommonBaseActivity implements INetWorRes
         }
 
 
-        for(int j=0; j<Integer.decode(Config.mPrintNumber); j++){
-            int shuliang = 0;
+        for(int j=0; j<MyUtils.convertToInt(Config.mPrintNumber,0); j++){
             String mes = title+"\n\n\n";
 
             if(!Config.mPrintPageHeader.equals("")){mes += Config.mPrintPageHeader+"\n";}

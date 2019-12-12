@@ -43,9 +43,6 @@ public class HandlerMessagePost implements IMessagePost {
             Result mResult = mJsonFormatImp.JsonToBean(info, Result.class);
             o.handleResult(response,info );
             o.handleResultJson(mResult.status,mResult.msg,mResult.jsonData);
-            if(Integer.decode(mResult.status)!=0){
-//                ToastUtils.showShort(mResult.msg);
-            }
         } catch (Exception e) {
             //e.printStackTrace();
             //o.handleResult(response,e.getMessage() );

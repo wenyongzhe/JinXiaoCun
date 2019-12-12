@@ -238,7 +238,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             GetClassPluResult item = mGetClassPluResult;
 //            if( !canModifyPrice(item))return;
             Intent intent = new Intent(this, DanPinZheKouCreatDialog.class);
-            intent.putExtra("oldPrice", Double.parseDouble(item.getSale_price()));
+            intent.putExtra("oldPrice", MyUtils.convertToDouble(item.getSale_price(),0));
             intent.putExtra("count", item.getSale_qnty());
             intent.putExtra("GetClassPluResult",item);
             if (!item.getEnable_discount().equals("1")) {
@@ -292,29 +292,15 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
             }
             return;
         }
-        double temprice;
         switch (resultCode) {
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-
-               /* if(mGetClassPluResultList.size()==1){
-                    //一个商品判断批次，返回变成多个商品，暂时不判断批次
-                    if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
-                        getPiCi(mGetClassPluResultList);
-                    } else {
-                        mGetClassPluResultList.get(0).setItem_barcode("");
-                        addListData();
-                        reflashList();
-                    }
-                }else{*/
-                    for(int i=0; i<mGetClassPluResultList.size(); i++){
-                        mGetClassPluResultList.get(i).setItem_barcode("");
-                    }
-                    mListData.clear();
-                    addListData();
-                    reflashList();
-                //}
-
+                for(int i=0; i<mGetClassPluResultList.size(); i++){
+                    mGetClassPluResultList.get(i).setItem_barcode("");
+                }
+                mListData.clear();
+                addListData();
+                reflashList();
 
                 break;
             case Config.RESULT_SELECT_GOODS_QUERY:
@@ -375,8 +361,9 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         float goodTotal = 0;
         for (int i = 0; i < mListData.size(); i++) {
             GetClassPluResult mGetClassPluResult = mListData.get(i);
-            total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
-            goodTotal += Float.parseFloat(mGetClassPluResult.getSale_qnty());
+            total += (MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d) *
+                    MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d));
+            goodTotal += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
         }
         String totalStr = MyUtils.formatDouble2(total) + "";
         if ((totalStr.length() - totalStr.indexOf(".")) > 3) {
@@ -391,8 +378,8 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
         for (int i = 0; i < mListData.size(); i++) {
             for (int j = 0; j < mGetClassPluResultList.size(); j++) {
                 if (mListData.get(i).getItem_no().trim().equalsIgnoreCase(mGetClassPluResultList.get(j).getItem_no().trim())) {
-                    int qnty1 = Integer.decode(mListData.get(i).getSale_qnty());
-                    int qnty2 = Integer.decode(mGetClassPluResultList.get(j).getSale_qnty());
+                    float qnty1 = MyUtils.convertToFloat(mListData.get(i).getSale_qnty(),0f);
+                    float qnty2 = MyUtils.convertToFloat(mGetClassPluResultList.get(j).getSale_qnty(),0f);
                     mListData.get(i).setSale_qnty(qnty1+qnty2 + "");
                     mGetClassPluResultList.remove(j);
                     break;
@@ -453,7 +440,7 @@ public class LingShouCreatAtivity extends BaseLinShouCreatActivity implements IN
                     intent.putExtra("barcode", et_barcode.getText().toString());
                     startActivityForResult(intent, 100);
                 } else {
-                    if (Integer.decode(mGetClassPluResultList.get(0).getEnable_batch()) == 1) {
+                    if (MyUtils.convertToInt(mGetClassPluResultList.get(0).getEnable_batch(),0) == 1) {
                         getPiCi(mGetClassPluResultList);
                     } else {
                         mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空

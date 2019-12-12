@@ -252,7 +252,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         if(Config.mMemberInfo!=null){
             for(int i=0; i<mListData.size(); i++){
                 GetClassPluResult mGetClassPluResult = mListData.get(i);
-                if(Float.parseFloat(mGetClassPluResult.getSale_price())>Float.parseFloat(mGetClassPluResult.getVip_price())){
+                if(MyUtils.convertToFloat(mGetClassPluResult.getSale_price(),0f)>
+                        MyUtils.convertToFloat(mGetClassPluResult.getVip_price(),0f)){
                     mGetClassPluResult.setSale_price(mGetClassPluResult.getVip_price());
                     if(!has){
                         AlertUtil.showToast("已更新部分商品为会员价。");
@@ -295,7 +296,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     intent.putExtra("barcode",et_barcode.getText().toString());
                     startActivityForResult(intent,100);
                 }else{
-                    if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                    if(MyUtils.convertToInt(mGetClassPluResultList.get(0).getEnable_batch(),0)==1){
                         getPiCi(mGetClassPluResultList);
                     }else{
                         mGetClassPluResultList.get(0).setItem_barcode("");//设置批次空
@@ -546,14 +547,15 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                     SendDataByte(title.getBytes("GBK"));
 
                     String mes = "";
-                    int shuliang = 0;
+                    float shuliang = 0;
                     mes = "门店号: "+Config.posid+"\n单据  "+FlowNo+"\n收银员："+Config.UserName+"\n";
                     SendDataByte(mes.getBytes("GBK"));
                     mes = "品名       数量    单价    金额\n";
                     for(int i=0; i<mListData.size(); i++){
                         GetClassPluResult mGetClassPluResult = mListData.get(i);
-                        Double total1 = Double.parseDouble(mGetClassPluResult.getSale_price())*Double.parseDouble(mGetClassPluResult.getSale_qnty());
-                        shuliang += Integer.decode(mGetClassPluResult.getSale_qnty());
+                        Double total1 = MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d)
+                                *MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d);
+                        shuliang += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f);
                         mes += mGetClassPluResult.getItem_name()+"   "+mGetClassPluResult.getSale_qnty()+"   "+mGetClassPluResult.getSale_price()+"     "+total1+"\n";
                     }
                     SendDataByte(mes.getBytes("GBK"));
@@ -759,22 +761,22 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 case "0":
                     break;
                 case "1":
-                    total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.DOWN));
+                    total = MyUtils.convertToDouble(MyUtils.formatDouble(1,total, RoundingMode.DOWN),0);
                     molingMoney -= total;
                     hasMoling = true;
                     break;
                 case "2":
-                    total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.DOWN));
+                    total = MyUtils.convertToDouble(MyUtils.formatDouble(0,total, RoundingMode.DOWN),0);
                     molingMoney -= total;
                     hasMoling = true;
                     break;
                 case "3":
-                    total = Double.parseDouble(MyUtils.formatDouble(0,total, RoundingMode.HALF_UP));
+                    total = MyUtils.convertToDouble(MyUtils.formatDouble(0,total, RoundingMode.HALF_UP),0);
                     molingMoney -= total;
                     hasMoling = true;
                     break;
                 case "4":
-                    total = Double.parseDouble(MyUtils.formatDouble(1,total, RoundingMode.HALF_UP));
+                    total = MyUtils.convertToDouble(MyUtils.formatDouble(1,total, RoundingMode.HALF_UP),0);
                     molingMoney -= total;
                     hasMoling = true;
                     break;
@@ -855,7 +857,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 break;
             case Config.RESULT_SELECT_GOODS:
                 mGetClassPluResultList = (List<GetClassPluResult>) data.getSerializableExtra("SelectList");
-                if(Integer.decode(mGetClassPluResultList.get(0).getEnable_batch())==1){
+                if(MyUtils.convertToInt(mGetClassPluResultList.get(0).getEnable_batch(),0)==1){
                     getPiCi(mGetClassPluResultList);
                 }else{
                     mGetClassPluResultList.get(0).setItem_barcode("");
@@ -998,10 +1000,10 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             if(!mGetClassPluResult.isHasYiJia()){
                 mGetClassPluResult.setHasYiJia(true);
                 String itemPrice = mGetClassPluResult.getSale_price();
-                Double itemPriceDouble =Double.parseDouble(itemPrice);
-                itemPrice = MyUtils.formatDouble2(itemPriceDouble*Double.parseDouble(zhekouAll)/100);
+                Double itemPriceDouble =MyUtils.convertToDouble(itemPrice,0);
+                itemPrice = MyUtils.formatDouble2(itemPriceDouble*MyUtils.convertToDouble(zhekouAll,0d)/100);
                 mGetClassPluResult.setSale_price(itemPrice);
-                tempmoney += Double.parseDouble(itemPrice);
+                tempmoney += MyUtils.convertToDouble(itemPrice,0d);
             }
         }
         setSaleFlowBean();//销售流水
@@ -1013,7 +1015,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         String totalStr = moneyTem+"";
         if((totalStr.length()-totalStr.indexOf("."))>leng){
             totalStr = totalStr.substring(0,totalStr.indexOf(".")+(leng));
-            moneyTem = Double.parseDouble(totalStr);
+            moneyTem = MyUtils.convertToDouble(totalStr,0d);
         }
         return moneyTem;
     }
@@ -1036,12 +1038,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         double befor_youhui_money = 0.0;
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
-            total += (Double.parseDouble(mGetClassPluResult.getSale_price()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
+            total += (MyUtils.convertToDouble(mGetClassPluResult.getSale_price(),0d) *
+                    MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d));
             goodTotal += MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0);
         }
         for(int i=0; i<mListData.size(); i++){
             GetClassPluResult mGetClassPluResult = mListData.get(i);
-            befor_youhui_money += (Double.parseDouble(mGetClassPluResult.getSale_price_beforModify()) * Double.parseDouble(mGetClassPluResult.getSale_qnty()));
+            befor_youhui_money += (MyUtils.convertToDouble(mGetClassPluResult.getSale_price_beforModify(),0d) *
+                    MyUtils.convertToDouble(mGetClassPluResult.getSale_qnty(),0d));
         }
         if(befor_youhui_money>total){
             youhuiMoney = befor_youhui_money-total;
@@ -1066,7 +1070,8 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
             mSaleFlowBean.setSale_price(mGetClassPluResult.getSale_price());
             mSaleFlowBean.setSale_qnty(mGetClassPluResult.getSale_qnty());
 
-            String money = Float.parseFloat(mGetClassPluResult.getSale_qnty())*Float.parseFloat(mGetClassPluResult.getSale_price())+"";
+            String money = MyUtils.convertToFloat(mGetClassPluResult.getSale_qnty(),0f)*
+                    MyUtils.convertToFloat(mGetClassPluResult.getSale_price(),0f)+"";
             mSaleFlowBean.setSale_money(money);
             mSaleFlowBean.setSell_way("A");
             mSaleFlowBean.setSale_man(Config.UserName);
@@ -1103,14 +1108,14 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
         mPlayFlowBean.setBranch_no(Config.branch_no);
         mPlayFlowBean.setFlow_no(FlowNo);
         mPlayFlowBean.setFlow_id(1);
-        mPlayFlowBean.setSale_amount(Float.parseFloat(payAmount));
+        mPlayFlowBean.setSale_amount(MyUtils.convertToFloat(payAmount,0f));
         mPlayFlowBean.setPay_way(pay_type);
         mPlayFlowBean.setSell_way("A");
         mPlayFlowBean.setCard_no("");
         mPlayFlowBean.setVip_no("");
         mPlayFlowBean.setCoin_no("");
         mPlayFlowBean.setCoin_rate(1);
-        mPlayFlowBean.setPay_amount(Float.parseFloat(payAmount));//付款金额
+        mPlayFlowBean.setPay_amount(MyUtils.convertToFloat(payAmount,0f));//付款金额
         mPlayFlowBean.setVoucher_no("");
         mPlayFlowBean.setPosid(Config.posid);
         mPlayFlowBean.setCounter_no("");
@@ -1184,7 +1189,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("此商品不允许打折。");
             }
             Intent intent = new Intent(this, DanPinZheKouDialog.class);
-            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price()));
+            intent.putExtra("oldPrice",MyUtils.convertToDouble(item.getSale_price(),0d));
             intent.putExtra("limit",Config.danbiZheKoulimit);
             startActivityForResult(intent,100);
         }catch (Exception e){
@@ -1207,7 +1212,7 @@ public class LingShouScanActivity extends BaseLinShouScanActivity implements INe
                 ToastUtils.showShort("此商品不允许议价。");
             }
             Intent intent = new Intent(this, DanPinGaiJiaDialog.class);
-            intent.putExtra("oldPrice",Double.parseDouble(item.getSale_price_beforModify()));
+            intent.putExtra("oldPrice",MyUtils.convertToDouble(item.getSale_price_beforModify(),0));
             intent.putExtra("limit",Config.danbiYiJialimit);
             startActivityForResult(intent,200);
         }catch (Exception e){

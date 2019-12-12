@@ -12,14 +12,11 @@ import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.INetWorResult;
 import com.eshop.jinxiaocun.base.bean.SaleFlowBean;
 import com.eshop.jinxiaocun.base.view.CommonBaseActivity;
-import com.eshop.jinxiaocun.huiyuan.presenter.IMemberList;
-import com.eshop.jinxiaocun.huiyuan.presenter.MemberImp;
 import com.eshop.jinxiaocun.lingshou.bean.GetFlowNoBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
 import com.eshop.jinxiaocun.lingshou.view.LingShouScanActivity;
-import com.eshop.jinxiaocun.lingshou.view.PayActivity;
 import com.eshop.jinxiaocun.othermodel.bean.PayRecordResult;
 import com.eshop.jinxiaocun.othermodel.presenter.IOtherModel;
 import com.eshop.jinxiaocun.othermodel.presenter.OtherModelImp;
@@ -401,12 +398,12 @@ public class ReturnedPurchaseByBillActivity extends CommonBaseActivity implement
 
             for (int i = 0; i < mSalesRecordDatas.size(); i++) {
                 if(i==modifyQtyPosition){
-                    if(MyUtils.convertToInt(count,0)>mSalesRecordDatas.get(i).getRe_qty()){
+                    if(MyUtils.convertToFloat(count,0)>mSalesRecordDatas.get(i).getRe_qty()){
                         AlertUtil.showToast(String.format("退货数量%s超过可退数量%s",count,mSalesRecordDatas.get(i).getRe_qty()));
                         return;
                     }
                     //修改退货数量
-                    mSalesRecordDatas.get(i).setRp_Qty(MyUtils.convertToInt(count,0));
+                    mSalesRecordDatas.get(i).setRp_Qty(MyUtils.convertToFloat(count,0));
                     break;
                 }
             }

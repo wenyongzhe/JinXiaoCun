@@ -95,7 +95,7 @@ public class MoneyDialog extends Activity {
         }
 
         String countN = txtCountN.getText().toString().trim();
-        if(total>0.0 && Double.parseDouble(countN)<total){
+        if(total>0.0 && MyUtils.convertToDouble(countN,0d)<total){
             MyUtils.showToast("请输入大于等于"+total+"的数！", this);
             return;
         }

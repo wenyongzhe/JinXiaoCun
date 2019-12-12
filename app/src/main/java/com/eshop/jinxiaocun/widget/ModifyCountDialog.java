@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +12,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,17 +40,12 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
     @BindView(R.id.iv_minus)
     ImageView iv_minus;
 
-
-//    @BindView(R.id.tv_key)
-//    KeyboardView keyboardView;
-
     private List<String> keyboardNumbers;
     private boolean refreshStartPoint = true;
     float startPointEvent, stopPointEvent;
     GestureDetector mDetector;
     private int mScreenWidth = 0;
     int curatorIndex;
-    Drawable mDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +53,6 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
         setContentView(R.layout.activity_modify_count);
 
         ButterKnife.bind(this);
-
-//        keyboardView.setOnKeyBoardClickListener( this);
-//        keyboardView.recyclerView.setOnTouchListener(onTouchListener);
-
-//        keyboardNumbers = keyboardView.getKeyboardWords();
-
         txtCountN.setFocusable(true);
         txtCountN.setFocusableInTouchMode(true);
         txtCountN.requestFocus();
@@ -73,16 +60,6 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
         Intent intent = getIntent();
         txtCountN.setText(intent.getStringExtra("countN"));
         txtCountN.selectAll();
-//        txtCountN.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!keyboardView.isVisible()) {
-//                    keyboardView.show();
-//                }
-//            }
-//        });
-
-//        closeEditTextKeyboard();
         initGestureDetector();
 
         int screen_width = DensityUtil.getInstance().getScreenWidth(this);
@@ -147,12 +124,12 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
     @OnClick(R.id.btn_ok)
     void OnOk()
     {
-        if (txtCountN.getText().toString().trim().equals("")) {
+        if (TextUtils.isEmpty(txtCountN.getText().toString().trim())) {
             MyUtils.showToast("请输入数量！", this);
             return;
         }
 
-        if (txtCountN.getText().toString().trim().equals("0")) {
+        if (MyUtils.convertToFloat(txtCountN.getText().toString().trim(),0f)<0) {
             MyUtils.showToast("请输入大于0的数量！", this);
             return;
         }
@@ -194,12 +171,12 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
             int count = 1;
             switch (position) {
                 case 12:
-                    count = Integer.decode(editText)+1;
+                    count = MyUtils.convertToInt(editText,0)+1;
                     txtCountN.setText(count+"");
                     break;
                 case 14:
-                    if(Integer.decode(editText)>0){
-                        count = Integer.decode(editText)-1;
+                    if(MyUtils.convertToInt(editText,0)>0){
+                        count = MyUtils.convertToInt(editText,0)-1;
                         txtCountN.setText(count+"");
                     }
                     break;
@@ -332,12 +309,12 @@ public class ModifyCountDialog extends Activity implements  KeyboardAdapter.OnKe
         int count = 1;
         switch (view.getId()){
             case R.id.iv_plus:
-                count = Integer.decode(editText)+1;
+                count = MyUtils.convertToInt(editText,0)+1;
                 txtCountN.setText(count+"");
                 break;
             case R.id.iv_minus:
-                if(Integer.decode(editText)>0) {
-                    count = Integer.decode(editText) - 1;
+                if(MyUtils.convertToInt(editText,0)>0) {
+                    count = MyUtils.convertToInt(editText,0) - 1;
                     txtCountN.setText(count + "");
                 }
                 break;

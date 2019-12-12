@@ -383,7 +383,7 @@ public class MyUtils {
     }
 
     public final static String formatFlowNo(String flowno){
-        flowno = String.format("%05d", Integer.decode(flowno)+1).trim();
+        flowno = String.format("%05d", convertToInt(flowno,0)+1).trim();
         String tempBranch_no = Config.branch_no;
         String data = DateUtility.getCurrentDateYYYYMMdd().trim();
         int ff = Config.branch_no.length();

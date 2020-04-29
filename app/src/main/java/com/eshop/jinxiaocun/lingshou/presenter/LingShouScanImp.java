@@ -156,7 +156,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
-            Log.e("error", event.toString());
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -261,8 +261,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
-
-            Log.e("error", event.toString());
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -303,7 +302,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
-            Log.e("error", event.toString());
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -523,6 +522,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -545,7 +545,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
-            int isisBillDiscount = 0;
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -568,7 +568,7 @@ public class LingShouScanImp implements ILingshouScan {
 //                        break;
 //                }
             }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,null);
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }
         }
     }
@@ -578,6 +578,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override
@@ -589,7 +590,7 @@ public class LingShouScanImp implements ILingshouScan {
             if(status.equals(Config.MESSAGE_OK+"")){
                 mHandler.handleResule(Config.MESSAGE_UP_PLAY_FLOW,null);
             }else{
-                mHandler.handleResule(Config.MESSAGE_ERROR,null);
+                mHandler.handleResule(Config.MESSAGE_ERROR,Msg);
             }
         }
     }
@@ -617,6 +618,7 @@ public class LingShouScanImp implements ILingshouScan {
 
         @Override
         public void handleError(Object event) {
+            mHandler.handleResule(Config.MESSAGE_ERROR,event);
         }
 
         @Override

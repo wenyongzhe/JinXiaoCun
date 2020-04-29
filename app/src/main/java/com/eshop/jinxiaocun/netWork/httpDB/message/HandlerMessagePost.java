@@ -1,18 +1,12 @@
 package com.eshop.jinxiaocun.netWork.httpDB.message;
-
-
-import android.widget.Toast;
-
-import com.blankj.utilcode.util.ToastUtils;
-import com.eshop.jinxiaocun.R;
 import com.eshop.jinxiaocun.base.IJsonFormat;
 import com.eshop.jinxiaocun.base.JsonFormatImp;
 import com.eshop.jinxiaocun.base.bean.Result;
-import com.eshop.jinxiaocun.base.view.Application;
 import com.eshop.jinxiaocun.netWork.httpDB.IResponseListener;
 
 import java.io.IOException;
-import java.util.logging.Handler;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 import okhttp3.Response;
 
@@ -25,8 +19,14 @@ public class HandlerMessagePost implements IMessagePost {
 
     @Override
     public void postError(IOException e, IResponseListener o) {
-        o.handleError(e);
-        Toast.makeText(Application.mContext, R.string.message_error,Toast.LENGTH_SHORT).show();
+
+        if(e instanceof ConnectException){
+            o.handleError("接口连接异常，请查看网络!");
+        }else if(e instanceof SocketTimeoutException){
+            o.handleError("连接超时，请查看网络!");
+        }else{
+            o.handleError(e.getMessage());
+        }
     }
 
     @Override

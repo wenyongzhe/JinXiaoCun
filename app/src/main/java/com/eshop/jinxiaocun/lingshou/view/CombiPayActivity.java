@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.eshop.jinxiaocun.R;
@@ -23,10 +22,8 @@ import com.eshop.jinxiaocun.huiyuan.bean.MemberCheckResultItem;
 import com.eshop.jinxiaocun.lingshou.bean.GetSystemBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.NetPlayBeanResult;
 import com.eshop.jinxiaocun.lingshou.bean.PlayFlowBean;
-import com.eshop.jinxiaocun.lingshou.bean.VipPayBeanResult;
 import com.eshop.jinxiaocun.lingshou.presenter.ILingshouScan;
 import com.eshop.jinxiaocun.lingshou.presenter.LingShouScanImp;
-import com.eshop.jinxiaocun.login.SystemSettingActivity;
 import com.eshop.jinxiaocun.utils.Config;
 import com.eshop.jinxiaocun.utils.DateUtility;
 import com.eshop.jinxiaocun.utils.MyUtils;
@@ -35,7 +32,6 @@ import com.eshop.jinxiaocun.widget.AlertUtil;
 import com.eshop.jinxiaocun.widget.DanPinGaiJiaDialog;
 import com.eshop.jinxiaocun.widget.DanPinZheKouDialog;
 import com.eshop.jinxiaocun.widget.SaleManDialog;
-import com.eshop.jinxiaocun.zjPrinter.BluetoothService;
 import com.eshop.jinxiaocun.zjPrinter.LingShouPrintSettingActivity;
 import com.landicorp.android.eptapi.device.Printer;
 import com.landicorp.android.eptapi.exception.RequestException;
@@ -44,7 +40,6 @@ import com.zxing.android.CaptureActivity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -86,12 +81,9 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     double last_pay_money = 0;
     Button btn_jiesuan;//
 
-    private static boolean is58mm = true;
-    public boolean isOk = false;
     private boolean hasMoling = false;
     private boolean hasGaiJia = false;
     private ILingshouScan mLingShouScanImp;
-    private Button btn_ok;
     private double money = 0.00;
     List<GetSystemBeanResult.SystemJson> mSystemJson;
     private int jiaoRmb = 0;
@@ -104,11 +96,8 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     private double gaiJiaMoney = 0;
     private String FlowNo = "";
     private String memberId = "";
-    YouHuiPopupWindow mWindow;
     List<HashMap<String,String>> hashMapList = new ArrayList<>();
     private static int XIAN_JING_PAY = 101;
-    private static int JU_HE_ZHIFU_PAY = 102;
-    private static int CHU_XU_KA_ZHIFU_PAY = 103;
     private double xianjing_money = 0;
     private double zhuhezhifu_money = 0;
     private double chuxukazhifu_money = 0;
@@ -216,45 +205,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         Print_Ex();
     }
 
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SystemSettingActivity.MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case BluetoothService.STATE_CONNECTED:
-                            ToastUtils.showShort("连接成功");
-                            printMs();
-                            break;
-                        case BluetoothService.STATE_CONNECTING:
-                            ToastUtils.showShort("连接中");
-                            break;
-                        case BluetoothService.STATE_LISTEN:
-                        case BluetoothService.STATE_NONE:
-                            //ToastUtils.showShort("没有连接打印机");
-                            break;
-                    }
-                    break;
-                case SystemSettingActivity.MESSAGE_WRITE:
-
-                    break;
-                case SystemSettingActivity.MESSAGE_READ:
-
-                    break;
-                case SystemSettingActivity.MESSAGE_DEVICE_NAME:
-                    break;
-                case SystemSettingActivity.MESSAGE_UNABLE_CONNECT:     //无法连接设备
-                    Toast.makeText(getApplicationContext(), "无法连接设备",
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case SystemSettingActivity.MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
-                    Toast.makeText(getApplicationContext(), "蓝牙已断开连接",
-                            Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    };
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -265,13 +215,16 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         super.onResume();
     }
 
-    VipPayBeanResult mVipPayBeanResult;
     @Override
     public void handleResule(int flag, Object o) {
         switch (flag) {
             case Config.MESSAGE_OK:
                 break;
             case Config.MESSAGE_ERROR:
+                hashMapList.clear();
+                if(whaPayWay==1){
+                    last_pay_money = money;
+                }
                 AlertUtil.dismissDialog();
                 if(o==null || ((String)o).equals("")){
                     o = "接口错误";
@@ -283,14 +236,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                                 AlertUtil.dismissDialog();
                             }
                         });
-                //AlertUtil.showAlert(PayActivity.this,"提示",(String)o);
                 break;
-//            case Config.MESSAGE_VIP_PAY_RESULT:
-//                mVipPayBeanResult = (VipPayBeanResult)o;
-//                //setResult(Config.MESSAGE_VIP_PAY_RESULT);
-//                mHan.sendEmptyMessage(0);
-//                //sellOk();
-//                break;
             case Config.MESSAGE_GET_SYSTEM_INFO_RETURN:
                 mSystemJson = (List<GetSystemBeanResult.SystemJson>) o;
                 break;
@@ -324,6 +270,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 }
                 NetPlayBeanResult mNetPlayBeanResult =  (NetPlayBeanResult)o;
                 if(mNetPlayBeanResult==null){
+                    hashMapList.clear();
                     ToastUtils.showShort(R.string.message_sell_error);
                     return;
                 }
@@ -332,7 +279,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                     mHan.sendEmptyMessage(4);
                     AlertUtil.dismissDialog();
                 }else {
-                    //ToastUtils.showShort(mNetPlayBeanResult.getReturn_msg());
                     if( mNetPlayBeanResult.getReturn_code().equals("1013")){
                         AlertUtil.showAlert(CombiPayActivity.this, "提示", mNetPlayBeanResult.getReturn_msg(),
                                 "整单取消", new View.OnClickListener() {
@@ -352,13 +298,11 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                                         AlertUtil.dismissDialog();
                                     }
                                 });
-                        //mHan.sendEmptyMessageDelayed(3,2000);
                     }
                 }
                 break;
             case Config.MESSAGE_SELL_SUB:
                 sellOk();
-//                printMs();
                 break;
         }
     }
@@ -395,7 +339,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
         }
     }
 
-    Handler mHan = new Handler(){
+    private Handler mHan = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -419,6 +363,7 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                         AlertUtil.showAlert(CombiPayActivity.this,"提示","请点击会员验证会员信息！");
                         return;
                     }
+                    hashMapList.clear();
                     HashMap<String,String> hashMapVIP = new HashMap<>();
                     hashMapVIP.put("payAmount",last_pay_money+"");
                     hashMapVIP.put("pay_type","SAV");
@@ -650,42 +595,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 return;
             }
             query = true;
-//            List<HashMap<String,String>> hashMapList = new ArrayList<>();
-//            switch (sp_payway.getSelectedItemPosition()){
-//                case 0:
-//                    if(et_pay_money.getText().toString().equals("") || Double.parseDouble(et_pay_money.getText().toString())<money){
-//                        ToastUtils.showShort("填写付款金额有误。");
-//                        return;
-//                    }
-//                    HashMap<String,String> hashMap = new HashMap<>();
-//                    hashMap.put("payAmount",et_pay_money.getText().toString());
-//                    hashMap.put("pay_type","RMB");
-//                    hashMapList.add(hashMap);
-//                    if( !tv_pay_return.getText().toString().equals("") && !tv_pay_return.getText().toString().equals("0")){
-//                        HashMap<String,String> hashMap1 = new HashMap<>();
-//                        hashMap1.put("payAmount",tv_pay_return.getText().toString());
-//                        hashMap1.put("pay_type","RMB");
-//                        hashMap1.put("pay_way","D");
-//                        hashMapList.add(hashMap1);
-//                    }
-//                    break;
-//                case 1:
-//                    HashMap<String,String> hashMapZFB = new HashMap<>();
-//                    hashMapZFB.put("payAmount",money+"");
-//                    hashMapZFB.put("pay_type","ZFB");
-//                    hashMapList.add(hashMapZFB);
-//                    break;
-//               /* case 2:
-//                    HashMap<String,String> hashMapWX = new HashMap<>();
-//                    hashMapWX.put("payAmount",money+"");
-//                    hashMapWX.put("pay_type","WXZ");
-//                    hashMapList.add(hashMapWX);
-//                    break;*/
-//                case 2:
-//                    Intent mIntent = new Intent(CombiPayActivity.this, VipCardPayActivity.class);
-//                    startActivityForResult(mIntent,300);
-//                    return;
-//            }
             if( hasMoling ){
                 HashMap<String,String> hashMap2 = new HashMap<>();
                 hashMap2.put("payAmount",molingMoney+"");
@@ -703,34 +612,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
             if(mListData.get(i).isHasYiJia()){
                 return true;
             }
-        }
-        return false;
-    }
-
-    private boolean sunmiScan(int requestCode, int resultCode, Intent data){
-        if (requestCode == Config.REQ_QR_CODE && data != null) {
-            Bundle bundle = data.getExtras();
-            ArrayList<HashMap<String, String>> result = (ArrayList<HashMap<String, String>>) bundle
-                    .getSerializable("data");
-
-            Iterator<HashMap<String, String>> it = result.iterator();
-            while (it.hasNext()) {
-                HashMap<String, String> hashMap = it.next();
-                /*Log.i("sunmi", hashMap.get("TYPE"));//这个是扫码的类型
-                Log.i("sunmi", hashMap.get("VALUE"));//这个是扫码的结果*/
-
-                tempayway = "";
-                if(hashMap.get("VALUE").startsWith("28")){
-                    tempayway = "ZFB";
-                }else{
-                    tempayway = "WXZ";
-                }
-
-                temMoney = money+"";
-                mLingShouScanImp.RtWzfPay(tempayway,hashMap.get("VALUE"),FlowNo,temMoney,temMoney);
-                break;
-            }
-            return true;
         }
         return false;
     }
@@ -770,7 +651,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        double temprice;
         //sunmi摄像头扫码
         if(zxingScan(requestCode,resultCode,data)){
             return;
@@ -829,11 +709,6 @@ public class CombiPayActivity extends BaseActivity implements ActionBarClickList
                 支付宝条码规则：28开头的18位数字。支付宝背景色是黄色*/
                 code = data.getStringExtra(Config.INTENT_EXTRA_KEY_QR_SCAN );
                 tempayway = "";
-                /*if(sp_payway.getSelectedItemPosition()==1){
-                    tempayway = "ZFB";
-                }else if(sp_payway.getSelectedItemPosition()==2){
-                    tempayway = "WXZ";
-                }*/
                 if(code.startsWith("28")){
                     tempayway = "ZFB";
                 }else{
